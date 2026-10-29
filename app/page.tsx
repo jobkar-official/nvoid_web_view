@@ -49,6 +49,7 @@ type Job = {
   applicationUrl?: string;
   employmentType?: string;
   workMode?: string;
+  postedAt?: string;
   salaryMin?: number;
   salaryMax?: number;
   salaryCurrency?: string;
@@ -494,6 +495,16 @@ function MetricCard({ label, value, foot, icon: Icon, tone = "blue" }: { label: 
   return <article className="metric-card"><div className="metric-top"><span className="metric-label">{label}</span><span className={"metric-icon metric-icon-" + tone}><Icon size={16} /></span></div><div className="metric-value">{value.toLocaleString()}</div><div className="metric-foot"><span className="metric-muted">{foot}</span></div></article>;
 }
 
+function formatPostedAt(value?: string) {
+  if (!value) return undefined;
+  const numeric = Number(value);
+  const date = Number.isFinite(numeric) && numeric >= 1000000000
+    ? new Date(numeric < 100000000000 ? numeric * 1000 : numeric)
+    : new Date(value);
+  if (!Number.isFinite(date.getTime())) return undefined;
+  return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short", day: "numeric" }).format(date);
+}
+
 function JobCard({ job }: { job: Job }) {
   const demo = job.source === "demo" || job.demo === true;
   const match = Number.isFinite(job.matchScore) ? Math.round(job.matchScore) : 0;
@@ -508,6 +519,7 @@ function JobCard({ job }: { job: Job }) {
     <div className="job-meta">
       {job.employmentType && <span className="tag"><Briefcase size={11} />{job.employmentType}</span>}
       {job.workMode && <span className="tag"><Globe2 size={11} />{job.workMode}</span>}
+      {formatPostedAt(job.postedAt) && <span className="tag"><Clock3 size={11} />Posted {formatPostedAt(job.postedAt)}</span>}
       {job.salaryMin !== undefined || job.salaryMax !== undefined ? <span className="tag">{money(job.salaryMin, job.salaryMax, job.salaryCurrency)}</span> : <span className="tag">Salary not listed</span>}
       {demo && <span className="tag source-demo">Synthetic demo listing</span>}
     </div>
