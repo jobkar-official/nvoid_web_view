@@ -80,6 +80,7 @@ type McpSourceStatus = {
   toolCount?: number;
   error?: string;
 };
+type JobSourceResult = { serverId: string; tool?: string; found: number; error?: string };
 
 const initialProfile: CandidateProfile = {
   userId: "nvoid-demo-candidate-001",
@@ -187,6 +188,7 @@ export default function HomePage() {
   const [tasks, setTasks] = useState<ApplicationTask[]>([]);
   const [health, setHealth] = useState<AgentHealth | null>(null);
   const [sourceStatuses, setSourceStatuses] = useState<McpSourceStatus[]>([]);
+  const [searchSourceResults, setSearchSourceResults] = useState<JobSourceResult[]>([]);
   const [sourceRefreshError, setSourceRefreshError] = useState("");
   const [agentState, setAgentState] = useState<"checking" | "online" | "offline">("checking");
   const [busy, setBusy] = useState<"search" | "run" | "refresh" | null>(null);
@@ -274,6 +276,7 @@ export default function HomePage() {
         })
       }));
       setJobs(Array.isArray(result.jobs) ? result.jobs as Job[] : []);
+      setSearchSourceResults(Array.isArray(result.sources) ? result.sources as JobSourceResult[] : []);
       setLastSearch(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
       setView("jobs");
       const foundCount = result.returnedCount ?? result.jobs?.length ?? 0;
@@ -310,6 +313,7 @@ export default function HomePage() {
         })
       }));
       if (Array.isArray(result.search?.jobs)) setJobs(result.search.jobs as Job[]);
+      setSearchSourceResults(Array.isArray(result.search?.sources) ? result.search.sources as JobSourceResult[] : []);
       await loadTasks();
       setView("applications");
       const queuedCount = result.applicationQueue?.queued ?? 0;
@@ -396,6 +400,16 @@ export default function HomePage() {
 
           {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches use five active public feeds, preserve source attribution, and require a target role and location. Optional Naukri, LinkedIn, Indeed, Glassdoor, and Apna connectors activate only after the worker's Apify token is configured. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
           {notice && <div className={"notice " + notice.type}><div>{notice.type === "error" ? <CircleAlert size={16} /> : notice.type === "success" ? <CheckCircle2 size={16} /> : <Activity size={16} />}</div><div>{notice.message}</div><button className="demo-banner-close" aria-label="Dismiss message" onClick={() => setNotice(null)}><X size={14} /></button></div>}
+          {view === "jobs" && searchSourceResults.length > 0 && <section className="panel" style={{ marginBottom: 16 }}>
+            <div className="panel-header"><div><h2 className="panel-title">Search source diagnostics</h2><p className="panel-subtitle">Counts returned by each connected source for the current role and location</p></div><span className="tag">{searchSourceResults.filter((source) => !source.error).length} healthy</span></div>
+            <div className="panel-body"><div className="grid" style={{ gap: 8 }}>
+              {searchSourceResults.map((source) => <div className="settings-row" key={source.serverId} style={{ alignItems: "flex-start", gap: 10 }}>
+                <span className="status-dot" style={{ marginTop: 5, flexShrink: 0, background: source.error ? "#dc5252" : "#16a36a", boxShadow: "none" }} />
+                <div style={{ flex: 1, minWidth: 0 }}><strong>{source.serverId}</strong><p>{source.error ? source.error : source.found + " role/location-matched listing(s)"}</p></div>
+                <span className="tag">{source.error ? "Error" : String(source.found)}</span>
+              </div>)}
+            </div></div>
+          </section>}
 
           {view === "overview" && (
             <>
