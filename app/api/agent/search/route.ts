@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     if (!body || typeof body !== "object" || !("profile" in body)) {
       return Response.json({ error: "A candidate profile is required." }, { status: 400 });
     }
-    return requestAgent("/api/jobs/search", { method: "POST", body });
+    return requestAgent("/api/jobs/search", { method: "POST", body, timeoutMs: 330_000 });
   } catch {
     return Response.json({ error: "Request body must be valid JSON." }, { status: 400 });
   }
