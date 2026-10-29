@@ -354,7 +354,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches use five enabled public feeds, preserve source attribution, and require a target role and location. The profile fields start blank so a global search is not silently assumed. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
+          {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches use five active public feeds, preserve source attribution, and require a target role and location. Optional Naukri, LinkedIn, Indeed, Glassdoor, and Apna connectors activate only after the worker's Apify token is configured. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
           {notice && <div className={"notice " + notice.type}><div>{notice.type === "error" ? <CircleAlert size={16} /> : notice.type === "success" ? <CheckCircle2 size={16} /> : <Activity size={16} />}</div><div>{notice.message}</div><button className="demo-banner-close" aria-label="Dismiss message" onClick={() => setNotice(null)}><X size={14} /></button></div>}
 
           {view === "overview" && (
@@ -480,7 +480,7 @@ export default function HomePage() {
               <section className="panel">
                 <div className="panel-header"><div><h2 className="panel-title">Source and execution safeguards</h2><p className="panel-subtitle">Select where test searches are sent</p></div><ShieldCheck size={17} color="#168765" /></div>
                 <div className="panel-body">
-                  <div className="field-wrap"><label>Live job source</label><div className="settings-row"><div><strong>5 active public feeds</strong><p>Jobicy, Remote OK, Arbeitnow, Working Nomads, and Himalayas. Every result is checked against the selected target role and location evidence before it reaches the UI.</p></div><span className="tag">5 live feeds</span></div><span className="field-help">Adzuna and Jooble can be enabled after adding their API credentials to the agent environment. Naukri, Indeed, LinkedIn, Glassdoor, and Apna require an authorized MCP/partner endpoint; disabled placeholders do not fetch those portals.</span></div>
+                  <div className="field-wrap"><label>Live job sources</label><div className="settings-row"><div><strong>5 active public feeds</strong><p>Jobicy, Remote OK, Arbeitnow, Working Nomads, and Himalayas. Every result is filtered by target role and location evidence before it reaches the UI.</p></div><span className="tag">5 live feeds</span></div><span className="field-help">Optional major-board connector: setting APIFY_API_TOKEN in the agent's server-side .env automatically enables Naukri, LinkedIn Jobs, Indeed, and Glassdoor through a third-party Apify actor. The same token enables a separate Apna connector. Adzuna and Jooble activate when their own API credentials are configured. These extra sources may incur usage charges; they stay inactive until credentials are present.</span></div>
                   <div className="settings-row"><div><strong>Auto-submit</strong><p>This interface forces autoSubmit=false for every run. Review tasks and test the form workflow before enabling any authorized real-world submissions through an appropriate backend-controlled flow.</p></div><span className="toggle-locked">OFF · LOCKED</span></div>
                   <div className="settings-row"><div><strong>Backend sync</strong><p>Disabled for this demo profile so synthetic data is not sent to your Jobkar backend.</p></div><span className="toggle-locked">OFF · DEMO</span></div>
                   <div className="settings-row"><div><strong>Candidate persistence</strong><p>Profile edits currently live in browser state and reset when the page reloads. Production persistence requires authenticated user APIs.</p></div><span className="tag">UI demo</span></div>
@@ -519,7 +519,23 @@ function JobCard({ job }: { job: Job }) {
   const demo = job.source === "demo" || job.demo === true;
   const match = Number.isFinite(job.matchScore) ? Math.round(job.matchScore) : 0;
   const dest = job.jobUrl || job.applicationUrl;
-  const sourceLabel = job.source === "jobicy" ? "Jobicy · remote feed" : job.source === "remoteok" ? "Remote OK · remote feed" : job.source || "Connected job source";
+  const sourceLabels: Record<string, string> = {
+    jobicy: "Jobicy · remote feed",
+    remoteok: "Remote OK · remote feed",
+    arbeitnow: "Arbeitnow",
+    workingnomads: "Working Nomads",
+    himalayas: "Himalayas",
+    naukri: "Naukri",
+    linkedin: "LinkedIn Jobs",
+    indeed: "Indeed",
+    glassdoor: "Glassdoor",
+    apna: "Apna",
+    adzuna: "Adzuna",
+    jooble: "Jooble",
+    ziprecruiter: "ZipRecruiter",
+    bayt: "Bayt"
+  };
+  const sourceLabel = sourceLabels[job.source || ""] || job.source || "Connected job source";
   return <article className="job-card">
     <div className="job-card-top">
       <div className="company-mark">{(job.company || job.title || "N").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}</div>
@@ -534,7 +550,7 @@ function JobCard({ job }: { job: Job }) {
       {demo && <span className="tag source-demo">Synthetic demo listing</span>}
     </div>
     {job.matchReasons && job.matchReasons.length > 0 && <p className="job-reasons">{job.matchReasons.slice(0, 2).join(" · ")}</p>}
-    <div className="job-card-footer"><span className="source-text">Source: {sourceLabel}</span>{dest ? <a className="text-link" href={dest} target="_blank" rel="noreferrer">{job.source === "jobicy" ? "Open Jobicy listing" : job.source === "remoteok" ? "Open Remote OK listing" : "View listing"} <ExternalLink size={12} /></a> : <span className="source-text">No external URL</span>}</div>{(job.source === "jobicy" || job.source === "remoteok") && <p className="field-help">Open the original provider listing to review the employer's instructions. Automated application tasks are queued only when a direct application URL is supplied by the source.</p>}
+    <div className="job-card-footer"><span className="source-text">Source: {sourceLabel}</span>{dest ? <a className="text-link" href={dest} target="_blank" rel="noreferrer">{job.source === "jobicy" ? "Open Jobicy listing" : job.source === "remoteok" ? "Open Remote OK listing" : "Open original listing"} <ExternalLink size={12} /></a> : <span className="source-text">No external URL</span>}</div>{(job.source === "jobicy" || job.source === "remoteok") && <p className="field-help">Open the original provider listing to review the employer's instructions. Automated application tasks are queued only when a direct application URL is supplied by the source.</p>}
   </article>;
 }
 
