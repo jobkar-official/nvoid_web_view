@@ -5,7 +5,8 @@ A Next.js user interface for the Nvoid AI Agent worker. This repository contains
 ## Included
 
 - Candidate profile form with clearly fictional default test details.
-- Live remote-job discovery from Jobicy and Remote OK, with target-role and supported geographic filtering, provider attribution, canonical listing URLs, and publication dates where available.
+- Live search from Jobicy, Remote OK, Arbeitnow, Working Nomads, and Himalayas, with role/location filtering, provider attribution, original listing URLs, and publication dates when available.
+- Optional Apify connectors for Naukri, LinkedIn Jobs, Indeed, Glassdoor, and Apna; optional Adzuna and Jooble API connectors when credentials are set.
 - Synthetic demo data isolated from the default runtime configuration and used only by CI.
 - Profile match scores and job cards.
 - Agent run controls and application task history.
@@ -13,7 +14,7 @@ A Next.js user interface for the Nvoid AI Agent worker. This repository contains
 - Server-side Next.js API proxy to the agent, keeping the agent API key out of browser JavaScript.
 - Review-only execution: every run sends `autoSubmit: false` and `syncToBackend: false`.
 
-The candidate profile shown initially is fictional and stored only in browser state; it is not saved to a user database. Job search results are live provider data, not generated demo listings. Current connectors cover remote roles from Jobicy and Remote OK and preserve original provider listing links. Provider responses are cached for up to one hour to respect their usage guidance; this is fresh source data, not second-by-second streaming. Jobicy public results cover recently published remote jobs, and Remote OK's feed may not give an explicit location-eligibility field for every listing, so check the listing when it says eligibility is unspecified. Jobicy listings are listing-only; Remote OK listings are queue-eligible only when the feed provides a verified external application URL. Naukri and LinkedIn remain disabled until real authorized connectors are configured. Keep execution in review-only mode while testing.
+The candidate profile shown initially is fictional and stored only in browser state; it is not saved to a user database. Job search results are provider data, not generated demo listings. The five default public feeds are checked against the chosen role and country/location eligibility before results reach the UI. Provider data is cached for 5–60 minutes depending on source, so the feed is current but not second-by-second streaming. Optional Naukri, LinkedIn, Indeed, Glassdoor, and Apna connectors activate when a private `APIFY_API_TOKEN` is configured in the agent's `.env`; Adzuna and Jooble activate when their own credentials are present. Third-party actors can charge per result plus platform usage. Public-board listings are not queued for automatic application unless a direct external application URL is provided. Keep submission in review-only mode.
 
 ## Run locally
 
@@ -37,7 +38,7 @@ docker compose up --build -d
 curl http://127.0.0.1:3100/api/health
 ```
 
-The runtime config enables live Jobicy and Remote OK sources. Synthetic demo data is isolated to `config/mcp-servers.test.json` for CI only.
+The runtime config enables five public live sources. Optional Apify, Adzuna, and Jooble sources activate when credentials are configured. Synthetic demo data is isolated to `config/mcp-servers.test.json` for CI only.
 
 ### If Docker is not installed: run the worker natively
 
@@ -73,7 +74,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 When Next.js and the worker run on the same host, the default `NVOID_AGENT_URL=http://127.0.0.1:3100` works. If the worker is on another server or private container network, set `NVOID_AGENT_URL` to its reachable internal URL and firewall it so only trusted services can access the worker.
 
-The agent repository also provides a real-provider smoke check at `scripts/live-source-smoke.mjs`. To run it, open the agent repository's GitHub Actions, select **Live job source check** on the `development` branch, and run the workflow manually. It uses the production source configuration (not the synthetic fixture) and verifies both providers return live search results. The normal CI workflow remains isolated on synthetic data so it does not poll external providers on every code change.
+The agent repository also provides a real-provider smoke check at `scripts/live-source-smoke.mjs`. To run it, open the agent repository's GitHub Actions, select **Live job source check** on the `development` branch, and run the workflow manually. It uses the production source configuration (not the synthetic fixture) and verifies the five default public sources return live search results. The normal CI workflow remains isolated on synthetic data so it does not poll external providers on every code change.
 
 ## Test the integration
 
