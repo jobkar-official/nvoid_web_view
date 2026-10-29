@@ -5,14 +5,16 @@ A Next.js user interface for the Nvoid AI Agent worker. This repository contains
 ## Included
 
 - Candidate profile form with clearly fictional default test details.
-- Job search against either the local demo MCP source or all enabled agent sources.
+- Live job search through enabled agent sources; the default worker source is Jobicy’s public remote-jobs feed.
+- Source attribution and canonical listing links, with role and supported geographic-region filtering.
+- Synthetic demo data isolated from the default runtime configuration and used only by CI.
 - Profile match scores and job cards.
 - Agent run controls and application task history.
 - Worker connection and MCP source status.
 - Server-side Next.js API proxy to the agent, keeping the agent API key out of browser JavaScript.
 - Review-only execution: every run sends `autoSubmit: false` and `syncToBackend: false`.
 
-The demo candidate profile is stored only in browser state. It is not saved to a user database. Do not use synthetic details to apply to real jobs.
+The candidate profile shown initially is fictional and stored only in browser state; it is not saved to a user database. Job search results are live provider data, not generated demo listings. The current public connector covers remote jobs and links to Jobicy listing pages; it does not provide a verified employer application URL, so those results are not queued for automated application. Naukri and LinkedIn remain disabled until real authorized connectors are configured. Keep all application execution in review-only mode while testing.
 
 ## Run locally
 
