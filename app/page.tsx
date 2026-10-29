@@ -71,6 +71,15 @@ type ApplicationTask = {
   result?: { status?: string; message?: string; applicationUrl?: string; screenshotPath?: string };
 };
 type AgentHealth = { status?: string; service?: string; mcp?: { configured?: number; connected?: number } };
+type McpSourceStatus = {
+  id: string;
+  name: string;
+  enabled: boolean;
+  transport?: string;
+  connected: boolean;
+  toolCount?: number;
+  error?: string;
+};
 
 const initialProfile: CandidateProfile = {
   userId: "nvoid-demo-candidate-001",
@@ -161,6 +170,8 @@ export default function HomePage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [tasks, setTasks] = useState<ApplicationTask[]>([]);
   const [health, setHealth] = useState<AgentHealth | null>(null);
+  const [sourceStatuses, setSourceStatuses] = useState<McpSourceStatus[]>([]);
+  const [sourceRefreshError, setSourceRefreshError] = useState("");
   const [agentState, setAgentState] = useState<"checking" | "online" | "offline">("checking");
   const [busy, setBusy] = useState<"search" | "run" | "refresh" | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
@@ -199,16 +210,29 @@ export default function HomePage() {
     }
   }, []);
 
+  const loadSources = useCallback(async () => {
+    try {
+      const result = await readJson(await fetch("/api/agent/sources", { cache: "no-store" }));
+      const servers = Array.isArray(result.servers) ? result.servers as McpSourceStatus[] : [];
+      setSourceStatuses(servers);
+      setSourceRefreshError("");
+    } catch (error) {
+      setSourceRefreshError(error instanceof Error ? error.message : "Could not load connector statuses.");
+      setSourceStatuses([]);
+    }
+  }, []);
+
   const refreshWorkspace = useCallback(async () => {
     setBusy("refresh");
-    await Promise.all([loadHealth(), loadTasks()]);
+    await Promise.all([loadHealth(), loadTasks(), loadSources()]);
     setBusy(null);
-  }, [loadHealth, loadTasks]);
+  }, [loadHealth, loadTasks, loadSources]);
 
   useEffect(() => {
     void loadHealth();
     void loadTasks();
-  }, [loadHealth, loadTasks]);
+    void loadSources();
+  }, [loadHealth, loadTasks, loadSources]);
 
   const updateProfile = <K extends keyof CandidateProfile,>(key: K, value: CandidateProfile[K]) => {
     setProfile((current) => ({ ...current, [key]: value }));
@@ -475,6 +499,34 @@ export default function HomePage() {
                   <div className="settings-row"><div><strong>Private API key</strong><p>NVOID_AGENT_API_KEY is sent only by server-side route handlers and is never embedded in browser JavaScript.</p></div><span className="tag"><ShieldCheck size={12} /> Server-side</span></div>
                   <div className="settings-row"><div><strong>MCP sources connected</strong><p>Enabled source connectors reported by the worker health endpoint.</p></div><strong>{connectedSources}/{health?.mcp?.configured ?? 0}</strong></div>
                   <button className="secondary-button full-width" style={{ marginTop: 15 }} onClick={refreshWorkspace} disabled={busy !== null}><RefreshCw size={14} className={busy === "refresh" ? "spin" : ""} /> Test connection</button>
+                </div>
+              </section>
+              <section className="panel">
+                <div className="panel-header">
+                  <div><h2 className="panel-title">Connector inventory</h2><p className="panel-subtitle">Actual worker-reported MCP status, not just a configured connector count</p></div>
+                  <button className="icon-button" aria-label="Refresh connector statuses" title="Refresh connector statuses" onClick={loadSources} disabled={busy !== null}><RefreshCw size={14} /></button>
+                </div>
+                <div className="panel-body">
+                  {sourceRefreshError && <div className="notice error" style={{ margin: "0 0 12px" }}><CircleAlert size={14} />{sourceRefreshError}</div>}
+                  {sourceStatuses.length === 0 && !sourceRefreshError && <p className="field-help">Loading connector status from the worker…</p>}
+                  <div className="grid" style={{ gap: 8 }}>
+                    {sourceStatuses.map((source) => {
+                      const stateLabel = source.connected ? "Connected" : source.enabled ? "Connection failed" : "Inactive";
+                      const stateTone = source.connected ? "source-state-connected" : source.enabled ? "source-state-error" : "source-state-inactive";
+                      return <div key={source.id} className="settings-row" style={{ alignItems: "flex-start", gap: 10 }}>
+                        <div className="status-dot" style={{ marginTop: 5, flexShrink: 0, background: source.connected ? "#16a36a" : source.enabled ? "#dc5252" : "#9aa8ba", boxShadow: "none" }} />
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+                            <strong>{source.name}</strong>
+                            <span className={"tag " + stateTone}>{stateLabel}</span>
+                          </div>
+                          <p>{source.id} · {source.transport || "MCP"} · {source.toolCount ?? 0} tool(s)</p>
+                          {!source.enabled && <span className="field-help">Not enabled. Some sources require API credentials or an authorized MCP endpoint.</span>}
+                          {source.error && <span className="field-help" style={{ color: "#c43c45" }}>{source.error}</span>}
+                        </div>
+                      </div>;
+                    })}
+                  </div>
                 </div>
               </section>
               <section className="panel">
