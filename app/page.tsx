@@ -88,7 +88,7 @@ const initialProfile: CandidateProfile = {
   salaryMin: 1200000,
   salaryCurrency: "INR",
   employmentTypes: ["full-time"],
-  remote: true,
+  remote: false,
   summary: "Demo candidate profile for testing the Nvoid discovery and application workflow. Replace these values with accurate candidate details before any real application.",
   linkedinUrl: "https://www.linkedin.com/in/demo-candidate/",
   portfolioUrl: "https://example.com/portfolio",
