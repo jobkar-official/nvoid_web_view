@@ -28,7 +28,7 @@ Clone and run the development branch of the agent project, configure a private `
 git clone https://github.com/jobkar-official/nvoid_ai_agent.git
 cd nvoid_ai_agent
 git checkout development
-cp .env.example .env
+test -f .env || cp .env.example .env
 ```
 
 Edit `.env` to set a strong random `AGENT_API_KEY`, keep `AUTO_SUBMIT_ENABLED=false`, and ensure `MCP_SERVERS_CONFIG=./config/mcp-servers.json` or leave it unset so the live sources are used. For the Docker route, then run:
@@ -104,7 +104,7 @@ The browser calls only same-origin routes:
 
 Those route handlers proxy the requests server-to-server to the worker's existing API. The agent key is read from `NVOID_AGENT_API_KEY` on the Next.js server and attached as `x-agent-api-key`. The UI never reads or returns the key.
 
-For the demo, searches and runs explicitly disable backend synchronization to prevent synthetic records being written to the Jobkar API. Candidate profile edits reset on page refresh; production should replace this fixture with your authenticated profile API.
+Searches and runs explicitly disable backend synchronization so test data is not written to the Jobkar API. The current candidate profile is a browser-side fixture and resets on page refresh; real account integration requires an authenticated profile API.
 
 ## Production checks still required
 
