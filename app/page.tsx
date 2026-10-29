@@ -211,7 +211,7 @@ export default function HomePage() {
     void loadTasks();
   }, [loadHealth, loadTasks]);
 
-  const updateProfile = <K extends keyof CandidateProfile>(key: K, value: CandidateProfile[K]) => {
+  const updateProfile = <K extends keyof CandidateProfile,>(key: K, value: CandidateProfile[K]) => {
     setProfile((current) => ({ ...current, [key]: value }));
   };
 
