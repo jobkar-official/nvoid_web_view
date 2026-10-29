@@ -9,11 +9,71 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      AGENT_API_KEY: ci-smoke-key-not-for-production
+      REDIS_HOST: 127.0.0.1
+      REDIS_PORT: "6379"
+      AUTO_SUBMIT_ENABLED: "false"
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: jobkar-official/nvoid_ai_agent
+          ref: development
+          path: agent-worker
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npm install --no-audit --no-fund
-      - run: npm run typecheck
-      - run: npm run build
+      - name: Install and build the UI
+        run: |
+          npm install --no-audit --no-fund
+          npm run typecheck
+          npm run build
+      - name: Build the real agent worker
+        working-directory: agent-worker
+        run: |
+          npm ci
+          npm run build
+      - name: Start agent and verify its demo source
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd agent-worker && npm run start:prod > /tmp/nvoid-agent.log 2>&1) &
+          agent_pid=$!
+          cleanup() {
+            if kill -0 "$agent_pid" 2>/dev/null; then kill "$agent_pid" || true; fi
+            if [ -n "${ui_pid:-}" ] && kill -0 "$ui_pid" 2>/dev/null; then kill "$ui_pid" || true; fi
+            wait "$agent_pid" 2>/dev/null || true
+            if [ -n "${ui_pid:-}" ]; then wait "$ui_pid" 2>/dev/null || true; fi
+            cat /tmp/nvoid-agent.log
+            if [ -f /tmp/nvoid-web.log ]; then cat /tmp/nvoid-web.log; fi
+          }
+          trap cleanup EXIT
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:3100/api/health > /tmp/agent-health.json 2>/dev/null; then break; fi
+            if ! kill -0 "$agent_pid" 2>/dev/null; then cat /tmp/nvoid-agent.log; exit 1; fi
+            sleep 1
+          done
+          node -e 'const h=require("/tmp/agent-health.json"); if(h.status!=="ok" || !h.mcp || h.mcp.connected<1) process.exit(1); console.log("Agent healthy with "+h.mcp.connected+" connected MCP source(s)")'
+          NVOID_AGENT_URL=http://127.0.0.1:3100 NVOID_AGENT_API_KEY="$AGENT_API_KEY" npm run start > /tmp/nvoid-web.log 2>&1 &
+          ui_pid=$!
+          for attempt in $(seq 1 60); do
+            if curl --silent --fail http://127.0.0.1:3000/api/agent/health > /tmp/web-agent-health.json 2>/dev/null; then break; fi
+            if ! kill -0 "$ui_pid" 2>/dev/null; then cat /tmp/nvoid-web.log; exit 1; fi
+            sleep 1
+          done
+          node -e 'const h=require("/tmp/web-agent-health.json"); if(h.status!=="ok" || !h.mcp || h.mcp.connected<1) process.exit(1); console.log("UI server-side health proxy is connected")'
+          response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/agent/search -H 'content-type: application/json' -d '{"profile":{"userId":"nvoid-demo-candidate-001","jobTitle":"Software Developer","location":"Worldwide","skills":["TypeScript","Java","Spring Boot"],"keywords":["backend","remote"],"employmentTypes":["full-time"]},"limit":20,"serverIds":["demo"],"syncToBackend":false}')
+          printf '%s' "$response" > /tmp/ui-search.json
+          node -e 'const r=require("/tmp/ui-search.json"); if(!Array.isArray(r.jobs) || r.jobs.length<1) { console.error(JSON.stringify(r)); process.exit(1); } console.log("UI-to-agent job search passed: "+r.jobs.length+" demo jobs returned through the authenticated proxy")'
