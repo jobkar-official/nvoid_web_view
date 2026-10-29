@@ -4,6 +4,7 @@ type AgentRequestOptions = {
   method?: "GET" | "POST";
   body?: unknown;
   authenticated?: boolean;
+  timeoutMs?: number;
 };
 
 function upstreamUrl(path: string): URL {
@@ -55,7 +56,7 @@ export async function requestAgent(path: string, options: AgentRequestOptions = 
       headers,
       body,
       cache: "no-store",
-      signal: AbortSignal.timeout(method === "POST" ? 120_000 : 20_000),
+      signal: AbortSignal.timeout(options.timeoutMs ?? (method === "POST" ? 120_000 : 20_000)),
     });
     const raw = await response.text();
     let data: unknown = raw;
