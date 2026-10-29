@@ -120,6 +120,22 @@ const pageInfo: Record<View, { eyebrow: string; title: string; description: stri
   settings: { eyebrow: "Agent configuration", title: "Connections & settings", description: "Check the worker connection, choose a source, and review submission safeguards." }
 };
 
+function connectorSetupHint(source: McpSourceStatus): string | undefined {
+  const hints: Record<string, string> = {
+    "apify-boards": "Add APIFY_API_TOKEN to the agent worker's .env to activate Naukri, LinkedIn Jobs, Indeed, and Glassdoor through the third-party Apify actor. Per-result/platform charges may apply.",
+    "apify-apna": "Add APIFY_API_TOKEN to the agent worker's .env to activate the Apna public-job connector. Third-party usage charges may apply.",
+    adzuna: "Add ADZUNA_APP_ID and ADZUNA_APP_KEY to the agent worker's .env.",
+    jooble: "Add JOOBLE_API_KEY to the agent worker's .env. Jooble API keys can be region-specific.",
+    naukri: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint and its actual search-tool schema, or enable the Apify multi-board connector.",
+    indeed: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint, or enable the Apify multi-board connector.",
+    linkedin: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint and its actual search-tool schema, or enable the Apify multi-board connector.",
+    glassdoor: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint, or enable the Apify multi-board connector.",
+    apna: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint, or enable the Apify Apna connector.",
+    demo: "Synthetic test listings only. Kept disabled in the normal runtime configuration."
+  };
+  return hints[source.id] || "Enable this source in config/mcp-servers.json and configure any required credentials or endpoint.";
+}
+
 async function readJson(response: Response) {
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
@@ -521,7 +537,7 @@ export default function HomePage() {
                             <span className={"tag " + stateTone}>{stateLabel}</span>
                           </div>
                           <p>{source.id} · {source.transport || "MCP"} · {source.toolCount ?? 0} tool(s)</p>
-                          {!source.enabled && <span className="field-help">Not enabled. Some sources require API credentials or an authorized MCP endpoint.</span>}
+                          {!source.enabled && <span className="field-help">{connectorSetupHint(source)}</span>}
                           {source.error && <span className="field-help" style={{ color: "#c43c45" }}>{source.error}</span>}
                         </div>
                       </div>;
