@@ -73,7 +73,7 @@ Open [http://localhost:3000](http://localhost:3000).
 
 When Next.js and the worker run on the same host, the default `NVOID_AGENT_URL=http://127.0.0.1:3100` works. If the worker is on another server or private container network, set `NVOID_AGENT_URL` to its reachable internal URL and firewall it so only trusted services can access the worker.
 
-The agent repository also provides a real-provider smoke check at `scripts/live-source-smoke.mjs`. Its GitHub Actions workflow runs against the production source configuration (not the synthetic fixture) and verifies both providers return live search results. The deterministic CI workflow remains isolated on synthetic data so it does not poll external providers on every code change.
+The agent repository also provides a real-provider smoke check at `scripts/live-source-smoke.mjs`. To run it, open the agent repository's GitHub Actions, select **Live job source check** on the `development` branch, and run the workflow manually. It uses the production source configuration (not the synthetic fixture) and verifies both providers return live search results. The normal CI workflow remains isolated on synthetic data so it does not poll external providers on every code change.
 
 ## Test the integration
 
