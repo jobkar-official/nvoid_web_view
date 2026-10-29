@@ -230,7 +230,9 @@ export default function HomePage() {
       setJobs(Array.isArray(result.jobs) ? result.jobs as Job[] : []);
       setLastSearch(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
       setView("jobs");
-      setNotice({ type: "success", message: "Search completed. Found " + (result.returnedCount ?? result.jobs?.length ?? 0) + " normalized job matches across " + (result.sourceCount ?? 0) + " source(s)." });
+      const foundCount = result.returnedCount ?? result.jobs?.length ?? 0;
+      const sourceErrors = Array.isArray(result.sources) ? result.sources.filter((source: { error?: string }) => Boolean(source.error)) : [];
+      setNotice({ type: sourceErrors.length > 0 && foundCount === 0 ? "error" : sourceErrors.length > 0 ? "info" : "success", message: sourceErrors.length > 0 ? "Search returned " + foundCount + " job(s); source issue: " + sourceErrors.map((source: { serverId?: string; error?: string }) => (source.serverId || "source") + ": " + (source.error || "unknown error")).join(" · ") : "Search completed. Found " + foundCount + " normalized job matches across " + (result.sourceCount ?? 0) + " source(s)." });
     } catch (error) {
       setNotice({ type: "error", message: error instanceof Error ? error.message : "Job search failed." });
       await loadHealth();
@@ -475,7 +477,7 @@ export default function HomePage() {
               </section>
               <section className="panel">
                 <div className="panel-header"><div><h2 className="panel-title">Test checklist</h2><p className="panel-subtitle">Validate the end-to-end UI and worker connection</p></div><ListChecks size={17} color="#6d87b2" /></div>
-                <div className="panel-body"><PipelineSteps hasJobs={jobs.length > 0} hasTasks={tasks.length > 0} hasSource={connectedSources > 0} /><div style={{ marginTop: 14 }}><button className="primary-button full-width" onClick={runAgent} disabled={busy !== null || agentState === "offline"}>{busy === "run" ? <LoaderCircle size={15} className="spin" /> : <Zap size={15} />} Run safe demo workflow</button></div></div>
+                <div className="panel-body"><PipelineSteps hasJobs={jobs.length > 0} hasTasks={tasks.length > 0} hasSource={connectedSources > 0} /><div style={{ marginTop: 14 }}><button className="primary-button full-width" onClick={runAgent} disabled={busy !== null || agentState === "offline"}>{busy === "run" ? <LoaderCircle size={15} className="spin" /> : <Zap size={15} />} Run safe review workflow</button></div></div>
               </section>
               <section className="panel info-card"><h2 className="info-heading"><CircleHelp size={16} color="#4176df" /> Environment variables</h2><p className="field-help" style={{ fontSize: 11, marginBottom: 13 }}>Set these on the Next.js server, not as NEXT_PUBLIC variables.</p><div className="code-panel"><code>NVOID_AGENT_URL=http://127.0.0.1:3100</code><code>NVOID_AGENT_API_KEY=your-private-agent-key</code></div><div className="field-help" style={{ marginTop: 11 }}>The key must match AGENT_API_KEY in the agent worker. In Docker, use the worker's internal service hostname instead of 127.0.0.1.</div></section>
             </div>
@@ -520,7 +522,7 @@ function EmptyState({ icon: Icon, title, description, buttonText, onAction, load
 
 function PipelineSteps({ hasJobs, hasTasks, hasSource }: { hasJobs: boolean; hasTasks: boolean; hasSource: boolean }) {
   const steps = [
-    { label: "Connect job sources", description: hasSource ? "The worker reports at least one connected MCP source." : "Enable the local demo source or configure a live MCP connector.", done: hasSource },
+    { label: "Connect job sources", description: hasSource ? "The worker reports at least one connected MCP source." : "The worker reports at least one enabled live job source.", done: hasSource },
     { label: "Discover and match jobs", description: hasJobs ? "Search results are available in this workspace." : "Search listings and rank them against your candidate profile.", done: hasJobs },
     { label: "Queue application tasks", description: hasTasks ? "Task records are available from the Redis-backed worker queue." : "Run the agent to enqueue eligible jobs in review-only mode.", done: hasTasks },
     { label: "Verify the outcome", description: "Check the task result. A queued task is not proof that an application was submitted.", done: false }
