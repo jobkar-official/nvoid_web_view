@@ -5,8 +5,7 @@ A Next.js user interface for the Nvoid AI Agent worker. This repository contains
 ## Included
 
 - Candidate profile form with clearly fictional default test details.
-- Live remote-job discovery from Jobicy and Remote OK, with provider-specific filters, attribution, and original listing URLs.
-- Source attribution and canonical listing links, with role and supported geographic-region filtering.
+- Live remote-job discovery from Jobicy and Remote OK, with target-role and supported geographic filtering, provider attribution, canonical listing URLs, and publication dates where available.
 - Synthetic demo data isolated from the default runtime configuration and used only by CI.
 - Profile match scores and job cards.
 - Agent run controls and application task history.
@@ -14,7 +13,7 @@ A Next.js user interface for the Nvoid AI Agent worker. This repository contains
 - Server-side Next.js API proxy to the agent, keeping the agent API key out of browser JavaScript.
 - Review-only execution: every run sends `autoSubmit: false` and `syncToBackend: false`.
 
-The candidate profile shown initially is fictional and stored only in browser state; it is not saved to a user database. Job search results are live provider data, not generated demo listings. Current connectors cover remote roles from Jobicy and Remote OK and preserve original provider listing links. Jobicy listings are listing-only; Remote OK listings are queue-eligible only when the feed provides an explicit direct application URL. Naukri and LinkedIn remain disabled until real authorized connectors are configured. Keep execution in review-only mode while testing.
+The candidate profile shown initially is fictional and stored only in browser state; it is not saved to a user database. Job search results are live provider data, not generated demo listings. Current connectors cover remote roles from Jobicy and Remote OK and preserve original provider listing links. Provider responses are cached for up to one hour to respect their usage guidance; this is fresh source data, not second-by-second streaming. Jobicy public results cover recently published remote jobs, and Remote OK's feed may not give an explicit location-eligibility field for every listing, so check the listing when it says eligibility is unspecified. Jobicy listings are listing-only; Remote OK listings are queue-eligible only when the feed provides a verified external application URL. Naukri and LinkedIn remain disabled until real authorized connectors are configured. Keep execution in review-only mode while testing.
 
 ## Run locally
 
@@ -73,6 +72,8 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000).
 
 When Next.js and the worker run on the same host, the default `NVOID_AGENT_URL=http://127.0.0.1:3100` works. If the worker is on another server or private container network, set `NVOID_AGENT_URL` to its reachable internal URL and firewall it so only trusted services can access the worker.
+
+The agent repository also provides a real-provider smoke check at `scripts/live-source-smoke.mjs`. Its GitHub Actions workflow runs against the production source configuration (not the synthetic fixture) and verifies both providers return live search results. The deterministic CI workflow remains isolated on synthetic data so it does not poll external providers on every code change.
 
 ## Test the integration
 
