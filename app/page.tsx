@@ -13,7 +13,6 @@ import {
 import type { LucideIcon } from "lucide-react";
 
 type View = "overview" | "jobs" | "applications" | "profile" | "settings";
-type SourceMode = "demo" | "connected";
 type Notice = { type: "error" | "success" | "info"; message: string };
 type CandidateProfile = {
   userId: string;
@@ -157,7 +156,6 @@ function statusLabel(status: string) {
 
 export default function HomePage() {
   const [view, setView] = useState<View>("overview");
-  const [sourceMode, setSourceMode] = useState<SourceMode>("demo");
   const [profile, setProfile] = useState<CandidateProfile>(initialProfile);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [tasks, setTasks] = useState<ApplicationTask[]>([]);
@@ -215,8 +213,6 @@ export default function HomePage() {
     setProfile((current) => ({ ...current, [key]: value }));
   };
 
-  const sourcePayload = () => sourceMode === "demo" ? ["demo"] : undefined;
-
   const searchJobs = async (event?: FormEvent) => {
     event?.preventDefault();
     setBusy("search");
@@ -228,7 +224,6 @@ export default function HomePage() {
         body: JSON.stringify({
           profile: { ...profile },
           limit: 100,
-          serverIds: sourcePayload(),
           syncToBackend: false
         })
       }));
@@ -257,7 +252,6 @@ export default function HomePage() {
           searchLimit: 50,
           applyLimit: 10,
           minMatchScore,
-          serverIds: sourcePayload(),
           autoSubmit: false,
           syncToBackend: false
         })
@@ -265,7 +259,9 @@ export default function HomePage() {
       if (Array.isArray(result.search?.jobs)) setJobs(result.search.jobs as Job[]);
       await loadTasks();
       setView("applications");
-      setNotice({ type: "success", message: "Agent run completed. Queued " + (result.applicationQueue?.queued ?? 0) + " task(s) in review-only mode. No real application was submitted by this UI." });
+      const queuedCount = result.applicationQueue?.queued ?? 0;
+      const queueNote = typeof result.applicationQueue?.note === "string" ? result.applicationQueue.note : "";
+      setNotice({ type: queuedCount > 0 ? "success" : "info", message: queuedCount > 0 ? "Agent run completed. Queued " + queuedCount + " task(s) in review-only mode. No real application was submitted by this UI." : queueNote || "The agent found no jobs with a supported direct application route to queue." });
     } catch (error) {
       setNotice({ type: "error", message: error instanceof Error ? error.message : "The agent could not complete this run." });
       await loadHealth();
@@ -345,7 +341,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Demo mode is active.</strong> The candidate details are fictional test data. Agent runs use review-only mode, do not sync to the Jobkar backend, and cannot submit real applications from this UI.</div><button className="demo-banner-close" aria-label="Dismiss demo notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
+          {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches use connected live sources; the current public feed provides remote listings, keeps source attribution, and links to the listing page. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
           {notice && <div className={"notice " + notice.type}><div>{notice.type === "error" ? <CircleAlert size={16} /> : notice.type === "success" ? <CheckCircle2 size={16} /> : <Activity size={16} />}</div><div>{notice.message}</div><button className="demo-banner-close" aria-label="Dismiss message" onClick={() => setNotice(null)}><X size={14} /></button></div>}
 
           {view === "overview" && (
@@ -360,7 +356,7 @@ export default function HomePage() {
                 <section className="panel">
                   <div className="panel-header"><div><h2 className="panel-title">Recommended opportunities</h2><p className="panel-subtitle">Best scoring jobs from your latest search</p></div><button className="text-link" onClick={() => goTo("jobs")}>View all <ArrowUpRight size={14} /></button></div>
                   <div className="panel-body">
-                    {jobs.length > 0 ? <div className="job-list">{jobs.slice(0, 3).map((job) => <JobCard key={job.id} job={job} />)}</div> : <EmptyState icon={SearchCheck} title="No jobs discovered yet" description="Run a search against the local demo source to validate the agent and see the first profile matches." buttonText="Search demo jobs" onAction={() => void searchJobs()} loading={busy === "search"} />}
+                    {jobs.length > 0 ? <div className="job-list">{jobs.slice(0, 3).map((job) => <JobCard key={job.id} job={job} />)}</div> : <EmptyState icon={SearchCheck} title="No jobs discovered yet" description="Search the connected live job source to load current listings and rank them against your target role and location preferences." buttonText="Search live jobs" onAction={() => void searchJobs()} loading={busy === "search"} />}
                   </div>
                 </section>
                 <div className="grid">
@@ -372,7 +368,7 @@ export default function HomePage() {
                     <div className="panel-header"><div><h2 className="panel-title">Connection status</h2><p className="panel-subtitle">Worker health and active sources</p></div><button className="icon-button" aria-label="Refresh status" onClick={refreshWorkspace} disabled={busy !== null}><RefreshCw size={14} className={busy === "refresh" ? "spin" : ""} /></button></div>
                     <div className="panel-body">
                       <div className="info-row"><div className="info-row-icon"><Server size={15} /></div><div className="info-row-copy"><strong>{agentState === "online" ? "Agent API reachable" : agentState === "checking" ? "Checking agent API" : "Agent API unavailable"}</strong><span>{health?.service || "job-agent-worker"}{health?.status ? " · " + health.status : ""}</span></div></div>
-                      <div className="info-row"><div className="info-row-icon"><Database size={15} /></div><div className="info-row-copy"><strong>{connectedSources} source(s) connected</strong><span>Demo MCP is the default test source. Live sources need their own authorized configuration.</span></div></div>
+                      <div className="info-row"><div className="info-row-icon"><Database size={15} /></div><div className="info-row-copy"><strong>{connectedSources} source(s) connected</strong><span>Searches use the enabled live source IDs configured on the worker. Listings retain provider attribution and are ranked against your profile.</span></div></div>
                       <div className="info-row"><div className="info-row-icon"><ShieldCheck size={15} /></div><div className="info-row-copy"><strong>Review-only submission</strong><span>The UI passes autoSubmit=false on every agent run.</span></div></div>
                       <button className="secondary-button full-width" style={{ marginTop: 17 }} onClick={() => goTo("settings")}>Connection settings <ArrowRight size={14} /></button>
                     </div>
@@ -384,7 +380,7 @@ export default function HomePage() {
 
           {view === "jobs" && (
             <section className="panel">
-              <div className="panel-header"><div><h2 className="panel-title">Job discovery</h2><p className="panel-subtitle">Search results returned by the connected Nvoid agent API.</p></div><div className="source-controls"><SourceSwitch mode={sourceMode} onChange={setSourceMode} /></div></div>
+              <div className="panel-header"><div><h2 className="panel-title">Job discovery</h2><p className="panel-subtitle">Live listings returned by connected job sources and matched against your role and geographic preferences.</p></div></div>
               <div className="panel-body">
                 <form className="search-bar" onSubmit={searchJobs}>
                   <div className="field-wrap"><label htmlFor="search-role">Target role</label><input id="search-role" className="field" value={profile.jobTitle} onChange={(event) => updateProfile("jobTitle", event.target.value)} placeholder="Software Developer" /></div>
@@ -392,7 +388,7 @@ export default function HomePage() {
                   <div className="field-wrap"><label>&nbsp;</label><button className="primary-button full-width" type="submit" disabled={busy !== null}>{busy === "search" ? <LoaderCircle size={15} className="spin" /> : <Search size={15} />} Search jobs</button></div>
                 </form>
                 <div className="filter-row"><div className="source-controls"><span className="result-count"><strong>{jobs.length}</strong> job(s) found</span><span className="tag"><Filter size={12} /> Match score {minMatchScore}%+</span></div><div className="source-controls"><label htmlFor="min-score" className="field-help">Match threshold</label><select id="min-score" className="field" style={{ width: 100, minHeight: 32, padding: "6px 8px" }} value={minMatchScore} onChange={(event) => setMinMatchScore(Number(event.target.value))}><option value={40}>40%</option><option value={50}>50%</option><option value={55}>55%</option><option value={60}>60%</option><option value={70}>70%</option><option value={80}>80%</option></select><button className="secondary-button button-small" onClick={runAgent} disabled={busy !== null || agentState === "offline"}>{busy === "run" ? <LoaderCircle size={13} className="spin" /> : <Zap size={13} />} Run & queue</button></div></div>
-                {jobs.length > 0 ? <div className="job-list">{jobs.map((job) => <JobCard key={job.id} job={job} />)}</div> : <EmptyState icon={Globe2} title="Search across your sources" description={sourceMode === "demo" ? "The demo source returns synthetic jobs for safe testing. Search now to confirm the UI-to-agent connection." : "Search any connected MCP sources. Live portal connectors must be configured on the agent worker first."} buttonText="Search jobs" onAction={() => void searchJobs()} loading={busy === "search"} />}
+                {jobs.length > 0 ? <div className="job-list">{jobs.map((job) => <JobCard key={job.id} job={job} />)}</div> : <EmptyState icon={Globe2} title="Search across your sources" description="Search current listings from the enabled live feed. This initial connector covers remote roles and may not include every city, onsite role, or job portal." buttonText="Search live jobs" onAction={() => void searchJobs()} loading={busy === "search"} />}
               </div>
             </section>
           )}
@@ -405,7 +401,7 @@ export default function HomePage() {
                 <table className="data-table">
                   <thead><tr><th>Job / company</th><th>Status</th><th>Created</th><th>Source</th><th>Application</th></tr></thead>
                   <tbody>
-                    {tasks.length === 0 ? <tr><td colSpan={5}><div className="table-empty"><ClipboardList size={25} style={{ margin: "0 auto 10px", color: "#a5b2c5" }} /><strong style={{ display: "block", color: "#596b84", marginBottom: 5 }}>No application tasks yet</strong>Run the agent in review-only mode to queue demo jobs and inspect their task states.</div></td></tr> : tasks.map((task) => {
+                    {tasks.length === 0 ? <tr><td colSpan={5}><div className="table-empty"><ClipboardList size={25} style={{ margin: "0 auto 10px", color: "#a5b2c5" }} /><strong style={{ display: "block", color: "#596b84", marginBottom: 5 }}>No application tasks yet</strong>Run the agent in review-only mode to inspect supported application tasks. Public aggregator listings without a verified employer application URL are not queued for automated application.</div></td></tr> : tasks.map((task) => {
                       const status = taskStatus(task);
                       const jobUrl = task.result?.applicationUrl || task.job?.applicationUrl;
                       return <tr key={task.taskId || task.job?.id || task.createdAt}>
@@ -471,7 +467,7 @@ export default function HomePage() {
               <section className="panel">
                 <div className="panel-header"><div><h2 className="panel-title">Source and execution safeguards</h2><p className="panel-subtitle">Select where test searches are sent</p></div><ShieldCheck size={17} color="#168765" /></div>
                 <div className="panel-body">
-                  <div className="field-wrap"><label>Job source mode</label><SourceSwitch mode={sourceMode} onChange={setSourceMode} /><span className="field-help">Demo uses the synthetic MCP source ID demo. Connected sources queries all enabled sources configured on the agent worker.</span></div>
+                  <div className="field-wrap"><label>Live job source</label><div className="settings-row"><div><strong>Jobicy Remote Jobs</strong><p>Queries current remote listings using the candidate target role and supported geographic region.</p></div><span className="tag">Live feed</span></div><span className="field-help">The public feed links to Jobicy listing pages rather than verified employer application forms. Naukri and LinkedIn remain disabled until their real authorized connectors are configured.</span></div>
                   <div className="settings-row"><div><strong>Auto-submit</strong><p>This interface forces autoSubmit=false for every run. Review tasks and test the form workflow before enabling any authorized real-world submissions through an appropriate backend-controlled flow.</p></div><span className="toggle-locked">OFF · LOCKED</span></div>
                   <div className="settings-row"><div><strong>Backend sync</strong><p>Disabled for this demo profile so synthetic data is not sent to your Jobkar backend.</p></div><span className="toggle-locked">OFF · DEMO</span></div>
                   <div className="settings-row"><div><strong>Candidate persistence</strong><p>Profile edits currently live in browser state and reset when the page reloads. Production persistence requires authenticated user APIs.</p></div><span className="tag">UI demo</span></div>
@@ -496,14 +492,11 @@ function MetricCard({ label, value, foot, icon: Icon, tone = "blue" }: { label: 
   return <article className="metric-card"><div className="metric-top"><span className="metric-label">{label}</span><span className={"metric-icon metric-icon-" + tone}><Icon size={16} /></span></div><div className="metric-value">{value.toLocaleString()}</div><div className="metric-foot"><span className="metric-muted">{foot}</span></div></article>;
 }
 
-function SourceSwitch({ mode, onChange }: { mode: SourceMode; onChange: (mode: SourceMode) => void }) {
-  return <div className="segmented" role="group" aria-label="Job source mode"><button type="button" className={mode === "demo" ? "selected" : ""} onClick={() => onChange("demo")}>Demo source</button><button type="button" className={mode === "connected" ? "selected" : ""} onClick={() => onChange("connected")}>Connected</button></div>;
-}
-
 function JobCard({ job }: { job: Job }) {
   const demo = job.source === "demo" || job.demo === true;
   const match = Number.isFinite(job.matchScore) ? Math.round(job.matchScore) : 0;
   const dest = job.applicationUrl || job.jobUrl;
+  const sourceLabel = job.source === "jobicy" ? "Jobicy · remote feed" : job.source || "Connected job source";
   return <article className="job-card">
     <div className="job-card-top">
       <div className="company-mark">{(job.company || job.title || "N").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}</div>
@@ -517,7 +510,7 @@ function JobCard({ job }: { job: Job }) {
       {demo && <span className="tag source-demo">Synthetic demo listing</span>}
     </div>
     {job.matchReasons && job.matchReasons.length > 0 && <p className="job-reasons">{job.matchReasons.slice(0, 2).join(" · ")}</p>}
-    <div className="job-card-footer"><span className="source-text">Source: {job.source || "Connected job source"}</span>{dest ? <a className="text-link" href={dest} target="_blank" rel="noreferrer">View listing <ExternalLink size={12} /></a> : <span className="source-text">No external URL</span>}</div>
+    <div className="job-card-footer"><span className="source-text">Source: {sourceLabel}</span>{dest ? <a className="text-link" href={dest} target="_blank" rel="noreferrer">{job.source === "jobicy" ? "Open Jobicy listing" : "View listing"} <ExternalLink size={12} /></a> : <span className="source-text">No external URL</span>}</div>{job.source === "jobicy" && <p className="field-help">Open the Jobicy listing to follow its employer application link. This public feed does not provide a verified direct application form.</p>}
   </article>;
 }
 
