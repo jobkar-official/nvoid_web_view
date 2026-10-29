@@ -79,11 +79,11 @@ const initialProfile: CandidateProfile = {
   lastName: "Sharma",
   email: "aarav.demo@example.com",
   phone: "+91 90000 12345",
-  jobTitle: "Software Developer",
-  location: "Worldwide",
-  countries: ["India", "Germany", "United Kingdom", "Canada", "Worldwide"],
-  skills: ["TypeScript", "JavaScript", "React", "Node.js", "Java", "Spring Boot", "Python", "Redis"],
-  keywords: ["backend", "full stack", "API", "remote"],
+  jobTitle: "",
+  location: "",
+  countries: [],
+  skills: [],
+  keywords: [],
   experienceYears: 3,
   salaryMin: 1200000,
   salaryCurrency: "INR",
@@ -216,6 +216,11 @@ export default function HomePage() {
 
   const searchJobs = async (event?: FormEvent) => {
     event?.preventDefault();
+    if (!profile.jobTitle.trim() || !profile.location.trim()) {
+      setView("jobs");
+      setNotice({ type: "error", message: "Enter both a target job title and a preferred city, region, or country before searching. Use Worldwide only for a global search." });
+      return;
+    }
     setBusy("search");
     setNotice(null);
     try {
@@ -243,6 +248,11 @@ export default function HomePage() {
   };
 
   const runAgent = async () => {
+    if (!profile.jobTitle.trim() || !profile.location.trim()) {
+      setView("jobs");
+      setNotice({ type: "error", message: "Enter both a target job title and a preferred location before running the agent." });
+      return;
+    }
     setBusy("run");
     setNotice(null);
     try {
@@ -344,7 +354,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches use the live Jobicy and Remote OK feeds, preserve source attribution, and link to original provider listings. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
+          {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches use five enabled public feeds, preserve source attribution, and require a target role and location. The profile fields start blank so a global search is not silently assumed. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
           {notice && <div className={"notice " + notice.type}><div>{notice.type === "error" ? <CircleAlert size={16} /> : notice.type === "success" ? <CheckCircle2 size={16} /> : <Activity size={16} />}</div><div>{notice.message}</div><button className="demo-banner-close" aria-label="Dismiss message" onClick={() => setNotice(null)}><X size={14} /></button></div>}
 
           {view === "overview" && (
@@ -386,12 +396,12 @@ export default function HomePage() {
               <div className="panel-header"><div><h2 className="panel-title">Job discovery</h2><p className="panel-subtitle">Live listings returned by connected job sources and matched against your role and geographic preferences.</p></div></div>
               <div className="panel-body">
                 <form className="search-bar" onSubmit={searchJobs}>
-                  <div className="field-wrap"><label htmlFor="search-role">Target role</label><input id="search-role" className="field" value={profile.jobTitle} onChange={(event) => updateProfile("jobTitle", event.target.value)} placeholder="Software Developer" /></div>
-                  <div className="field-wrap"><label htmlFor="search-location">Location</label><input id="search-location" className="field" value={profile.location} onChange={(event) => updateProfile("location", event.target.value)} placeholder="Worldwide, Remote, Bengaluru..." /></div>
+                  <div className="field-wrap"><label htmlFor="search-role">Target role</label><input id="search-role" className="field" value={profile.jobTitle} onChange={(event) => updateProfile("jobTitle", event.target.value)} placeholder="e.g. Java Backend Developer" /></div>
+                  <div className="field-wrap"><label htmlFor="search-location">Location</label><input id="search-location" className="field" value={profile.location} onChange={(event) => updateProfile("location", event.target.value)} placeholder="e.g. Bengaluru, India" /></div>
                   <div className="field-wrap"><label>&nbsp;</label><button className="primary-button full-width" type="submit" disabled={busy !== null}>{busy === "search" ? <LoaderCircle size={15} className="spin" /> : <Search size={15} />} Search jobs</button></div>
                 </form>
                 <div className="filter-row"><div className="source-controls"><span className="result-count"><strong>{jobs.length}</strong> job(s) found</span><span className="tag"><Filter size={12} /> Match score {minMatchScore}%+</span></div><div className="source-controls"><label htmlFor="min-score" className="field-help">Match threshold</label><select id="min-score" className="field" style={{ width: 100, minHeight: 32, padding: "6px 8px" }} value={minMatchScore} onChange={(event) => setMinMatchScore(Number(event.target.value))}><option value={40}>40%</option><option value={50}>50%</option><option value={55}>55%</option><option value={60}>60%</option><option value={70}>70%</option><option value={80}>80%</option></select><button className="secondary-button button-small" onClick={runAgent} disabled={busy !== null || agentState === "offline"}>{busy === "run" ? <LoaderCircle size={13} className="spin" /> : <Zap size={13} />} Run & queue</button></div></div>
-                {jobs.length > 0 ? <div className="job-list">{jobs.map((job) => <JobCard key={job.id} job={job} />)}</div> : <EmptyState icon={Globe2} title="Search across your sources" description="Search current listings from the enabled live feed. This initial connector covers remote roles and may not include every city, onsite role, or job portal." buttonText="Search live jobs" onAction={() => void searchJobs()} loading={busy === "search"} />}
+                {jobs.length > 0 ? <div className="job-list">{jobs.map((job) => <JobCard key={job.id} job={job} />)}</div> : <EmptyState icon={Globe2} title="Search across your sources" description="Search live listings from the enabled public feeds. Results are filtered by target role and location eligibility; local onsite coverage depends on the source." buttonText="Search live jobs" onAction={() => void searchJobs()} loading={busy === "search"} />}
               </div>
             </section>
           )}
@@ -470,7 +480,7 @@ export default function HomePage() {
               <section className="panel">
                 <div className="panel-header"><div><h2 className="panel-title">Source and execution safeguards</h2><p className="panel-subtitle">Select where test searches are sent</p></div><ShieldCheck size={17} color="#168765" /></div>
                 <div className="panel-body">
-                  <div className="field-wrap"><label>Live job source</label><div className="settings-row"><div><strong>Jobicy and Remote OK</strong><p>Queries live remote listings by candidate role, then filters by supported geographic eligibility where the provider reports it.</p></div><span className="tag">2 live feeds</span></div><span className="field-help">Both feeds preserve their original listing URLs. Some listings do not provide a direct employer application URL, so those remain listing-only. Naukri and LinkedIn are still disabled until real authorized connectors are configured.</span></div>
+                  <div className="field-wrap"><label>Live job source</label><div className="settings-row"><div><strong>5 active public feeds</strong><p>Jobicy, Remote OK, Arbeitnow, Working Nomads, and Himalayas. Every result is checked against the selected target role and location evidence before it reaches the UI.</p></div><span className="tag">5 live feeds</span></div><span className="field-help">Adzuna and Jooble can be enabled after adding their API credentials to the agent environment. Naukri, Indeed, LinkedIn, Glassdoor, and Apna require an authorized MCP/partner endpoint; disabled placeholders do not fetch those portals.</span></div>
                   <div className="settings-row"><div><strong>Auto-submit</strong><p>This interface forces autoSubmit=false for every run. Review tasks and test the form workflow before enabling any authorized real-world submissions through an appropriate backend-controlled flow.</p></div><span className="toggle-locked">OFF · LOCKED</span></div>
                   <div className="settings-row"><div><strong>Backend sync</strong><p>Disabled for this demo profile so synthetic data is not sent to your Jobkar backend.</p></div><span className="toggle-locked">OFF · DEMO</span></div>
                   <div className="settings-row"><div><strong>Candidate persistence</strong><p>Profile edits currently live in browser state and reset when the page reloads. Production persistence requires authenticated user APIs.</p></div><span className="tag">UI demo</span></div>
