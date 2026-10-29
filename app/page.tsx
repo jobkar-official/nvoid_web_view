@@ -469,7 +469,7 @@ export default function HomePage() {
               <section className="panel">
                 <div className="panel-header"><div><h2 className="panel-title">Source and execution safeguards</h2><p className="panel-subtitle">Select where test searches are sent</p></div><ShieldCheck size={17} color="#168765" /></div>
                 <div className="panel-body">
-                  <div className="field-wrap"><label>Live job source</label><div className="settings-row"><div><strong>Jobicy Remote Jobs</strong><p>Queries current remote listings using the candidate target role and supported geographic region.</p></div><span className="tag">Live feed</span></div><span className="field-help">The public feed links to Jobicy listing pages rather than verified employer application forms. Naukri and LinkedIn remain disabled until their real authorized connectors are configured.</span></div>
+                  <div className="field-wrap"><label>Live job source</label><div className="settings-row"><div><strong>Jobicy and Remote OK</strong><p>Queries live remote listings by candidate role, then filters by supported geographic eligibility where the provider reports it.</p></div><span className="tag">2 live feeds</span></div><span className="field-help">Both feeds preserve their original listing URLs. Some listings do not provide a direct employer application URL, so those remain listing-only. Naukri and LinkedIn are still disabled until real authorized connectors are configured.</span></div>
                   <div className="settings-row"><div><strong>Auto-submit</strong><p>This interface forces autoSubmit=false for every run. Review tasks and test the form workflow before enabling any authorized real-world submissions through an appropriate backend-controlled flow.</p></div><span className="toggle-locked">OFF · LOCKED</span></div>
                   <div className="settings-row"><div><strong>Backend sync</strong><p>Disabled for this demo profile so synthetic data is not sent to your Jobkar backend.</p></div><span className="toggle-locked">OFF · DEMO</span></div>
                   <div className="settings-row"><div><strong>Candidate persistence</strong><p>Profile edits currently live in browser state and reset when the page reloads. Production persistence requires authenticated user APIs.</p></div><span className="tag">UI demo</span></div>
@@ -497,8 +497,8 @@ function MetricCard({ label, value, foot, icon: Icon, tone = "blue" }: { label: 
 function JobCard({ job }: { job: Job }) {
   const demo = job.source === "demo" || job.demo === true;
   const match = Number.isFinite(job.matchScore) ? Math.round(job.matchScore) : 0;
-  const dest = job.applicationUrl || job.jobUrl;
-  const sourceLabel = job.source === "jobicy" ? "Jobicy · remote feed" : job.source || "Connected job source";
+  const dest = job.jobUrl || job.applicationUrl;
+  const sourceLabel = job.source === "jobicy" ? "Jobicy · remote feed" : job.source === "remoteok" ? "Remote OK · remote feed" : job.source || "Connected job source";
   return <article className="job-card">
     <div className="job-card-top">
       <div className="company-mark">{(job.company || job.title || "N").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}</div>
@@ -512,7 +512,7 @@ function JobCard({ job }: { job: Job }) {
       {demo && <span className="tag source-demo">Synthetic demo listing</span>}
     </div>
     {job.matchReasons && job.matchReasons.length > 0 && <p className="job-reasons">{job.matchReasons.slice(0, 2).join(" · ")}</p>}
-    <div className="job-card-footer"><span className="source-text">Source: {sourceLabel}</span>{dest ? <a className="text-link" href={dest} target="_blank" rel="noreferrer">{job.source === "jobicy" ? "Open Jobicy listing" : "View listing"} <ExternalLink size={12} /></a> : <span className="source-text">No external URL</span>}</div>{job.source === "jobicy" && <p className="field-help">Open the Jobicy listing to follow its employer application link. This public feed does not provide a verified direct application form.</p>}
+    <div className="job-card-footer"><span className="source-text">Source: {sourceLabel}</span>{dest ? <a className="text-link" href={dest} target="_blank" rel="noreferrer">{job.source === "jobicy" ? "Open Jobicy listing" : job.source === "remoteok" ? "Open Remote OK listing" : "View listing"} <ExternalLink size={12} /></a> : <span className="source-text">No external URL</span>}</div>{(job.source === "jobicy" || job.source === "remoteok") && <p className="field-help">Open the original provider listing to review the employer's instructions. Automated application tasks are queued only when a direct application URL is supplied by the source.</p>}
   </article>;
 }
 
