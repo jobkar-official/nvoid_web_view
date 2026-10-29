@@ -287,3 +287,14 @@ textarea.field { min-height: 92px; resize: vertical; line-height: 1.6; }
 @media (max-width: 900px) {
   .sidebar-backdrop { display: block; position: fixed; z-index: 29; inset: 0; border: 0; background: rgba(9,20,37,.45); }
 }
+
+
+.checkbox-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.checkbox-chip { display: inline-flex; align-items: center; gap: 7px; border: 1px solid #e1e8f2; border-radius: 8px; padding: 8px 10px; color: #61728b; background: #fbfcfe; font-size: 11px; font-weight: 600; cursor: pointer; }
+.checkbox-chip:has(input:checked) { border-color: #b9cdf7; background: #eef4ff; color: #2859b0; }
+.checkbox-chip input, .preference-toggle input { accent-color: var(--blue); }
+.preference-toggle { display: flex; align-items: flex-start; gap: 11px; border: 1px solid #e2eaf5; border-radius: 10px; padding: 13px; background: #fbfcfe; cursor: pointer; }
+.preference-toggle input { flex: 0 0 auto; width: 16px; height: 16px; margin: 2px 0 0; }
+.preference-toggle span { display: grid; gap: 5px; }
+.preference-toggle strong { color: #354760; font-size: 11px; }
+.preference-toggle small { color: #8996a8; font-size: 10px; line-height: 1.5; font-weight: 400; }
