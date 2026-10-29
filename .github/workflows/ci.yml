@@ -75,6 +75,9 @@ jobs:
             sleep 1
           done
           node -e 'const h=require("/tmp/web-agent-health.json"); if(h.status!=="ok" || !h.mcp || h.mcp.connected<1) process.exit(1); console.log("UI server-side health proxy is connected")'
+          sources_response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/agent/sources)
+          printf '%s' "$sources_response" > /tmp/ui-sources.json
+          node -e 'const r=require("/tmp/ui-sources.json"); if(!Array.isArray(r.servers) || !r.servers.some(s=>s.id==="demo" && s.connected)) { console.error(JSON.stringify(r)); process.exit(1); } console.log("UI connector inventory passed: "+r.servers.length+" source status record(s) returned")'
           response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/agent/search -H 'content-type: application/json' -d '{"profile":{"userId":"nvoid-demo-candidate-001","jobTitle":"Software Developer","location":"Worldwide","skills":["TypeScript","Java","Spring Boot"],"keywords":["backend","remote"],"employmentTypes":["full-time"]},"limit":20,"serverIds":["demo"],"syncToBackend":false}')
           printf '%s' "$response" > /tmp/ui-search.json
           node -e 'const r=require("/tmp/ui-search.json"); if(!Array.isArray(r.jobs) || r.jobs.length<1) { console.error(JSON.stringify(r)); process.exit(1); } console.log("UI-to-agent job search passed: "+r.jobs.length+" demo jobs returned through the authenticated proxy")'
