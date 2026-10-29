@@ -5,7 +5,7 @@ A Next.js user interface for the Nvoid AI Agent worker. This repository contains
 ## Included
 
 - Candidate profile form with clearly fictional default test details.
-- Live job search through enabled agent sources; the default worker source is Jobicy’s public remote-jobs feed.
+- Live remote-job discovery from Jobicy and Remote OK, with provider-specific filters, attribution, and original listing URLs.
 - Source attribution and canonical listing links, with role and supported geographic-region filtering.
 - Synthetic demo data isolated from the default runtime configuration and used only by CI.
 - Profile match scores and job cards.
@@ -14,7 +14,7 @@ A Next.js user interface for the Nvoid AI Agent worker. This repository contains
 - Server-side Next.js API proxy to the agent, keeping the agent API key out of browser JavaScript.
 - Review-only execution: every run sends `autoSubmit: false` and `syncToBackend: false`.
 
-The candidate profile shown initially is fictional and stored only in browser state; it is not saved to a user database. Job search results are live provider data, not generated demo listings. The current public connector covers remote jobs and links to Jobicy listing pages; it does not provide a verified employer application URL, so those results are not queued for automated application. Naukri and LinkedIn remain disabled until real authorized connectors are configured. Keep all application execution in review-only mode while testing.
+The candidate profile shown initially is fictional and stored only in browser state; it is not saved to a user database. Job search results are live provider data, not generated demo listings. Current connectors cover remote roles from Jobicy and Remote OK and preserve original provider listing links. Jobicy listings are listing-only; Remote OK listings are queue-eligible only when the feed provides an explicit direct application URL. Naukri and LinkedIn remain disabled until real authorized connectors are configured. Keep execution in review-only mode while testing.
 
 ## Run locally
 
@@ -31,14 +31,36 @@ git checkout development
 cp .env.example .env
 ```
 
-Edit `.env` to set a strong random `AGENT_API_KEY` and keep `AUTO_SUBMIT_ENABLED=false`, then:
+Edit `.env` to set a strong random `AGENT_API_KEY`, keep `AUTO_SUBMIT_ENABLED=false`, and ensure `MCP_SERVERS_CONFIG=./config/mcp-servers.json` or leave it unset so the live sources are used. For the Docker route, then run:
 
 ```bash
 docker compose up --build -d
 curl http://127.0.0.1:3100/api/health
 ```
 
-The demo MCP source is enabled on the agent's development branch and returns synthetic data only.
+The runtime config enables live Jobicy and Remote OK sources. Synthetic demo data is isolated to `config/mcp-servers.test.json` for CI only.
+
+### Native Node.js setup (without Docker)
+
+Use this route if Docker is not installed. You need Node.js 22+ and Redis 7 running locally; the worker uses Redis for its queue. Install Redis using your Linux distribution's package manager, start the Redis service, and confirm `redis-cli ping` returns `PONG`. Keep `REDIS_HOST=127.0.0.1` and `REDIS_PORT=6379` in the worker `.env`.
+
+In terminal 1:
+
+```bash
+cd nvoid_ai_agent
+npm ci
+npm run start:dev
+``
+
+In terminal 2:
+
+```bash
+cd nvoid_web_view
+npm install
+npm run dev
+```
+
+Do not replace the default `MCP_SERVERS_CONFIG=./config/mcp-servers.json` with the CI-only `config/mcp-servers.test.json`, or searches will return synthetic demo data instead of live listings.
 
 ### 2. Start this UI
 
@@ -63,13 +85,12 @@ When Next.js and the worker run on the same host, the default `NVOID_AGENT_URL=h
 ## Test the integration
 
 1. Open the dashboard and check that the agent is reachable and at least one MCP source is connected.
-2. Keep **Demo source** selected.
-3. Open **Find jobs**, then click **Search jobs**.
-4. Review the returned synthetic job cards and match scores.
-5. Click **Run agent** or **Run & queue** to enqueue a limited batch in review-only mode.
-6. Open **Applications** and refresh the task list to see worker queue states and results.
+2. Open **Find jobs**, enter the target role and preferred location, then click **Search jobs**.
+3. Review live results with source labels, match scores, and canonical listing URLs.
+4. Click **Run agent** to queue only jobs that have a supported application URL; submissions remain disabled.
+5. Open **Applications** to see worker queue states and results.
 
-Demo application links point to `example.com`, where no application form is available. A `NEEDS_USER_ACTION` result is therefore expected for those demo jobs. It is not a successful application.
+Live search does not mean a job was applied to. Some providers expose only their own listing URL, not an employer application URL. Those records remain searchable and are not queued as applications. A queued task is not proof of a submitted application.
 
 ## API connection design
 
