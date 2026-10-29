@@ -60,7 +60,7 @@ From this repository:
 
 ```bash
 git checkout development
-cp .env.example .env
+test -f .env || cp .env.example .env
 ```
 
 Set `NVOID_AGENT_API_KEY` in the UI server's `.env` to exactly match the worker's `AGENT_API_KEY`. Keep it server-side; do not add a `NEXT_PUBLIC_` prefix.
