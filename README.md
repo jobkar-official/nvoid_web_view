@@ -40,24 +40,16 @@ curl http://127.0.0.1:3100/api/health
 
 The runtime config enables live Jobicy and Remote OK sources. Synthetic demo data is isolated to `config/mcp-servers.test.json` for CI only.
 
-### Native Node.js setup (without Docker)
+### If Docker is not installed: run the worker natively
 
-Use this route if Docker is not installed. You need Node.js 22+ and Redis 7 running locally; the worker uses Redis for its queue. Install Redis using your Linux distribution's package manager, start the Redis service, and confirm `redis-cli ping` returns `PONG`. Keep `REDIS_HOST=127.0.0.1` and `REDIS_PORT=6379` in the worker `.env`.
+You need Node.js 22+ and Redis 7 running locally; the worker uses Redis for its queue. Install Redis using your Linux distribution's package manager, start the Redis service, and confirm `redis-cli ping` returns `PONG`. Keep `REDIS_HOST=127.0.0.1` and `REDIS_PORT=6379` in the worker `.env`.
 
-In terminal 1:
+In terminal 1, start the agent from its repository directory:
 
 ```bash
-cd nvoid_ai_agent
 npm ci
+npx playwright install chromium
 npm run start:dev
-``
-
-In terminal 2:
-
-```bash
-cd nvoid_web_view
-npm install
-npm run dev
 ```
 
 Do not replace the default `MCP_SERVERS_CONFIG=./config/mcp-servers.json` with the CI-only `config/mcp-servers.test.json`, or searches will return synthetic demo data instead of live listings.
