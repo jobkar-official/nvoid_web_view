@@ -85,10 +85,10 @@ type SearchSourceReport = { serverId: string; provider?: string; mode?: string; 
 type JobSourceResult = { serverId: string; tool?: string; found: number; error?: string; report?: SearchSourceReport };
 type ResearchToolOption = { serverId: string; serverName: string; name: string; description?: string; inputSchema?: unknown; safety?: string };
 type ResearchCatalog = { connectedServers: number; configuredServers: number; servers: McpSourceStatus[]; availableReadOnlyTools: ResearchToolOption[]; availableReadOnlyToolCount: number };
-type ResearchConnectorReport = { serverId: string; serverName: string; enabled: boolean; connected: boolean; connectionError?: string; discoveredTools: number; readOnlyTools: number; callsSucceeded: number; callsFailed: number; recordsReturned: number };
+type ResearchConnectorReport = { serverId: string; serverName: string; enabled: boolean; connected: boolean; selected: boolean; connectionError?: string; discoveredTools: number; readOnlyTools: number; callsSucceeded: number; callsFailed: number; recordsReturned: number };
 type ResearchCall = { serverId: string; serverName: string; toolName: string; reason: string; status: "success" | "failed"; durationMs: number; recordsReturned: number; providerReport?: Record<string, unknown>; error?: string };
 type ResearchRecord = { id: string; serverId: string; serverName: string; toolName: string; title?: string; url?: string; data: Record<string, unknown> };
-type ResearchResult = { query: string; generatedAt: string; planner: "llm" | "heuristic"; report: { configuredServers: number; connectedServers: number; toolsDiscovered: number; readOnlyToolsDiscovered: number; plannedCalls: number; successfulCalls: number; failedCalls: number; rawRecords: number; uniqueRecords: number; duplicatesRemoved: number; maxRecords: number; truncated: boolean; perConnector: ResearchConnectorReport[] }; calls: ResearchCall[]; records: ResearchRecord[]; warnings: string[] };
+type ResearchResult = { query: string; generatedAt: string; planner: "llm" | "heuristic"; report: { configuredServers: number; connectedServers: number; selectedServers: number; selectedConnectedServers: number; toolsDiscovered: number; readOnlyToolsDiscovered: number; plannedCalls: number; successfulCalls: number; failedCalls: number; rawRecords: number; uniqueRecords: number; duplicatesRemoved: number; maxRecords: number; truncated: boolean; perConnector: ResearchConnectorReport[] }; calls: ResearchCall[]; records: ResearchRecord[]; warnings: string[] };
 
 const initialProfile: CandidateProfile = {
   userId: "nvoid-demo-candidate-001",
@@ -547,7 +547,7 @@ export default function HomePage() {
                     <div className="panel-header"><div><h2 className="panel-title">Execution report</h2><p className="panel-subtitle">{researchResult.query} · {new Date(researchResult.generatedAt).toLocaleString()} · planner: {researchResult.planner}</p></div><span className="tag">{researchResult.report.uniqueRecords.toLocaleString()} unique records</span></div>
                     <div className="panel-body">
                       <div className="grid metric-grid">
-                        <MetricCard label="Connected sources" value={researchResult.report.connectedServers} foot={researchResult.report.configuredServers + " configured"} icon={Server} />
+                        <MetricCard label="Connected sources" value={researchResult.report.connectedServers} foot={researchResult.report.selectedConnectedServers + " selected · " + researchResult.report.configuredServers + " configured"} icon={Server} />
                         <MetricCard label="Read-only tools" value={researchResult.report.readOnlyToolsDiscovered} foot={researchResult.report.toolsDiscovered + " tools discovered"} icon={Code2} />
                         <MetricCard label="Successful calls" value={researchResult.report.successfulCalls} foot={researchResult.report.failedCalls + " failed · " + researchResult.report.plannedCalls + " planned"} icon={Activity} />
                         <MetricCard label="Unique records" value={researchResult.report.uniqueRecords} foot={researchResult.report.rawRecords + " raw · " + researchResult.report.duplicatesRemoved + " duplicates removed"} icon={Database} />
@@ -563,6 +563,7 @@ export default function HomePage() {
                       {researchResult.report.perConnector.map((source) => <div key={source.serverId} className="settings-row" style={{ alignItems: "flex-start", gap: 10 }}>
                         <span className="status-dot" style={{ marginTop: 5, flexShrink: 0, background: source.connected ? "#16a36a" : source.enabled ? "#dc5252" : "#9aa8ba", boxShadow: "none" }} />
                         <div style={{ flex: 1, minWidth: 0 }}><strong>{source.serverName}</strong><p>{source.serverId} · {source.connected ? source.readOnlyTools + " read-only / " + source.discoveredTools + " discovered tools" : source.enabled ? "Connection failed" : "Inactive"}</p>{source.connectionError && <span className="field-help" style={{ color: "#c43c45" }}>{source.connectionError}</span>}</div>
+                        <span className="tag">{source.selected ? "Selected" : "Not selected"} · {source.connected ? "Connected" : source.enabled ? "Failed" : "Inactive"}</span>
                         <span className="tag">{source.callsSucceeded} ok · {source.callsFailed} failed · {source.recordsReturned} records</span>
                       </div>)}
                     </div></div>
