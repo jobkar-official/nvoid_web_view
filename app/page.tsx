@@ -139,6 +139,9 @@ function connectorSetupHint(source: McpSourceStatus): string | undefined {
     adzuna: "Add ADZUNA_APP_ID and ADZUNA_APP_KEY to the agent worker's .env.",
     jooble: "Add JOOBLE_API_KEY to the agent worker's .env. Jooble API keys can be region-specific.",
     "serper-search": "Add SERPER_API_KEY to the worker .env. One search expands into Google-style role, location, job-board, ATS, company-career and government-recruitment queries, then crawls public result pages. API credits are used per successful search request.",
+    greenhouse: "Set GREENHOUSE_BOARDS to comma-separated company board slugs in the worker .env. Nvoid searches those public Greenhouse career boards.",
+    lever: "Set LEVER_SITES to comma-separated company site slugs in the worker .env. Nvoid searches those public Lever career boards.",
+    ashby: "Set ASHBY_BOARDS to comma-separated company board slugs in the worker .env. Nvoid searches those public Ashby career boards.",
     naukri: "Set NAUKRI_MCP_URL and NAUKRI_MCP_TOKEN to an authorized Naukri MCP endpoint. It auto-enables after restart and the worker discovers the search tool from the MCP tool catalogue.",
     indeed: "Set INDEED_MCP_URL and INDEED_MCP_TOKEN to an authorized Indeed MCP endpoint. It auto-enables after restart and the worker discovers the search tool from the MCP tool catalogue.",
     linkedin: "Set LINKEDIN_MCP_URL and LINKEDIN_MCP_TOKEN to an authorized LinkedIn Jobs MCP endpoint. It auto-enables after restart and the worker discovers the search tool from the MCP tool catalogue.",
@@ -274,7 +277,7 @@ export default function HomePage() {
       return sources;
     } catch (error) {
       setJobSourceLoadError(error instanceof Error ? error.message : "Could not load job-search sources.");
-      throw error;
+      return [];
     }
   }, []);
 
@@ -712,18 +715,21 @@ export default function HomePage() {
                         ? (source.searchTool || "Search tool discovered") + " · " + (source.toolCount ?? 0) + " tool(s)"
                         : source.error || (!source.enabled ? connectorSetupHint(source) : "No compatible job-search tool was discovered on this MCP server.");
                       return <label key={source.id} className="settings-row" style={{ alignItems: "flex-start", gap: 10, cursor: selectable ? "pointer" : "not-allowed", opacity: selectable ? 1 : 0.72 }}>
-                        <input type="checkbox" checked={selected} disabled={!selectable} onChange={(event) => setSelectedJobSourceIds((current) => {
-                          const selectedIds = current ?? availableJobSourceIds;
-                          return event.target.checked
-                            ? [...new Set([...selectedIds, source.id])]
-                            : selectedIds.filter((id) => id !== source.id);
-                        })} />
+                        <input type="checkbox" checked={selected} disabled={!selectable} onChange={(event) => {
+                          const checked = event.currentTarget.checked;
+                          setSelectedJobSourceIds((current) => {
+                            const selectedIds = current ?? availableJobSourceIds;
+                            return checked
+                              ? [...new Set([...selectedIds, source.id])]
+                              : selectedIds.filter((id) => id !== source.id);
+                          });
+                        }} />
                         <div style={{ minWidth: 0, flex: 1 }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
                             <strong>{source.name}</strong>
                             <span className="tag">{state}</span>
                           </div>
-                          <p>{source.id} · {source.transport || "MCP"}</p>
+                          <p>{source.id} · {source.transport || "MCP"}{source.jobSearchAvailable && source.searchTool ? " · " + source.searchTool : ""}</p>
                           <span className="field-help">{detail}</span>
                         </div>
                       </label>;
