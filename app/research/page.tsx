@@ -45,6 +45,7 @@ type ResearchCall = {
   status: "success" | "failed";
   durationMs: number;
   recordsReturned: number;
+  providerReport?: Record<string, unknown>;
   error?: string;
 };
 
@@ -393,7 +394,7 @@ export default function ResearchPage() {
                   {result.calls.map((call, index) => (
                     <div className="research-call-row" key={call.serverId + "/" + call.toolName + "/" + index}>
                       <span className={"research-call-icon " + (call.status === "success" ? "success" : "failed")}>{call.status === "success" ? <CheckCircle2 size={15} /> : <XCircle size={15} />}</span>
-                      <div className="research-call-main"><strong>{call.toolName}</strong><small>{call.serverName} · {call.reason}</small>{call.error && <span className="research-call-error">{call.error}</span>}</div>
+                      <div className="research-call-main"><strong>{call.toolName}</strong><small>{call.serverName} · {call.reason}</small>{call.error && <span className="research-call-error">{call.error}</span>}{call.providerReport && <details className="research-provider-report"><summary>Provider crawl metrics</summary><pre>{JSON.stringify(call.providerReport, null, 2)}</pre></details>}</div>
                       <div className="research-call-meta"><strong>{call.recordsReturned}</strong><small>records</small></div>
                       <div className="research-call-meta"><strong>{call.durationMs.toLocaleString()} ms</strong><small>{call.status}</small></div>
                     </div>
