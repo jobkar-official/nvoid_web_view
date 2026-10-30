@@ -107,6 +107,8 @@ Live search does not mean a job was applied to. Some providers expose only their
 The browser calls only same-origin routes:
 
 - `GET /api/agent/health`
+- `GET /api/agent/sources`
+- `GET /api/agent/tools`
 - `POST /api/agent/search`
 - `POST /api/agent/run`
 - `GET /api/agent/applications`
