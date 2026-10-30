@@ -92,7 +92,7 @@ The research route is read-only. It never invokes tools identified as mutating/d
 ## Test the integration
 
 1. Open the dashboard and check that the agent is reachable and at least one MCP source is connected.
-2. Open **Find jobs**, enter the target role and preferred location, then click **Search jobs**.
+2. Open **Find jobs**, select one or more connected search/crawl sources (all searchable sources are selected by default), enter the target role and preferred location, then click **Search jobs**. The selected source IDs are passed to the worker; unchecked or unavailable sources are not called. Serper appears as the Google-indexed web search and public-page crawler when its API key is configured.
 3. Review live results with source labels, match scores, and canonical listing URLs.
 4. Click **Run agent** to queue only jobs that have a supported application URL; submissions remain disabled.
 5. Open **Applications** to see worker queue states and results.
