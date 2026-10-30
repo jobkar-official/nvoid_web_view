@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: jobkar-official/nvoid_ai_agent
-          ref: development
+          ref: feat/federated-mcp-research
           path: agent-worker
           persist-credentials: false
       - uses: actions/setup-node@v4
@@ -45,6 +45,10 @@ jobs:
         working-directory: agent-worker
         run: |
           npm ci
+          npm run lint:types
+          node --check scripts/search-engine-research-mcp-server.cjs
+          npm test -- --coverage
+          node -e 'const { buildDorkQueries } = require("./scripts/search-engine-research-mcp-server.cjs"); const queries = buildDorkQueries("Java backend developer jobs in India"); if (!queries.some(q => q.startsWith("site:linkedin.com/jobs")) || !queries.some(q => q.startsWith("intitle:"))) process.exit(1); console.log("Google dork expansion passed: " + queries.length + " query variants")'
           npm run build
       - name: Start agent and verify its demo source
         shell: bash
@@ -78,6 +82,12 @@ jobs:
           sources_response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/agent/sources)
           printf '%s' "$sources_response" > /tmp/ui-sources.json
           node -e 'const r=require("/tmp/ui-sources.json"); if(!Array.isArray(r.servers) || !r.servers.some(s=>s.id==="demo" && s.connected)) { console.error(JSON.stringify(r)); process.exit(1); } console.log("UI connector inventory passed: "+r.servers.length+" source status record(s) returned")'
+          research_tools_response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/research/tools)
+          printf '%s' "$research_tools_response" > /tmp/ui-research-tools.json
+          node -e 'const r=require("/tmp/ui-research-tools.json"); if(!Array.isArray(r.availableReadOnlyTools) || !r.availableReadOnlyTools.some(t=>t.serverId==="demo" && t.name==="search_jobs")) { console.error(JSON.stringify(r)); process.exit(1); } console.log("UI research tool inventory passed: "+r.availableReadOnlyToolCount+" read-only tool(s) discovered")'
+          research_response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/research/run -H 'content-type: application/json' -d '{"query":"Software Developer jobs","serverIds":["demo"],"maxRecords":10,"maxTools":5}')
+          printf '%s' "$research_response" > /tmp/ui-research.json
+          node -e 'const r=require("/tmp/ui-research.json"); if(!Array.isArray(r.records) || r.records.length<1 || !Array.isArray(r.calls) || !r.calls.some(c=>c.serverId==="demo" && c.status==="success") || !r.report || r.report.uniqueRecords<1 || !Array.isArray(r.report.perConnector) || !r.report.perConnector.some(c=>c.serverId==="demo" && c.selected && c.connected) || r.report.selectedConnectedServers<1) { console.error(JSON.stringify(r)); process.exit(1); } console.log("UI-to-agent federated research passed: "+r.report.uniqueRecords+" actual MCP records from "+r.report.successfulCalls+" successful call(s)")'
           response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/agent/search -H 'content-type: application/json' -d '{"profile":{"userId":"nvoid-demo-candidate-001","jobTitle":"Software Developer","location":"Worldwide","skills":["TypeScript","Java","Spring Boot"],"keywords":["backend","remote"],"employmentTypes":["full-time"]},"limit":20,"serverIds":["demo"],"syncToBackend":false}')
           printf '%s' "$response" > /tmp/ui-search.json
           node -e 'const r=require("/tmp/ui-search.json"); if(!Array.isArray(r.jobs) || r.jobs.length<1) { console.error(JSON.stringify(r)); process.exit(1); } console.log("UI-to-agent job search passed: "+r.jobs.length+" demo jobs returned through the authenticated proxy")'
