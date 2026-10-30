@@ -730,7 +730,7 @@ export default function HomePage() {
                   </>
                 )}
                 {jobs.length === 0 && lastSearch ? (
-                  <EmptyState icon={SearchCheck} title="No matching jobs returned" description="The connected providers completed without returning a job that matched this role and location. Review source diagnostics above or broaden the location and job-title query." buttonText="Search again" onAction={() => void searchJobs()} loading={busy === "search"} />
+                  <EmptyState icon={SearchCheck} title="No matching jobs returned" description="The connected providers completed without returning a job that matched this role and location. Review the source coverage below or broaden the location and job-title query." buttonText="Search again" onAction={() => void searchJobs()} loading={busy === "search"} />
                 ) : jobs.length === 0 ? (
                   <div className="job-search-empty">
                     <div className="empty-icon"><SearchCheck size={22} /></div>
