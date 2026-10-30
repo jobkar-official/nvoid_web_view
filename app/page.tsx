@@ -1035,7 +1035,8 @@ function JobCard({ job }: { job: Job }) {
     glassdoor: "Glassdoor", apna: "Apna", adzuna: "Adzuna", jooble: "Jooble",
     ziprecruiter: "ZipRecruiter", bayt: "Bayt", "serper-search": "Google Search + public-page crawler",
     remotive: "Remotive", weworkremotely: "We Work Remotely", greenhouse: "Greenhouse careers",
-    lever: "Lever careers", ashby: "Ashby careers", "apify-boards": "Apify job boards", "apify-apna": "Apify Apna"
+    lever: "Lever careers", ashby: "Ashby careers", "apify-boards": "Apify job boards", "apify-apna": "Apify Apna",
+     jobspy: "JobSpy", aidevboard: "AI Dev Jobs", "openings-mcp": "Openings MCP", bdjobs: "BDJobs", hellowork: "HelloWork"
   };
   const sourceLabel = sourceLabels[job.source || ""] || job.source || "Connected job source";
   const postedAt = job.postedAt || rawFieldText(raw, ["postedAt", "posted_at", "posted", "postedDate", "posted_date", "datePosted", "date_posted", "createdAt", "created_at", "publishedAt", "pubDate", "pub_date", "age"]);
