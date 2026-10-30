@@ -56,6 +56,7 @@ type Job = {
   matchScore: number;
   matchReasons?: string[];
   demo?: boolean;
+  raw?: Record<string, unknown>;
 };
 type ApplicationTask = {
   taskId?: string;
@@ -80,7 +81,7 @@ type McpSourceStatus = {
   toolCount?: number;
   error?: string;
 };
-type SearchSourceReport = { serverId: string; provider?: string; mode?: string; queryCount?: number; requestsMade?: number; rawIndexedResults?: number; uniqueRoleLocationUrls?: number; publicJobPagesFetched?: number; structuredJobPages?: number; metadataOnlyListings?: number; matchedJobs?: number; returnedJobs?: number; targetCount?: number; reachedRequestedLimit?: boolean; moreSearchResultsAvailable?: boolean; failedSearchRequests?: number; truncated?: boolean };
+type SearchSourceReport = { serverId: string; provider?: string; mode?: string; queryCount?: number; requestsMade?: number; rawIndexedResults?: number; uniqueRoleLocationUrls?: number; publicJobPagesFetched?: number; structuredJobPages?: number; metadataOnlyListings?: number; matchedJobs?: number; returnedJobs?: number; targetCount?: number; reachedRequestedLimit?: boolean; moreSearchResultsAvailable?: boolean; failedSearchRequests?: number; rejectedUrlResults?: number; rejectedRoleResults?: number; rejectedLocationResults?: number; opportunityTypes?: Record<string, number>; truncated?: boolean };
 type JobSourceResult = { serverId: string; tool?: string; found: number; error?: string; report?: SearchSourceReport };
 
 const initialProfile: CandidateProfile = {
@@ -116,7 +117,7 @@ const navItems: Array<{ id: View; label: string; icon: LucideIcon }> = [
 
 const pageInfo: Record<View, { eyebrow: string; title: string; description: string }> = {
   overview: { eyebrow: "Your job search workspace", title: "Overview", description: "One workspace to discover opportunities, compare your fit, and track every agent task." },
-  jobs: { eyebrow: "Opportunity discovery", title: "Find your next role", description: "Search configured feeds and indexed public job pages by target role, location, skills and experience, then review deduplicated matches." },
+  jobs: { eyebrow: "Federated opportunity discovery", title: "Find your next role", description: "One search fans out across connected MCP sources, public job feeds, Google-dork discovery, company career pages and relevant public recruitment notices." },
   applications: { eyebrow: "Execution history", title: "Application tracker", description: "Review queued tasks, completion states, and jobs that need your attention." },
   profile: { eyebrow: "Candidate intelligence", title: "Your candidate profile", description: "Keep the test profile accurate so the agent can search and match against the right criteria." },
   settings: { eyebrow: "Agent configuration", title: "Connections & settings", description: "Check the worker connection, choose a source, and review submission safeguards." }
@@ -128,12 +129,12 @@ function connectorSetupHint(source: McpSourceStatus): string | undefined {
     "apify-apna": "Add APIFY_API_TOKEN to the agent worker's .env to activate the Apna public-job connector. Third-party usage charges may apply.",
     adzuna: "Add ADZUNA_APP_ID and ADZUNA_APP_KEY to the agent worker's .env.",
     jooble: "Add JOOBLE_API_KEY to the agent worker's .env. Jooble API keys can be region-specific.",
-    "serper-search": "Add SERPER_API_KEY to the agent worker .env to enable role/location-specific web searches and public career-page crawling. API usage may incur charges.",
-    naukri: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint and its actual search-tool schema, or enable the Apify multi-board connector.",
-    indeed: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint, or enable the Apify multi-board connector.",
-    linkedin: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint and its actual search-tool schema, or enable the Apify multi-board connector.",
-    glassdoor: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint, or enable the Apify multi-board connector.",
-    apna: "This direct MCP slot is only a placeholder. Configure an authorized MCP endpoint, or enable the Apify Apna connector.",
+    "serper-search": "Add SERPER_API_KEY to the worker .env. One search expands into Google-style role, location, job-board, ATS, company-career and government-recruitment queries, then crawls public result pages. API credits are used per successful search request.",
+    naukri: "Set NAUKRI_MCP_URL and NAUKRI_MCP_TOKEN to an authorized Naukri MCP endpoint. It auto-enables after restart and the worker discovers the search tool from the MCP tool catalogue.",
+    indeed: "Set INDEED_MCP_URL and INDEED_MCP_TOKEN to an authorized Indeed MCP endpoint. It auto-enables after restart and the worker discovers the search tool from the MCP tool catalogue.",
+    linkedin: "Set LINKEDIN_MCP_URL and LINKEDIN_MCP_TOKEN to an authorized LinkedIn Jobs MCP endpoint. It auto-enables after restart and the worker discovers the search tool from the MCP tool catalogue.",
+    glassdoor: "Set GLASSDOOR_MCP_URL and GLASSDOOR_MCP_TOKEN to an authorized Glassdoor MCP endpoint. It auto-enables after restart and the worker discovers the search tool from the MCP tool catalogue.",
+    apna: "Set APNA_MCP_URL and APNA_MCP_TOKEN to an authorized Apna MCP endpoint. It auto-enables after restart and the worker discovers the search tool from the MCP tool catalogue.",
     demo: "Synthetic test listings only. Kept disabled in the normal runtime configuration."
   };
   return hints[source.id] || "Enable this source in config/mcp-servers.json and configure any required credentials or endpoint.";
@@ -403,7 +404,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches use the configured public feeds plus optional role/location-specific web-index crawling. The crawl report shows indexed results, fetched pages and whether the up-to-1,000-record target was reached. Optional Naukri, LinkedIn, Indeed, Glassdoor, and Apna connectors activate only after the worker's Apify token is configured. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
+          {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches fan out across connected MCP sources and public feeds, plus Serper's Google-style dork searches for job boards, ATS boards, company career pages and public recruitment notices. Naukri, LinkedIn, Indeed, Glassdoor and Apna require an authorized direct MCP endpoint or the optional Apify connector. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
           {notice && <div className={"notice " + notice.type}><div>{notice.type === "error" ? <CircleAlert size={16} /> : notice.type === "success" ? <CheckCircle2 size={16} /> : <Activity size={16} />}</div><div>{notice.message}</div><button className="demo-banner-close" aria-label="Dismiss message" onClick={() => setNotice(null)}><X size={14} /></button></div>}
           {view === "jobs" && searchReport.some((report) => report.serverId === "serper-search") && (() => { const report = searchReport.find((item) => item.serverId === "serper-search")!; return <section className="panel" style={{ marginBottom: 16 }}><div className="panel-header"><div><h2 className="panel-title">Search-engine crawl report</h2><p className="panel-subtitle">{report.provider || "Web-index discovery"} · role/location-specific queries and public job-page extraction</p></div><span className="tag">{report.reachedRequestedLimit ? (report.targetCount ?? 1000) + " target reached" : "Target not reached"}</span></div><div className="panel-body"><div className="grid metric-grid"><MetricCard label="Indexed results" value={report.rawIndexedResults ?? 0} foot={(report.requestsMade ?? 0) + " search requests"} icon={Search} /><MetricCard label="Unique job URLs" value={report.uniqueRoleLocationUrls ?? 0} foot="After URL deduplication" icon={Link2} /><MetricCard label="Public pages fetched" value={report.publicJobPagesFetched ?? 0} foot={(report.structuredJobPages ?? 0) + " structured JobPosting pages"} icon={Globe2} /><MetricCard label="Matching records" value={report.matchedJobs ?? 0} foot={"Returned " + (report.returnedJobs ?? 0) + " of " + (report.targetCount ?? 500)} icon={SearchCheck} /></div><p className="field-help" style={{ marginTop: 12 }}>{report.reachedRequestedLimit ? "The requested record count was reached." : "The requested count was not reached. Check search request limits, API quota, crawl coverage and the size of the matching role/location market."}{report.failedSearchRequests ? " Failed search requests: " + report.failedSearchRequests + "." : ""}{report.truncated ? " Results were truncated by the configured crawl/result budget." : ""}{report.moreSearchResultsAvailable ? " The search provider reports more indexed results." : ""}</p></div></section>; })()}
           {view === "jobs" && searchSourceResults.length > 0 && <section className="panel" style={{ marginBottom: 16 }}>
@@ -622,7 +623,7 @@ function JobCard({ job }: { job: Job }) {
     jooble: "Jooble",
     ziprecruiter: "ZipRecruiter",
     bayt: "Bayt",
-    "serper-search": "Web-index job crawler",
+    "serper-search": "Google dork discovery + public-page crawler",
     remotive: "Remotive",
     weworkremotely: "We Work Remotely",
     greenhouse: "Greenhouse careers",
