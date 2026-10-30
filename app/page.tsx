@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-type View = "overview" | "jobs" | "research" | "applications" | "profile" | "settings";
+type View = "overview" | "jobs" | "research" | "applications" | "profile" | "connections";
 type Notice = { type: "error" | "success" | "info"; message: string };
 type CandidateProfile = {
   userId: string;
@@ -50,6 +50,7 @@ type Job = {
   employmentType?: string;
   workMode?: string;
   postedAt?: string;
+  experience?: string;
   salaryMin?: number;
   salaryMax?: number;
   salaryCurrency?: string;
@@ -81,7 +82,14 @@ type McpSourceStatus = {
   toolCount?: number;
   error?: string;
 };
-type JobSearchSource = McpSourceStatus & { jobSearchAvailable: boolean; searchTool?: string };
+type McpTool = {
+  name: string;
+  description?: string;
+  inputSchema?: unknown;
+  outputSchema?: unknown;
+  annotations?: { title?: string; readOnlyHint?: boolean; destructiveHint?: boolean; idempotentHint?: boolean; openWorldHint?: boolean };
+};
+type McpToolServer = { serverId: string; serverName: string; tools: McpTool[] };
 type SearchSourceReport = { serverId: string; provider?: string; mode?: string; queryCount?: number; requestsMade?: number; rawIndexedResults?: number; uniqueRoleLocationUrls?: number; linkedJobUrlsDiscovered?: number; publicJobPagesFetched?: number; structuredJobPages?: number; metadataOnlyListings?: number; matchedJobs?: number; returnedJobs?: number; targetCount?: number; reachedRequestedLimit?: boolean; moreSearchResultsAvailable?: boolean; failedSearchRequests?: number; rejectedUrlResults?: number; rejectedRoleResults?: number; rejectedLocationResults?: number; opportunityTypes?: Record<string, number>; truncated?: boolean };
 type JobSourceResult = { serverId: string; tool?: string; found: number; error?: string; report?: SearchSourceReport };
 type ResearchToolOption = { serverId: string; serverName: string; name: string; description?: string; inputSchema?: unknown; safety?: string };
@@ -120,7 +128,7 @@ const navItems: Array<{ id: View; label: string; icon: LucideIcon }> = [
   { id: "research", label: "Research anything", icon: Globe2 },
   { id: "applications", label: "Applications", icon: ClipboardList },
   { id: "profile", label: "Candidate profile", icon: UserRound },
-  { id: "settings", label: "Connections & settings", icon: Settings }
+  { id: "connections", label: "Connections", icon: Server }
 ];
 
 const pageInfo: Record<View, { eyebrow: string; title: string; description: string }> = {
@@ -129,7 +137,7 @@ const pageInfo: Record<View, { eyebrow: string; title: string; description: stri
   research: { eyebrow: "Live federated research", title: "Research anything", description: "Plan a query across connected read-only MCP tools, search the public web, crawl accessible pages, and inspect the real records returned by every source." },
   applications: { eyebrow: "Execution history", title: "Application tracker", description: "Review queued tasks, completion states, and jobs that need your attention." },
   profile: { eyebrow: "Candidate intelligence", title: "Your candidate profile", description: "Keep the test profile accurate so the agent can search and match against the right criteria." },
-  settings: { eyebrow: "Agent configuration", title: "Connections & settings", description: "Check the worker connection, choose a source, and review submission safeguards." }
+  connections: { eyebrow: "MCP infrastructure", title: "Connections", description: "Inspect every configured MCP connector, its live connection state, and the tools and skills discovered from each connected server." }
 };
 
 function connectorSetupHint(source: McpSourceStatus): string | undefined {
@@ -203,9 +211,8 @@ export default function HomePage() {
   const [tasks, setTasks] = useState<ApplicationTask[]>([]);
   const [health, setHealth] = useState<AgentHealth | null>(null);
   const [sourceStatuses, setSourceStatuses] = useState<McpSourceStatus[]>([]);
-  const [jobSearchSources, setJobSearchSources] = useState<JobSearchSource[]>([]);
-  const [selectedJobSourceIds, setSelectedJobSourceIds] = useState<string[] | null>(null);
-  const [jobSourceLoadError, setJobSourceLoadError] = useState("");
+  const [mcpToolServers, setMcpToolServers] = useState<McpToolServer[]>([]);
+  const [toolCatalogError, setToolCatalogError] = useState("");
   const [searchSourceResults, setSearchSourceResults] = useState<JobSourceResult[]>([]);
   const [searchReport, setSearchReport] = useState<SearchSourceReport[]>([]);
   const [sourceRefreshError, setSourceRefreshError] = useState("");
@@ -216,6 +223,8 @@ export default function HomePage() {
   const [minMatchScore, setMinMatchScore] = useState(55);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lastSearch, setLastSearch] = useState<string | null>(null);
+  const [jobsPage, setJobsPage] = useState(1);
+  const [jobsPageSize, setJobsPageSize] = useState(12);
   const [taskRefreshError, setTaskRefreshError] = useState("");
   const [researchQuery, setResearchQuery] = useState("");
   const [researchCatalog, setResearchCatalog] = useState<ResearchCatalog | null>(null);
@@ -230,6 +239,16 @@ export default function HomePage() {
   const needsActionTasks = useMemo(() => tasks.filter((task) => taskStatus(task) === "needs_user_action" || taskStatus(task) === "failed").length, [tasks]);
   const queuedTasks = useMemo(() => tasks.filter((task) => ["waiting", "active", "delayed"].includes(taskStatus(task))).length, [tasks]);
   const currentInfo = pageInfo[view];
+  const totalJobPages = Math.max(1, Math.ceil(jobs.length / jobsPageSize));
+  const visibleJobPages = Array.from(
+    { length: Math.min(5, totalJobPages) },
+    (_, index) => Math.max(1, Math.min(jobsPage - 2, totalJobPages - 4)) + index,
+  );
+  const paginatedJobs = useMemo(
+    () => jobs.slice((jobsPage - 1) * jobsPageSize, jobsPage * jobsPageSize),
+    [jobs, jobsPage, jobsPageSize],
+  );
+  const discoveredToolCount = mcpToolServers.reduce((total, server) => total + server.tools.length, 0);
 
   const loadHealth = useCallback(async () => {
     setAgentState("checking");
@@ -265,26 +284,19 @@ export default function HomePage() {
     }
   }, []);
 
-  const loadJobSearchSources = useCallback(async () => {
+  const loadToolCatalog = useCallback(async () => {
     try {
-      const result = await readJson(await fetch("/api/agent/job-sources", { cache: "no-store" }));
-      const sources = Array.isArray(result.sources) ? result.sources as JobSearchSource[] : [];
-      setJobSearchSources(sources);
-      setJobSourceLoadError("");
-      setSelectedJobSourceIds((current) => current === null
-        ? sources.filter((source) => source.connected && source.jobSearchAvailable).map((source) => source.id)
-        : current.filter((id) => sources.some((source) => source.id === id && source.connected && source.jobSearchAvailable)));
-      return sources;
+      const result = await readJson(await fetch("/api/agent/tools", { cache: "no-store" }));
+      const servers = Array.isArray(result.servers) ? result.servers as McpToolServer[] : [];
+      setMcpToolServers(servers);
+      setToolCatalogError("");
+      return servers;
     } catch (error) {
-      setJobSourceLoadError(error instanceof Error ? error.message : "Could not load job-search sources.");
+      setToolCatalogError(error instanceof Error ? error.message : "Could not load MCP tool inventory.");
+      setMcpToolServers([]);
       return [];
     }
   }, []);
-
-  const availableJobSourceIds = jobSearchSources
-    .filter((source) => source.connected && source.jobSearchAvailable)
-    .map((source) => source.id);
-  const activeJobSourceIds = selectedJobSourceIds ?? availableJobSourceIds;
 
   const loadResearchTools = useCallback(async () => {
     try {
@@ -348,16 +360,16 @@ export default function HomePage() {
 
   const refreshWorkspace = useCallback(async () => {
     setBusy("refresh");
-    await Promise.all([loadHealth(), loadTasks(), loadSources(), loadJobSearchSources()]);
+    await Promise.all([loadHealth(), loadTasks(), loadSources(), loadToolCatalog()]);
     setBusy(null);
-  }, [loadHealth, loadTasks, loadSources, loadJobSearchSources]);
+  }, [loadHealth, loadTasks, loadSources, loadToolCatalog]);
 
   useEffect(() => {
     void loadHealth();
     void loadTasks();
     void loadSources();
-    void loadJobSearchSources().catch(() => undefined);
-  }, [loadHealth, loadTasks, loadSources, loadJobSearchSources]);
+    void loadToolCatalog();
+  }, [loadHealth, loadTasks, loadSources, loadToolCatalog]);
 
   const updateProfile = <K extends keyof CandidateProfile,>(key: K, value: CandidateProfile[K]) => {
     setProfile((current) => ({ ...current, [key]: value }));
@@ -370,16 +382,7 @@ export default function HomePage() {
       setNotice({ type: "error", message: "Enter both a target job title and a preferred city, region, or country before searching. Use Worldwide only for a global search." });
       return;
     }
-    let serverIds = selectedJobSourceIds;
-    if (serverIds === null) {
-      const sources = await loadJobSearchSources();
-      serverIds = sources.filter((source) => source.connected && source.jobSearchAvailable).map((source) => source.id);
-      setSelectedJobSourceIds(serverIds);
-    }
-    if (serverIds.length === 0) {
-      setNotice({ type: "error", message: "Select at least one connected job-search source before searching." });
-      return;
-    }
+    setJobsPage(1);
     setBusy("search");
     setNotice(null);
     try {
@@ -388,7 +391,6 @@ export default function HomePage() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           profile: { ...profile },
-          serverIds,
           limit: 1000,
           syncToBackend: false
         })
@@ -415,16 +417,6 @@ export default function HomePage() {
       setNotice({ type: "error", message: "Enter both a target job title and a preferred location before running the agent." });
       return;
     }
-    let serverIds = selectedJobSourceIds;
-    if (serverIds === null) {
-      const sources = await loadJobSearchSources();
-      serverIds = sources.filter((source) => source.connected && source.jobSearchAvailable).map((source) => source.id);
-      setSelectedJobSourceIds(serverIds);
-    }
-    if (serverIds.length === 0) {
-      setNotice({ type: "error", message: "Select at least one connected job-search source before running the agent." });
-      return;
-    }
     setBusy("run");
     setNotice(null);
     try {
@@ -434,7 +426,6 @@ export default function HomePage() {
         body: JSON.stringify({
           userId: profile.userId,
           profile: { ...profile },
-          serverIds,
           searchLimit: 1000,
           applyLimit: 10,
           minMatchScore,
@@ -468,6 +459,7 @@ export default function HomePage() {
     setMobileOpen(false);
     setNotice(null);
     if (next === "research" && !researchCatalog) void loadResearchTools().catch(() => undefined);
+    if (next === "connections") void Promise.all([loadSources(), loadToolCatalog()]);
   };
 
   const statusClass = agentState === "online" ? "" : agentState === "offline" ? "offline" : "warning";
@@ -527,9 +519,11 @@ export default function HomePage() {
             <div className="heading-actions">
               {view === "research" ? (
                 <button className="secondary-button" onClick={() => void loadResearchTools()} disabled={busy !== null}><RefreshCw size={15} /> Refresh tools</button>
-              ) : (
+              ) : view === "connections" ? (
+                <button className="secondary-button" onClick={() => void Promise.all([loadSources(), loadToolCatalog()])} disabled={busy !== null}><RefreshCw size={15} /> Refresh connections</button>
+              ) : view === "jobs" ? null : (
                 <>
-                  <button className="secondary-button" onClick={() => void searchJobs()} disabled={busy !== null}><Search size={15} /> Find jobs</button>
+                  <button className="secondary-button" onClick={() => goTo("jobs")} disabled={busy !== null}><Search size={15} /> Find jobs</button>
                   <button className="primary-button" onClick={runAgent} disabled={busy !== null || agentState === "offline"}>{busy === "run" ? <LoaderCircle size={15} className="spin" /> : <Zap size={15} />} Run agent <ArrowRight size={14} /></button>
                 </>
               )}
@@ -679,7 +673,7 @@ export default function HomePage() {
                       <div className="info-row"><div className="info-row-icon"><Server size={15} /></div><div className="info-row-copy"><strong>{agentState === "online" ? "Agent API reachable" : agentState === "checking" ? "Checking agent API" : "Agent API unavailable"}</strong><span>{health?.service || "job-agent-worker"}{health?.status ? " · " + health.status : ""}</span></div></div>
                       <div className="info-row"><div className="info-row-icon"><Database size={15} /></div><div className="info-row-copy"><strong>{connectedSources} source(s) connected</strong><span>Searches use the enabled live source IDs configured on the worker. Listings retain provider attribution and are ranked against your profile.</span></div></div>
                       <div className="info-row"><div className="info-row-icon"><ShieldCheck size={15} /></div><div className="info-row-copy"><strong>Review-only submission</strong><span>The UI passes autoSubmit=false on every agent run.</span></div></div>
-                      <button className="secondary-button full-width" style={{ marginTop: 17 }} onClick={() => goTo("settings")}>Connection settings <ArrowRight size={14} /></button>
+                      <button className="secondary-button full-width" style={{ marginTop: 17 }} onClick={() => goTo("connections")}>Connection settings <ArrowRight size={14} /></button>
                     </div>
                   </section>
                 </div>
@@ -689,61 +683,73 @@ export default function HomePage() {
 
           {view === "jobs" && (
             <section className="panel">
-              <div className="panel-header"><div><h2 className="panel-title">Job discovery</h2><p className="panel-subtitle">Live listings returned by connected job sources and matched against your role and geographic preferences.</p></div></div>
+              <div className="panel-header">
+                <div>
+                  <h2 className="panel-title">Find jobs across connected sources</h2>
+                  <p className="panel-subtitle">Search every connected job-search MCP, public job feed and configured public-web crawler in one run.</p>
+                </div>
+              </div>
               <div className="panel-body">
-                <section className="grid" style={{ gap: 10, marginBottom: 18 }}>
-                  <div className="filter-row" style={{ marginBottom: 0, alignItems: "flex-start" }}>
-                    <div>
-                      <strong>Where should Nvoid find and crawl jobs?</strong>
-                      <p className="field-help">Choose the connected sources for this search. All searchable sources are selected by default; Google-indexed web discovery and public-page crawling appear here when the Serper connector is active.</p>
-                    </div>
-                    <div className="source-controls">
-                      <span className="tag">{activeJobSourceIds.length} / {availableJobSourceIds.length} selected</span>
-                      <button type="button" className="secondary-button button-small" onClick={() => setSelectedJobSourceIds(availableJobSourceIds)}>Select all</button>
-                      <button type="button" className="secondary-button button-small" onClick={() => setSelectedJobSourceIds([])} disabled={activeJobSourceIds.length === 0}>Clear</button>
-                      <button type="button" className="icon-button" aria-label="Refresh job-search sources" title="Refresh job-search sources" onClick={() => void loadJobSearchSources().catch(() => undefined)} disabled={busy !== null}><RefreshCw size={14} /></button>
-                    </div>
+                <form className="search-bar job-search-form" onSubmit={searchJobs}>
+                  <div className="field-wrap">
+                    <label htmlFor="search-role">Job title</label>
+                    <input id="search-role" className="field" value={profile.jobTitle} onChange={(event) => updateProfile("jobTitle", event.target.value)} placeholder="e.g. Java Backend Developer" />
                   </div>
-                  {jobSourceLoadError && <div className="notice error" style={{ margin: 0 }}><CircleAlert size={14} />{jobSourceLoadError}</div>}
-                  {jobSearchSources.length === 0 && !jobSourceLoadError && <p className="field-help">Loading available job-search connectors…</p>}
-                  <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 8 }}>
-                    {jobSearchSources.map((source) => {
-                      const selectable = source.connected && source.jobSearchAvailable;
-                      const selected = activeJobSourceIds.includes(source.id);
-                      const state = selectable ? "Ready to search" : source.connected ? "Connected · no job-search tool" : source.enabled ? "Connection failed" : "Inactive";
-                      const detail = selectable
-                        ? (source.searchTool || "Search tool discovered") + " · " + (source.toolCount ?? 0) + " tool(s)"
-                        : source.error || (!source.enabled ? connectorSetupHint(source) : "No compatible job-search tool was discovered on this MCP server.");
-                      return <label key={source.id} className="settings-row" style={{ alignItems: "flex-start", gap: 10, cursor: selectable ? "pointer" : "not-allowed", opacity: selectable ? 1 : 0.72 }}>
-                        <input type="checkbox" checked={selected} disabled={!selectable} onChange={(event) => {
-                          const checked = event.currentTarget.checked;
-                          setSelectedJobSourceIds((current) => {
-                            const selectedIds = current ?? availableJobSourceIds;
-                            return checked
-                              ? [...new Set([...selectedIds, source.id])]
-                              : selectedIds.filter((id) => id !== source.id);
-                          });
-                        }} />
-                        <div style={{ minWidth: 0, flex: 1 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
-                            <strong>{source.name}</strong>
-                            <span className="tag">{state}</span>
-                          </div>
-                          <p>{source.id} · {source.transport || "MCP"}{source.jobSearchAvailable && source.searchTool ? " · " + source.searchTool : ""}</p>
-                          <span className="field-help">{detail}</span>
-                        </div>
-                      </label>;
-                    })}
+                  <div className="field-wrap">
+                    <label htmlFor="search-location">Location</label>
+                    <input id="search-location" className="field" value={profile.location} onChange={(event) => updateProfile("location", event.target.value)} placeholder="e.g. Bengaluru, India" />
                   </div>
-                  {jobSearchSources.length > 0 && availableJobSourceIds.length === 0 && <div className="notice error" style={{ margin: 0 }}><CircleAlert size={14} />No connected MCP source currently exposes a compatible job-search tool. Activate a source in Connections &amp; settings, then refresh this list.</div>}
-                </section>
-                <form className="search-bar" onSubmit={searchJobs}>
-                  <div className="field-wrap"><label htmlFor="search-role">Target role</label><input id="search-role" className="field" value={profile.jobTitle} onChange={(event) => updateProfile("jobTitle", event.target.value)} placeholder="e.g. Java Backend Developer" /></div>
-                  <div className="field-wrap"><label htmlFor="search-location">Location</label><input id="search-location" className="field" value={profile.location} onChange={(event) => updateProfile("location", event.target.value)} placeholder="e.g. Bengaluru, India" /></div>
-                  <div className="field-wrap"><label>&nbsp;</label><button className="primary-button full-width" type="submit" disabled={busy !== null}>{busy === "search" ? <LoaderCircle size={15} className="spin" /> : <Search size={15} />} Search jobs</button></div>
+                  <div className="field-wrap">
+                    <label>&nbsp;</label>
+                    <button className="primary-button full-width" type="submit" disabled={busy !== null}>
+                      {busy === "search" ? <LoaderCircle size={15} className="spin" /> : <Search size={15} />}
+                      {busy === "search" ? "Searching all sources..." : "Search jobs"}
+                    </button>
+                  </div>
                 </form>
-                <div className="filter-row"><div className="source-controls"><span className="result-count"><strong>{jobs.length}</strong> job(s) found</span><span className="tag"><Filter size={12} /> Match score {minMatchScore}%+</span></div><div className="source-controls"><label htmlFor="min-score" className="field-help">Match threshold</label><select id="min-score" className="field" style={{ width: 100, minHeight: 32, padding: "6px 8px" }} value={minMatchScore} onChange={(event) => setMinMatchScore(Number(event.target.value))}><option value={40}>40%</option><option value={50}>50%</option><option value={55}>55%</option><option value={60}>60%</option><option value={70}>70%</option><option value={80}>80%</option></select><button className="secondary-button button-small" onClick={runAgent} disabled={busy !== null || agentState === "offline"}>{busy === "run" ? <LoaderCircle size={13} className="spin" /> : <Zap size={13} />} Run & queue</button></div></div>
-                {jobs.length > 0 ? <div className="job-list">{jobs.map((job) => <JobCard key={job.id} job={job} />)}</div> : <EmptyState icon={Globe2} title="Search across your sources" description="Search live listings from the enabled public feeds. Results are filtered by target role and location eligibility; local onsite coverage depends on the source." buttonText="Search live jobs" onAction={() => void searchJobs()} loading={busy === "search"} />}
+                <p className="job-search-note">Nvoid automatically searches every connected source that exposes a job-search tool. Connector configuration and tool discovery live in the Connections tab.</p>
+                {jobs.length > 0 && (
+                  <>
+                    <div className="job-results-toolbar">
+                      <div>
+                        <strong>{jobs.length.toLocaleString()} jobs found</strong>
+                        <span>{lastSearch ? " · Last searched at " + lastSearch : ""}</span>
+                      </div>
+                      <label className="page-size-control">
+                        <span>Show</span>
+                        <select className="field" value={jobsPageSize} onChange={(event) => { setJobsPageSize(Number(event.target.value)); setJobsPage(1); }}>
+                          <option value={12}>12 per page</option>
+                          <option value={24}>24 per page</option>
+                          <option value={48}>48 per page</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div className="job-results-grid">
+                      {paginatedJobs.map((job) => <JobCard key={job.id} job={job} />)}
+                    </div>
+                    {totalJobPages > 1 && (
+                      <div className="job-pagination" aria-label="Job result pages">
+                        <span className="pagination-summary">Showing {((jobsPage - 1) * jobsPageSize) + 1}–{Math.min(jobsPage * jobsPageSize, jobs.length)} of {jobs.length.toLocaleString()}</span>
+                        <div className="pagination-controls">
+                          <button className="page-button" type="button" onClick={() => setJobsPage((current) => Math.max(1, current - 1))} disabled={jobsPage === 1}>Previous</button>
+                          {visibleJobPages.map((pageNumber) => (
+                            <button key={pageNumber} className={"page-button" + (jobsPage === pageNumber ? " active" : "")} type="button" onClick={() => setJobsPage(pageNumber)} aria-current={jobsPage === pageNumber ? "page" : undefined}>{pageNumber}</button>
+                          ))}
+                          <button className="page-button" type="button" onClick={() => setJobsPage((current) => Math.min(totalJobPages, current + 1))} disabled={jobsPage === totalJobPages}>Next</button>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
+                {jobs.length === 0 && lastSearch ? (
+                  <EmptyState icon={SearchCheck} title="No matching jobs returned" description="The connected providers completed without returning a job that matched this role and location. Review source diagnostics above or broaden the location and job-title query." buttonText="Search again" onAction={() => void searchJobs()} loading={busy === "search"} />
+                ) : jobs.length === 0 ? (
+                  <div className="job-search-empty">
+                    <div className="empty-icon"><SearchCheck size={22} /></div>
+                    <h3>Search once. Explore every connected source.</h3>
+                    <p>Enter a job title and location to collect matching listings from all available MCP job tools and configured crawlers.</p>
+                  </div>
+                ) : null}
               </div>
             </section>
           )}
@@ -807,60 +813,110 @@ export default function HomePage() {
             </div>
           )}
 
-          {view === "settings" && (
-            <div className="grid settings-grid">
-              <section className="panel">
-                <div className="panel-header"><div><h2 className="panel-title">Agent connection</h2><p className="panel-subtitle">Server-side connection to the NestJS worker</p></div><Server size={17} color="#6d87b2" /></div>
-                <div className="panel-body">
-                  <div className="connection-state"><span className={"status-dot " + statusClass} /><span><strong>{statusText}</strong>{health?.service ? " · " + health.service : ""}</span></div>
-                  <div className="settings-row"><div><strong>Worker API</strong><p>Configured on the web server using NVOID_AGENT_URL.</p></div><span className="tag">{agentState === "online" ? "Reachable" : agentState === "checking" ? "Checking" : "Unavailable"}</span></div>
-                  <div className="settings-row"><div><strong>Private API key</strong><p>NVOID_AGENT_API_KEY is sent only by server-side route handlers and is never embedded in browser JavaScript.</p></div><span className="tag"><ShieldCheck size={12} /> Server-side</span></div>
-                  <div className="settings-row"><div><strong>MCP sources connected</strong><p>Enabled source connectors reported by the worker health endpoint.</p></div><strong>{connectedSources}/{health?.mcp?.configured ?? 0}</strong></div>
-                  <button className="secondary-button full-width" style={{ marginTop: 15 }} onClick={refreshWorkspace} disabled={busy !== null}><RefreshCw size={14} className={busy === "refresh" ? "spin" : ""} /> Test connection</button>
-                </div>
-              </section>
+          {view === "connections" && (
+            <div className="grid" style={{ gap: 16 }}>
+              <div className="grid metric-grid">
+                <MetricCard label="Configured connectors" value={sourceStatuses.length} foot="MCP servers in worker config" icon={Server} />
+                <MetricCard label="Connected servers" value={sourceStatuses.filter((source) => source.connected).length} foot={sourceStatuses.filter((source) => source.enabled && !source.connected).length + " enabled but unavailable"} icon={CheckCircle2} tone="purple" />
+                <MetricCard label="Discovered tools / skills" value={discoveredToolCount} foot="Tools listed by connected MCP servers" icon={Code2} tone="blue" />
+                <MetricCard label="Job-search sources" value={sourceStatuses.filter((source) => source.connected && mcpToolServers.find((entry) => entry.serverId === source.id)?.tools.some((tool) => /job|vacanc|career|search|listing/i.test(tool.name + " " + (tool.description ?? "")))).length} foot="Connected servers exposing job-related tools" icon={Briefcase} tone="amber" />
+              </div>
+
               <section className="panel">
                 <div className="panel-header">
-                  <div><h2 className="panel-title">Connector inventory</h2><p className="panel-subtitle">Actual worker-reported MCP status, not just a configured connector count</p></div>
-                  <button className="icon-button" aria-label="Refresh connector statuses" title="Refresh connector statuses" onClick={loadSources} disabled={busy !== null}><RefreshCw size={14} /></button>
-                </div>
-                <div className="panel-body">
-                  {sourceRefreshError && <div className="notice error" style={{ margin: "0 0 12px" }}><CircleAlert size={14} />{sourceRefreshError}</div>}
-                  {sourceStatuses.length === 0 && !sourceRefreshError && <p className="field-help">Loading connector status from the worker…</p>}
-                  <div className="grid" style={{ gap: 8 }}>
-                    {sourceStatuses.map((source) => {
-                      const stateLabel = source.connected ? "Connected" : source.enabled ? "Connection failed" : "Inactive";
-                      const stateTone = source.connected ? "source-state-connected" : source.enabled ? "source-state-error" : "source-state-inactive";
-                      return <div key={source.id} className="settings-row" style={{ alignItems: "flex-start", gap: 10 }}>
-                        <div className="status-dot" style={{ marginTop: 5, flexShrink: 0, background: source.connected ? "#16a36a" : source.enabled ? "#dc5252" : "#9aa8ba", boxShadow: "none" }} />
-                        <div style={{ minWidth: 0, flex: 1 }}>
-                          <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-                            <strong>{source.name}</strong>
-                            <span className={"tag " + stateTone}>{stateLabel}</span>
-                          </div>
-                          <p>{source.id} · {source.transport || "MCP"} · {source.toolCount ?? 0} tool(s)</p>
-                          {!source.enabled && <span className="field-help">{connectorSetupHint(source)}</span>}
-                          {source.error && <span className="field-help" style={{ color: "#c43c45" }}>{source.error}</span>}
-                        </div>
-                      </div>;
-                    })}
+                  <div>
+                    <h2 className="panel-title">Nvoid worker connection</h2>
+                    <p className="panel-subtitle">Private server-to-server connection from this workspace to the MCP worker.</p>
                   </div>
+                  <span className={"tag " + (agentState === "online" ? "source-state-connected" : agentState === "offline" ? "source-state-error" : "")}>{statusText}</span>
                 </div>
-              </section>
-              <section className="panel">
-                <div className="panel-header"><div><h2 className="panel-title">Source and execution safeguards</h2><p className="panel-subtitle">Select where test searches are sent</p></div><ShieldCheck size={17} color="#168765" /></div>
                 <div className="panel-body">
-                  <div className="field-wrap"><label>Live job sources</label><div className="settings-row"><div><strong>{connectedSources} source(s) connected</strong><p>Jobicy, Remote OK, Arbeitnow, Working Nomads, Himalayas, Remotive, and We Work Remotely are the default public feeds. The Serper Google Search crawler activates with SERPER_API_KEY; Greenhouse, Lever, and Ashby crawl board slugs that you configure. Naukri, LinkedIn Jobs, Indeed, Glassdoor, and Apna can be added through the configured Apify connector.</p></div><span className="tag">{connectedSources} connected</span></div><span className="field-help">Optional major-board connector: setting APIFY_API_TOKEN in the agent's server-side .env automatically enables Naukri, LinkedIn Jobs, Indeed, and Glassdoor through a third-party Apify actor. The same token enables a separate Apna connector. Adzuna and Jooble activate when their own API credentials are configured. These extra sources may incur usage charges; they stay inactive until credentials are present.</span></div>
-                  <div className="settings-row"><div><strong>Auto-submit</strong><p>This interface forces autoSubmit=false for every run. Review tasks and test the form workflow before enabling any authorized real-world submissions through an appropriate backend-controlled flow.</p></div><span className="toggle-locked">OFF · LOCKED</span></div>
-                  <div className="settings-row"><div><strong>Backend sync</strong><p>Disabled for this demo profile so synthetic data is not sent to your Jobkar backend.</p></div><span className="toggle-locked">OFF · DEMO</span></div>
-                  <div className="settings-row"><div><strong>Candidate persistence</strong><p>Profile edits currently live in browser state and reset when the page reloads. Production persistence requires authenticated user APIs.</p></div><span className="tag">UI demo</span></div>
+                  <div className="connection-state">
+                    <span className={"status-dot " + statusClass} />
+                    <span><strong>{agentState === "online" ? "Worker API reachable" : agentState === "checking" ? "Checking worker API" : "Worker API unavailable"}</strong>{health?.service ? " · " + health.service : ""}</span>
+                  </div>
+                  <div className="connection-summary-grid">
+                    <div><span>Worker API address</span><strong>Configured on the web server</strong><small>NVOID_AGENT_URL</small></div>
+                    <div><span>Authentication</span><strong>Server-side API key</strong><small>NVOID_AGENT_API_KEY → AGENT_API_KEY</small></div>
+                    <div><span>Submission safety</span><strong>Review-only mode</strong><small>This workspace never auto-submits applications.</small></div>
+                  </div>
+                  <div className="field-help">Connector endpoints, API tokens and provider credentials are read by the worker process. They are never displayed in this browser page.</div>
                 </div>
               </section>
+
               <section className="panel">
-                <div className="panel-header"><div><h2 className="panel-title">Test checklist</h2><p className="panel-subtitle">Validate the end-to-end UI and worker connection</p></div><ListChecks size={17} color="#6d87b2" /></div>
-                <div className="panel-body"><PipelineSteps hasJobs={jobs.length > 0} hasTasks={tasks.length > 0} hasSource={connectedSources > 0} /><div style={{ marginTop: 14 }}><button className="primary-button full-width" onClick={runAgent} disabled={busy !== null || agentState === "offline"}>{busy === "run" ? <LoaderCircle size={15} className="spin" /> : <Zap size={15} />} Run safe review workflow</button></div></div>
+                <div className="panel-header">
+                  <div>
+                    <h2 className="panel-title">MCP connectors and discovered skills</h2>
+                    <p className="panel-subtitle">Every connector reported by the worker is listed here, including inactive and failed connections. Open a connected connector to inspect its actual MCP tools.</p>
+                  </div>
+                  <button className="secondary-button button-small" onClick={() => void Promise.all([loadSources(), loadToolCatalog()])} disabled={busy !== null}><RefreshCw size={13} /> Refresh inventory</button>
+                </div>
+                <div className="panel-body">
+                  {sourceRefreshError && <div className="notice error"><CircleAlert size={14} />{sourceRefreshError}</div>}
+                  {toolCatalogError && <div className="notice error"><CircleAlert size={14} />{toolCatalogError}</div>}
+                  {sourceStatuses.length === 0 && !sourceRefreshError ? (
+                    <div className="job-search-empty"><LoaderCircle size={20} className="spin" /><p>Loading connectors reported by the worker…</p></div>
+                  ) : (
+                    <div className="connector-grid">
+                      {sourceStatuses.map((source) => {
+                        const catalog = mcpToolServers.find((entry) => entry.serverId === source.id);
+                        const tools = catalog?.tools ?? [];
+                        const stateLabel = source.connected ? "Connected" : source.enabled ? "Connection failed" : "Inactive";
+                        const stateTone = source.connected ? "source-state-connected" : source.enabled ? "source-state-error" : "source-state-inactive";
+                        return (
+                          <article key={source.id} className="connector-card">
+                            <div className="connector-card-header">
+                              <div className="connector-icon"><Server size={17} /></div>
+                              <div className="connector-card-title">
+                                <strong>{source.name}</strong>
+                                <span>{source.id} · {source.transport || "MCP transport"}</span>
+                              </div>
+                              <span className={"tag " + stateTone}>{stateLabel}</span>
+                            </div>
+                            <div className="connector-card-stats">
+                              <span>{tools.length || source.toolCount || 0} discovered tool(s)</span>
+                              <span>{source.enabled ? "Enabled in worker config" : "Disabled in worker config"}</span>
+                            </div>
+                            {!source.enabled && <p className="connector-guidance">{connectorSetupHint(source)}</p>}
+                            {source.error && <p className="connector-error">{source.error}</p>}
+                            {source.connected && tools.length > 0 ? (
+                              <details className="connector-tools">
+                                <summary>View MCP tools and skills <span>{tools.length}</span></summary>
+                                <div className="mcp-tool-list">
+                                  {tools.map((tool) => {
+                                    const schema = tool.inputSchema && typeof tool.inputSchema === "object" ? tool.inputSchema as { properties?: Record<string, unknown>; required?: string[] } : undefined;
+                                    const requiredInputs = schema?.required ?? [];
+                                    const inputNames = Object.keys(schema?.properties ?? {});
+                                    const safetyLabel = tool.annotations?.destructiveHint ? "May modify data" : tool.annotations?.readOnlyHint ? "Read-only" : tool.annotations?.openWorldHint ? "External action" : "Capability metadata not declared";
+                                    return (
+                                      <details className="mcp-tool-item" key={tool.name}>
+                                        <summary>
+                                          <span><Code2 size={13} /> {tool.annotations?.title || tool.name}</span>
+                                          <span className="tag">{safetyLabel}</span>
+                                        </summary>
+                                        <div className="mcp-tool-description">{tool.description || "This tool did not publish a description."}</div>
+                                        <div className="mcp-tool-inputs">
+                                          <span>Tool ID</span><code>{tool.name}</code>
+                                          <span>Inputs</span><code>{inputNames.length ? inputNames.join(", ") : "No input schema published"}</code>
+                                          <span>Required</span><code>{requiredInputs.length ? requiredInputs.join(", ") : "None declared"}</code>
+                                        </div>
+                                      </details>
+                                    );
+                                  })}
+                                </div>
+                              </details>
+                            ) : source.connected ? (
+                              <p className="connector-guidance">The MCP server connected, but it did not publish any tools.</p>
+                            ) : null}
+                          </article>
+                        );
+                      })}
+                    </div>
+                  )}
+                  <div className="field-help" style={{ marginTop: 14 }}>A connector marked Inactive needs configuration and a worker restart. A connector marked Connection failed is enabled, but its endpoint, credentials or MCP handshake need attention. Connections made inside ChatGPT or Claude are not automatically inherited by this separate worker.</div>
+                </div>
               </section>
-              <section className="panel info-card"><h2 className="info-heading"><CircleHelp size={16} color="#4176df" /> Environment variables</h2><p className="field-help" style={{ fontSize: 11, marginBottom: 13 }}>Set these on the Next.js server, not as NEXT_PUBLIC variables.</p><div className="code-panel"><code>NVOID_AGENT_URL=http://127.0.0.1:3100</code><code>NVOID_AGENT_API_KEY=your-private-agent-key</code></div><div className="field-help" style={{ marginTop: 11 }}>The key must match AGENT_API_KEY in the agent worker. In Docker, use the worker's internal service hostname instead of 127.0.0.1.</div></section>
             </div>
           )}
 
@@ -885,51 +941,151 @@ function formatPostedAt(value?: string) {
   return new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short", day: "numeric" }).format(date);
 }
 
+function rawFieldText(raw: Record<string, unknown> | undefined, keys: string[]): string | undefined {
+  if (!raw) return undefined;
+  const normalized = new Map(Object.entries(raw).map(([key, value]) => [key.toLowerCase().replace(/[^a-z0-9]/g, ""), value]));
+  for (const key of keys) {
+    const value = normalized.get(key.toLowerCase().replace(/[^a-z0-9]/g, ""));
+    if (value === undefined || value === null) continue;
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      const text = String(value).replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
+      if (text) return text;
+    }
+    if (Array.isArray(value)) {
+      const text = value.map((item) => {
+        if (typeof item === "string" || typeof item === "number") return String(item);
+        if (item && typeof item === "object") {
+          const record = item as Record<string, unknown>;
+          return String(record.name ?? record.label ?? record.value ?? record.text ?? "");
+        }
+        return "";
+      }).filter(Boolean).join(" · ");
+      if (text) return text;
+    }
+    if (typeof value === "object") {
+      const record = value as Record<string, unknown>;
+      const nested = record.name ?? record.label ?? record.value ?? record.text ?? record.description;
+      if (typeof nested === "string" && nested.trim()) return nested.trim();
+    }
+  }
+  return undefined;
+}
+
+function hostFromUrl(value?: string): string | undefined {
+  if (!value) return undefined;
+  try { return new URL(value).hostname.replace(/^www\./, ""); } catch { return undefined; }
+}
+
 function JobCard({ job }: { job: Job }) {
+  const raw = job.raw ?? {};
   const demo = job.source === "demo" || job.demo === true;
   const match = Number.isFinite(job.matchScore) ? Math.round(job.matchScore) : 0;
-  const dest = job.jobUrl || job.applicationUrl;
+  const listingUrl = job.jobUrl || job.applicationUrl;
+  const applyUrl = job.applicationUrl && job.applicationUrl !== job.jobUrl ? job.applicationUrl : undefined;
   const sourceLabels: Record<string, string> = {
-    jobicy: "Jobicy · remote feed",
-    remoteok: "Remote OK · remote feed",
-    arbeitnow: "Arbeitnow",
-    workingnomads: "Working Nomads",
-    himalayas: "Himalayas",
-    naukri: "Naukri",
-    linkedin: "LinkedIn Jobs",
-    indeed: "Indeed",
-    glassdoor: "Glassdoor",
-    apna: "Apna",
-    adzuna: "Adzuna",
-    jooble: "Jooble",
-    ziprecruiter: "ZipRecruiter",
-    bayt: "Bayt",
-    "serper-search": "Google dork discovery + public-page crawler",
-    remotive: "Remotive",
-    weworkremotely: "We Work Remotely",
-    greenhouse: "Greenhouse careers",
-    lever: "Lever careers",
-    ashby: "Ashby careers"
+    jobicy: "Jobicy", remoteok: "Remote OK", arbeitnow: "Arbeitnow", workingnomads: "Working Nomads",
+    himalayas: "Himalayas", naukri: "Naukri", linkedin: "LinkedIn Jobs", indeed: "Indeed",
+    glassdoor: "Glassdoor", apna: "Apna", adzuna: "Adzuna", jooble: "Jooble",
+    ziprecruiter: "ZipRecruiter", bayt: "Bayt", "serper-search": "Google Search + public-page crawler",
+    remotive: "Remotive", weworkremotely: "We Work Remotely", greenhouse: "Greenhouse careers",
+    lever: "Lever careers", ashby: "Ashby careers", "apify-boards": "Apify job boards", "apify-apna": "Apify Apna"
   };
   const sourceLabel = sourceLabels[job.source || ""] || job.source || "Connected job source";
-  const opportunityType = typeof job.raw?.opportunityType === "string" ? job.raw.opportunityType.replace(/-/g, " ") : "";
-  return <article className="job-card">
-    <div className="job-card-top">
-      <div className="company-mark">{(job.company || job.title || "N").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}</div>
-      <div className="job-main"><h3 className="job-title">{job.title}</h3><div className="job-company">{job.company || "Company not listed"}</div><div className="job-location"><span><MapPin size={12} />{job.location || job.country || "Location not listed"}</span>{job.country && job.location && job.country !== job.location && <span><Globe2 size={12} />{job.country}</span>}</div></div>
-      <span className="match-pill"><Target size={12} />{match}% fit</span>
-    </div>
-    <div className="job-meta">
-      {job.employmentType && <span className="tag"><Briefcase size={11} />{job.employmentType}</span>}
-      {opportunityType && opportunityType !== "employment" && <span className="tag">{opportunityType.charAt(0).toUpperCase() + opportunityType.slice(1)}</span>}
-      {job.workMode && <span className="tag"><Globe2 size={11} />{job.workMode}</span>}
-      {formatPostedAt(job.postedAt) && <span className="tag"><Clock3 size={11} />Posted {formatPostedAt(job.postedAt)}</span>}
-      {job.salaryMin !== undefined || job.salaryMax !== undefined ? <span className="tag">{money(job.salaryMin, job.salaryMax, job.salaryCurrency)}</span> : <span className="tag">Salary not listed</span>}
-      {demo && <span className="tag source-demo">Synthetic demo listing</span>}
-    </div>
-    {job.matchReasons && job.matchReasons.length > 0 && <p className="job-reasons">{job.matchReasons.slice(0, 2).join(" · ")}</p>}
-    <div className="job-card-footer"><span className="source-text">Source: {sourceLabel}</span>{dest ? <a className="text-link" href={dest} target="_blank" rel="noreferrer">{job.source === "jobicy" ? "Open Jobicy listing" : job.source === "remoteok" ? "Open Remote OK listing" : "Open original listing"} <ExternalLink size={12} /></a> : <span className="source-text">No external URL</span>}</div>{(job.source === "jobicy" || job.source === "remoteok") && <p className="field-help">Open the original provider listing to review the employer's instructions. Automated application tasks are queued only when a direct application URL is supplied by the source.</p>}
-  </article>;
+  const postedAt = job.postedAt || rawFieldText(raw, ["postedAt", "posted_at", "datePosted", "date_posted", "createdAt", "created_at", "publishedAt", "pubDate", "pub_date"]);
+  const postedBy = rawFieldText(raw, ["postedBy", "posted_by", "publisher", "sourceName", "source_name", "provider"]);
+  const experience = job.experience || rawFieldText(raw, ["experience", "experienceLevel", "experience_level", "yearsExperience", "minimumExperience", "min_experience"]);
+  const employmentType = job.employmentType || rawFieldText(raw, ["employmentType", "employment_type", "jobType", "job_type", "type"]);
+  const workMode = job.workMode || rawFieldText(raw, ["workMode", "work_mode", "workplaceType", "workplace_type", "remoteType"]);
+  const description = job.description || rawFieldText(raw, ["description", "jobDescription", "job_description", "summary", "snippet", "details"]);
+  const cleanDescription = description?.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
+  const requirements = rawFieldText(raw, ["requirements", "qualifications", "requiredSkills", "required_skills", "mustHave", "must_haves", "skills", "whatYouNeed"]);
+  const responsibilities = rawFieldText(raw, ["responsibilities", "duties", "whatYouWillDo", "what_you_will_do"]);
+  const education = rawFieldText(raw, ["education", "educationRequirements", "education_requirements", "degree"]);
+  const industry = rawFieldText(raw, ["industry", "sector"]);
+  const department = rawFieldText(raw, ["department", "team", "function"]);
+  const seniority = rawFieldText(raw, ["seniority", "level", "jobLevel", "job_level", "careerLevel", "career_level"]);
+  const benefits = rawFieldText(raw, ["benefits", "perks", "compensationBenefits", "compensation_benefits"]);
+  const opportunityType = rawFieldText(raw, ["opportunityType", "opportunity_type", "category"]);
+  const sourceHost = hostFromUrl(listingUrl);
+
+  return (
+    <article className="job-card job-result-card">
+      <div className="job-card-top">
+        <div className="company-mark">{(job.company || job.title || "N").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}</div>
+        <div className="job-main">
+          <h3 className="job-title">{job.title}</h3>
+          <div className="job-company">{job.company || "Company not listed"}</div>
+          <div className="job-location">
+            <span><MapPin size={12} />{job.location || job.country || "Location not specified by source"}</span>
+            {job.country && job.location && job.country !== job.location && <span><Globe2 size={12} />{job.country}</span>}
+          </div>
+        </div>
+        <span className="match-pill"><Target size={12} />{match}% fit</span>
+      </div>
+
+      <div className="job-fact-grid">
+        <div><span>Posted</span><strong>{formatPostedAt(postedAt) || "Date not provided"}</strong></div>
+        <div><span>Experience</span><strong>{experience || "Not specified"}</strong></div>
+        <div><span>Employment</span><strong>{employmentType || "Not specified"}</strong></div>
+        <div><span>Salary</span><strong>{money(job.salaryMin, job.salaryMax, job.salaryCurrency)}</strong></div>
+      </div>
+
+      <div className="job-meta">
+        {workMode && <span className="tag"><Globe2 size={11} />{workMode}</span>}
+        {seniority && <span className="tag">{seniority}</span>}
+        {industry && <span className="tag">{industry}</span>}
+        {department && <span className="tag">{department}</span>}
+        {opportunityType && <span className="tag">{opportunityType}</span>}
+        {demo && <span className="tag source-demo">Synthetic test record</span>}
+      </div>
+
+      <div className="job-description-block">
+        <span className="job-section-label">About this role</span>
+        <p className="job-description">{cleanDescription || "The provider did not include a job description in the returned listing."}</p>
+      </div>
+
+      {requirements && (
+        <div className="job-requirements">
+          <span className="job-section-label">Requirements / qualifications</span>
+          <p>{requirements}</p>
+        </div>
+      )}
+
+      {job.matchReasons && job.matchReasons.length > 0 && <p className="job-reasons">{job.matchReasons.slice(0, 3).join(" · ")}</p>}
+
+      <div className="job-card-footer job-result-footer">
+        <div className="job-source-details">
+          <strong>{sourceLabel}</strong>
+          <span>{postedBy ? "Posted by " + postedBy : "Original job source"}{sourceHost ? " · " + sourceHost : ""}</span>
+        </div>
+        <div className="job-action-links">
+          {listingUrl && <a className="text-link" href={listingUrl} target="_blank" rel="noreferrer">View original listing <ExternalLink size={12} /></a>}
+          {applyUrl && <a className="text-link" href={applyUrl} target="_blank" rel="noreferrer">Apply on employer site <ArrowUpRight size={12} /></a>}
+          {!listingUrl && <span className="source-text">Provider did not return a public URL</span>}
+        </div>
+      </div>
+
+      <details className="job-full-details">
+        <summary>Full job details, requirements and source data</summary>
+        <div className="job-full-details-body">
+          {cleanDescription && <section><h4>Full description</h4><p>{cleanDescription}</p></section>}
+          <div className="job-detail-grid">
+            {[
+              ["Experience", experience], ["Employment type", employmentType], ["Work mode", workMode],
+              ["Education", education], ["Seniority", seniority], ["Industry", industry],
+              ["Department / team", department], ["Benefits", benefits], ["Requirements", requirements],
+              ["Responsibilities", responsibilities], ["Posted by", postedBy], ["Original source", sourceLabel],
+              ["Posting date", formatPostedAt(postedAt)], ["Listing URL", job.jobUrl], ["Application URL", job.applicationUrl],
+              ["Job reference", job.sourceJobId]
+            ].filter(([, value]) => Boolean(value)).map(([label, value]) => (
+              <div key={label as string}><span>{label}</span><p>{String(value)}</p></div>
+            ))}
+          </div>
+          {job.matchReasons && job.matchReasons.length > 0 && <section><h4>Why this matched</h4><p>{job.matchReasons.join(" · ")}</p></section>}
+        </div>
+      </details>
+    </article>
+  );
 }
 
 function EmptyState({ icon: Icon, title, description, buttonText, onAction, loading = false }: { icon: LucideIcon; title: string; description: string; buttonText: string; onAction: () => void; loading?: boolean }) {
