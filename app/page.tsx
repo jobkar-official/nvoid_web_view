@@ -51,6 +51,7 @@ type Job = {
   workMode?: string;
   postedAt?: string;
   experience?: string;
+  salary?: string;
   salaryMin?: number;
   salaryMax?: number;
   salaryCurrency?: string;
@@ -1024,8 +1025,8 @@ function JobCard({ job }: { job: Job }) {
   const raw = job.raw ?? {};
   const demo = job.source === "demo" || job.demo === true;
   const match = Number.isFinite(job.matchScore) ? Math.round(job.matchScore) : 0;
-  const company = job.company || rawFieldText(raw, ["company", "companyName", "company_name", "employer", "organization", "organisation"]) || "Company not listed";
-  const location = job.location || rawFieldText(raw, ["location", "jobLocation", "job_location", "city", "workLocation", "work_location"]) || job.country || "Location not listed";
+  const company = job.company || rawFieldText(raw, ["company", "companyName", "company_name", "employer", "organization", "organisation", "co"]) || "Company not listed";
+  const location = job.location || rawFieldText(raw, ["location", "jobLocation", "job_location", "city", "workLocation", "work_location", "loc"]) || job.country || "Location not listed";
   const listingUrl = job.jobUrl || job.applicationUrl;
   const applyUrl = job.applicationUrl && job.applicationUrl !== job.jobUrl ? job.applicationUrl : undefined;
   const sourceLabels: Record<string, string> = {
@@ -1037,14 +1038,14 @@ function JobCard({ job }: { job: Job }) {
     lever: "Lever careers", ashby: "Ashby careers", "apify-boards": "Apify job boards", "apify-apna": "Apify Apna"
   };
   const sourceLabel = sourceLabels[job.source || ""] || job.source || "Connected job source";
-  const postedAt = job.postedAt || rawFieldText(raw, ["postedAt", "posted_at", "datePosted", "date_posted", "createdAt", "created_at", "publishedAt", "pubDate", "pub_date"]);
+  const postedAt = job.postedAt || rawFieldText(raw, ["postedAt", "posted_at", "posted", "postedDate", "posted_date", "datePosted", "date_posted", "createdAt", "created_at", "publishedAt", "pubDate", "pub_date", "age"]);
   const postedBy = rawFieldText(raw, ["postedBy", "posted_by", "publisher", "sourceName", "source_name", "provider"]);
   const experience = job.experience || rawFieldText(raw, ["experience", "experienceLevel", "experience_level", "experienceRange", "experience_range", "yearsExperience", "yearsOfExperience", "years_of_experience", "minimumExperience", "minExperience", "min_experience", "requiredExperience", "required_experience", "exp"]);
   const employmentType = job.employmentType || rawFieldText(raw, ["employmentType", "employment_type", "jobType", "job_type", "employment", "type"]);
   const workMode = job.workMode || rawFieldText(raw, ["workMode", "work_mode", "workplaceType", "workplace_type", "remoteType", "workArrangement", "work_arrangement"]);
-  const salary = job.salaryMin !== undefined || job.salaryMax !== undefined
+  const salary = job.salary || (job.salaryMin !== undefined || job.salaryMax !== undefined
     ? money(job.salaryMin, job.salaryMax, job.salaryCurrency)
-    : rawFieldText(raw, ["salary", "salaryRange", "salary_range", "salaryText", "salary_text", "compensation", "payRange", "pay_range", "remuneration"]) || "Not disclosed";
+    : rawFieldText(raw, ["salary", "sal", "salaryRange", "salary_range", "salaryText", "salary_text", "compensation", "payRange", "pay_range", "remuneration"])) || "Not disclosed";
   const description = job.description || rawFieldText(raw, ["description", "jobDescription", "job_description", "summary", "snippet", "details"]);
   const cleanDescription = description?.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
   const requirements = rawFieldText(raw, ["requirements", "qualifications", "requiredSkills", "required_skills", "mustHave", "must_haves", "skills", "whatYouNeed"]);
