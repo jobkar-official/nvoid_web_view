@@ -45,6 +45,8 @@ jobs:
         working-directory: agent-worker
         run: |
           npm ci
+          npm run lint:types
+          npm test -- --coverage
           npm run build
       - name: Start agent and verify its demo source
         shell: bash
