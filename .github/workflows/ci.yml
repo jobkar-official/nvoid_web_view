@@ -46,7 +46,9 @@ jobs:
         run: |
           npm ci
           npm run lint:types
+          node --check scripts/search-engine-research-mcp-server.cjs
           npm test -- --coverage
+          node -e 'const { buildDorkQueries } = require("./scripts/search-engine-research-mcp-server.cjs"); const queries = buildDorkQueries("Java backend developer jobs in India"); if (!queries.some(q => q.startsWith("site:linkedin.com/jobs")) || !queries.some(q => q.startsWith("intitle:"))) process.exit(1); console.log("Google dork expansion passed: " + queries.length + " query variants")'
           npm run build
       - name: Start agent and verify its demo source
         shell: bash
