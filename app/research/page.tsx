@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { FormEvent } from "react";
 import {
-  Activity, AlertCircle, ArrowLeft, CheckCircle2, ChevronDown, Clock3,
+  Activity, AlertCircle, ArrowLeft, CheckCircle2, ChevronDown,
   Database, Download, ExternalLink, FileJson, LoaderCircle, RefreshCw,
   Search, ShieldCheck, XCircle
 } from "lucide-react";
@@ -178,7 +179,7 @@ export default function ResearchPage() {
     [inventory]
   );
 
-  const runResearch = async (event: React.FormEvent<HTMLFormElement>) => {
+  const runResearch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (query.trim().length < 3) {
       setRunError("Enter a research question containing at least three characters.");
@@ -207,9 +208,13 @@ export default function ResearchPage() {
   };
 
   const toggleServer = (serverId: string) => {
-    setSelectedServers((current) => current.includes(serverId)
-      ? current.filter((id) => id !== serverId)
-      : [...current, serverId]);
+    setSelectedServers((current) => {
+      if (current.length === 0) return connectedServers.map((server) => server.id).filter((id) => id !== serverId);
+      const next = current.includes(serverId)
+        ? current.filter((id) => id !== serverId)
+        : [...current, serverId];
+      return next.length === connectedServers.length ? [] : next;
+    });
   };
 
   const downloadJson = () => {
