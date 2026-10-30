@@ -532,18 +532,6 @@ export default function HomePage() {
 
           {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches fan out across connected MCP sources and public feeds, plus Serper's Google-style dork searches for job boards, ATS boards, company career pages and public recruitment notices. Naukri, LinkedIn, Indeed, Glassdoor and Apna require an authorized direct MCP endpoint or the optional Apify connector. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
           {notice && <div className={"notice " + notice.type}><div>{notice.type === "error" ? <CircleAlert size={16} /> : notice.type === "success" ? <CheckCircle2 size={16} /> : <Activity size={16} />}</div><div>{notice.message}</div><button className="demo-banner-close" aria-label="Dismiss message" onClick={() => setNotice(null)}><X size={14} /></button></div>}
-          {view === "jobs" && searchReport.some((report) => report.serverId === "serper-search") && (() => { const report = searchReport.find((item) => item.serverId === "serper-search")!; return <section className="panel" style={{ marginBottom: 16 }}><div className="panel-header"><div><h2 className="panel-title">Search-engine crawl report</h2><p className="panel-subtitle">{report.provider || "Web-index discovery"} · role/location-specific queries and public job-page extraction</p></div><span className="tag">{report.reachedRequestedLimit ? (report.targetCount ?? 1000) + " target reached" : "Target not reached"}</span></div><div className="panel-body"><div className="grid metric-grid"><MetricCard label="Indexed results" value={report.rawIndexedResults ?? 0} foot={(report.requestsMade ?? 0) + " search requests"} icon={Search} /><MetricCard label="Unique job URLs" value={report.uniqueRoleLocationUrls ?? 0} foot="After URL deduplication" icon={Link2} /><MetricCard label="Public pages fetched" value={report.publicJobPagesFetched ?? 0} foot={(report.structuredJobPages ?? 0) + " structured JobPosting pages · " + (report.linkedJobUrlsDiscovered ?? 0) + " career-page links discovered"} icon={Globe2} /><MetricCard label="Matching records" value={report.matchedJobs ?? 0} foot={"Returned " + (report.returnedJobs ?? 0) + " of " + (report.targetCount ?? 500)} icon={SearchCheck} /></div><p className="field-help" style={{ marginTop: 12 }}>{report.reachedRequestedLimit ? "The requested record count was reached." : "The requested count was not reached. Check search request limits, API quota, crawl coverage and the size of the matching role/location market."}{report.failedSearchRequests ? " Failed search requests: " + report.failedSearchRequests + "." : ""}{report.truncated ? " Results were truncated by the configured crawl/result budget." : ""}{report.moreSearchResultsAvailable ? " The search provider reports more indexed results." : ""}</p><p className="field-help">Filtered out: {(report.rejectedUrlResults ?? 0).toLocaleString()} non-opportunity URLs, {(report.rejectedRoleResults ?? 0).toLocaleString()} role mismatches, and {(report.rejectedLocationResults ?? 0).toLocaleString()} location mismatches. {report.opportunityTypes ? "Opportunity types: " + Object.entries(report.opportunityTypes).map(([kind, count]) => kind.replace(/-/g, " ") + " " + count).join(" · ") + "." : ""}</p></div></section>; })()}
-          {view === "jobs" && searchSourceResults.length > 0 && <section className="panel" style={{ marginBottom: 16 }}>
-            <div className="panel-header"><div><h2 className="panel-title">Search source diagnostics</h2><p className="panel-subtitle">Counts returned by each connected source for the current role and location</p></div><span className="tag">{searchSourceResults.filter((source) => !source.error).length} healthy</span></div>
-            <div className="panel-body"><div className="grid" style={{ gap: 8 }}>
-              {searchSourceResults.map((source) => <div className="settings-row" key={source.serverId} style={{ alignItems: "flex-start", gap: 10 }}>
-                <span className="status-dot" style={{ marginTop: 5, flexShrink: 0, background: source.error ? "#dc5252" : "#16a36a", boxShadow: "none" }} />
-                <div style={{ flex: 1, minWidth: 0 }}><strong>{source.serverId}</strong><p>{source.error ? source.error : source.found + " role/location-matched listing(s)" + (source.report?.requestsMade ? " · " + source.report.requestsMade + " web-search requests · " + (source.report.publicJobPagesFetched ?? 0) + " pages fetched" : "")}</p></div>
-                <span className="tag">{source.error ? "Error" : String(source.found)}</span>
-              </div>)}
-            </div></div>
-          </section>}
-
           {view === "research" && (
             <div className="grid" style={{ gap: 16 }}>
               <section className="panel">
@@ -750,6 +738,54 @@ export default function HomePage() {
                     <p>Enter a job title and location to collect matching listings from all available MCP job tools and configured crawlers.</p>
                   </div>
                 ) : null}
+                {(searchSourceResults.length > 0 || searchReport.some((report) => report.serverId === "serper-search")) && (
+                  <section className="source-coverage">
+                    <div className="source-coverage-heading">
+                      <div>
+                        <h3>Search coverage</h3>
+                        <p>See which connected sources returned listings for this search.</p>
+                      </div>
+                      <span>{searchSourceResults.filter((source) => !source.error).length} healthy sources</span>
+                    </div>
+                    {searchSourceResults.length > 0 && (
+                      <div className="source-result-grid">
+                        {searchSourceResults.map((source) => (
+                          <article className="source-result-card" key={source.serverId}>
+                            <div className="source-result-top">
+                              <span className={"source-result-indicator" + (source.error ? " has-error" : "")} />
+                              <strong>{source.provider || source.serverId.replace(/[-_]/g, " ")}</strong>
+                              <span className={"source-result-status" + (source.error ? " has-error" : "")}>{source.error ? "Error" : source.found > 0 ? "Results" : "Checked"}</span>
+                            </div>
+                            <div className="source-result-count">{source.found.toLocaleString()}</div>
+                            <div className="source-result-caption">matching listing(s)</div>
+                            <div className="source-result-meta">
+                              {source.report?.requestsMade ? <span>{source.report.requestsMade} web requests</span> : null}
+                              {source.report?.publicJobPagesFetched ? <span>{source.report.publicJobPagesFetched} pages fetched</span> : null}
+                              {source.report?.structuredJobPages ? <span>{source.report.structuredJobPages} structured job pages</span> : null}
+                              {!source.report?.requestsMade && !source.report?.publicJobPagesFetched && !source.report?.structuredJobPages ? <span>Source checked for this role and location</span> : null}
+                            </div>
+                            {source.error && <p className="source-result-error">{source.error}</p>}
+                          </article>
+                        ))}
+                      </div>
+                    )}
+                    {searchReport.some((report) => report.serverId === "serper-search") && (() => {
+                      const report = searchReport.find((item) => item.serverId === "serper-search")!;
+                      return (
+                        <details className="source-crawl-details">
+                          <summary>Public web search and crawl details <span>{(report.requestsMade ?? 0).toLocaleString()} requests · {(report.publicJobPagesFetched ?? 0).toLocaleString()} pages fetched</span></summary>
+                          <div className="source-crawl-stats">
+                            <div><span>Indexed results</span><strong>{(report.rawIndexedResults ?? 0).toLocaleString()}</strong></div>
+                            <div><span>Unique job URLs</span><strong>{(report.uniqueRoleLocationUrls ?? 0).toLocaleString()}</strong></div>
+                            <div><span>Structured job pages</span><strong>{(report.structuredJobPages ?? 0).toLocaleString()}</strong></div>
+                            <div><span>Matching records</span><strong>{(report.matchedJobs ?? 0).toLocaleString()}</strong></div>
+                          </div>
+                          <p>{report.reachedRequestedLimit ? "The requested record count was reached." : "The requested count was not reached."}{report.failedSearchRequests ? " Failed search requests: " + report.failedSearchRequests + "." : ""}{report.truncated ? " Results were truncated by the configured crawl/result budget." : ""}{report.moreSearchResultsAvailable ? " More indexed results may be available." : ""}</p>
+                        </details>
+                      );
+                    })()}
+                  </section>
+                )}
               </div>
             </section>
           )}
@@ -964,7 +1000,15 @@ function rawFieldText(raw: Record<string, unknown> | undefined, keys: string[]):
     }
     if (typeof value === "object") {
       const record = value as Record<string, unknown>;
-      const nested = record.name ?? record.label ?? record.value ?? record.text ?? record.description;
+      const lower = record.min ?? record.minimum ?? record.from ?? record.lower;
+      const upper = record.max ?? record.maximum ?? record.to ?? record.upper;
+      if (lower !== undefined || upper !== undefined) {
+        const currency = record.currency ?? record.currencyCode ?? record.currency_code ?? record.symbol;
+        const range = [lower, upper].filter((item) => item !== undefined && item !== null && String(item).trim()).join(" – ");
+        const formatted = [currency, range].filter((item) => item !== undefined && item !== null && String(item).trim()).join(" ");
+        if (formatted) return formatted;
+      }
+      const nested = record.name ?? record.label ?? record.value ?? record.text ?? record.description ?? record.title;
       if (typeof nested === "string" && nested.trim()) return nested.trim();
     }
   }
@@ -980,6 +1024,8 @@ function JobCard({ job }: { job: Job }) {
   const raw = job.raw ?? {};
   const demo = job.source === "demo" || job.demo === true;
   const match = Number.isFinite(job.matchScore) ? Math.round(job.matchScore) : 0;
+  const company = job.company || rawFieldText(raw, ["company", "companyName", "company_name", "employer", "organization", "organisation"]) || "Company not listed";
+  const location = job.location || rawFieldText(raw, ["location", "jobLocation", "job_location", "city", "workLocation", "work_location"]) || job.country || "Location not listed";
   const listingUrl = job.jobUrl || job.applicationUrl;
   const applyUrl = job.applicationUrl && job.applicationUrl !== job.jobUrl ? job.applicationUrl : undefined;
   const sourceLabels: Record<string, string> = {
@@ -993,9 +1039,12 @@ function JobCard({ job }: { job: Job }) {
   const sourceLabel = sourceLabels[job.source || ""] || job.source || "Connected job source";
   const postedAt = job.postedAt || rawFieldText(raw, ["postedAt", "posted_at", "datePosted", "date_posted", "createdAt", "created_at", "publishedAt", "pubDate", "pub_date"]);
   const postedBy = rawFieldText(raw, ["postedBy", "posted_by", "publisher", "sourceName", "source_name", "provider"]);
-  const experience = job.experience || rawFieldText(raw, ["experience", "experienceLevel", "experience_level", "yearsExperience", "minimumExperience", "min_experience"]);
-  const employmentType = job.employmentType || rawFieldText(raw, ["employmentType", "employment_type", "jobType", "job_type", "type"]);
-  const workMode = job.workMode || rawFieldText(raw, ["workMode", "work_mode", "workplaceType", "workplace_type", "remoteType"]);
+  const experience = job.experience || rawFieldText(raw, ["experience", "experienceLevel", "experience_level", "experienceRange", "experience_range", "yearsExperience", "yearsOfExperience", "years_of_experience", "minimumExperience", "minExperience", "min_experience", "requiredExperience", "required_experience", "exp"]);
+  const employmentType = job.employmentType || rawFieldText(raw, ["employmentType", "employment_type", "jobType", "job_type", "employment", "type"]);
+  const workMode = job.workMode || rawFieldText(raw, ["workMode", "work_mode", "workplaceType", "workplace_type", "remoteType", "workArrangement", "work_arrangement"]);
+  const salary = job.salaryMin !== undefined || job.salaryMax !== undefined
+    ? money(job.salaryMin, job.salaryMax, job.salaryCurrency)
+    : rawFieldText(raw, ["salary", "salaryRange", "salary_range", "salaryText", "salary_text", "compensation", "payRange", "pay_range", "remuneration"]) || "Not disclosed";
   const description = job.description || rawFieldText(raw, ["description", "jobDescription", "job_description", "summary", "snippet", "details"]);
   const cleanDescription = description?.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
   const requirements = rawFieldText(raw, ["requirements", "qualifications", "requiredSkills", "required_skills", "mustHave", "must_haves", "skills", "whatYouNeed"]);
@@ -1011,26 +1060,26 @@ function JobCard({ job }: { job: Job }) {
   return (
     <article className="job-card job-result-card">
       <div className="job-card-top">
-        <div className="company-mark">{(job.company || job.title || "N").split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase()}</div>
+        <div className="company-mark">{initials(company)}</div>
         <div className="job-main">
           <h3 className="job-title">{job.title}</h3>
-          <div className="job-company">{job.company || "Company not listed"}</div>
+          <div className="job-company">{company}</div>
           <div className="job-location">
-            <span><MapPin size={12} />{job.location || job.country || "Location not specified by source"}</span>
-            {job.country && job.location && job.country !== job.location && <span><Globe2 size={12} />{job.country}</span>}
+            <span><MapPin size={12} />{location}</span>
+            {job.country && location !== job.country && <span><Globe2 size={12} />{job.country}</span>}
           </div>
         </div>
         <span className="match-pill"><Target size={12} />{match}% fit</span>
       </div>
 
-      <div className="job-fact-grid">
-        <div><span>Posted</span><strong>{formatPostedAt(postedAt) || "Date not provided"}</strong></div>
-        <div><span>Experience</span><strong>{experience || "Not specified"}</strong></div>
-        <div><span>Employment</span><strong>{employmentType || "Not specified"}</strong></div>
-        <div><span>Salary</span><strong>{money(job.salaryMin, job.salaryMax, job.salaryCurrency)}</strong></div>
+      <div className="job-primary-facts">
+        <div className="job-primary-fact salary-fact"><span>Salary range</span><strong>{salary}</strong></div>
+        <div className="job-primary-fact"><span>Experience</span><strong>{experience || "Not listed"}</strong></div>
+        <div className="job-primary-fact"><span>Employment type</span><strong>{employmentType || "Not listed"}</strong></div>
       </div>
 
-      <div className="job-meta">
+      <div className="job-meta job-meta-prominent">
+        <span className="job-posted-date"><Clock3 size={12} />Posted {formatPostedAt(postedAt) || "date not provided"}</span>
         {workMode && <span className="tag"><Globe2 size={11} />{workMode}</span>}
         {seniority && <span className="tag">{seniority}</span>}
         {industry && <span className="tag">{industry}</span>}
@@ -1055,7 +1104,7 @@ function JobCard({ job }: { job: Job }) {
 
       <div className="job-card-footer job-result-footer">
         <div className="job-source-details">
-          <strong>{sourceLabel}</strong>
+          <strong>Found on {sourceLabel}</strong>
           <span>{postedBy ? "Posted by " + postedBy : "Original job source"}{sourceHost ? " · " + sourceHost : ""}</span>
         </div>
         <div className="job-action-links">
@@ -1071,7 +1120,7 @@ function JobCard({ job }: { job: Job }) {
           {cleanDescription && <section><h4>Full description</h4><p>{cleanDescription}</p></section>}
           <div className="job-detail-grid">
             {[
-              ["Experience", experience], ["Employment type", employmentType], ["Work mode", workMode],
+              ["Company", company], ["Location", location], ["Salary", salary], ["Experience", experience], ["Employment type", employmentType], ["Work mode", workMode],
               ["Education", education], ["Seniority", seniority], ["Industry", industry],
               ["Department / team", department], ["Benefits", benefits], ["Requirements", requirements],
               ["Responsibilities", responsibilities], ["Posted by", postedBy], ["Original source", sourceLabel],
