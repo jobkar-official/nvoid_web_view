@@ -364,6 +364,7 @@ export default function HomePage() {
               {item.id === "applications" && tasks.length > 0 && <span className="nav-count">{tasks.length}</span>}
             </button>
           ))}
+          <a className="nav-item" href="/research"><Database size={16} strokeWidth={1.8} /><span>Research agent</span></a>
         </nav>
         <div className="sidebar-spacer" />
         <div className="sidebar-connection">

@@ -14,7 +14,17 @@ A Next.js user interface for the Nvoid AI Agent worker. This repository contains
 - Server-side Next.js API proxy to the agent, keeping the agent API key out of browser JavaScript.
 - Review-only execution: every run sends `autoSubmit: false` and `syncToBackend: false`.
 
-The candidate profile shown initially is fictional and stored only in browser state; it is not saved to a user database. Job search results are provider data, not generated demo listings. The five default public feeds are checked against the chosen role and country/location eligibility before results reach the UI. Provider data is cached for 5–60 minutes depending on source, so the feed is current but not second-by-second streaming. Optional Naukri, LinkedIn, Indeed, Glassdoor, and Apna connectors activate when a private `APIFY_API_TOKEN` is configured in the agent's `.env`; Adzuna and Jooble activate when their own credentials are present. Third-party actors can charge per result plus platform usage. Public-board listings are not queued for automatic application unless a direct external application URL is provided. Keep submission in review-only mode.
+The candidate profile shown initially is fictional and stored only in browser state; it is not saved to a user database. Job search results are provider data, not generated demo listings. The seven default public feeds are checked against the chosen role and country/location eligibility before results reach the UI. Provider data is cached for 5–60 minutes depending on source, so the feed is current but not second-by-second streaming. Optional Naukri, LinkedIn, Indeed, Glassdoor, and Apna connectors activate when a private `APIFY_API_TOKEN` is configured in the agent's `.env`; Adzuna and Jooble activate when their own credentials are present. Third-party actors can charge per result plus platform usage. Public-board listings are not queued for automatic application unless a direct external application URL is provided. Keep submission in review-only mode.
+
+## Live federated MCP research workspace
+
+Open `/research` from the workspace navigation to run research questions across the worker's actual connected MCP servers. This is a separate workflow from the candidate job-search dashboard.
+
+The page loads the worker's live MCP tool catalog, displays connected sources and safe read-only tools, accepts a natural-language query, and lets the user choose a maximum record count and tool-call budget. It calls the server-side `/api/agent/research` proxy, which invokes the worker's `/api/research/run` endpoint. The result view is generated from the real response and includes per-connector coverage, each actual tool invocation, failures, durations, returned records, deduplication totals, and JSON/CSV exports.
+
+The UI does not contain a synthetic research dataset or a prefilled report. An empty result set remains empty and displays the source-call diagnostics. Tools marked destructive or non-read-only are not eligible for this workflow; the worker also blocks mutation-style operations by name.
+
+Only MCP endpoints and credentials configured on the Nvoid worker can be used. Connections held privately inside ChatGPT or Claude are not automatically shared with this separate service. Configure an endpoint that Nvoid is authorized to access in the worker's `config/mcp-servers.json` and store its token in the worker's server environment. The dashboard reports only servers that have actually connected.
 
 ## Run locally
 
