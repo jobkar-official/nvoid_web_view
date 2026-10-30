@@ -753,7 +753,7 @@ export default function HomePage() {
                           <article className="source-result-card" key={source.serverId}>
                             <div className="source-result-top">
                               <span className={"source-result-indicator" + (source.error ? " has-error" : "")} />
-                              <strong>{source.provider || source.serverId.replace(/[-_]/g, " ")}</strong>
+                              <strong>{source.serverId.replace(/[-_]/g, " ")}</strong>
                               <span className={"source-result-status" + (source.error ? " has-error" : "")}>{source.error ? "Error" : source.found > 0 ? "Results" : "Checked"}</span>
                             </div>
                             <div className="source-result-count">{source.found.toLocaleString()}</div>
