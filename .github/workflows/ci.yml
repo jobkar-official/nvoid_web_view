@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: jobkar-official/nvoid_ai_agent
-          ref: feat/find-jobs-source-selection
+          ref: development
           path: agent-worker
           persist-credentials: false
       - uses: actions/setup-node@v4
