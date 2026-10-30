@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-type View = "overview" | "jobs" | "applications" | "profile" | "settings";
+type View = "overview" | "jobs" | "research" | "applications" | "profile" | "settings";
 type Notice = { type: "error" | "success" | "info"; message: string };
 type CandidateProfile = {
   userId: string;
@@ -83,6 +83,12 @@ type McpSourceStatus = {
 };
 type SearchSourceReport = { serverId: string; provider?: string; mode?: string; queryCount?: number; requestsMade?: number; rawIndexedResults?: number; uniqueRoleLocationUrls?: number; linkedJobUrlsDiscovered?: number; publicJobPagesFetched?: number; structuredJobPages?: number; metadataOnlyListings?: number; matchedJobs?: number; returnedJobs?: number; targetCount?: number; reachedRequestedLimit?: boolean; moreSearchResultsAvailable?: boolean; failedSearchRequests?: number; rejectedUrlResults?: number; rejectedRoleResults?: number; rejectedLocationResults?: number; opportunityTypes?: Record<string, number>; truncated?: boolean };
 type JobSourceResult = { serverId: string; tool?: string; found: number; error?: string; report?: SearchSourceReport };
+type ResearchToolOption = { serverId: string; serverName: string; name: string; description?: string; inputSchema?: unknown; safety?: string };
+type ResearchCatalog = { connectedServers: number; configuredServers: number; servers: McpSourceStatus[]; availableReadOnlyTools: ResearchToolOption[]; availableReadOnlyToolCount: number };
+type ResearchConnectorReport = { serverId: string; serverName: string; enabled: boolean; connected: boolean; connectionError?: string; discoveredTools: number; readOnlyTools: number; callsSucceeded: number; callsFailed: number; recordsReturned: number };
+type ResearchCall = { serverId: string; serverName: string; toolName: string; reason: string; status: "success" | "failed"; durationMs: number; recordsReturned: number; providerReport?: Record<string, unknown>; error?: string };
+type ResearchRecord = { id: string; serverId: string; serverName: string; toolName: string; title?: string; url?: string; data: Record<string, unknown> };
+type ResearchResult = { query: string; generatedAt: string; planner: "llm" | "heuristic"; report: { configuredServers: number; connectedServers: number; toolsDiscovered: number; readOnlyToolsDiscovered: number; plannedCalls: number; successfulCalls: number; failedCalls: number; rawRecords: number; uniqueRecords: number; duplicatesRemoved: number; maxRecords: number; truncated: boolean; perConnector: ResearchConnectorReport[] }; calls: ResearchCall[]; records: ResearchRecord[]; warnings: string[] };
 
 const initialProfile: CandidateProfile = {
   userId: "nvoid-demo-candidate-001",
@@ -110,6 +116,7 @@ const initialProfile: CandidateProfile = {
 const navItems: Array<{ id: View; label: string; icon: LucideIcon }> = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "jobs", label: "Find jobs", icon: Search },
+  { id: "research", label: "Research anything", icon: Globe2 },
   { id: "applications", label: "Applications", icon: ClipboardList },
   { id: "profile", label: "Candidate profile", icon: UserRound },
   { id: "settings", label: "Connections & settings", icon: Settings }
@@ -118,6 +125,7 @@ const navItems: Array<{ id: View; label: string; icon: LucideIcon }> = [
 const pageInfo: Record<View, { eyebrow: string; title: string; description: string }> = {
   overview: { eyebrow: "Your job search workspace", title: "Overview", description: "One workspace to discover opportunities, compare your fit, and track every agent task." },
   jobs: { eyebrow: "Federated opportunity discovery", title: "Find your next role", description: "One search fans out across connected MCP sources, public job feeds, Google-dork discovery, company career pages and relevant public recruitment notices." },
+  research: { eyebrow: "Live federated research", title: "Research anything", description: "Plan a query across connected read-only MCP tools, search the public web, crawl accessible pages, and inspect the real records returned by every source." },
   applications: { eyebrow: "Execution history", title: "Application tracker", description: "Review queued tasks, completion states, and jobs that need your attention." },
   profile: { eyebrow: "Candidate intelligence", title: "Your candidate profile", description: "Keep the test profile accurate so the agent can search and match against the right criteria." },
   settings: { eyebrow: "Agent configuration", title: "Connections & settings", description: "Check the worker connection, choose a source, and review submission safeguards." }
@@ -195,13 +203,19 @@ export default function HomePage() {
   const [searchReport, setSearchReport] = useState<SearchSourceReport[]>([]);
   const [sourceRefreshError, setSourceRefreshError] = useState("");
   const [agentState, setAgentState] = useState<"checking" | "online" | "offline">("checking");
-  const [busy, setBusy] = useState<"search" | "run" | "refresh" | null>(null);
+  const [busy, setBusy] = useState<"search" | "run" | "research" | "refresh" | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
   const [showDemoBanner, setShowDemoBanner] = useState(true);
   const [minMatchScore, setMinMatchScore] = useState(55);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lastSearch, setLastSearch] = useState<string | null>(null);
   const [taskRefreshError, setTaskRefreshError] = useState("");
+  const [researchQuery, setResearchQuery] = useState("");
+  const [researchCatalog, setResearchCatalog] = useState<ResearchCatalog | null>(null);
+  const [researchServerIds, setResearchServerIds] = useState<string[] | null>(null);
+  const [researchMaxRecords, setResearchMaxRecords] = useState(100);
+  const [researchMaxTools, setResearchMaxTools] = useState(20);
+  const [researchResult, setResearchResult] = useState<ResearchResult | null>(null);
 
   const connectedSources = health?.mcp?.connected ?? 0;
   const matchedJobs = useMemo(() => jobs.filter((job) => job.matchScore >= minMatchScore).length, [jobs, minMatchScore]);
@@ -243,6 +257,66 @@ export default function HomePage() {
       setSourceStatuses([]);
     }
   }, []);
+
+  const loadResearchTools = useCallback(async () => {
+    try {
+      const result = await readJson(await fetch("/api/research/tools", { cache: "no-store" }));
+      const catalog = result as ResearchCatalog;
+      setResearchCatalog(catalog);
+      setResearchServerIds((current) => current === null
+        ? catalog.availableReadOnlyTools.map((tool) => tool.serverId).filter((id, index, all) => all.indexOf(id) === index)
+        : current.filter((id) => catalog.availableReadOnlyTools.some((tool) => tool.serverId === id)));
+      return catalog;
+    } catch (error) {
+      setNotice({ type: "error", message: error instanceof Error ? error.message : "Could not load connected research tools." });
+      throw error;
+    }
+  }, []);
+
+  const selectedResearchServerIds = researchServerIds ?? [...new Set(researchCatalog?.availableReadOnlyTools.map((tool) => tool.serverId) ?? [])];
+  const researchSourceOptions = useMemo(() => (researchCatalog?.servers ?? [])
+    .filter((server) => server.connected && researchCatalog?.availableReadOnlyTools.some((tool) => tool.serverId === server.id))
+    .map((server) => ({
+      ...server,
+      tools: researchCatalog?.availableReadOnlyTools.filter((tool) => tool.serverId === server.id) ?? [],
+    })), [researchCatalog]);
+
+  const runResearch = async (event?: FormEvent) => {
+    event?.preventDefault();
+    if (researchQuery.trim().length < 3) {
+      setNotice({ type: "error", message: "Enter a research question of at least three characters." });
+      return;
+    }
+    const selectedIds = selectedResearchServerIds;
+    if (selectedIds.length === 0) {
+      setNotice({ type: "error", message: "Select at least one connected source with read-only research tools." });
+      return;
+    }
+    setBusy("research");
+    setNotice(null);
+    try {
+      const result = await readJson(await fetch("/api/research/run", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          query: researchQuery.trim(),
+          serverIds: selectedIds,
+          maxRecords: researchMaxRecords,
+          maxTools: researchMaxTools,
+        }),
+      }));
+      setResearchResult(result as ResearchResult);
+      const report = result.report as ResearchResult["report"];
+      setNotice({
+        type: report.successfulCalls > 0 ? "success" : "info",
+        message: "Research execution finished: " + report.uniqueRecords + " unique record(s) from " + report.successfulCalls + " successful tool call(s), with " + report.failedCalls + " failed call(s).",
+      });
+    } catch (error) {
+      setNotice({ type: "error", message: error instanceof Error ? error.message : "Research execution failed." });
+    } finally {
+      setBusy(null);
+    }
+  };
 
   const refreshWorkspace = useCallback(async () => {
     setBusy("refresh");
@@ -342,6 +416,7 @@ export default function HomePage() {
     setView(next);
     setMobileOpen(false);
     setNotice(null);
+    if (next === "research" && !researchCatalog) void loadResearchTools().catch(() => undefined);
   };
 
   const statusClass = agentState === "online" ? "" : agentState === "offline" ? "offline" : "warning";
@@ -399,8 +474,14 @@ export default function HomePage() {
               <p>{currentInfo.description}</p>
             </div>
             <div className="heading-actions">
-              <button className="secondary-button" onClick={() => void searchJobs()} disabled={busy !== null}><Search size={15} /> Find jobs</button>
-              <button className="primary-button" onClick={runAgent} disabled={busy !== null || agentState === "offline"}>{busy === "run" ? <LoaderCircle size={15} className="spin" /> : <Zap size={15} />} Run agent <ArrowRight size={14} /></button>
+              {view === "research" ? (
+                <button className="secondary-button" onClick={() => void loadResearchTools()} disabled={busy !== null}><RefreshCw size={15} /> Refresh tools</button>
+              ) : (
+                <>
+                  <button className="secondary-button" onClick={() => void searchJobs()} disabled={busy !== null}><Search size={15} /> Find jobs</button>
+                  <button className="primary-button" onClick={runAgent} disabled={busy !== null || agentState === "offline"}>{busy === "run" ? <LoaderCircle size={15} className="spin" /> : <Zap size={15} />} Run agent <ArrowRight size={14} /></button>
+                </>
+              )}
             </div>
           </div>
 
@@ -417,6 +498,108 @@ export default function HomePage() {
               </div>)}
             </div></div>
           </section>}
+
+          {view === "research" && (
+            <div className="grid" style={{ gap: 16 }}>
+              <section className="panel">
+                <div className="panel-header">
+                  <div><h2 className="panel-title">Live research query</h2><p className="panel-subtitle">Every metric and record below comes from tool calls executed for this query. No synthetic report data is inserted.</p></div>
+                  <span className="tag">{researchCatalog?.availableReadOnlyToolCount ?? 0} read-only tools</span>
+                </div>
+                <div className="panel-body">
+                  <form className="grid" style={{ gap: 14 }} onSubmit={runResearch}>
+                    <div className="field-wrap">
+                      <label htmlFor="research-query">What do you want to research?</label>
+                      <textarea id="research-query" className="field" rows={4} value={researchQuery} onChange={(event) => setResearchQuery(event.target.value)} placeholder="e.g. Find Indian SaaS companies hiring backend engineers, identify their careers pages, open roles, decision makers and public contact channels." />
+                      <span className="field-help">Use natural language or include Google operators such as site:, inurl:, intitle:, quoted phrases and OR. The planner may expand the query into complementary searches when an LLM is configured.</span>
+                    </div>
+                    <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 12 }}>
+                      <div className="field-wrap"><label htmlFor="research-record-limit">Maximum unique records</label><select id="research-record-limit" className="field" value={researchMaxRecords} onChange={(event) => setResearchMaxRecords(Number(event.target.value))}><option value={25}>25 records</option><option value={100}>100 records</option><option value={250}>250 records</option><option value={500}>500 records</option><option value={1000}>1,000 records</option></select></div>
+                      <div className="field-wrap"><label htmlFor="research-tool-limit">Maximum MCP tool calls</label><select id="research-tool-limit" className="field" value={researchMaxTools} onChange={(event) => setResearchMaxTools(Number(event.target.value))}><option value={5}>5 calls</option><option value={10}>10 calls</option><option value={20}>20 calls</option><option value={30}>30 calls</option><option value={40}>40 calls</option></select></div>
+                      <div className="field-wrap"><label>&nbsp;</label><button className="primary-button full-width" type="submit" disabled={busy !== null || researchQuery.trim().length < 3 || selectedResearchServerIds.length === 0}>{busy === "research" ? <LoaderCircle size={15} className="spin" /> : <Globe2 size={15} />} {busy === "research" ? "Researching live sources…" : "Run live research"} <ArrowRight size={14} /></button></div>
+                    </div>
+                  </form>
+                  <div className="settings-row" style={{ marginTop: 18, paddingTop: 15 }}>
+                    <div><strong>Connected read-only sources</strong><p>Select the actual connected MCP servers whose read tools should be executed. Mutation and destructive tools are excluded by the worker.</p></div>
+                    <span className="tag">{selectedResearchServerIds.length} selected</span>
+                  </div>
+                  {!researchCatalog && <p className="field-help">Load the connected tool catalogue to see available research sources.</p>}
+                  {researchCatalog && researchSourceOptions.length === 0 && <div className="notice info" style={{ marginTop: 12 }}>No connected MCP server currently exposes a tool that can be classified as read-only research. Check the worker's connector inventory and tool schemas.</div>}
+                  <div className="grid" style={{ gap: 8, marginTop: 10 }}>
+                    {researchSourceOptions.map((source) => {
+                      const checked = selectedResearchServerIds.includes(source.id);
+                      return <label key={source.id} className="settings-row" style={{ alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
+                        <input type="checkbox" checked={checked} onChange={() => setResearchServerIds((current) => {
+                          const selected = current ?? researchSourceOptions.map((item) => item.id);
+                          return selected.includes(source.id) ? selected.filter((id) => id !== source.id) : [...selected, source.id];
+                        })} />
+                        <span style={{ flex: 1, minWidth: 0 }}><strong>{source.name}</strong><p>{source.id} · {source.tools.length} read-only tool(s) · {source.tools.map((tool) => tool.name).join(", ")}</p></span>
+                        <span className="tag">Connected</span>
+                      </label>;
+                    })}
+                  </div>
+                </div>
+              </section>
+
+              {researchResult && (
+                <>
+                  <section className="panel">
+                    <div className="panel-header"><div><h2 className="panel-title">Execution report</h2><p className="panel-subtitle">{researchResult.query} · {new Date(researchResult.generatedAt).toLocaleString()} · planner: {researchResult.planner}</p></div><span className="tag">{researchResult.report.uniqueRecords.toLocaleString()} unique records</span></div>
+                    <div className="panel-body">
+                      <div className="grid metric-grid">
+                        <MetricCard label="Connected sources" value={researchResult.report.connectedServers} foot={researchResult.report.configuredServers + " configured"} icon={Server} />
+                        <MetricCard label="Read-only tools" value={researchResult.report.readOnlyToolsDiscovered} foot={researchResult.report.toolsDiscovered + " tools discovered"} icon={Code2} />
+                        <MetricCard label="Successful calls" value={researchResult.report.successfulCalls} foot={researchResult.report.failedCalls + " failed · " + researchResult.report.plannedCalls + " planned"} icon={Activity} />
+                        <MetricCard label="Unique records" value={researchResult.report.uniqueRecords} foot={researchResult.report.rawRecords + " raw · " + researchResult.report.duplicatesRemoved + " duplicates removed"} icon={Database} />
+                      </div>
+                      <div className="field-help" style={{ marginTop: 12 }}>{researchResult.report.truncated ? "The requested unique-record cap was reached. Additional provider records may exist." : "Record cap: " + researchResult.report.maxRecords + ". Results shown are only records actually returned by successful connector calls."}</div>
+                      {researchResult.warnings.map((warning, index) => <div key={index} className="notice info" style={{ marginTop: 8 }}><CircleAlert size={14} />{warning}</div>)}
+                    </div>
+                  </section>
+
+                  <section className="panel">
+                    <div className="panel-header"><div><h2 className="panel-title">Connector coverage</h2><p className="panel-subtitle">Configured sources are included even when they failed to connect or were unable to return data.</p></div></div>
+                    <div className="panel-body"><div className="grid" style={{ gap: 8 }}>
+                      {researchResult.report.perConnector.map((source) => <div key={source.serverId} className="settings-row" style={{ alignItems: "flex-start", gap: 10 }}>
+                        <span className="status-dot" style={{ marginTop: 5, flexShrink: 0, background: source.connected ? "#16a36a" : source.enabled ? "#dc5252" : "#9aa8ba", boxShadow: "none" }} />
+                        <div style={{ flex: 1, minWidth: 0 }}><strong>{source.serverName}</strong><p>{source.serverId} · {source.connected ? source.readOnlyTools + " read-only / " + source.discoveredTools + " discovered tools" : source.enabled ? "Connection failed" : "Inactive"}</p>{source.connectionError && <span className="field-help" style={{ color: "#c43c45" }}>{source.connectionError}</span>}</div>
+                        <span className="tag">{source.callsSucceeded} ok · {source.callsFailed} failed · {source.recordsReturned} records</span>
+                      </div>)}
+                    </div></div>
+                  </section>
+
+                  <section className="panel">
+                    <div className="panel-header"><div><h2 className="panel-title">Executed MCP tool calls</h2><p className="panel-subtitle">The worker's actual calls, execution time, output counts and any provider errors.</p></div><span className="tag">{researchResult.calls.length} calls</span></div>
+                    <div className="panel-body"><div className="grid" style={{ gap: 9 }}>
+                      {researchResult.calls.map((call, index) => <div className="settings-row" key={call.serverId + "/" + call.toolName + "/" + index} style={{ alignItems: "flex-start", gap: 10 }}>
+                        <span className="status-dot" style={{ marginTop: 5, flexShrink: 0, background: call.status === "success" ? "#16a36a" : "#dc5252", boxShadow: "none" }} />
+                        <div style={{ flex: 1, minWidth: 0 }}><strong>{call.serverName} / {call.toolName}</strong><p>{call.reason} · {call.durationMs.toLocaleString()} ms · {call.recordsReturned} returned</p>{call.error && <span className="field-help" style={{ color: "#c43c45" }}>{call.error}</span>}</div>
+                        <span className="tag">{call.status}</span>
+                      </div>)}
+                      {researchResult.calls.length === 0 && <p className="field-help">No tool calls were executable for this query. Review planner warnings and tool input schemas.</p>}
+                    </div></div>
+                  </section>
+
+                  <section className="panel">
+                    <div className="panel-header"><div><h2 className="panel-title">Retrieved records</h2><p className="panel-subtitle">Real connector output with source attribution and original URLs where provided by the source.</p></div><span className="tag">{researchResult.records.length.toLocaleString()} records</span></div>
+                    <div className="panel-body">
+                      {researchResult.records.length === 0 ? <div className="empty-state"><div className="empty-icon"><Database size={22} /></div><h3>No records returned</h3><p>Calls may have failed, returned an empty response or required input arguments that could not safely be inferred. Inspect connector coverage and call diagnostics above.</p></div> : (
+                        <div className="grid" style={{ gap: 10 }}>
+                          {researchResult.records.map((record) => <article className="job-card" key={record.id}>
+                            <div className="job-card-top"><div className="company-mark"><Database size={17} /></div><div className="job-main"><h3 className="job-title">{record.title || String(record.data.name || record.data.subject || record.data.headline || record.data.title || "Research record")}</h3><div className="job-company">{record.serverName} · {record.toolName}</div></div><span className="tag">{record.serverId}</span></div>
+                            <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 8, marginTop: 10 }}>
+                              {Object.entries(record.data).filter(([key]) => !["description", "content", "body", "text"].includes(key.toLowerCase())).slice(0, 6).map(([key, value]) => <div key={key} className="field-wrap"><span className="field-help">{key}</span><strong style={{ overflowWrap: "anywhere", fontSize: 12 }}>{typeof value === "string" || typeof value === "number" || typeof value === "boolean" ? String(value).slice(0, 220) : JSON.stringify(value).slice(0, 220)}</strong></div>)}
+                            </div>
+                            <div className="job-card-footer">{record.url && record.url.startsWith("http") ? <a className="text-link" href={record.url} target="_blank" rel="noreferrer">Open source record <ExternalLink size={12} /></a> : <span className="source-text">No source URL supplied</span>}<details><summary className="text-link" style={{ cursor: "pointer" }}>View complete record</summary><pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", maxHeight: 420, overflow: "auto", fontSize: 11, marginTop: 10 }}>{JSON.stringify(record.data, null, 2)}</pre></details></div>
+                          </article>)}
+                        </div>
+                      )}
+                    </div>
+                  </section>
+                </>
+              )}
+            </div>
+          )}
 
           {view === "overview" && (
             <>
