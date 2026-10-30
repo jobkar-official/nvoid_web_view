@@ -81,6 +81,7 @@ type McpSourceStatus = {
   toolCount?: number;
   error?: string;
 };
+type JobSearchSource = McpSourceStatus & { jobSearchAvailable: boolean; searchTool?: string };
 type SearchSourceReport = { serverId: string; provider?: string; mode?: string; queryCount?: number; requestsMade?: number; rawIndexedResults?: number; uniqueRoleLocationUrls?: number; linkedJobUrlsDiscovered?: number; publicJobPagesFetched?: number; structuredJobPages?: number; metadataOnlyListings?: number; matchedJobs?: number; returnedJobs?: number; targetCount?: number; reachedRequestedLimit?: boolean; moreSearchResultsAvailable?: boolean; failedSearchRequests?: number; rejectedUrlResults?: number; rejectedRoleResults?: number; rejectedLocationResults?: number; opportunityTypes?: Record<string, number>; truncated?: boolean };
 type JobSourceResult = { serverId: string; tool?: string; found: number; error?: string; report?: SearchSourceReport };
 type ResearchToolOption = { serverId: string; serverName: string; name: string; description?: string; inputSchema?: unknown; safety?: string };
@@ -199,6 +200,9 @@ export default function HomePage() {
   const [tasks, setTasks] = useState<ApplicationTask[]>([]);
   const [health, setHealth] = useState<AgentHealth | null>(null);
   const [sourceStatuses, setSourceStatuses] = useState<McpSourceStatus[]>([]);
+  const [jobSearchSources, setJobSearchSources] = useState<JobSearchSource[]>([]);
+  const [selectedJobSourceIds, setSelectedJobSourceIds] = useState<string[] | null>(null);
+  const [jobSourceLoadError, setJobSourceLoadError] = useState("");
   const [searchSourceResults, setSearchSourceResults] = useState<JobSourceResult[]>([]);
   const [searchReport, setSearchReport] = useState<SearchSourceReport[]>([]);
   const [sourceRefreshError, setSourceRefreshError] = useState("");
@@ -257,6 +261,27 @@ export default function HomePage() {
       setSourceStatuses([]);
     }
   }, []);
+
+  const loadJobSearchSources = useCallback(async () => {
+    try {
+      const result = await readJson(await fetch("/api/agent/job-sources", { cache: "no-store" }));
+      const sources = Array.isArray(result.sources) ? result.sources as JobSearchSource[] : [];
+      setJobSearchSources(sources);
+      setJobSourceLoadError("");
+      setSelectedJobSourceIds((current) => current === null
+        ? sources.filter((source) => source.connected && source.jobSearchAvailable).map((source) => source.id)
+        : current.filter((id) => sources.some((source) => source.id === id && source.connected && source.jobSearchAvailable)));
+      return sources;
+    } catch (error) {
+      setJobSourceLoadError(error instanceof Error ? error.message : "Could not load job-search sources.");
+      throw error;
+    }
+  }, []);
+
+  const availableJobSourceIds = jobSearchSources
+    .filter((source) => source.connected && source.jobSearchAvailable)
+    .map((source) => source.id);
+  const activeJobSourceIds = selectedJobSourceIds ?? availableJobSourceIds;
 
   const loadResearchTools = useCallback(async () => {
     try {
@@ -320,15 +345,16 @@ export default function HomePage() {
 
   const refreshWorkspace = useCallback(async () => {
     setBusy("refresh");
-    await Promise.all([loadHealth(), loadTasks(), loadSources()]);
+    await Promise.all([loadHealth(), loadTasks(), loadSources(), loadJobSearchSources()]);
     setBusy(null);
-  }, [loadHealth, loadTasks, loadSources]);
+  }, [loadHealth, loadTasks, loadSources, loadJobSearchSources]);
 
   useEffect(() => {
     void loadHealth();
     void loadTasks();
     void loadSources();
-  }, [loadHealth, loadTasks, loadSources]);
+    void loadJobSearchSources().catch(() => undefined);
+  }, [loadHealth, loadTasks, loadSources, loadJobSearchSources]);
 
   const updateProfile = <K extends keyof CandidateProfile,>(key: K, value: CandidateProfile[K]) => {
     setProfile((current) => ({ ...current, [key]: value }));
@@ -341,6 +367,16 @@ export default function HomePage() {
       setNotice({ type: "error", message: "Enter both a target job title and a preferred city, region, or country before searching. Use Worldwide only for a global search." });
       return;
     }
+    let serverIds = selectedJobSourceIds;
+    if (serverIds === null) {
+      const sources = await loadJobSearchSources();
+      serverIds = sources.filter((source) => source.connected && source.jobSearchAvailable).map((source) => source.id);
+      setSelectedJobSourceIds(serverIds);
+    }
+    if (serverIds.length === 0) {
+      setNotice({ type: "error", message: "Select at least one connected job-search source before searching." });
+      return;
+    }
     setBusy("search");
     setNotice(null);
     try {
@@ -349,6 +385,7 @@ export default function HomePage() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           profile: { ...profile },
+          serverIds,
           limit: 1000,
           syncToBackend: false
         })
@@ -375,6 +412,16 @@ export default function HomePage() {
       setNotice({ type: "error", message: "Enter both a target job title and a preferred location before running the agent." });
       return;
     }
+    let serverIds = selectedJobSourceIds;
+    if (serverIds === null) {
+      const sources = await loadJobSearchSources();
+      serverIds = sources.filter((source) => source.connected && source.jobSearchAvailable).map((source) => source.id);
+      setSelectedJobSourceIds(serverIds);
+    }
+    if (serverIds.length === 0) {
+      setNotice({ type: "error", message: "Select at least one connected job-search source before running the agent." });
+      return;
+    }
     setBusy("run");
     setNotice(null);
     try {
@@ -384,6 +431,7 @@ export default function HomePage() {
         body: JSON.stringify({
           userId: profile.userId,
           profile: { ...profile },
+          serverIds,
           searchLimit: 1000,
           applyLimit: 10,
           minMatchScore,
@@ -640,6 +688,49 @@ export default function HomePage() {
             <section className="panel">
               <div className="panel-header"><div><h2 className="panel-title">Job discovery</h2><p className="panel-subtitle">Live listings returned by connected job sources and matched against your role and geographic preferences.</p></div></div>
               <div className="panel-body">
+                <section className="grid" style={{ gap: 10, marginBottom: 18 }}>
+                  <div className="filter-row" style={{ marginBottom: 0, alignItems: "flex-start" }}>
+                    <div>
+                      <strong>Where should Nvoid find and crawl jobs?</strong>
+                      <p className="field-help">Choose the connected sources for this search. All searchable sources are selected by default; Google-indexed web discovery and public-page crawling appear here when the Serper connector is active.</p>
+                    </div>
+                    <div className="source-controls">
+                      <span className="tag">{activeJobSourceIds.length} / {availableJobSourceIds.length} selected</span>
+                      <button type="button" className="secondary-button button-small" onClick={() => setSelectedJobSourceIds(availableJobSourceIds)}>Select all</button>
+                      <button type="button" className="secondary-button button-small" onClick={() => setSelectedJobSourceIds([])} disabled={activeJobSourceIds.length === 0}>Clear</button>
+                      <button type="button" className="icon-button" aria-label="Refresh job-search sources" title="Refresh job-search sources" onClick={() => void loadJobSearchSources().catch(() => undefined)} disabled={busy !== null}><RefreshCw size={14} /></button>
+                    </div>
+                  </div>
+                  {jobSourceLoadError && <div className="notice error" style={{ margin: 0 }}><CircleAlert size={14} />{jobSourceLoadError}</div>}
+                  {jobSearchSources.length === 0 && !jobSourceLoadError && <p className="field-help">Loading available job-search connectors…</p>}
+                  <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 8 }}>
+                    {jobSearchSources.map((source) => {
+                      const selectable = source.connected && source.jobSearchAvailable;
+                      const selected = activeJobSourceIds.includes(source.id);
+                      const state = selectable ? "Ready to search" : source.connected ? "Connected · no job-search tool" : source.enabled ? "Connection failed" : "Inactive";
+                      const detail = selectable
+                        ? (source.searchTool || "Search tool discovered") + " · " + (source.toolCount ?? 0) + " tool(s)"
+                        : source.error || (!source.enabled ? connectorSetupHint(source) : "No compatible job-search tool was discovered on this MCP server.");
+                      return <label key={source.id} className="settings-row" style={{ alignItems: "flex-start", gap: 10, cursor: selectable ? "pointer" : "not-allowed", opacity: selectable ? 1 : 0.72 }}>
+                        <input type="checkbox" checked={selected} disabled={!selectable} onChange={(event) => setSelectedJobSourceIds((current) => {
+                          const selectedIds = current ?? availableJobSourceIds;
+                          return event.target.checked
+                            ? [...new Set([...selectedIds, source.id])]
+                            : selectedIds.filter((id) => id !== source.id);
+                        })} />
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 7, flexWrap: "wrap" }}>
+                            <strong>{source.name}</strong>
+                            <span className="tag">{state}</span>
+                          </div>
+                          <p>{source.id} · {source.transport || "MCP"}</p>
+                          <span className="field-help">{detail}</span>
+                        </div>
+                      </label>;
+                    })}
+                  </div>
+                  {jobSearchSources.length > 0 && availableJobSourceIds.length === 0 && <div className="notice error" style={{ margin: 0 }}><CircleAlert size={14} />No connected MCP source currently exposes a compatible job-search tool. Activate a source in Connections &amp; settings, then refresh this list.</div>}
+                </section>
                 <form className="search-bar" onSubmit={searchJobs}>
                   <div className="field-wrap"><label htmlFor="search-role">Target role</label><input id="search-role" className="field" value={profile.jobTitle} onChange={(event) => updateProfile("jobTitle", event.target.value)} placeholder="e.g. Java Backend Developer" /></div>
                   <div className="field-wrap"><label htmlFor="search-location">Location</label><input id="search-location" className="field" value={profile.location} onChange={(event) => updateProfile("location", event.target.value)} placeholder="e.g. Bengaluru, India" /></div>
