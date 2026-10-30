@@ -11,6 +11,7 @@ A Next.js user interface for the Nvoid AI Agent worker. This repository contains
 - Profile match scores and job cards.
 - Agent run controls and application task history.
 - Worker connection and MCP source status.
+- General-purpose research workspace backed by real connected read-only MCP tools, public-web search, schema-aware tool planning, parallel execution, source diagnostics, deduplicated records and original result URLs.
 - Server-side Next.js API proxy to the agent, keeping the agent API key out of browser JavaScript.
 - Review-only execution: every run sends `autoSubmit: false` and `syncToBackend: false`.
 
@@ -75,6 +76,18 @@ Open [http://localhost:3000](http://localhost:3000).
 When Next.js and the worker run on the same host, the default `NVOID_AGENT_URL=http://127.0.0.1:3100` works. If the worker is on another server or private container network, set `NVOID_AGENT_URL` to its reachable internal URL and firewall it so only trusted services can access the worker.
 
 The agent repository also provides a real-provider smoke check at `scripts/live-source-smoke.mjs`. To run it, open the agent repository's GitHub Actions, select **Live job source check** on the `development` branch, and run the workflow manually. It uses the production source configuration (not the synthetic fixture) and verifies the five default public sources return live search results. The normal CI workflow remains isolated on synthetic data so it does not poll external providers on every code change.
+
+## General-purpose live research
+
+The **Research anything** workspace is separate from candidate job search. It can execute read-only tools exposed by any connected MCP server, not only job/job-board connectors.
+
+1. Merge and deploy the backend federated research change from [nvoid_ai_agent PR #1](https://github.com/jobkar-official/nvoid_ai_agent/pull/1).
+2. Configure `SERPER_API_KEY` in the agent worker's server-side `.env` to enable Google-indexed public-web research and bounded public-page crawling.
+3. Configure each third-party MCP endpoint and its authorized credentials in the worker's `config/mcp-servers.json` / `.env`. A ChatGPT or Claude host connection is not automatically available to a separately deployed Nvoid process.
+4. Open **Research anything**, load the connected tool catalogue, enter a research question, select read-only sources and run the query.
+5. Inspect the report's configured/connected source coverage, actual tool calls, execution errors, returned record counts, deduplicated records and source URLs.
+
+The research route is read-only. It never invokes tools identified as mutating/destructive. The UI displays actual tool results; it does not fill missing results with sample records. Result quantity depends on the providers, permissions, credentials, search budget and accessible public pages. LLM-based tool planning and dork expansion require the backend's `LLM_API_KEY` and `LLM_MODEL`; without them, the worker uses its bounded schema-based fallback.
 
 ## Test the integration
 
