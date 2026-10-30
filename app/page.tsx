@@ -92,7 +92,7 @@ type McpTool = {
 };
 type McpToolServer = { serverId: string; serverName: string; tools: McpTool[] };
 type SearchSourceReport = { serverId: string; provider?: string; mode?: string; queryCount?: number; requestsMade?: number; rawIndexedResults?: number; uniqueRoleLocationUrls?: number; linkedJobUrlsDiscovered?: number; publicJobPagesFetched?: number; structuredJobPages?: number; metadataOnlyListings?: number; matchedJobs?: number; returnedJobs?: number; targetCount?: number; reachedRequestedLimit?: boolean; moreSearchResultsAvailable?: boolean; failedSearchRequests?: number; rejectedUrlResults?: number; rejectedRoleResults?: number; rejectedLocationResults?: number; opportunityTypes?: Record<string, number>; truncated?: boolean };
-type JobSourceResult = { serverId: string; tool?: string; found: number; error?: string; report?: SearchSourceReport };
+type JobSourceResult = { serverId: string; tool?: string; found: number; error?: string; report?: SearchSourceReport; detailsRequested?: number; detailsFetched?: number; detailTool?: string };
 type ResearchToolOption = { serverId: string; serverName: string; name: string; description?: string; inputSchema?: unknown; safety?: string };
 type ResearchCatalog = { connectedServers: number; configuredServers: number; servers: McpSourceStatus[]; availableReadOnlyTools: ResearchToolOption[]; availableReadOnlyToolCount: number };
 type ResearchConnectorReport = { serverId: string; serverName: string; enabled: boolean; connected: boolean; selected: boolean; connectionError?: string; discoveredTools: number; readOnlyTools: number; callsSucceeded: number; callsFailed: number; recordsReturned: number };
@@ -764,6 +764,7 @@ export default function HomePage() {
                               {source.report?.publicJobPagesFetched ? <span>{source.report.publicJobPagesFetched} pages fetched</span> : null}
                               {source.report?.structuredJobPages ? <span>{source.report.structuredJobPages} structured job pages</span> : null}
                               {!source.report?.requestsMade && !source.report?.publicJobPagesFetched && !source.report?.structuredJobPages ? <span>Source checked for this role and location</span> : null}
+                              {source.detailsRequested ? <span>{source.detailsFetched ?? 0}/{source.detailsRequested} deep job details fetched{source.detailTool ? " · " + source.detailTool : ""}</span> : null}
                             </div>
                             {source.error && <p className="source-result-error">{source.error}</p>}
                           </article>
