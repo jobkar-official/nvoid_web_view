@@ -84,7 +84,10 @@ jobs:
           node -e 'const r=require("/tmp/ui-sources.json"); if(!Array.isArray(r.servers) || !r.servers.some(s=>s.id==="demo" && s.connected)) { console.error(JSON.stringify(r)); process.exit(1); } console.log("UI connector inventory passed: "+r.servers.length+" source status record(s) returned")'
           job_sources_response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/agent/job-sources)
           printf '%s' "$job_sources_response" > /tmp/ui-job-sources.json
-          node -e 'const r=require("/tmp/ui-job-sources.json"); if(!Array.isArray(r.sources) || !r.sources.some(s=>s.id==="demo" && s.connected && s.jobSearchAvailable && s.searchTool==="search_jobs")) { console.error(JSON.stringify(r)); process.exit(1); } console.log("Find Jobs source selector inventory passed: "+r.sources.filter(s=>s.jobSearchAvailable).length+" searchable source(s)")'
+          node -e 'const r=require("/tmp/ui-job-sources.json"); if(!Array.isArray(r.sources) || !r.sources.some(s=>s.id==="demo" && s.connected && s.jobSearchAvailable && s.searchTool==="search_jobs")) { console.error(JSON.stringify(r)); process.exit(1); } console.log("Find Jobs source discovery passed: "+r.sources.filter(s=>s.jobSearchAvailable).length+" searchable source(s)")'
+          mcp_tools_response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/agent/tools)
+          printf '%s' "$mcp_tools_response" > /tmp/ui-mcp-tools.json
+          node -e 'const r=require("/tmp/ui-mcp-tools.json"); if(!Array.isArray(r.servers) || !r.servers.some(s=>s.serverId==="demo" && s.tools.some(t=>t.name==="search_jobs"))) { console.error(JSON.stringify(r)); process.exit(1); } console.log("Connections tool inventory passed: "+r.servers.reduce((n,s)=>n+s.tools.length,0)+" MCP tools returned")'
           research_tools_response=$(curl --silent --show-error --fail http://127.0.0.1:3000/api/research/tools)
           printf '%s' "$research_tools_response" > /tmp/ui-research-tools.json
           node -e 'const r=require("/tmp/ui-research-tools.json"); if(!Array.isArray(r.availableReadOnlyTools) || !r.availableReadOnlyTools.some(t=>t.serverId==="demo" && t.name==="search_jobs")) { console.error(JSON.stringify(r)); process.exit(1); } console.log("UI research tool inventory passed: "+r.availableReadOnlyToolCount+" read-only tool(s) discovered")'
