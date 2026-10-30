@@ -573,7 +573,7 @@ export default function HomePage() {
                     <div className="panel-body"><div className="grid" style={{ gap: 9 }}>
                       {researchResult.calls.map((call, index) => <div className="settings-row" key={call.serverId + "/" + call.toolName + "/" + index} style={{ alignItems: "flex-start", gap: 10 }}>
                         <span className="status-dot" style={{ marginTop: 5, flexShrink: 0, background: call.status === "success" ? "#16a36a" : "#dc5252", boxShadow: "none" }} />
-                        <div style={{ flex: 1, minWidth: 0 }}><strong>{call.serverName} / {call.toolName}</strong><p>{call.reason} · {call.durationMs.toLocaleString()} ms · {call.recordsReturned} returned</p>{call.error && <span className="field-help" style={{ color: "#c43c45" }}>{call.error}</span>}</div>
+                        <div style={{ flex: 1, minWidth: 0 }}><strong>{call.serverName} / {call.toolName}</strong><p>{call.reason} · {call.durationMs.toLocaleString()} ms · {call.recordsReturned} returned</p>{call.error && <span className="field-help" style={{ color: "#c43c45" }}>{call.error}</span>}{call.providerReport && <details style={{ marginTop: 8 }}><summary className="text-link" style={{ cursor: "pointer" }}>View search and crawl diagnostics</summary><pre style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", maxHeight: 360, overflow: "auto", fontSize: 11, marginTop: 8 }}>{JSON.stringify(call.providerReport, null, 2)}</pre></details>}</div>
                         <span className="tag">{call.status}</span>
                       </div>)}
                       {researchResult.calls.length === 0 && <p className="field-help">No tool calls were executable for this query. Review planner warnings and tool input schemas.</p>}
