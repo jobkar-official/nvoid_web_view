@@ -92,8 +92,11 @@ The research route is read-only. It never invokes tools identified as mutating/d
 ## Test the integration
 
 1. Open the dashboard and check that the agent is reachable and at least one MCP source is connected.
-2. Open **Find jobs**, select one or more connected search/crawl sources (all searchable sources are selected by default), enter the target role and preferred location, then click **Search jobs**. The selected source IDs are passed to the worker; unchecked or unavailable sources are not called. Serper appears as the Google-indexed web search and public-page crawler when its API key is configured.
-3. Review live results with source labels, match scores, and canonical listing URLs.
+2. Open **Connections** to inspect every configured MCP connector, its live status, and the tools/skills returned by connected servers. Inactive sources show their configuration requirements; enabled sources that fail to connect show their worker error.
+3. Open **Find jobs**, enter a job title and location, then click **Search jobs**. Nvoid automatically runs every connected source with a compatible job-search tool; no source checkboxes are required.
+4. Review the paginated two-column job cards. Each listing shows company, location, posting date, experience, employment type, salary, provider/source, description and any requirements the provider returned. Expand full details to inspect extra fields, and use the original listing or employer application link.
+5. Click **Run agent** from the dashboard when you are ready to queue eligible jobs for review; submissions remain disabled.
+6. Open **Applications** to see worker queue states and results.
 4. Click **Run agent** to queue only jobs that have a supported application URL; submissions remain disabled.
 5. Open **Applications** to see worker queue states and results.
 
@@ -104,6 +107,8 @@ Live search does not mean a job was applied to. Some providers expose only their
 The browser calls only same-origin routes:
 
 - `GET /api/agent/health`
+- `GET /api/agent/sources`
+- `GET /api/agent/tools`
 - `POST /api/agent/search`
 - `POST /api/agent/run`
 - `GET /api/agent/applications`
