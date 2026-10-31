@@ -15,7 +15,7 @@ export type WorkerDirectoryEntry = {
   status: string;
   description: string;
   detail?: string;
-  icon: "bot" | "brain" | "briefcase" | "code" | "cpu" | "database" | "globe" | "layers" | "network" | "puzzle" | "shield" | "workflow";
+  icon: "bot" | "brain" | "briefcase" | "code" | "cpu" | "database" | "globe" | "layers" | "network" | "puzzle" | "search" | "shield" | "workflow";
   href?: string;
   linkLabel?: string;
 };
@@ -40,6 +40,7 @@ const iconMap: Record<WorkerDirectoryEntry["icon"], LucideIcon> = {
   layers: Layers3,
   network: Network,
   puzzle: Puzzle,
+  search: Search,
   shield: ShieldCheck,
   workflow: Workflow
 };
