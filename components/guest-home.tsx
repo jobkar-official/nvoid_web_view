@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
-import { ArrowRight, ArrowUpRight, BrainCircuit, BriefcaseBusiness, Building2, CheckCircle2, Clock3, ExternalLink, LoaderCircle, MapPin, Search, Sparkles, Target, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { ArrowRight, Asterisk, BriefcaseBusiness, Clock3, ExternalLink, Globe2, LoaderCircle, MapPin, Search, ShieldCheck, Target, X } from "lucide-react";
 import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
 
 type Job = GuestSearchJob;
@@ -55,9 +54,9 @@ function cachedJobs(jobs: Job[]): Job[] {
   })).filter((job) => job.title !== "Untitled opportunity" || Boolean(job.jobUrl || job.applicationUrl));
 }
 
-export default function GuestHome({ searchId, initialJobTitle = "", initialLocation = "India" }: { searchId?: string; initialJobTitle?: string; initialLocation?: string }) {
-  const router = useRouter();
+export default function GuestHome({ searchId, initialJobTitle = "", initialLocation = "India", autoSearch = false }: { searchId?: string; initialJobTitle?: string; initialLocation?: string; autoSearch?: boolean }) {
   const { saveSearch, updateSearch, getSearch } = useGuestHistory();
+  const autoSearchKey = useRef("");
   const [jobTitle, setJobTitle] = useState(initialJobTitle);
   const [location, setLocation] = useState(initialLocation || "India");
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -101,10 +100,13 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       : "Search details restored. Run it again to retrieve current job records."));
   }, [searchId, getSearch, initialJobTitle, initialLocation]);
 
-  const runSearch = async (event?: FormEvent) => {
+  const runSearch = useCallback(async (
+    event?: FormEvent,
+    values?: { jobTitle: string; location: string; forceNewRecord?: boolean }
+  ) => {
     event?.preventDefault();
-    const role = jobTitle.trim();
-    const place = location.trim();
+    const role = (values?.jobTitle ?? jobTitle).trim();
+    const place = (values?.location ?? location).trim();
     if (!role || !place) {
       setNotice("Enter a job title and location to search.");
       return;
@@ -114,7 +116,9 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setNotice("");
     setJobs([]);
     setSearched(false);
-    const recordId = activeSearch || saveSearch({ jobTitle: role, location: place, resultCount: 0 });
+    const recordId = values?.forceNewRecord
+      ? saveSearch({ jobTitle: role, location: place, resultCount: 0 })
+      : activeSearch || saveSearch({ jobTitle: role, location: place, resultCount: 0 });
     setActiveSearch(recordId);
     updateSearch(recordId, { jobTitle: role, location: place, resultCount: 0, jobs: [], error: undefined });
 
@@ -152,50 +156,63 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setSearched(true);
       updateSearch(recordId, { resultCount: savedJobs.length, jobs: savedJobs, error: undefined });
       setNotice(savedJobs.length ? savedJobs.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
-      if (searchId !== recordId) router.push(`/search/${recordId}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Worker could not complete this search. Please try again.";
       setSearched(true);
       setNotice(message);
       updateSearch(recordId, { resultCount: 0, jobs: [], error: message });
-      if (searchId !== recordId) router.push(`/search/${recordId}`);
     } finally {
       setBusy(false);
     }
-  };
+  }, [activeSearch, jobTitle, location, saveSearch, updateSearch]);
 
-  const chooseCategory = (value: string) => {
-    setJobTitle(value);
+  useEffect(() => {
+    const role = initialJobTitle.trim();
+    const place = initialLocation.trim() || "India";
+    if (!autoSearch || !role) {
+      autoSearchKey.current = "";
+      return;
+    }
+
+    const key = `${role.toLocaleLowerCase()}::${place.toLocaleLowerCase()}`;
+    if (autoSearchKey.current === key) return;
+    autoSearchKey.current = key;
+    setJobTitle(role);
+    setLocation(place);
     setActiveSearch("");
-    document.getElementById("job-search")?.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
+    void runSearch(undefined, { jobTitle: role, location: place, forceNewRecord: true });
+  }, [autoSearch, initialJobTitle, initialLocation, runSearch]);
 
   return (
-    <div className="home-page">
-      <section className="home-hero">
-        <div className="hero-brand-lockup" aria-label="Worker">
-          <span className="hero-brand-mark"><BrainCircuit size={58} strokeWidth={1.65} /></span>
-          <span className="hero-brand-name">Worker</span>
+    <div className="worker-results-page">
+      <section className="worker-results-header">
+        <div className="worker-results-heading">
+          <span className="worker-results-eyebrow"><Asterisk size={13} /> WORKER SEARCH</span>
+          <h1>{searchId ? "Saved search" : "Explore opportunities"}</h1>
+          <p>Search across connected job boards and company career pages. Review each opportunity and choose where to apply.</p>
         </div>
-        <p className="hero-description">Discover relevant opportunities from connected job platforms and company career pages in one search.</p>
 
-        <form id="job-search" className="public-search-panel" onSubmit={runSearch}>
-          <div className="search-input-block">
-            <label htmlFor="public-role">What role are you looking for?</label>
-            <div className="search-input-line"><Search size={18} /><input id="public-role" value={jobTitle} onChange={(event) => { setJobTitle(event.target.value); setActiveSearch(""); }} placeholder="Job title, skill or company" autoComplete="off" /></div>
-          </div>
-          <div className="search-divider" />
-          <div className="search-input-block location-block">
-            <label htmlFor="public-location">Where?</label>
-            <div className="search-input-line"><MapPin size={18} /><input id="public-location" value={location} onChange={(event) => { setLocation(event.target.value); setActiveSearch(""); }} placeholder="City, country or Remote" autoComplete="off" /></div>
-          </div>
-          <button className="search-submit" type="submit" disabled={busy}>{busy ? <LoaderCircle className="spin" size={17} /> : <Search size={17} />}{busy ? "Searching" : "Find jobs"}<ArrowRight size={16} /></button>
+        <form id="job-search" className="worker-results-search" onSubmit={runSearch}>
+          <label className="worker-results-field" htmlFor="public-role">
+            <span>ROLE, SKILL OR KEYWORD</span>
+            <span><Search size={17} /><input id="public-role" value={jobTitle} onChange={(event) => { setJobTitle(event.target.value); setActiveSearch(""); }} placeholder="e.g. Product Designer, Java Developer" autoComplete="off" required /></span>
+          </label>
+          <span className="worker-results-divider" aria-hidden="true" />
+          <label className="worker-results-field" htmlFor="public-location">
+            <span>LOCATION</span>
+            <span><MapPin size={17} /><input id="public-location" value={location} onChange={(event) => { setLocation(event.target.value); setActiveSearch(""); }} placeholder="City, country or Remote" autoComplete="off" required /></span>
+          </label>
+          <button className="worker-results-submit" type="submit" disabled={busy}>
+            {busy ? <LoaderCircle className="spin" size={17} /> : <Search size={17} />}
+            {busy ? "Searching" : "Search jobs"}
+            {!busy && <ArrowRight size={15} />}
+          </button>
         </form>
-        <div className="search-trust"><span><CheckCircle2 size={14} /> Browse without signing in</span><span><ShieldCheckIcon /> Your guest searches stay in this browser</span></div>
-
+        <div className="worker-results-trust"><ShieldCheck size={14} /> No account required. Your searches stay in this browser.</div>
       </section>
 
-      {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")}><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
+      {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching connected job sources for {jobTitle} in {location}…</div>}
+      {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
 
       {jobs.length > 0 && (
         <section className="public-results-section">
@@ -244,47 +261,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         </section>
       )}
 
-      <section className="directory-section">
-        <div className="section-heading">
-          <div><span className="section-kicker">EXPLORE THE MARKET</span><h2>Browse by role</h2><p>Start with a role and let Worker search the connected job market.</p></div>
-        </div>
-        <div className="category-grid">
-          {[
-            ["Software development", "Java, Python, React, backend and frontend"],
-            ["Data & analytics", "Data analyst, data engineer and BI roles"],
-            ["Product & design", "Product managers, UX and UI designers"],
-            ["Sales & marketing", "Growth, digital marketing and sales"],
-            ["Finance & operations", "Finance, HR and business operations"],
-            ["Internships & fresher", "Entry-level roles and internships"]
-          ].map(([name, description]) => (
-            <button className="category-card" key={name} onClick={() => chooseCategory(name)}>
-              <span className="category-icon"><BriefcaseBusiness size={17} /></span>
-              <strong>{name}</strong><small>{description}</small><ArrowUpRight size={15} className="category-arrow" />
-            </button>
-          ))}
-        </div>
-      </section>
 
-      <section className="home-bottom-grid">
-        <article className="home-feature-card">
-          <div className="feature-icon"><Sparkles size={20} /></div>
-          <span className="section-kicker">FOR CANDIDATES</span>
-          <h2>Your job search, on autopilot.</h2>
-          <p>Build a complete professional profile and let the Worker agent look for relevant opportunities across connected job platforms and company career pages.</p>
-          <a href="/auth/register">Create your free profile <ArrowRight size={15} /></a>
-        </article>
-        <article className="home-feature-card recruiter-feature">
-          <div className="feature-icon"><Building2 size={20} /></div>
-          <span className="section-kicker">FOR EMPLOYERS</span>
-          <h2>Post jobs. Find the right people.</h2>
-          <p>Register your company, publish vacancies and review applicants with AI-assisted skills and experience matching.</p>
-          <a href="/auth/register?role=3">Create an employer account <ArrowRight size={15} /></a>
-        </article>
-      </section>
     </div>
   );
-}
-
-function ShieldCheckIcon() {
-  return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z" /><path d="m9 12 2 2 4-4" /></svg>;
 }
