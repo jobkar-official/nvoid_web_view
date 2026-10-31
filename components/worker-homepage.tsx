@@ -37,8 +37,8 @@ export default function WorkerHomepage() {
     <div className="worker-homepage worker-homepage-v2">
       <section className="worker-home-brand-intro" aria-label="Worker">
         <div className="worker-home-brand-lockup worker-home-brand-lockup-search">
-          <span className="worker-home-brand-icon"><WorkerMark size={40} /></span>
-          <span className="worker-home-brand-name">Worker</span>
+          <span className="worker-home-brand-icon worker-home-brand-icon-standalone"><WorkerMark size={54} /></span>
+          <span className="worker-home-brand-name">worker.com</span>
         </div>
       </section>
       <section className="worker-home-search-section worker-home-search-v2" aria-labelledby="worker-search-heading">
