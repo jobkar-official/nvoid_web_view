@@ -3,7 +3,8 @@ import GuestHome from "../../../../components/guest-home";
 
 export const metadata: Metadata = {
   title: "Saved job search | Brewl",
-  description: "Review job opportunities from a saved Brewl search."
+  description: "Review job opportunities from a saved Brewl search.",
+  robots: { index: false, follow: false }
 };
 
 export default async function SavedSearchPage({
