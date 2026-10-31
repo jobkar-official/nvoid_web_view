@@ -3888,3 +3888,51 @@ body::-webkit-scrollbar {
     align-self: flex-end;
   }
 }
+
+/* Employer entry in the public header */
+.topbar-action-separator {
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+  margin: 0 2px;
+  color: #777;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.topbar-employer {
+  display: inline-flex;
+  min-height: 35px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 8px;
+  color: #f2f2f2;
+  background: #2f2f2f;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: background .18s ease, border-color .18s ease;
+}
+
+.topbar-employer:hover {
+  border-color: rgba(255,255,255,.42);
+  background: #3a3a3a;
+}
+
+@media (max-width: 680px) {
+  .topbar-actions {
+    gap: 8px;
+  }
+
+  .topbar-action-separator {
+    margin: 0;
+  }
+
+  .topbar-employer {
+    min-height: 32px;
+    padding: 0 9px;
+    font-size: 9px;
+  }
+}
