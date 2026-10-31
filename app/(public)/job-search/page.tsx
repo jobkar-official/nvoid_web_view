@@ -22,10 +22,13 @@ export default async function JobSearchPage({
   searchParams: Promise<SearchParams>;
 }) {
   const params = await searchParams;
+  const initialJobTitle = firstValue(params.role).trim();
+  const initialLocation = firstValue(params.location).trim() || "India";
   return (
     <GuestHome
-      initialJobTitle={firstValue(params.role)}
-      initialLocation={firstValue(params.location) || "India"}
+      initialJobTitle={initialJobTitle}
+      initialLocation={initialLocation}
+      autoSearch={Boolean(initialJobTitle)}
     />
   );
 }
