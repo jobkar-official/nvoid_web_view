@@ -51,19 +51,19 @@ const menus: Record<RoleId, NavItem[]> = {
 
 const sectionInfo: Record<string, { title: string; description: string; icon: typeof Search }> = {
   overview: { title: "Overview", description: "Your recent activity and workspace at a glance.", icon: LayoutDashboard },
-  "find-jobs": { title: "Find jobs", description: "Search opportunities across the job sources connected to Nvoid.", icon: Search },
+  "find-jobs": { title: "Find jobs", description: "Search opportunities across the job sources connected to Worker.", icon: Search },
   jobs: { title: "Jobs", description: "Explore and manage the opportunities relevant to your profile.", icon: BriefcaseBusiness },
-  "post-job": { title: "Post a job", description: "Publish a vacancy for candidates across the Nvoid network.", icon: Plus },
+  "post-job": { title: "Post a job", description: "Publish a vacancy for candidates across the Worker network.", icon: Plus },
   applications: { title: "Applications", description: "Review candidates who applied to your company's openings.", icon: ClipboardList },
   applied: { title: "Applied jobs", description: "Keep track of roles you have applied to.", icon: ClipboardList },
   highlights: { title: "Highlights", description: "Your important matches, updates and recommended actions.", icon: Target },
-  messages: { title: "Messages", description: "Conversations with candidates, recruiters and the Nvoid team.", icon: MessageSquare },
+  messages: { title: "Messages", description: "Conversations with candidates, recruiters and the Worker team.", icon: MessageSquare },
   company: { title: "Company", description: "Manage your company identity and hiring presence.", icon: Building2 },
   companies: { title: "Companies", description: "Review registered companies and their workspace status.", icon: Building2 },
   users: { title: "Users", description: "Manage user access and account support.", icon: Users },
   complaints: { title: "Complaints", description: "Review and manage reported issues.", icon: FileText },
   notifications: { title: "Notifications", description: "Important job, application and account updates.", icon: Bell },
-  support: { title: "Support", description: "Get help with your Nvoid account and hiring workflow.", icon: CircleHelp },
+  support: { title: "Support", description: "Get help with your Worker account and hiring workflow.", icon: CircleHelp },
   profile: { title: "Profile", description: "Manage your account and professional information.", icon: UserRound }
 };
 
@@ -210,7 +210,7 @@ function Overview({ roleId, displayName, activities, onNavigate }: { roleId: Rol
   return (
     <div className="workspace-dashboard-grid">
       <section className="workspace-welcome-card">
-        <div className="welcome-card-copy"><span className="workspace-eyebrow">YOUR WORKSPACE</span><h2>Welcome back, {displayName.split(" ")[0]}.</h2><p>{recruiter ? "Manage your vacancies, review applicants and keep your hiring moving." : support ? "Review platform activity and help keep the Nvoid experience reliable." : "Explore opportunities and let your profile help Nvoid find relevant roles."}</p>
+        <div className="welcome-card-copy"><span className="workspace-eyebrow">YOUR WORKSPACE</span><h2>Welcome back, {displayName.split(" ")[0]}.</h2><p>{recruiter ? "Manage your vacancies, review applicants and keep your hiring moving." : support ? "Review platform activity and help keep the Worker experience reliable." : "Explore opportunities and let your profile help Worker find relevant roles."}</p>
           {!support && <button className="workspace-primary-button" onClick={() => onNavigate("/workspace/" + (recruiter ? "post-job" : "find-jobs"), recruiter ? "Started a job post" : "Started a job search")}>{recruiter ? <Plus size={15} /> : <Search size={15} />}{recruiter ? "Post a job" : "Find jobs"}<ArrowRight size={14} /></button>}
         </div>
         <div className="welcome-card-art"><div className="art-orbit orbit-one" /><div className="art-orbit orbit-two" /><div className="art-center"><Sparkles size={30} /></div></div>
@@ -223,7 +223,7 @@ function Overview({ roleId, displayName, activities, onNavigate }: { roleId: Rol
       </section>
       <section className="workspace-content-card">
         <div className="workspace-card-heading"><div><h2>Recent activity</h2><p>Actions from this browser session.</p></div><Activity size={18} /></div>
-        {activities.length ? <div className="activity-timeline">{activities.map((item) => <div className="activity-row" key={item.id}><span className="activity-dot" /><div><strong>{item.label}</strong><small>{new Date(item.at).toLocaleString()}</small></div></div>)}</div> : <EmptyPanel title="No recent activity yet" text="Your workspace activity will appear here as you use Nvoid." />}
+        {activities.length ? <div className="activity-timeline">{activities.map((item) => <div className="activity-row" key={item.id}><span className="activity-dot" /><div><strong>{item.label}</strong><small>{new Date(item.at).toLocaleString()}</small></div></div>)}</div> : <EmptyPanel title="No recent activity yet" text="Your workspace activity will appear here as you use Worker." />}
       </section>
     </div>
   );
@@ -240,7 +240,7 @@ function FindJobs({ onNotice }: { onNotice: (value: string) => void }) {
     if (!title.trim() || !location.trim()) { onNotice("Enter a job title and location."); return; }
     setLoading(true); setSearched(false); setJobs([]);
     try {
-      const profile = { userId: "workspace-search", fullName: "Nvoid member", firstName: "Nvoid", lastName: "member", email: "", phone: "", jobTitle: title.trim(), location: location.trim(), countries: [location.trim()], skills: [], keywords: [title.trim()], experienceYears: 0, salaryMin: 0, salaryCurrency: "INR", employmentTypes: ["full-time"], remote: false, summary: "", linkedinUrl: "", portfolioUrl: "", resumePath: "" };
+      const profile = { userId: "workspace-search", fullName: "Worker member", firstName: "Worker", lastName: "member", email: "", phone: "", jobTitle: title.trim(), location: location.trim(), countries: [location.trim()], skills: [], keywords: [title.trim()], experienceYears: 0, salaryMin: 0, salaryCurrency: "INR", employmentTypes: ["full-time"], remote: false, summary: "", linkedinUrl: "", portfolioUrl: "", resumePath: "" };
       const response = await fetch("/api/agent/search", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ profile, limit: 100, syncToBackend: false }) });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || "Job search could not be completed.");
@@ -256,7 +256,7 @@ function FindJobs({ onNotice }: { onNotice: (value: string) => void }) {
       <button className="workspace-primary-button" disabled={loading}>{loading ? <LoaderCircle className="spin" size={16} /> : <Search size={16} />}{loading ? "Searching sources" : "Find jobs"}</button>
     </form>
     {jobs.length > 0 && <div className="workspace-job-list">{jobs.map((job) => <article className="workspace-job-row" key={job.id}><div><strong>{job.title}</strong><span>{job.company || "Company not listed"} · {job.location || "Location not listed"}</span><small>{job.source || "Connected source"}{job.employmentType ? " · " + job.employmentType : ""}</small></div>{(job.applicationUrl || job.jobUrl) && <a href={job.applicationUrl || job.jobUrl} target="_blank" rel="noreferrer">View <ArrowUpRight size={13} /></a>}</article>)}</div>}
-    {searched && jobs.length === 0 && <EmptyPanel title="No matching opportunities returned" text="Try a broader title or location. Nvoid only shows results returned by connected sources." />}
+    {searched && jobs.length === 0 && <EmptyPanel title="No matching opportunities returned" text="Try a broader title or location. Worker only shows results returned by connected sources." />}
   </section>;
 }
 
@@ -293,7 +293,7 @@ function ProfilePanel({ session, onNotice }: { session: AuthSession; onNotice: (
 }
 
 const dataCopy: Record<string, { heading: string; text: string; icon: typeof Search; action?: string }> = {
-  jobs: { heading: "Your job recommendations will appear here", text: "Search the connected market or use Nvoid Bot to discover roles that fit your professional profile.", icon: BriefcaseBusiness, action: "Find jobs" },
+  jobs: { heading: "Your job recommendations will appear here", text: "Search the connected market or use Worker agent to discover roles that fit your professional profile.", icon: BriefcaseBusiness, action: "Find jobs" },
   applied: { heading: "No applications to show yet", text: "Applications submitted through connected workflows will appear here with their latest verifiable status.", icon: ClipboardList, action: "Find jobs" },
   applications: { heading: "No applications received yet", text: "Applications to your company's published jobs will appear here when the hiring API is connected.", icon: ClipboardList, action: "Post a job" },
   highlights: { heading: "Your highlights will appear here", text: "Important job matches, application updates and hiring insights will be collected here.", icon: Target },
