@@ -534,11 +534,36 @@ export default function HomePage() {
                           ))}
                         </div>
                       ) : (
-                        <div className="empty-state">
-                          <div className="empty-icon"><SearchCheck size={22} /></div>
-                          <h3>No verifiable open positions found</h3>
-                          <p>Connected sources did not return job pages with enough evidence to confirm an active opening. Try a more specific role or check the public web research connection.</p>
-                        </div>
+                        <>
+                          <div className="empty-state">
+                            <div className="empty-icon"><SearchCheck size={22} /></div>
+                            <h3>No verifiable open positions found</h3>
+                            <p>Returned pages did not contain enough evidence to confirm active openings. Nvoid has not guessed company names or job details.</p>
+                          </div>
+                          {researchResult.records.length > 0 && (
+                            <div className="grid" style={{ gap: 10, marginTop: 16 }}>
+                              <h3 className="panel-title">Source pages to review</h3>
+                              {researchResult.records.slice(0, 12).map((record) => {
+                                const data = record.data ?? {};
+                                const heading = record.title || String(data.pageTitle || data.title || "Research result");
+                                const description = String(data.pageDescription || data.snippet || data.description || "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim().slice(0, 320);
+                                const sourceUrl = record.url || String(data.finalUrl || data.canonicalUrl || "");
+                                return (
+                                  <article className="job-card" key={record.id}>
+                                    <div className="job-card-top">
+                                      <div className="company-mark"><Globe2 size={17} /></div>
+                                      <div className="job-main">
+                                        <h3 className="job-title">{heading}</h3>
+                                        {description && <p className="job-description">{description}</p>}
+                                      </div>
+                                    </div>
+                                    {sourceUrl.startsWith("http") && <div className="job-card-footer"><a className="text-link" href={sourceUrl} target="_blank" rel="noreferrer">Review source page <ExternalLink size={12} /></a></div>}
+                                  </article>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </>
                       )
                     ) : researchResult.records.length > 0 ? (
                       <div className="grid" style={{ gap: 10 }}>
@@ -568,6 +593,11 @@ export default function HomePage() {
                         <h3>No source records returned</h3>
                         <p>No connected source returned usable evidence for this question. Check the Connections tab or adjust your research query.</p>
                       </div>
+                    )}
+                    {researchResult.warnings?.find((warning) => warning.includes("Public web research is not connected")) && (
+                      <p className="field-help" style={{ marginTop: 12 }}>
+                        {researchResult.warnings.find((warning) => warning.includes("Public web research is not connected"))}
+                      </p>
                     )}
                   </div>
                 </section>
