@@ -172,10 +172,7 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
       <div className="workspace-main">
         <header className="workspace-topbar">
           <button className="workspace-sidebar-toggle" type="button" onClick={() => setSidebarOpen((open) => !open)} aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"} aria-expanded={sidebarOpen} aria-controls="nvoid-workspace-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
-          <Link href="/workspace" className="topbar-brand" aria-label="nvoid.ai workspace">
-            <span className="topbar-brand-mark"><BrainCircuit size={19} strokeWidth={1.8} /></span>
-            <span className="topbar-brand-copy"><strong>nvoid.ai</strong><small>Find opportunities. Let AI find more.</small></span>
-          </Link>
+          <div className="workspace-crumb"><span>Workspace</span><span>/</span><strong>{page.title}</strong></div>
           <span className="model-status-pill" role="status" aria-label="Default AI model: Alpha - k1. This model is fixed and cannot be changed here.">
             <BrainCircuit size={15} />
             <span className="model-status-copy"><small>DEFAULT MODEL</small><strong>Alpha - k1</strong></span>
