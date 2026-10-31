@@ -1752,3 +1752,12 @@ body {
     gap: 4px;
   }
 }
+
+
+/* Brewl domain wordmark uses the same clean white treatment everywhere */
+.hero-brand-name,
+.public-brand strong,
+.workspace-brand strong,
+.footer-brand-copy strong {
+  color: #ffffff !important;
+}
