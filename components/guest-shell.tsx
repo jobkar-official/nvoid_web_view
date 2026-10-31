@@ -1,12 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   ArrowUpRight, BrainCircuit, BriefcaseBusiness, Check, ChevronDown, Clock3, FileText,
   History, LockKeyhole, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Trash2, UserRound, X
 } from "lucide-react";
+
+export type GuestSearchJob = {
+  id: string;
+  title: string;
+  company?: string;
+  location?: string;
+  country?: string;
+  description?: string;
+  jobUrl?: string;
+  applicationUrl?: string;
+  employmentType?: string;
+  workMode?: string;
+  postedAt?: string;
+  experience?: string;
+  salary?: string;
+  matchScore?: number;
+  matchReasons?: string[];
+  source?: string;
+};
 
 export type GuestSearchRecord = {
   id: string;
@@ -14,12 +33,15 @@ export type GuestSearchRecord = {
   location: string;
   searchedAt: string;
   resultCount?: number;
+  jobs?: GuestSearchJob[];
+  error?: string;
 };
 
 type GuestHistoryContextValue = {
   history: GuestSearchRecord[];
   saveSearch: (record: Omit<GuestSearchRecord, "id" | "searchedAt">) => string;
   updateSearch: (id: string, patch: Partial<GuestSearchRecord>) => void;
+  getSearch: (id: string) => GuestSearchRecord | undefined;
   removeSearch: (id: string) => void;
   clearHistory: () => void;
 };
@@ -41,16 +63,37 @@ function makeId() {
   });
 }
 
+const MAX_HISTORY_RECORDS = 30;
+const MAX_SAVED_JOBS = 100;
+
 function readHistory(): GuestSearchRecord[] {
   try {
-    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    const parsed: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter((item): item is GuestSearchRecord =>
-      item && typeof item.id === "string" &&
-      typeof item.jobTitle === "string" &&
-      typeof item.location === "string" &&
-      typeof item.searchedAt === "string"
-    ).slice(0, 40);
+    return parsed.flatMap((value): GuestSearchRecord[] => {
+      if (!value || typeof value !== "object") return [];
+      const item = value as Record<string, unknown>;
+      if (
+        typeof item.id !== "string" ||
+        typeof item.jobTitle !== "string" ||
+        typeof item.location !== "string" ||
+        typeof item.searchedAt !== "string"
+      ) return [];
+      const jobs = Array.isArray(item.jobs)
+        ? item.jobs.filter((job): job is GuestSearchJob =>
+            Boolean(job && typeof job === "object" && typeof (job as Record<string, unknown>).title === "string")
+          ).slice(0, MAX_SAVED_JOBS)
+        : undefined;
+      return [{
+        id: item.id,
+        jobTitle: item.jobTitle,
+        location: item.location,
+        searchedAt: item.searchedAt,
+        resultCount: typeof item.resultCount === "number" ? item.resultCount : undefined,
+        jobs,
+        error: typeof item.error === "string" ? item.error : undefined
+      }];
+    }).slice(0, MAX_HISTORY_RECORDS);
   } catch {
     return [];
   }
@@ -64,7 +107,6 @@ function formatTime(value: string) {
 
 export function GuestShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [history, setHistory] = useState<GuestSearchRecord[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [ready, setReady] = useState(false);
@@ -76,23 +118,37 @@ export function GuestShell({ children }: { children: ReactNode }) {
   }, []);
 
   const persist = useCallback((next: GuestSearchRecord[]) => {
-    setHistory(next);
+    const limited = next.slice(0, MAX_HISTORY_RECORDS);
+    setHistory(limited);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(limited));
     } catch {
-      setHistory(next);
+      const compacted = limited.map((item, index) => index < 8
+        ? { ...item, jobs: item.jobs?.slice(0, 40).map((job) => ({ ...job, description: job.description?.slice(0, 240), matchReasons: job.matchReasons?.slice(0, 3) })) }
+        : { ...item, jobs: undefined }
+      );
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(compacted));
+      } catch {
+        const historyOnly = limited.slice(0, 20).map(({ jobs, ...item }) => item);
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(historyOnly));
+        } catch {}
+      }
     }
   }, []);
 
   const saveSearch = useCallback((record: Omit<GuestSearchRecord, "id" | "searchedAt">) => {
     const item: GuestSearchRecord = { ...record, id: makeId(), searchedAt: new Date().toISOString() };
-    persist([item, ...readHistory()].slice(0, 40));
+    persist([item, ...readHistory()].slice(0, MAX_HISTORY_RECORDS));
     return item.id;
   }, [persist]);
 
   const updateSearch = useCallback((id: string, patch: Partial<GuestSearchRecord>) => {
     persist(readHistory().map((item) => item.id === id ? { ...item, ...patch } : item));
   }, [persist]);
+
+  const getSearch = useCallback((id: string) => readHistory().find((item) => item.id === id), []);
 
   const removeSearch = useCallback((id: string) => {
     if (editing?.id === id) setEditing(null);
@@ -106,20 +162,14 @@ export function GuestShell({ children }: { children: ReactNode }) {
 
   const saveEdit = () => {
     if (!editing || !editing.jobTitle.trim() || !editing.location.trim()) return;
-    updateSearch(editing.id, { jobTitle: editing.jobTitle.trim(), location: editing.location.trim() });
+    updateSearch(editing.id, { jobTitle: editing.jobTitle.trim(), location: editing.location.trim(), resultCount: 0, jobs: [], error: undefined });
     setEditing(null);
   };
 
-  const context = useMemo(() => ({ history, saveSearch, updateSearch, removeSearch, clearHistory }), [history, saveSearch, updateSearch, removeSearch, clearHistory]);
+  const context = useMemo(() => ({ history, saveSearch, updateSearch, getSearch, removeSearch, clearHistory }), [history, saveSearch, updateSearch, getSearch, removeSearch, clearHistory]);
 
   const closeSidebarOnMobile = () => {
     if (window.matchMedia("(max-width: 850px)").matches) setSidebarOpen(false);
-  };
-
-  const selectSearch = (item: GuestSearchRecord) => {
-    if (pathname !== "/") router.push("/");
-    window.setTimeout(() => window.dispatchEvent(new CustomEvent("nvoid:select-search", { detail: item })), pathname === "/" ? 0 : 250);
-    closeSidebarOnMobile();
   };
 
   const links = [
@@ -137,7 +187,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
           <div className="public-sidebar-header">
             <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
               <span className="brand-symbol"><BrainCircuit size={20} strokeWidth={1.8} /></span>
-              <span className="brand-copy"><strong>nvoid.ai</strong><small>Find opportunities. Let AI find more.</small></span>
+              <span className="brand-copy"><strong>brewl.ai</strong><small>Find opportunities. Let AI find more.</small></span>
             </Link>
             <button className="sidebar-collapse-button" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
           </div>
@@ -183,10 +233,10 @@ export function GuestShell({ children }: { children: ReactNode }) {
                       </div>
                     ) : (
                       <>
-                        <button className="history-select" onClick={() => selectSearch(item)} title={item.jobTitle + " in " + item.location}>
+                        <Link href={`/search/${item.id}`} className="history-select" onClick={closeSidebarOnMobile} title={item.jobTitle + " in " + item.location}>
                           <span className="history-search-icon"><Clock3 size={13} /></span>
-                          <span className="history-copy"><strong>{item.jobTitle}</strong><small>{item.location} · {formatTime(item.searchedAt)}</small></span>
-                        </button>
+                          <span className="history-copy"><strong>{item.jobTitle}</strong><small>{item.location} · {item.resultCount === undefined ? "Saved search" : `${item.resultCount} jobs`} · {formatTime(item.searchedAt)}</small></span>
+                        </Link>
                         <button className="history-edit" aria-label={"Edit search " + item.jobTitle} onClick={() => setEditing({ id: item.id, jobTitle: item.jobTitle, location: item.location })}><Pencil size={12} /></button>
                         <button className="history-delete" aria-label={"Delete search " + item.jobTitle} onClick={() => removeSearch(item.id)}><Trash2 size={13} /></button>
                       </>
