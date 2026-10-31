@@ -1,9 +1,7 @@
-"use client";
-
 import Link from "next/link";
 import {
   ArrowRight, ArrowUpRight, BrainCircuit, BriefcaseBusiness, Building2,
-  CheckCircle2, Globe2, Network, Puzzle, Search, ShieldCheck, Sparkles, Workflow
+  CheckCircle2, Globe2, Network, Puzzle, Search, ShieldCheck, Sparkles
 } from "lucide-react";
 
 const capabilities = [
