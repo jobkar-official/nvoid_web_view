@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
-  Asterisk, ArrowRight, ArrowUpRight, BriefcaseBusiness, Building2,
-  CheckCircle2, Globe2, Network, Puzzle, Search, ShieldCheck, Sparkles
+  Asterisk, ArrowRight, BriefcaseBusiness, Globe2, Search, ShieldCheck
 } from "lucide-react";
 
 const capabilities = [
