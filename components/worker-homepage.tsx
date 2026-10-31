@@ -36,14 +36,6 @@ export default function WorkerHomepage() {
   return (
     <div className="worker-homepage worker-homepage-v2">
       <section className="worker-home-search-section worker-home-search-v2" aria-labelledby="worker-search-heading">
-        <div className="worker-home-search-heading">
-          <div>
-            <span className="worker-home-section-label">START YOUR SEARCH</span>
-            <h2 id="worker-search-heading">What are you looking for?</h2>
-            <p>Choose a role and location to explore available opportunities.</p>
-          </div>
-          <span className="worker-home-search-note"><Search size={14} /> Guest search available</span>
-        </div>
         <form className="worker-home-search-card" action="/job-search" method="get">
           <label className="worker-home-field" htmlFor="home-role">
             <span>ROLE, SKILL OR KEYWORD</span>
