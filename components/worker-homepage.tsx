@@ -22,7 +22,7 @@ export default function WorkerHomepage() {
         </div>
       </section>
       <section className="worker-home-search-section worker-home-search-v2" aria-labelledby="worker-search-heading">
-        <div className="worker-home-search-caption">
+        <div className="worker-home-search-caption" id="worker-search-heading">
           <span>START YOUR SEARCH</span>
           <p>Find roles by title, skill or location.</p>
         </div>
