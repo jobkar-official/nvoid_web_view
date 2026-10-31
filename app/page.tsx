@@ -526,7 +526,9 @@ export default function HomePage() {
                               </div>
                               <div className="job-card-footer">
                                 <div className="job-action-links">
-                                  {job.careerPageUrl && <a className="text-link" href={job.careerPageUrl} target="_blank" rel="noreferrer">Company careers page <ExternalLink size={12} /></a>}
+                                  {job.careerPageUrl
+                                    ? <a className="text-link" href={job.careerPageUrl} target="_blank" rel="noreferrer">Company careers page <ExternalLink size={12} /></a>
+                                    : <span className="source-text">Career page not identified</span>}
                                   <a className="text-link" href={job.jobUrl} target="_blank" rel="noreferrer">Original job posting <ArrowUpRight size={12} /></a>
                                 </div>
                               </div>
@@ -569,7 +571,6 @@ export default function HomePage() {
                         <p>No connected source returned usable evidence for this question. Check the Connections tab or adjust your research query.</p>
                       </div>
                     )}
-                    {researchResult.warnings?.length ? <p className="field-help" style={{ marginTop: 12 }}>{researchResult.warnings[0]}</p> : null}
                   </div>
                 </section>
               )}
