@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, Bot, Building2, Globe2, Search, ShieldCheck, Target } from "lucide-react";
+import { ArrowUpRight, BrainCircuit, Bot, Building2, Globe2, LockKeyhole, Search, ShieldCheck, Target } from "lucide-react";
 
 export const metadata: Metadata = { title: "Nvoid Models and AI Engines", description: "Learn how Nvoid's job discovery, profile matching, research and recruiter intelligence engines work." };
 
@@ -15,6 +15,15 @@ const models = [
 export default function ModelsPage() {
   return <div className="catalog-page">
     <div className="catalog-hero"><span className="section-kicker">THE NVOID ENGINE</span><h1>Models built around employment.</h1><p>Nvoid is more than a chat interface. Its engines perform discovery, data normalization, profile matching and public-source research. Each capability has a defined input and output.</p><div className="catalog-meta"><span><ShieldCheck size={14} /> Human decisions remain in control</span><span>Current and planned capabilities are labelled separately</span></div></div>
+    <section className="default-model-card" aria-label="Nvoid default AI model">
+      <span className="default-model-icon"><BrainCircuit size={22} /></span>
+      <div className="default-model-copy">
+        <span className="model-label">DEFAULT AI MODEL</span>
+        <h2>Alpha - k1</h2>
+        <p>Alpha - k1 is the fixed default model across Nvoid. Model selection is managed by Nvoid and cannot be changed by users.</p>
+      </div>
+      <span className="default-model-lock"><LockKeyhole size={13} /> Locked default</span>
+    </section>
     <div className="model-grid">{models.map((item) => { const Icon = item.icon; const current = item.state.includes("Current"); return <article className="model-card" key={item.id}><div className="model-card-top"><span className="model-number">{item.id}</span><span className={current ? "release-status available" : "release-status planned"}>{item.state}</span></div><div className="model-icon"><Icon size={21} /></div><span className="model-label">{item.label}</span><h2>{item.name}</h2><p>{item.text}</p><div className="model-detail"><span>INPUT</span><p>{item.inputs}</p></div><div className="model-detail"><span>OUTPUT</span><p>{item.output}</p></div></article>; })}</div>
     <div className="catalog-callout"><div><strong>Ready to explore opportunities?</strong><p>Search connected job sources without creating an account.</p></div><Link href="/">Find jobs <ArrowUpRight size={15} /></Link></div>
   </div>;
