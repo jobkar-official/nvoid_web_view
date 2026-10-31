@@ -20,7 +20,7 @@ export default function WorkerHomepage() {
           </div>
         </div>
       </section>
-      <section className="worker-home-search-section worker-home-search-v2" aria-labelledby="worker-search-heading">
+      <section className="worker-home-search-section worker-home-search-v2" aria-label="Search jobs by role and location">
         <form className="worker-home-search-card" action="/job-search" method="get">
           <label className="worker-home-field" htmlFor="home-role">
             <span>ROLE, SKILL OR KEYWORD</span>
