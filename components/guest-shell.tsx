@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import {
-  ArrowUpRight, BrainCircuit, BriefcaseBusiness, Check, ChevronDown, Clock3, FileText,
-  History, LockKeyhole, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Trash2, UserRound, X
+  ArrowUpRight, BrainCircuit, BriefcaseBusiness, Bot, Check, ChevronDown, Clock3, FileText,
+  Globe2, History, LockKeyhole, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Puzzle, Search, ShieldCheck, Trash2, UserRound, X
 } from "lucide-react";
 
 export type GuestSearchJob = {
@@ -109,6 +109,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [history, setHistory] = useState<GuestSearchRecord[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [browseOpen, setBrowseOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const [editing, setEditing] = useState<{ id: string; jobTitle: string; location: string } | null>(null);
 
@@ -116,6 +117,10 @@ export function GuestShell({ children }: { children: ReactNode }) {
     setHistory(readHistory());
     setReady(true);
   }, []);
+
+  useEffect(() => {
+    setBrowseOpen(false);
+  }, [pathname]);
 
   const persist = useCallback((next: GuestSearchRecord[]) => {
     const limited = next.slice(0, MAX_HISTORY_RECORDS);
@@ -173,10 +178,12 @@ export function GuestShell({ children }: { children: ReactNode }) {
   };
 
   const links = [
-    { href: "/", label: "Find jobs", icon: Search },
+    { href: "/worker", label: "Worker", icon: Bot },
+    { href: "/sources", label: "Job sources", icon: Globe2 },
+    { href: "/plugins", label: "Plugins", icon: Puzzle },
     { href: "/models", label: "AI models", icon: BrainCircuit },
     { href: "/release", label: "Release notes", icon: FileText },
-    { href: "/about", label: "About Nvoid", icon: UserRound }
+    { href: "/about", label: "About Worker", icon: UserRound }
   ];
 
   return (
@@ -187,7 +194,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
           <div className="public-sidebar-header">
             <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
               <span className="brand-symbol"><BrainCircuit size={20} strokeWidth={1.8} /></span>
-              <span className="brand-copy"><strong>brewl.ai</strong><small>Find opportunities. Let AI find more.</small></span>
+              <span className="brand-copy"><strong>Worker</strong><small>AI discovery & integrations</small></span>
             </Link>
             <button className="sidebar-collapse-button" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
           </div>
@@ -271,34 +278,44 @@ export function GuestShell({ children }: { children: ReactNode }) {
               <LockKeyhole size={12} />
             </span>
             <div className="topbar-actions">
-              <Link href="/security" className="topbar-quiet-link">Security</Link>
+              <div className="topbar-browse-wrap">
+                <button
+                  type="button"
+                  className="topbar-browse-trigger"
+                  aria-expanded={browseOpen}
+                  aria-haspopup="menu"
+                  onClick={() => setBrowseOpen((open) => !open)}
+                >
+                  Browse <ChevronDown size={14} />
+                </button>
+                {browseOpen && (
+                  <div className="topbar-browse-menu" role="menu" aria-label="Browse Worker pages">
+                    <span className="topbar-browse-label">WORKER ECOSYSTEM</span>
+                    <Link href="/worker" role="menuitem" onClick={() => setBrowseOpen(false)}><Bot size={16} /><span><strong>Worker</strong><small>Agent runtime and capabilities</small></span></Link>
+                    <Link href="/sources" role="menuitem" onClick={() => setBrowseOpen(false)}><Globe2 size={16} /><span><strong>Job sources</strong><small>Boards and career platforms</small></span></Link>
+                    <Link href="/plugins" role="menuitem" onClick={() => setBrowseOpen(false)}><Puzzle size={16} /><span><strong>Plugins</strong><small>MCP tools and integrations</small></span></Link>
+                    <div className="topbar-browse-divider" />
+                    <span className="topbar-browse-label">PRODUCT</span>
+                    <Link href="/models" role="menuitem" onClick={() => setBrowseOpen(false)}><BrainCircuit size={16} /><span><strong>AI models</strong><small>Worker model and engines</small></span></Link>
+                    <Link href="/release" role="menuitem" onClick={() => setBrowseOpen(false)}><FileText size={16} /><span><strong>Release notes</strong><small>Capabilities and updates</small></span></Link>
+                    <Link href="/about" role="menuitem" onClick={() => setBrowseOpen(false)}><UserRound size={16} /><span><strong>About Worker</strong><small>Product overview</small></span></Link>
+                    <div className="topbar-browse-divider" />
+                    <span className="topbar-browse-label">INFORMATION</span>
+                    <div className="topbar-browse-legal">
+                      <Link href="/free-job-posting" onClick={() => setBrowseOpen(false)}>For employers</Link>
+                      <Link href="/privacy" onClick={() => setBrowseOpen(false)}>Privacy</Link>
+                      <Link href="/terms" onClick={() => setBrowseOpen(false)}>Terms</Link>
+                      <Link href="/cookies" onClick={() => setBrowseOpen(false)}>Cookies</Link>
+                      <Link href="/security" onClick={() => setBrowseOpen(false)}>Security</Link>
+                    </div>
+                  </div>
+                )}
+              </div>
               <Link href="/auth/signin" className="topbar-login">Sign in</Link>
               <Link href="/auth/register" className="topbar-create">Create account <ArrowUpRight size={14} /></Link>
             </div>
           </header>
           <main className="public-content">{children}</main>
-          <footer className="public-footer">
-            <div className="public-footer-main">
-              <Link href="/" className="footer-brand" aria-label="brewl.ai home">
-                <span className="footer-brand-mark"><BrainCircuit size={23} strokeWidth={1.75} /></span>
-                <span className="footer-brand-copy"><strong>brewl.ai</strong><small>AI-powered opportunity discovery</small></span>
-              </Link>
-              <nav className="public-footer-links" aria-label="Footer navigation">
-                <span className="footer-links-label">Explore</span>
-                <div className="footer-link-list">
-                  <Link href="/about">About</Link>
-                  <Link href="/privacy">Privacy</Link>
-                  <Link href="/terms">Terms</Link>
-                  <Link href="/cookies">Cookies</Link>
-                  <Link href="/security">Security</Link>
-                </div>
-              </nav>
-            </div>
-            <div className="public-footer-bottom">
-              <span>© {new Date().getFullYear()} brewl.ai. All rights reserved.</span>
-              <span>Built for better opportunity discovery.</span>
-            </div>
-          </footer>
         </div>
       </div>
     </GuestHistoryContext.Provider>
