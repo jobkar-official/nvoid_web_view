@@ -143,7 +143,7 @@ export default function GuestHome() {
     <div className="home-page">
       <section className="home-hero">
         <div className="hero-brand-lockup" aria-label="nvoid.ai">
-          <span className="hero-brand-mark"><BrainCircuit size={29} strokeWidth={1.75} /></span>
+          <span className="hero-brand-mark"><BrainCircuit size={58} strokeWidth={1.65} /></span>
           <span className="hero-brand-name">nvoid.ai</span>
         </div>
         <p className="hero-description">Search jobs across connected sources, company career pages and public listings. Or let your personal Nvoid agent discover opportunities based on your profile.</p>
