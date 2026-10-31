@@ -1,28 +1,11 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowRight, ArrowUpRight, BrainCircuit, BriefcaseBusiness, Building2, CheckCircle2, Clock3, ExternalLink, LoaderCircle, MapPin, Search, Sparkles, Target, X } from "lucide-react";
-import { useGuestHistory, type GuestSearchRecord } from "./guest-shell";
+import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
 
-type Job = {
-  id: string;
-  title: string;
-  company?: string;
-  location?: string;
-  country?: string;
-  description?: string;
-  jobUrl?: string;
-  applicationUrl?: string;
-  employmentType?: string;
-  workMode?: string;
-  postedAt?: string;
-  experience?: string;
-  salary?: string;
-  matchScore?: number;
-  matchReasons?: string[];
-  source?: string;
-  raw?: Record<string, unknown>;
-};
+type Job = GuestSearchJob;
 
 function clean(value?: string) {
   return (value || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
@@ -51,8 +34,30 @@ async function responseData(response: Response) {
   return payload;
 }
 
-export default function GuestHome() {
-  const { saveSearch, updateSearch } = useGuestHistory();
+function cachedJobs(jobs: Job[]): Job[] {
+  return jobs.slice(0, 100).map((job, index) => ({
+    id: clean(job.id).slice(0, 180) || `saved-job-${index + 1}`,
+    title: clean(job.title).slice(0, 180) || "Untitled opportunity",
+    company: clean(job.company).slice(0, 140) || undefined,
+    location: clean(job.location).slice(0, 140) || undefined,
+    country: clean(job.country).slice(0, 80) || undefined,
+    description: clean(job.description).slice(0, 420) || undefined,
+    jobUrl: clean(job.jobUrl).slice(0, 1200) || undefined,
+    applicationUrl: clean(job.applicationUrl).slice(0, 1200) || undefined,
+    employmentType: clean(job.employmentType).slice(0, 80) || undefined,
+    workMode: clean(job.workMode).slice(0, 80) || undefined,
+    postedAt: clean(job.postedAt).slice(0, 80) || undefined,
+    experience: clean(job.experience).slice(0, 100) || undefined,
+    salary: clean(job.salary).slice(0, 100) || undefined,
+    matchScore: typeof job.matchScore === "number" && Number.isFinite(job.matchScore) ? job.matchScore : undefined,
+    matchReasons: Array.isArray(job.matchReasons) ? job.matchReasons.slice(0, 4).map((reason) => clean(reason).slice(0, 160)) : undefined,
+    source: clean(job.source).slice(0, 80) || undefined
+  })).filter((job) => job.title !== "Untitled opportunity" || Boolean(job.jobUrl || job.applicationUrl));
+}
+
+export default function GuestHome({ searchId }: { searchId?: string }) {
+  const router = useRouter();
+  const { saveSearch, updateSearch, getSearch } = useGuestHistory();
   const [jobTitle, setJobTitle] = useState("");
   const [location, setLocation] = useState("India");
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -62,20 +67,39 @@ export default function GuestHome() {
   const [activeSearch, setActiveSearch] = useState("");
 
   useEffect(() => {
-    const onSelect = (event: Event) => {
-      const item = (event as CustomEvent<GuestSearchRecord>).detail;
-      if (!item) return;
-      setJobTitle(item.jobTitle);
-      setLocation(item.location);
-      setNotice("Search restored. Press Find jobs to refresh current opportunities.");
-      setActiveSearch(item.id);
+    if (!searchId) {
+      setJobTitle("");
+      setLocation("India");
       setJobs([]);
       setSearched(false);
-      document.getElementById("job-search")?.scrollIntoView({ behavior: "smooth", block: "start" });
-    };
-    window.addEventListener("nvoid:select-search", onSelect);
-    return () => window.removeEventListener("nvoid:select-search", onSelect);
-  }, []);
+      setActiveSearch("");
+      setNotice("");
+      return;
+    }
+
+    const saved = getSearch(searchId);
+    if (!saved) {
+      setJobTitle("");
+      setLocation("India");
+      setJobs([]);
+      setSearched(false);
+      setActiveSearch("");
+      setNotice("This saved search is not available in this browser. Start a new search to continue.");
+      return;
+    }
+
+    const savedJobs = Array.isArray(saved.jobs) ? saved.jobs : [];
+    setJobTitle(saved.jobTitle);
+    setLocation(saved.location);
+    setJobs(savedJobs);
+    setSearched(Array.isArray(saved.jobs));
+    setActiveSearch(saved.id);
+    setNotice(saved.error || (Array.isArray(saved.jobs)
+      ? savedJobs.length
+        ? `${saved.resultCount ?? savedJobs.length} saved opportunities restored for ${saved.jobTitle} in ${saved.location}.`
+        : "This search is saved, but no matching job records were returned."
+      : "Search details restored. Run it again to retrieve current job records."));
+  }, [searchId, getSearch]);
 
   const runSearch = async (event?: FormEvent) => {
     event?.preventDefault();
@@ -90,8 +114,9 @@ export default function GuestHome() {
     setNotice("");
     setJobs([]);
     setSearched(false);
-    const recordId = saveSearch({ jobTitle: role, location: place, resultCount: 0 });
+    const recordId = activeSearch || saveSearch({ jobTitle: role, location: place, resultCount: 0 });
     setActiveSearch(recordId);
+    updateSearch(recordId, { jobTitle: role, location: place, resultCount: 0, jobs: [], error: undefined });
 
     try {
       const profile = {
@@ -109,7 +134,7 @@ export default function GuestHome() {
         experienceYears: 0,
         salaryMin: 0,
         salaryCurrency: "INR",
-        employmentTypes: ["full-time"],
+        employmentTypes: /intern|internship/i.test(role) ? ["internship"] : /part[ -]?time/i.test(role) ? ["part-time"] : ["full-time"],
         remote: false,
         summary: "",
         linkedinUrl: "",
@@ -122,13 +147,18 @@ export default function GuestHome() {
         body: JSON.stringify({ profile, limit: 100, syncToBackend: false })
       }));
       const found = Array.isArray(result.jobs) ? result.jobs as Job[] : [];
+      const savedJobs = cachedJobs(found);
       setJobs(found);
       setSearched(true);
-      updateSearch(recordId, { resultCount: found.length });
+      updateSearch(recordId, { resultCount: found.length, jobs: savedJobs, error: undefined });
       setNotice(found.length ? found.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
+      if (searchId !== recordId) router.push(`/search/${recordId}`);
     } catch (error) {
+      const message = error instanceof Error ? error.message : "Brewl could not complete this search. Please try again.";
       setSearched(true);
-      setNotice(error instanceof Error ? error.message : "Nvoid could not complete this search. Please try again.");
+      setNotice(message);
+      updateSearch(recordId, { resultCount: 0, jobs: [], error: message });
+      if (searchId !== recordId) router.push(`/search/${recordId}`);
     } finally {
       setBusy(false);
     }
@@ -146,17 +176,17 @@ export default function GuestHome() {
           <span className="hero-brand-mark"><BrainCircuit size={58} strokeWidth={1.65} /></span>
           <span className="hero-brand-name">brewl.ai</span>
         </div>
-        <p className="hero-description">Search jobs across connected sources, company career pages and public listings. Or let your personal Nvoid agent discover opportunities based on your profile.</p>
+        <p className="hero-description">Discover relevant opportunities from connected job platforms and company career pages in one search.</p>
 
         <form id="job-search" className="public-search-panel" onSubmit={runSearch}>
           <div className="search-input-block">
             <label htmlFor="public-role">What role are you looking for?</label>
-            <div className="search-input-line"><Search size={18} /><input id="public-role" value={jobTitle} onChange={(event) => setJobTitle(event.target.value)} placeholder="Job title, skill or company" autoComplete="off" /></div>
+            <div className="search-input-line"><Search size={18} /><input id="public-role" value={jobTitle} onChange={(event) => { setJobTitle(event.target.value); setActiveSearch(""); }} placeholder="Job title, skill or company" autoComplete="off" /></div>
           </div>
           <div className="search-divider" />
           <div className="search-input-block location-block">
             <label htmlFor="public-location">Where?</label>
-            <div className="search-input-line"><MapPin size={18} /><input id="public-location" value={location} onChange={(event) => setLocation(event.target.value)} placeholder="City, country or Remote" autoComplete="off" /></div>
+            <div className="search-input-line"><MapPin size={18} /><input id="public-location" value={location} onChange={(event) => { setLocation(event.target.value); setActiveSearch(""); }} placeholder="City, country or Remote" autoComplete="off" /></div>
           </div>
           <button className="search-submit" type="submit" disabled={busy}>{busy ? <LoaderCircle className="spin" size={17} /> : <Search size={17} />}{busy ? "Searching" : "Find jobs"}<ArrowRight size={16} /></button>
         </form>
