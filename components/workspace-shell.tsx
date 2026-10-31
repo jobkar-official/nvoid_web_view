@@ -121,7 +121,7 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
     router.refresh();
   };
 
-  const allowedSections = useMemo(() => new Set(navItems.map((item) => item.id).concat(["overview", "find-jobs"])), [navItems]);
+  const allowedSections = useMemo(() => new Set([...navItems.map((item) => item.id), "overview", ...(roleId === 7 ? [] : ["find-jobs"])]), [navItems, roleId]);
   useEffect(() => {
     if (section !== "overview" && !allowedSections.has(section)) router.replace("/workspace");
   }, [section, allowedSections, router]);
