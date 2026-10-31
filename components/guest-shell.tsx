@@ -6,7 +6,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import WorkerMark from "./worker-mark";
 import {
   ArrowUpRight, BrainCircuit, BriefcaseBusiness, Bot, Check, ChevronDown, Clock3, FileText,
-  Globe2, History, LockKeyhole, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Puzzle, Search, ShieldCheck, Trash2, UserRound, X
+  Globe2, History, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Puzzle, Search, ShieldCheck, Trash2, UserRound, X
 } from "lucide-react";
 
 export type GuestSearchJob = {
@@ -274,11 +274,6 @@ export function GuestShell({ children }: { children: ReactNode }) {
             <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
             <div className="topbar-breadcrumb"><span>Explore</span><span className="breadcrumb-dot">/</span><strong>{pathname.startsWith("/search/") ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search" : pathname === "/" ? "Home" : pathname === "/job-search" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Worker"}</strong></div>
             <div className="topbar-actions">
-            <span className="model-status-pill" role="status" aria-label="Default AI model: Alpha - k1. This model is fixed and cannot be changed here.">
-              <BrainCircuit size={15} />
-              <span className="model-status-copy"><small>DEFAULT MODEL</small><strong>Alpha - k1</strong></span>
-              <LockKeyhole size={12} />
-            </span>
               <div className="topbar-browse-wrap">
                 <button
                   type="button"
