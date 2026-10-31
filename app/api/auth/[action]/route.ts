@@ -26,6 +26,12 @@ export async function POST(request: NextRequest, context: { params: Promise<{ ac
 
   const body = await request.json().catch(() => null);
   if (!body || typeof body !== "object") return NextResponse.json({ error: "A valid JSON request body is required." }, { status: 400 });
+  if (action === "register") {
+    const requestedRole = Number((body as Record<string, unknown>).roleId);
+    if (requestedRole !== 3 && requestedRole !== 4) {
+      return NextResponse.json({ error: "Public registration is available for job seekers and recruiters only." }, { status: 400 });
+    }
+  }
 
   try {
     const response = await fetch(upstream, {
