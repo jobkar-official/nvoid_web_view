@@ -3,33 +3,6 @@ import {
   Asterisk, ArrowRight, BriefcaseBusiness, Globe2, Search, ShieldCheck
 } from "lucide-react";
 
-const capabilities = [
-  {
-    icon: Globe2,
-    label: "Broader discovery",
-    title: "More than one job board",
-    description: "Explore compatible public job feeds and company career pages from a single search.",
-    href: "/sources",
-    action: "Explore job sources"
-  },
-  {
-    icon: BrainCircuit,
-    label: "Relevant results",
-    title: "Search with context",
-    description: "Use role, location, skills and experience signals to make opportunity discovery more useful.",
-    href: "/worker",
-    action: "See how it works"
-  },
-  {
-    icon: Puzzle,
-    label: "Connected tools",
-    title: "Extend what Worker can do",
-    description: "Bring configured MCP servers and research integrations into the discovery workflow.",
-    href: "/plugins",
-    action: "Browse integrations"
-  }
-];
-
 export default function WorkerHomepage() {
   return (
     <div className="worker-homepage worker-homepage-v2">
