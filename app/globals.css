@@ -396,3 +396,141 @@ textarea.field { min-height: 92px; resize: vertical; line-height: 1.6; }
 .research-provider-report { margin-top: 4px; color: #63748d; font-size: 9px; }
 .research-provider-report summary { cursor: pointer; color: #316bd0; font-weight: 700; }
 .research-provider-report pre { max-height: 200px; overflow: auto; margin: 7px 0 0; padding: 8px; border-radius: 7px; background: #f5f7fb; color: #576981; white-space: pre-wrap; overflow-wrap: anywhere; font: 9px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+
+/* Nvoid ChatGPT dark theme — applied to every route */
+:root {
+  color-scheme: dark;
+  --ink: #ececec;
+  --muted: #b4b4b4;
+  --line: rgba(255,255,255,.10);
+  --panel: #2f2f2f;
+  --canvas: #212121;
+  --blue: #ececec;
+  --blue-dark: #ffffff;
+  --blue-soft: #3a3a3a;
+  --navy: #171717;
+  --navy-2: #212121;
+  --green: #75c99b;
+  --shadow: none;
+}
+html, body { min-height: 100%; background: #212121 !important; color: #ececec !important; }
+body { color: #ececec !important; }
+.app-shell, .main-panel, .content, .research-page { background: #212121 !important; color: #ececec !important; }
+.sidebar { background: #171717 !important; color: #ececec !important; border-right: 1px solid rgba(255,255,255,.08); box-shadow: none !important; }
+.brand-name, .sidebar-user strong { color: #ececec !important; }
+.brand-caption, .nav-label, .sidebar-user span { color: #9b9b9b !important; }
+.brand-mark { color: #ececec !important; background: #303030 !important; box-shadow: none !important; }
+.nav-item { color: #b4b4b4 !important; background: transparent !important; }
+.nav-item:hover, .nav-item.active { color: #fff !important; background: #2f2f2f !important; box-shadow: none !important; }
+.nav-item.active { border-left: 3px solid #ececec; }
+.nav-count { color: #d4d4d4 !important; background: #3a3a3a !important; }
+.sidebar-connection { color: #d4d4d4 !important; background: #212121 !important; border-color: rgba(255,255,255,.10) !important; }
+.side-connection-title { color: #ececec !important; }
+.side-connection-copy { color: #a3a3a3 !important; }
+.sidebar-footer { border-color: rgba(255,255,255,.10) !important; }
+.topbar { color: #ececec !important; background: rgba(33,33,33,.94) !important; border-color: rgba(255,255,255,.10) !important; }
+.breadcrumb { color: #a3a3a3 !important; }
+.breadcrumb strong, h1, h2, h3 { color: #ececec !important; }
+.content { color: #ececec !important; }
+.page-heading p, .panel-subtitle, .field-help, .metric-foot, .job-location, .source-text, .footer-note { color: #a3a3a3 !important; }
+.panel, .metric-card, .job-card, .info-card, .form-panel, .profile-summary,
+.research-query-panel, .research-warning-panel, .research-results > .panel,
+.research-results .panel, .research-connector-card, .research-empty-connectors,
+.research-empty-results, .empty-state, .code-panel {
+  color: #ececec !important;
+  background: #2f2f2f !important;
+  border-color: rgba(255,255,255,.10) !important;
+  box-shadow: none !important;
+}
+.panel-header, .panel-body, .job-card-footer, .panel-header, .form-footer,
+.info-row, .settings-row, .research-source-heading, .research-coverage-row,
+.research-call-row, .research-record, .research-record summary {
+  border-color: rgba(255,255,255,.10) !important;
+}
+.panel-title, .job-title, .job-company, .salary-text, .info-heading,
+.info-row-copy strong, .step-copy strong, .table-main, .form-section-title,
+.settings-row strong, .connection-state strong, .research-source-heading strong,
+.research-coverage-name strong, .research-coverage-stat strong,
+.research-call-meta strong, .research-call-main strong,
+.research-record-summary strong, .research-result-title {
+  color: #ececec !important;
+}
+.metric-label, .metric-value, .panel-subtitle, .job-reasons,
+.info-row-copy span, .step-copy span, .table-secondary, .settings-row p,
+.connection-state, .research-source-heading span:not(.tag),
+.research-coverage-name small, .research-coverage-stat small,
+.research-call-meta small, .research-call-main small,
+.research-record-summary small, .research-empty-results,
+.research-loading, .research-connector-copy small {
+  color: #b4b4b4 !important;
+}
+.field, input, select, textarea, .research-query-input {
+  color: #ececec !important;
+  background: #212121 !important;
+  border-color: rgba(255,255,255,.16) !important;
+}
+.field::placeholder, input::placeholder, textarea::placeholder { color: #858585 !important; }
+.field:focus, input:focus, textarea:focus, select:focus {
+  border-color: #8e8e8e !important;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.08) !important;
+}
+.primary-button, .secondary-button, .quiet-button, .icon-button,
+.topbar-status, .segmented, .segmented button, .tag, .result-count,
+.toggle-locked, .connection-state, .checkbox-chip, .preference-toggle {
+  color: #dedede !important;
+  background: #3a3a3a !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: none !important;
+}
+.primary-button, .primary-button:hover {
+  color: #171717 !important;
+  background: #ececec !important;
+  border-color: #ececec !important;
+}
+.secondary-button:hover, .quiet-button:hover, .icon-button:hover,
+.segmented button:hover, .checkbox-chip:hover, .preference-toggle:hover {
+  color: #fff !important;
+  background: #454545 !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+.segmented button.selected, .checkbox-chip:has(input:checked) {
+  color: #fff !important;
+  background: #505050 !important;
+  border-color: #777 !important;
+}
+.text-link, .research-record-open, .research-connector-count,
+.research-provider-report summary { color: #d1d1d1 !important; }
+.demo-banner, .research-safety-note, .research-empty-connectors,
+.research-provider-report pre, .research-record-body pre {
+  color: #c8c8c8 !important;
+  background: #262626 !important;
+  border-color: rgba(255,255,255,.10) !important;
+}
+.demo-banner strong, .research-empty-connectors strong { color: #ececec !important; }
+.status-applied, .status-completed, .match-pill, .side-connection-footer,
+.research-live-label, .research-call-icon.success {
+  color: #a7e0bf !important;
+  background: #20352a !important;
+  border-color: rgba(125,210,158,.18) !important;
+}
+.status-waiting, .status-delayed, .status-active, .research-warning {
+  color: #e7c98b !important;
+}
+.status-failed, .notice.error { color: #f0a6ad !important; background: #3a2528 !important; }
+.notice.success { color: #a7e0bf !important; background: #20352a !important; border-color: rgba(125,210,158,.18) !important; }
+.notice.info { color: #c8c8c8 !important; background: #292929 !important; border-color: rgba(255,255,255,.10) !important; }
+.data-table th { color: #a3a3a3 !important; background: #292929 !important; border-color: rgba(255,255,255,.10) !important; }
+.data-table td { color: #c8c8c8 !important; border-color: rgba(255,255,255,.08) !important; }
+.empty-state { background: #2f2f2f !important; border-color: rgba(255,255,255,.14) !important; }
+.empty-state h3, .empty-state p { color: #d0d0d0 !important; }
+.profile-summary { background: #292929 !important; }
+.profile-summary p, .profile-summary-tags span, .summary-stat { color: #c8c8c8 !important; }
+.profile-summary-tags span { background: #383838 !important; border-color: rgba(255,255,255,.10) !important; }
+.status-dot { box-shadow: none !important; }
+:focus-visible { outline: 2px solid #bdbdbd !important; outline-offset: 2px; }
+::selection { color: #171717; background: #d4d4d4; }
+@media (max-width: 900px) {
+  .sidebar { background: #171717 !important; }
+  .sidebar-backdrop { background: rgba(0,0,0,.65) !important; }
+}
