@@ -3420,3 +3420,63 @@ body::-webkit-scrollbar {
     margin-top: 0;
   }
 }
+
+
+/* Minimal Worker brand signature above the main search */
+.worker-home-brand-intro {
+  display: flex;
+  justify-content: center;
+  margin: 14px auto 27px;
+  text-align: center;
+}
+
+.worker-home-brand-lockup-search {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  margin: 0;
+}
+
+.worker-home-brand-lockup-search .worker-home-brand-icon {
+  width: 62px;
+  height: 62px;
+  border-radius: 17px;
+}
+
+.worker-home-brand-lockup-search .worker-home-brand-name {
+  color: #f5f5f5;
+  font-size: clamp(42px,5vw,55px);
+  font-weight: 760;
+  letter-spacing: -.075em;
+  line-height: 1;
+}
+
+.worker-home-search-v2 {
+  margin-top: 0;
+}
+
+@media (max-width: 680px) {
+  .worker-home-brand-intro {
+    margin: 10px auto 22px;
+  }
+
+  .worker-home-brand-lockup-search {
+    gap: 11px;
+  }
+
+  .worker-home-brand-lockup-search .worker-home-brand-icon {
+    width: 53px;
+    height: 53px;
+    border-radius: 15px;
+  }
+
+  .worker-home-brand-lockup-search .worker-home-brand-icon svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  .worker-home-brand-lockup-search .worker-home-brand-name {
+    font-size: 45px;
+  }
+}
