@@ -55,11 +55,11 @@ function cachedJobs(jobs: Job[]): Job[] {
   })).filter((job) => job.title !== "Untitled opportunity" || Boolean(job.jobUrl || job.applicationUrl));
 }
 
-export default function GuestHome({ searchId }: { searchId?: string }) {
+export default function GuestHome({ searchId, initialJobTitle = "", initialLocation = "India" }: { searchId?: string; initialJobTitle?: string; initialLocation?: string }) {
   const router = useRouter();
   const { saveSearch, updateSearch, getSearch } = useGuestHistory();
-  const [jobTitle, setJobTitle] = useState("");
-  const [location, setLocation] = useState("India");
+  const [jobTitle, setJobTitle] = useState(initialJobTitle);
+  const [location, setLocation] = useState(initialLocation || "India");
   const [jobs, setJobs] = useState<Job[]>([]);
   const [searched, setSearched] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -68,8 +68,8 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
 
   useEffect(() => {
     if (!searchId) {
-      setJobTitle("");
-      setLocation("India");
+      setJobTitle(initialJobTitle);
+      setLocation(initialLocation || "India");
       setJobs([]);
       setSearched(false);
       setActiveSearch("");
@@ -99,7 +99,7 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
         ? `${saved.resultCount ?? savedJobs.length} saved opportunities restored for ${saved.jobTitle} in ${saved.location}.`
         : "This search is saved, but no matching job records were returned."
       : "Search details restored. Run it again to retrieve current job records."));
-  }, [searchId, getSearch]);
+  }, [searchId, getSearch, initialJobTitle, initialLocation]);
 
   const runSearch = async (event?: FormEvent) => {
     event?.preventDefault();
