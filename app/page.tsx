@@ -81,18 +81,9 @@ type McpSourceStatus = {
   transport?: string;
   connected: boolean;
   toolCount?: number;
+  jobSearchAvailable?: boolean;
   error?: string;
 };
-type McpTool = {
-  name: string;
-  description?: string;
-  inputSchema?: unknown;
-  outputSchema?: unknown;
-  annotations?: { title?: string; readOnlyHint?: boolean; destructiveHint?: boolean; idempotentHint?: boolean; openWorldHint?: boolean };
-};
-type McpToolServer = { serverId: string; serverName: string; tools: McpTool[] };
-type SearchSourceReport = { serverId: string; provider?: string; mode?: string; queryCount?: number; requestsMade?: number; rawIndexedResults?: number; uniqueRoleLocationUrls?: number; linkedJobUrlsDiscovered?: number; publicJobPagesFetched?: number; structuredJobPages?: number; metadataOnlyListings?: number; matchedJobs?: number; returnedJobs?: number; targetCount?: number; reachedRequestedLimit?: boolean; moreSearchResultsAvailable?: boolean; failedSearchRequests?: number; rejectedUrlResults?: number; rejectedRoleResults?: number; rejectedLocationResults?: number; opportunityTypes?: Record<string, number>; truncated?: boolean };
-type JobSourceResult = { serverId: string; tool?: string; found: number; error?: string; report?: SearchSourceReport; detailsRequested?: number; detailsFetched?: number; detailTool?: string };
 type ResearchToolOption = { serverId: string; serverName: string; name: string; description?: string; inputSchema?: unknown; safety?: string };
 type ResearchCatalog = { connectedServers: number; configuredServers: number; servers: McpSourceStatus[]; availableReadOnlyTools: ResearchToolOption[]; availableReadOnlyToolCount: number };
 type ResearchConnectorReport = { serverId: string; serverName: string; enabled: boolean; connected: boolean; selected: boolean; connectionError?: string; discoveredTools: number; readOnlyTools: number; callsSucceeded: number; callsFailed: number; recordsReturned: number };
@@ -134,7 +125,7 @@ const navItems: Array<{ id: View; label: string; icon: LucideIcon }> = [
 
 const pageInfo: Record<View, { eyebrow: string; title: string; description: string }> = {
   overview: { eyebrow: "Your job search workspace", title: "Overview", description: "One workspace to discover opportunities, compare your fit, and track every agent task." },
-  jobs: { eyebrow: "Federated opportunity discovery", title: "Find your next role", description: "One search fans out across connected MCP sources, public job feeds, Google-dork discovery, company career pages and relevant public recruitment notices." },
+  jobs: { eyebrow: "Opportunity discovery", title: "Find your next role", description: "Search live job boards, company career pages and public listings in one place." },
   research: { eyebrow: "Live federated research", title: "Research anything", description: "Plan a query across connected read-only MCP tools, search the public web, crawl accessible pages, and inspect the real records returned by every source." },
   applications: { eyebrow: "Execution history", title: "Application tracker", description: "Review queued tasks, completion states, and jobs that need your attention." },
   profile: { eyebrow: "Candidate intelligence", title: "Your candidate profile", description: "Keep the test profile accurate so the agent can search and match against the right criteria." },
@@ -212,15 +203,10 @@ export default function HomePage() {
   const [tasks, setTasks] = useState<ApplicationTask[]>([]);
   const [health, setHealth] = useState<AgentHealth | null>(null);
   const [sourceStatuses, setSourceStatuses] = useState<McpSourceStatus[]>([]);
-  const [mcpToolServers, setMcpToolServers] = useState<McpToolServer[]>([]);
-  const [toolCatalogError, setToolCatalogError] = useState("");
-  const [searchSourceResults, setSearchSourceResults] = useState<JobSourceResult[]>([]);
-  const [searchReport, setSearchReport] = useState<SearchSourceReport[]>([]);
   const [sourceRefreshError, setSourceRefreshError] = useState("");
   const [agentState, setAgentState] = useState<"checking" | "online" | "offline">("checking");
   const [busy, setBusy] = useState<"search" | "run" | "research" | "refresh" | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
-  const [showDemoBanner, setShowDemoBanner] = useState(true);
   const [minMatchScore, setMinMatchScore] = useState(55);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lastSearch, setLastSearch] = useState<string | null>(null);
@@ -249,7 +235,6 @@ export default function HomePage() {
     () => jobs.slice((jobsPage - 1) * jobsPageSize, jobsPage * jobsPageSize),
     [jobs, jobsPage, jobsPageSize],
   );
-  const discoveredToolCount = mcpToolServers.reduce((total, server) => total + server.tools.length, 0);
 
   const loadHealth = useCallback(async () => {
     setAgentState("checking");
@@ -282,20 +267,6 @@ export default function HomePage() {
     } catch (error) {
       setSourceRefreshError(error instanceof Error ? error.message : "Could not load connector statuses.");
       setSourceStatuses([]);
-    }
-  }, []);
-
-  const loadToolCatalog = useCallback(async () => {
-    try {
-      const result = await readJson(await fetch("/api/agent/tools", { cache: "no-store" }));
-      const servers = Array.isArray(result.servers) ? result.servers as McpToolServer[] : [];
-      setMcpToolServers(servers);
-      setToolCatalogError("");
-      return servers;
-    } catch (error) {
-      setToolCatalogError(error instanceof Error ? error.message : "Could not load MCP tool inventory.");
-      setMcpToolServers([]);
-      return [];
     }
   }, []);
 
@@ -361,16 +332,15 @@ export default function HomePage() {
 
   const refreshWorkspace = useCallback(async () => {
     setBusy("refresh");
-    await Promise.all([loadHealth(), loadTasks(), loadSources(), loadToolCatalog()]);
+    await Promise.all([loadHealth(), loadTasks(), loadSources()]);
     setBusy(null);
-  }, [loadHealth, loadTasks, loadSources, loadToolCatalog]);
+  }, [loadHealth, loadTasks, loadSources]);
 
   useEffect(() => {
     void loadHealth();
     void loadTasks();
     void loadSources();
-    void loadToolCatalog();
-  }, [loadHealth, loadTasks, loadSources, loadToolCatalog]);
+  }, [loadHealth, loadTasks, loadSources]);
 
   const updateProfile = <K extends keyof CandidateProfile,>(key: K, value: CandidateProfile[K]) => {
     setProfile((current) => ({ ...current, [key]: value }));
@@ -397,13 +367,13 @@ export default function HomePage() {
         })
       }));
       setJobs(Array.isArray(result.jobs) ? result.jobs as Job[] : []);
-      setSearchSourceResults(Array.isArray(result.sources) ? result.sources as JobSourceResult[] : []);
-      setSearchReport(Array.isArray(result.searchReport) ? result.searchReport as SearchSourceReport[] : Array.isArray(result.sources) ? (result.sources as JobSourceResult[]).flatMap((source) => source.report ? [source.report] : []) : []);
       setLastSearch(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
       setView("jobs");
       const foundCount = result.returnedCount ?? result.jobs?.length ?? 0;
-      const sourceErrors = Array.isArray(result.sources) ? result.sources.filter((source: { error?: string }) => Boolean(source.error)) : [];
-      setNotice({ type: sourceErrors.length > 0 && foundCount === 0 ? "error" : sourceErrors.length > 0 ? "info" : "success", message: sourceErrors.length > 0 ? "Search returned " + foundCount + " job(s); source issue: " + sourceErrors.map((source: { serverId?: string; error?: string }) => (source.serverId || "source") + ": " + (source.error || "unknown error")).join(" · ") : "Search completed. Found " + foundCount + " normalized job matches across " + (result.sourceCount ?? 0) + " source(s)." });
+      setNotice({
+        type: foundCount > 0 ? "success" : "info",
+        message: foundCount > 0 ? "Found " + foundCount.toLocaleString() + " matching jobs." : "No matching jobs found. Try a broader role or location.",
+      });
     } catch (error) {
       setNotice({ type: "error", message: error instanceof Error ? error.message : "Job search failed." });
       await loadHealth();
@@ -435,8 +405,6 @@ export default function HomePage() {
         })
       }));
       if (Array.isArray(result.search?.jobs)) setJobs(result.search.jobs as Job[]);
-      setSearchSourceResults(Array.isArray(result.search?.sources) ? result.search.sources as JobSourceResult[] : []);
-      setSearchReport(Array.isArray(result.search?.searchReport) ? result.search.searchReport as SearchSourceReport[] : Array.isArray(result.search?.sources) ? (result.search.sources as JobSourceResult[]).flatMap((source) => source.report ? [source.report] : []) : []);
       await loadTasks();
       setView("applications");
       const queuedCount = result.applicationQueue?.queued ?? 0;
@@ -460,7 +428,7 @@ export default function HomePage() {
     setMobileOpen(false);
     setNotice(null);
     if (next === "research" && !researchCatalog) void loadResearchTools().catch(() => undefined);
-    if (next === "connections") void Promise.all([loadSources(), loadToolCatalog()]);
+    if (next === "connections") void loadSources();
   };
 
   const statusClass = agentState === "online" ? "" : agentState === "offline" ? "offline" : "warning";
@@ -521,7 +489,7 @@ export default function HomePage() {
               {view === "research" ? (
                 <button className="secondary-button" onClick={() => void loadResearchTools()} disabled={busy !== null}><RefreshCw size={15} /> Refresh tools</button>
               ) : view === "connections" ? (
-                <button className="secondary-button" onClick={() => void Promise.all([loadSources(), loadToolCatalog()])} disabled={busy !== null}><RefreshCw size={15} /> Refresh connections</button>
+                <button className="secondary-button" onClick={() => void loadSources()} disabled={busy !== null}><RefreshCw size={15} /> Refresh connections</button>
               ) : view === "jobs" ? null : (
                 <>
                   <button className="secondary-button" onClick={() => goTo("jobs")} disabled={busy !== null}><Search size={15} /> Find jobs</button>
@@ -531,7 +499,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {showDemoBanner && <div className="demo-banner"><ShieldCheck size={17} /><div className="demo-banner-copy"><strong>Live job search is enabled.</strong> The candidate profile still contains fictional test details. Searches fan out across connected MCP sources and public feeds, plus Serper's Google-style dork searches for job boards, ATS boards, company career pages and public recruitment notices. Naukri, LinkedIn, Indeed, Glassdoor and Apna require an authorized direct MCP endpoint or the optional Apify connector. Agent runs remain review-only and do not sync to the Jobkar backend or submit applications.</div><button className="demo-banner-close" aria-label="Dismiss notice" onClick={() => setShowDemoBanner(false)}><X size={15} /></button></div>}
           {notice && <div className={"notice " + notice.type}><div>{notice.type === "error" ? <CircleAlert size={16} /> : notice.type === "success" ? <CheckCircle2 size={16} /> : <Activity size={16} />}</div><div>{notice.message}</div><button className="demo-banner-close" aria-label="Dismiss message" onClick={() => setNotice(null)}><X size={14} /></button></div>}
           {view === "research" && (
             <div className="grid" style={{ gap: 16 }}>
@@ -739,55 +706,7 @@ export default function HomePage() {
                     <p>Enter a job title and location to collect matching listings from all available MCP job tools and configured crawlers.</p>
                   </div>
                 ) : null}
-                {(searchSourceResults.length > 0 || searchReport.some((report) => report.serverId === "serper-search")) && (
-                  <section className="source-coverage">
-                    <div className="source-coverage-heading">
-                      <div>
-                        <h3>Search coverage</h3>
-                        <p>See which connected sources returned listings for this search.</p>
-                      </div>
-                      <span>{searchSourceResults.filter((source) => !source.error).length} healthy sources</span>
-                    </div>
-                    {searchSourceResults.length > 0 && (
-                      <div className="source-result-grid">
-                        {searchSourceResults.map((source) => (
-                          <article className="source-result-card" key={source.serverId}>
-                            <div className="source-result-top">
-                              <span className={"source-result-indicator" + (source.error ? " has-error" : "")} />
-                              <strong>{source.serverId.replace(/[-_]/g, " ")}</strong>
-                              <span className={"source-result-status" + (source.error ? " has-error" : "")}>{source.error ? "Error" : source.found > 0 ? "Results" : "Checked"}</span>
-                            </div>
-                            <div className="source-result-count">{source.found.toLocaleString()}</div>
-                            <div className="source-result-caption">matching listing(s)</div>
-                            <div className="source-result-meta">
-                              {source.report?.requestsMade ? <span>{source.report.requestsMade} web requests</span> : null}
-                              {source.report?.publicJobPagesFetched ? <span>{source.report.publicJobPagesFetched} pages fetched</span> : null}
-                              {source.report?.structuredJobPages ? <span>{source.report.structuredJobPages} structured job pages</span> : null}
-                              {!source.report?.requestsMade && !source.report?.publicJobPagesFetched && !source.report?.structuredJobPages ? <span>Source checked for this role and location</span> : null}
-                              {source.detailsRequested ? <span>{source.detailsFetched ?? 0}/{source.detailsRequested} deep job details fetched{source.detailTool ? " · " + source.detailTool : ""}</span> : null}
-                            </div>
-                            {source.error && <p className="source-result-error">{source.error}</p>}
-                          </article>
-                        ))}
-                      </div>
-                    )}
-                    {searchReport.some((report) => report.serverId === "serper-search") && (() => {
-                      const report = searchReport.find((item) => item.serverId === "serper-search")!;
-                      return (
-                        <details className="source-crawl-details">
-                          <summary>Public web search and crawl details <span>{(report.requestsMade ?? 0).toLocaleString()} requests · {(report.publicJobPagesFetched ?? 0).toLocaleString()} pages fetched</span></summary>
-                          <div className="source-crawl-stats">
-                            <div><span>Indexed results</span><strong>{(report.rawIndexedResults ?? 0).toLocaleString()}</strong></div>
-                            <div><span>Unique job URLs</span><strong>{(report.uniqueRoleLocationUrls ?? 0).toLocaleString()}</strong></div>
-                            <div><span>Structured job pages</span><strong>{(report.structuredJobPages ?? 0).toLocaleString()}</strong></div>
-                            <div><span>Matching records</span><strong>{(report.matchedJobs ?? 0).toLocaleString()}</strong></div>
-                          </div>
-                          <p>{report.reachedRequestedLimit ? "The requested record count was reached." : "The requested count was not reached."}{report.failedSearchRequests ? " Failed search requests: " + report.failedSearchRequests + "." : ""}{report.truncated ? " Results were truncated by the configured crawl/result budget." : ""}{report.moreSearchResultsAvailable ? " More indexed results may be available." : ""}</p>
-                        </details>
-                      );
-                    })()}
-                  </section>
-                )}
+
               </div>
             </section>
           )}
@@ -854,53 +773,27 @@ export default function HomePage() {
           {view === "connections" && (
             <div className="grid" style={{ gap: 16 }}>
               <div className="grid metric-grid">
-                <MetricCard label="Configured connectors" value={sourceStatuses.length} foot="MCP servers in worker config" icon={Server} />
-                <MetricCard label="Connected servers" value={sourceStatuses.filter((source) => source.connected).length} foot={sourceStatuses.filter((source) => source.enabled && !source.connected).length + " enabled but unavailable"} icon={CheckCircle2} tone="purple" />
-                <MetricCard label="Discovered tools / skills" value={discoveredToolCount} foot="Tools listed by connected MCP servers" icon={Code2} tone="blue" />
-                <MetricCard label="Job-search sources" value={sourceStatuses.filter((source) => source.connected && mcpToolServers.find((entry) => entry.serverId === source.id)?.tools.some((tool) => /job|vacanc|career|search|listing/i.test(tool.name + " " + (tool.description ?? "")))).length} foot="Connected servers exposing job-related tools" icon={Briefcase} tone="amber" />
+                <MetricCard label="Configured sources" value={sourceStatuses.length} foot="Providers in worker configuration" icon={Server} />
+                <MetricCard label="Connected sources" value={sourceStatuses.filter((source) => source.connected).length} foot="Live MCP connections" icon={CheckCircle2} tone="purple" />
+                <MetricCard label="Search-ready sources" value={sourceStatuses.filter((source) => source.connected && source.jobSearchAvailable).length} foot="Providers exposing job search" icon={Briefcase} tone="blue" />
+                <MetricCard label="Unavailable sources" value={sourceStatuses.filter((source) => source.enabled && !source.connected).length} foot="Require worker-side attention" icon={Activity} tone="amber" />
               </div>
-
               <section className="panel">
                 <div className="panel-header">
                   <div>
-                    <h2 className="panel-title">Nvoid worker connection</h2>
-                    <p className="panel-subtitle">Private server-to-server connection from this workspace to the MCP worker.</p>
+                    <h2 className="panel-title">Source connections</h2>
+                    <p className="panel-subtitle">A clear status view of the providers available to your job search.</p>
                   </div>
-                  <span className={"tag " + (agentState === "online" ? "source-state-connected" : agentState === "offline" ? "source-state-error" : "")}>{statusText}</span>
-                </div>
-                <div className="panel-body">
-                  <div className="connection-state">
-                    <span className={"status-dot " + statusClass} />
-                    <span><strong>{agentState === "online" ? "Worker API reachable" : agentState === "checking" ? "Checking worker API" : "Worker API unavailable"}</strong>{health?.service ? " · " + health.service : ""}</span>
-                  </div>
-                  <div className="connection-summary-grid">
-                    <div><span>Worker API address</span><strong>Configured on the web server</strong><small>NVOID_AGENT_URL</small></div>
-                    <div><span>Authentication</span><strong>Server-side API key</strong><small>NVOID_AGENT_API_KEY → AGENT_API_KEY</small></div>
-                    <div><span>Submission safety</span><strong>Review-only mode</strong><small>This workspace never auto-submits applications.</small></div>
-                  </div>
-                  <div className="field-help">Connector endpoints, API tokens and provider credentials are read by the worker process. They are never displayed in this browser page.</div>
-                </div>
-              </section>
-
-              <section className="panel">
-                <div className="panel-header">
-                  <div>
-                    <h2 className="panel-title">MCP connectors and discovered skills</h2>
-                    <p className="panel-subtitle">Every connector reported by the worker is listed here, including inactive and failed connections. Open a connected connector to inspect its actual MCP tools.</p>
-                  </div>
-                  <button className="secondary-button button-small" onClick={() => void Promise.all([loadSources(), loadToolCatalog()])} disabled={busy !== null}><RefreshCw size={13} /> Refresh inventory</button>
+                  <button className="secondary-button button-small" onClick={() => void loadSources()} disabled={busy !== null}><RefreshCw size={13} /> Refresh sources</button>
                 </div>
                 <div className="panel-body">
                   {sourceRefreshError && <div className="notice error"><CircleAlert size={14} />{sourceRefreshError}</div>}
-                  {toolCatalogError && <div className="notice error"><CircleAlert size={14} />{toolCatalogError}</div>}
                   {sourceStatuses.length === 0 && !sourceRefreshError ? (
-                    <div className="job-search-empty"><LoaderCircle size={20} className="spin" /><p>Loading connectors reported by the worker…</p></div>
+                    <div className="job-search-empty"><LoaderCircle size={20} className="spin" /><p>Loading connected sources…</p></div>
                   ) : (
                     <div className="connector-grid">
                       {sourceStatuses.map((source) => {
-                        const catalog = mcpToolServers.find((entry) => entry.serverId === source.id);
-                        const tools = catalog?.tools ?? [];
-                        const stateLabel = source.connected ? "Connected" : source.enabled ? "Connection failed" : "Inactive";
+                        const stateLabel = source.connected ? "Connected" : source.enabled ? "Unavailable" : "Inactive";
                         const stateTone = source.connected ? "source-state-connected" : source.enabled ? "source-state-error" : "source-state-inactive";
                         return (
                           <article key={source.id} className="connector-card">
@@ -908,51 +801,23 @@ export default function HomePage() {
                               <div className="connector-icon"><Server size={17} /></div>
                               <div className="connector-card-title">
                                 <strong>{source.name}</strong>
-                                <span>{source.id} · {source.transport || "MCP transport"}</span>
+                                <span>{source.transport || "MCP provider"}</span>
                               </div>
                               <span className={"tag " + stateTone}>{stateLabel}</span>
                             </div>
                             <div className="connector-card-stats">
-                              <span>{tools.length || source.toolCount || 0} discovered tool(s)</span>
-                              <span>{source.enabled ? "Enabled in worker config" : "Disabled in worker config"}</span>
+                              <span>{source.toolCount ?? 0} capabilities</span>
+                              <span>{source.jobSearchAvailable ? "Job search enabled" : source.enabled ? "Connected tools only" : "Not enabled"}</span>
                             </div>
                             {!source.enabled && <p className="connector-guidance">{connectorSetupHint(source)}</p>}
-                            {source.error && <p className="connector-error">{source.error}</p>}
-                            {source.connected && tools.length > 0 ? (
-                              <details className="connector-tools">
-                                <summary>View MCP tools and skills <span>{tools.length}</span></summary>
-                                <div className="mcp-tool-list">
-                                  {tools.map((tool) => {
-                                    const schema = tool.inputSchema && typeof tool.inputSchema === "object" ? tool.inputSchema as { properties?: Record<string, unknown>; required?: string[] } : undefined;
-                                    const requiredInputs = schema?.required ?? [];
-                                    const inputNames = Object.keys(schema?.properties ?? {});
-                                    const safetyLabel = tool.annotations?.destructiveHint ? "May modify data" : tool.annotations?.readOnlyHint ? "Read-only" : tool.annotations?.openWorldHint ? "External action" : "Capability metadata not declared";
-                                    return (
-                                      <details className="mcp-tool-item" key={tool.name}>
-                                        <summary>
-                                          <span><Code2 size={13} /> {tool.annotations?.title || tool.name}</span>
-                                          <span className="tag">{safetyLabel}</span>
-                                        </summary>
-                                        <div className="mcp-tool-description">{tool.description || "This tool did not publish a description."}</div>
-                                        <div className="mcp-tool-inputs">
-                                          <span>Tool ID</span><code>{tool.name}</code>
-                                          <span>Inputs</span><code>{inputNames.length ? inputNames.join(", ") : "No input schema published"}</code>
-                                          <span>Required</span><code>{requiredInputs.length ? requiredInputs.join(", ") : "None declared"}</code>
-                                        </div>
-                                      </details>
-                                    );
-                                  })}
-                                </div>
-                              </details>
-                            ) : source.connected ? (
-                              <p className="connector-guidance">The MCP server connected, but it did not publish any tools.</p>
-                            ) : null}
+                            {source.enabled && !source.connected && <p className="connector-guidance">This provider is not available to the worker right now. Check its endpoint or credentials in the server configuration.</p>}
+                            {source.connected && <p className="connector-guidance">Ready for live requests from the job-search agent.</p>}
                           </article>
                         );
                       })}
                     </div>
                   )}
-                  <div className="field-help" style={{ marginTop: 14 }}>A connector marked Inactive needs configuration and a worker restart. A connector marked Connection failed is enabled, but its endpoint, credentials or MCP handshake need attention. Connections made inside ChatGPT or Claude are not automatically inherited by this separate worker.</div>
+                  <p className="field-help" style={{ marginTop: 14 }}>Credentials and technical traces stay on the worker. This view shows provider availability without exposing raw MCP errors or tool schemas.</p>
                 </div>
               </section>
             </div>
@@ -1048,8 +913,12 @@ function JobCard({ job }: { job: Job }) {
   const salary = job.salary || (job.salaryMin !== undefined || job.salaryMax !== undefined
     ? money(job.salaryMin, job.salaryMax, job.salaryCurrency)
     : rawFieldText(raw, ["salary", "sal", "salaryRange", "salary_range", "salaryText", "salary_text", "compensation", "payRange", "pay_range", "remuneration"])) || "Not disclosed";
-  const description = job.description || rawFieldText(raw, ["description", "jobDescription", "job_description", "summary", "snippet", "details"]);
+  const description = job.description || rawFieldText(raw, ["description", "jobDescription", "job_description", "excerpt", "jobExcerpt", "job_excerpt", "shortDescription", "short_description", "summary", "snippet", "details"]);
+  const companyRecord = raw.company && typeof raw.company === "object" ? raw.company as Record<string, unknown> : undefined;
+  const companyBio = rawFieldText(raw, ["companyBio", "company_bio", "companyDescription", "company_description", "aboutCompany", "about_company", "companyOverview", "company_overview", "employerBio", "employer_bio"])
+    || rawFieldText(companyRecord, ["bio", "about", "overview", "description", "summary"]);
   const cleanDescription = description?.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
+  const cleanCompanyBio = companyBio?.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
   const requirements = rawFieldText(raw, ["requirements", "qualifications", "requiredSkills", "required_skills", "mustHave", "must_haves", "skills", "whatYouNeed"]);
   const responsibilities = rawFieldText(raw, ["responsibilities", "duties", "whatYouWillDo", "what_you_will_do"]);
   const education = rawFieldText(raw, ["education", "educationRequirements", "education_requirements", "degree"]);
@@ -1096,6 +965,13 @@ function JobCard({ job }: { job: Job }) {
         <p className="job-description">{cleanDescription || "The provider did not include a job description in the returned listing."}</p>
       </div>
 
+      {cleanCompanyBio && (
+        <div className="job-company-bio-block">
+          <span className="job-section-label">About the company</span>
+          <p className="job-company-bio">{cleanCompanyBio}</p>
+        </div>
+      )}
+
       {requirements && (
         <div className="job-requirements">
           <span className="job-section-label">Requirements / qualifications</span>
@@ -1121,6 +997,7 @@ function JobCard({ job }: { job: Job }) {
         <summary>Full job details, requirements and source data</summary>
         <div className="job-full-details-body">
           {cleanDescription && <section><h4>Full description</h4><p>{cleanDescription}</p></section>}
+          {cleanCompanyBio && <section><h4>Company overview</h4><p>{cleanCompanyBio}</p></section>}
           <div className="job-detail-grid">
             {[
               ["Company", company], ["Location", location], ["Salary", salary], ["Experience", experience], ["Employment type", employmentType], ["Work mode", workMode],
