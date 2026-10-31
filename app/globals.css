@@ -594,3 +594,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .topbar-actions { gap: 10px; }
   .topbar-quiet-link { display: none; }
 }
+
+/* Final sidebar type scale */
+.public-nav-link, .workspace-nav-link { min-height: 40px; font-size: 13px; }
+.sidebar-section-label, .workspace-nav-label { font-size: 11px; }
+.sidebar-find-button, .workspace-find-button { font-size: 13px; }
+.history-copy strong { font-size: 12px; }
+.history-copy small, .history-placeholder, .history-empty { font-size: 10px; }
+.guest-identity strong, .account-copy strong { font-size: 12px; }
+.guest-identity small, .account-copy small { font-size: 10px; }
+.topbar-breadcrumb, .workspace-crumb { font-size: 12px; }

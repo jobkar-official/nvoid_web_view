@@ -171,7 +171,7 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
 
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <button className="workspace-sidebar-toggle" type="button" onClick={() => setSidebarOpen((open) => !open)} aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"} aria-expanded={sidebarOpen} aria-controls="nvoid-workspace-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"}><PanelLeftOpen size={19} /></button>
+          <button className="workspace-sidebar-toggle" type="button" onClick={() => setSidebarOpen((open) => !open)} aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"} aria-expanded={sidebarOpen} aria-controls="nvoid-workspace-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
           <div className="workspace-crumb"><span>Workspace</span><span>/</span><strong>{page.title}</strong></div>
           <div className="workspace-top-actions"><span className="workspace-role-pill">{roleNames[roleId]}</span><button className="workspace-icon-button" aria-label="Notifications" onClick={() => navigate("/workspace/notifications", "Opened notifications")}><Bell size={17} /></button><span className="workspace-top-avatar">{initials(displayName(initialSession))}</span></div>
         </header>

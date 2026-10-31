@@ -213,7 +213,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
 
         <div className="public-main">
           <header className="public-topbar">
-            <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}><PanelLeftOpen size={19} /></button>
+            <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
             <div className="topbar-breadcrumb"><span>Explore</span><span className="breadcrumb-dot">/</span><strong>{pathname === "/" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid"}</strong></div>
             <div className="topbar-actions">
               <Link href="/security" className="topbar-quiet-link">Security</Link>
