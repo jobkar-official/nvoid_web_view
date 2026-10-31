@@ -142,9 +142,9 @@ export default function GuestHome() {
   return (
     <div className="home-page">
       <section className="home-hero">
-        <div className="hero-brand-lockup" aria-label="nvoid.ai">
+        <div className="hero-brand-lockup" aria-label="brewl.ai">
           <span className="hero-brand-mark"><BrainCircuit size={58} strokeWidth={1.65} /></span>
-          <span className="hero-brand-name">nvoid.ai</span>
+          <span className="hero-brand-name">brewl.ai</span>
         </div>
         <p className="hero-description">Search jobs across connected sources, company career pages and public listings. Or let your personal Nvoid agent discover opportunities based on your profile.</p>
 
@@ -162,14 +162,6 @@ export default function GuestHome() {
         </form>
         <div className="search-trust"><span><CheckCircle2 size={14} /> Browse without signing in</span><span><ShieldCheckIcon /> Your guest searches stay in this browser</span></div>
 
-        <div className="bot-promo">
-          <div className="bot-promo-icon"><Sparkles size={21} /></div>
-          <div className="bot-promo-copy">
-            <strong>Let Nvoid Bot work for you</strong>
-            <span>Create a professional profile once. Get personalized job discoveries and new-opportunity alerts.</span>
-          </div>
-          <a href="/auth/register" className="bot-promo-link">Create free profile <ArrowUpRight size={15} /></a>
-        </div>
       </section>
 
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")}><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
