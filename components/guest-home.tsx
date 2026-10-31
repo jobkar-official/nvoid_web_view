@@ -200,7 +200,7 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
       {jobs.length > 0 && (
         <section className="public-results-section">
           <div className="section-heading">
-            <div><span className="section-kicker">LIVE SEARCH RESULTS</span><h2>Opportunities for {jobTitle}</h2><p>Results are returned by the sources currently connected to Nvoid.</p></div>
+            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE SEARCH RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Results are returned by the sources currently connected to Brewl."}</p></div>
             <span className="result-count">{jobs.length.toLocaleString()} found</span>
           </div>
           <div className="public-job-grid">
