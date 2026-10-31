@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
-  Activity, ArrowRight, ArrowUpRight, Bell, BriefcaseBusiness, Building2,
+  Activity, ArrowRight, ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, Building2,
   CheckCircle2, ChevronDown, CircleHelp, ClipboardList, Clock3, FileText,
   LayoutDashboard, LoaderCircle, LogOut, PanelLeftClose, PanelLeftOpen, MessageSquare, Plus, Search,
-  ShieldCheck, Sparkles, Target, UserRound, Users, X
+  LockKeyhole, ShieldCheck, Sparkles, Target, UserRound, Users, X
 } from "lucide-react";
 
 type RoleId = 3 | 4 | 7;
@@ -136,8 +136,8 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
       <aside id="nvoid-workspace-sidebar" aria-label="Workspace navigation" aria-hidden={!sidebarOpen} className={"workspace-sidebar" + (sidebarOpen ? " is-open" : "")}>
         <div className="workspace-sidebar-header">
           <Link className="workspace-brand" href="/workspace">
-            <span className="workspace-brand-mark"><Sparkles size={19} /></span>
-            <span><strong>NVOID</strong><small>Employment intelligence</small></span>
+            <span className="workspace-brand-mark"><BrainCircuit size={20} strokeWidth={1.8} /></span>
+            <span className="brand-copy"><strong>nvoid.ai</strong><small>Find opportunities. Let AI find more.</small></span>
           </Link>
           <button className="workspace-sidebar-close" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
         </div>
@@ -173,6 +173,11 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
         <header className="workspace-topbar">
           <button className="workspace-sidebar-toggle" type="button" onClick={() => setSidebarOpen((open) => !open)} aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"} aria-expanded={sidebarOpen} aria-controls="nvoid-workspace-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
           <div className="workspace-crumb"><span>Workspace</span><span>/</span><strong>{page.title}</strong></div>
+          <span className="model-status-pill" role="status" aria-label="Default AI model: Alpha - k1. This model is fixed and cannot be changed here.">
+            <BrainCircuit size={15} />
+            <span className="model-status-copy"><small>DEFAULT MODEL</small><strong>Alpha - k1</strong></span>
+            <LockKeyhole size={12} />
+          </span>
           <div className="workspace-top-actions"><span className="workspace-role-pill">{roleNames[roleId]}</span><button className="workspace-icon-button" aria-label="Notifications" onClick={() => navigate("/workspace/notifications", "Opened notifications")}><Bell size={17} /></button><span className="workspace-top-avatar">{initials(displayName(initialSession))}</span></div>
         </header>
 
