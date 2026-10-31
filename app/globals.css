@@ -1468,171 +1468,42 @@ body {
 }
 
 
-/* Always-visible topbar brand lockup */
-.topbar-brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  flex: 0 1 auto;
+
+
+/* Homepage and sidebar wordmark color */
+.hero-brand-name,
+.public-brand strong,
+.workspace-brand strong {
+  color: #3b82f6 !important;
+}
+
+/* Keep the homepage search controls integrated into their single search panel */
+.public-search-panel .search-input-line input {
+  display: block;
+  width: 100%;
   min-width: 0;
-  margin-left: 12px;
+  margin: 0;
+  padding: 1px 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
   color: #ececec !important;
-  text-decoration: none;
+  background: transparent !important;
+  appearance: none;
 }
 
-.topbar-brand-mark {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
-  place-items: center;
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 11px;
-  color: #ececec;
-  background: #3a3a3a;
-}
-
-.topbar-brand-copy {
-  display: grid;
+.public-search-panel .search-input-line {
   min-width: 0;
-  gap: 2px;
-}
-
-.topbar-brand-copy strong {
-  color: #ececec;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: -.035em;
-  line-height: 1.1;
-}
-
-.topbar-brand-copy small {
-  overflow: hidden;
-  color: #b4b4b4;
-  font-size: 9px;
-  font-weight: 400;
-  line-height: 1.3;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.topbar-brand + .model-status-pill {
-  margin-left: auto;
-}
-
-@media (max-width: 850px) {
-  .topbar-brand {
-    margin-left: 8px;
-  }
-
-  .topbar-brand-copy small {
-    max-width: 190px;
-  }
-}
-
-@media (max-width: 620px) {
-  .topbar-brand {
-    gap: 7px;
-    margin-left: 6px;
-  }
-
-  .topbar-brand-mark {
-    width: 32px;
-    height: 32px;
-    flex-basis: 32px;
-    border-radius: 9px;
-  }
-
-  .topbar-brand-copy strong {
-    font-size: 12px;
-  }
-
-  .topbar-brand-copy small {
-    max-width: 138px;
-    font-size: 7px;
-  }
-
-  .model-status-pill {
-    margin-left: auto;
-  }
-}
-
-@media (max-width: 420px) {
-  .topbar-brand-copy small {
-    max-width: 105px;
-  }
-
-  .model-status-pill {
-    gap: 5px;
-    padding: 4px 6px;
-  }
-
-  .model-status-pill > svg:first-child {
-    width: 13px;
-  }
-
-  .model-status-pill > svg:last-child {
-    display: none;
-  }
-}
-
-
-/* Homepage hero brand identity */
-.hero-brand-lockup {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin: 0 auto 3px;
-  white-space: nowrap;
-}
-
-.hero-brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: auto;
-  height: auto;
-  flex: 0 0 auto;
   border: 0;
-  border-radius: 0;
-  color: #ffffff;
   background: transparent;
 }
 
-.hero-brand-name {
+.public-search-panel .search-input-line:focus-within {
   color: #ffffff;
-  font-size: clamp(40px, 5.2vw, 50px);
-  font-weight: 750;
-  letter-spacing: -.055em;
-  line-height: 1;
 }
 
-.home-hero h1 {
-  margin-top: 18px;
-}
-
-@media (max-width: 620px) {
-  .hero-brand-lockup {
-    gap: 12px;
-  }
-
-  .hero-brand-mark svg {
-    width: 68px;
-    height: 68px;
-  }
-
-  .hero-brand-name {
-    font-size: 42px;
-  }
-}
-
-
-/* The hero brand replaces the previous text headline */
-.hero-brand-lockup {
-  margin-bottom: 20px;
-}
-
-.home-hero h1 {
-  display: none;
+.public-search-panel .search-input-line input:focus-visible {
+  outline: 0 !important;
+  box-shadow: none !important;
 }
