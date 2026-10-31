@@ -135,3 +135,40 @@ npm run build
 ```
 
 All changes are being made on the `development` branch. Do not deploy the UI until its integration settings and authentication are configured for the intended environment.
+
+## Public site, guest search, and role-based workspace
+
+The public route group provides:
+
+- `/` — guest job discovery using the existing `POST /api/agent/search` proxy. Guests can search without signing in.
+- `/release`, `/models` (also `/model`), `/about`, `/privacy`, `/terms`, `/security`, `/cookies`, and `/free-job-posting`.
+- `/auth/signin` and `/auth/register`.
+- `/workspace` and role-aware workspace sections for role ID 3 (recruiter), 4 (job seeker), and 7 (support).
+- Development-only visual previews at `/preview/workspace/3`, `/preview/workspace/4`, and `/preview/workspace/7`. These routes return 404 in production.
+
+Guest search history is stored in the current browser's local storage under `nvoid.guest-search-history.v1`. Each entry has a UUID, job title, location, search timestamp and returned result count. A guest can restore a prior query, delete one item, or clear the history. Guest search history is not synced between devices.
+
+### Authentication service adapter
+
+The web app now provides same-origin authentication routes:
+
+- `POST /api/auth/signin`
+- `POST /api/auth/register`
+- `POST /api/auth/logout`
+
+Configure these server-side values in the web app environment:
+
+- `NVOID_AUTH_BASE_URL` — base URL of the existing authentication service.
+- `NVOID_AUTH_SIGNIN_PATH` — defaults to `/auth/signin`.
+- `NVOID_AUTH_REGISTER_PATH` — defaults to `/auth/register`.
+- `NVOID_AUTH_SESSION_PATH` — defaults to `/auth/me`.
+
+The sign-in/register service must accept the submitted JSON fields and return an access token plus a user object carrying role ID 3, 4 or 7. The web server stores the token in an HttpOnly, SameSite=Lax cookie and validates it against the configured session endpoint before rendering `/workspace`. Adapt the configurable endpoint paths or response mapping to the actual Jobkar/Nvoid authentication contract before production rollout. The web view does not create a new identity database.
+
+### Workspace integration status
+
+The role-specific navigation, dashboard, recent activity, Find Jobs interaction, post-job form and page states are implemented in the UI. The existing Nvoid job-search proxy is reused. The authenticated account session is checked server-side against the configured auth service.
+
+The current repository does not yet expose verified Jobkar hiring endpoints for job creation, applicant lists, messaging, company data, notifications, support cases, or persistent professional profile updates. Those sections therefore render honest integration states rather than fabricated records. Connect each section to its authorized backend API before production use. UI navigation is not a substitute for authorization checks in the corresponding backend APIs.
+
+Guest job search is publicly reachable and should be protected with server-side rate limiting, abuse monitoring and provider-cost controls before a public launch. Policy pages are implementation drafts; insert the operator's legal identity, contact details, retention periods and final reviewed legal wording before treating them as binding policies.
