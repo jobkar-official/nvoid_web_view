@@ -14,7 +14,7 @@ const models = [
 
 export default function ModelsPage() {
   return <div className="catalog-page">
-    <div className="catalog-hero"><span className="section-kicker">THE NVOID ENGINE</span><h1>Models built around employment.</h1><p>Worker is more than a chat interface. Its engines perform discovery, data normalization, profile matching and public-source research. Each capability has a defined input and output.</p><div className="catalog-meta"><span><ShieldCheck size={14} /> Human decisions remain in control</span><span>Current and planned capabilities are labelled separately</span></div></div>
+    <div className="catalog-hero"><span className="section-kicker">THE WORKER ENGINE</span><h1>Models built around employment.</h1><p>Worker is more than a chat interface. Its engines perform discovery, data normalization, profile matching and public-source research. Each capability has a defined input and output.</p><div className="catalog-meta"><span><ShieldCheck size={14} /> Human decisions remain in control</span><span>Current and planned capabilities are labelled separately</span></div></div>
     <section className="default-model-card" aria-label="Worker default AI model">
       <span className="default-model-icon"><BrainCircuit size={22} /></span>
       <div className="default-model-copy">
