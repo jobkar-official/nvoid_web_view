@@ -15,7 +15,8 @@ export default function WorkerHomepage() {
           <h1>Find your next <span>opportunity.</span></h1>
           <p>Search across public job boards and company career pages, all from one focused place.</p>
           <div className="worker-home-highlight-row" aria-label="Worker benefits">
-            <span><Globe2 size={14} /> Multiple job sources</span>
+            <span><Globe2 size={14} /> Public job boards</span>
+            <span><BriefcaseBusiness size={14} /> Company career pages</span>
             <span><ShieldCheck size={14} /> You control every application</span>
           </div>
         </div>
