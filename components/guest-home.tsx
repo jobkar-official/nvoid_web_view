@@ -154,7 +154,7 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
       setNotice(savedJobs.length ? savedJobs.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
       if (searchId !== recordId) router.push(`/search/${recordId}`);
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Brewl could not complete this search. Please try again.";
+      const message = error instanceof Error ? error.message : "Worker could not complete this search. Please try again.";
       setSearched(true);
       setNotice(message);
       updateSearch(recordId, { resultCount: 0, jobs: [], error: message });
@@ -173,9 +173,9 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
   return (
     <div className="home-page">
       <section className="home-hero">
-        <div className="hero-brand-lockup" aria-label="brewl.ai">
+        <div className="hero-brand-lockup" aria-label="Worker">
           <span className="hero-brand-mark"><BrainCircuit size={58} strokeWidth={1.65} /></span>
-          <span className="hero-brand-name">brewl.ai</span>
+          <span className="hero-brand-name">Worker</span>
         </div>
         <p className="hero-description">Discover relevant opportunities from connected job platforms and company career pages in one search.</p>
 
@@ -200,7 +200,7 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
       {jobs.length > 0 && (
         <section className="public-results-section">
           <div className="section-heading">
-            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE SEARCH RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Results are returned by the sources currently connected to Brewl."}</p></div>
+            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE SEARCH RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Results are returned by the sources currently connected to Worker."}</p></div>
             <span className="result-count">{jobs.length.toLocaleString()} found</span>
           </div>
           <div className="public-job-grid">
