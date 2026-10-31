@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { ArrowRight, Asterisk, BriefcaseBusiness, Clock3, ExternalLink, Globe2, LoaderCircle, MapPin, Search, ShieldCheck, Target, X } from "lucide-react";
+import { ArrowRight, Asterisk, BriefcaseBusiness, Clock3, ExternalLink, LoaderCircle, MapPin, Search, ShieldCheck, Target, X } from "lucide-react";
 import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
 
 type Job = GuestSearchJob;
