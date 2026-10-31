@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowLeft, ArrowRight, BriefcaseBusiness, Building2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, Sparkles, UserRound } from "lucide-react";
+import { ArrowLeft, ArrowRight, BriefcaseBusiness, Building2, Eye, EyeOff, LockKeyhole, Mail, Search, ShieldCheck, UserRound } from "lucide-react";
+import WorkerMark from "./worker-mark";
 
 export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
   const isRegister = mode === "register";
@@ -43,46 +44,101 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
   };
 
   return (
-    <main className="auth-page">
-      <Link href="/" className="auth-back"><ArrowLeft size={15} /> Back to Nvoid</Link>
+    <main className="auth-page auth-page-worker">
+      <Link href="/" className="auth-back"><ArrowLeft size={15} /> Back to Worker</Link>
       <div className="auth-layout">
-        <section className="auth-brand-panel">
-          <Link href="/" className="auth-brand"><span className="brand-symbol"><Sparkles size={20} /></span><strong>NVOID</strong></Link>
+        <section className="auth-brand-panel" aria-labelledby="auth-brand-heading">
+          <Link href="/" className="auth-brand" aria-label="worker.com home">
+            <span className="auth-brand-mark"><WorkerMark size={25} /></span>
+            <span className="auth-brand-wordmark">worker<span>.com</span></span>
+          </Link>
           <div className="auth-brand-copy">
-            <span className="auth-overline">EMPLOYMENT, WITH INTELLIGENCE</span>
-            <h1>{isRegister ? "Your next opportunity starts here." : "Welcome back to your next opportunity."}</h1>
-            <p>Discover jobs across connected sources, let your AI agent keep looking and connect with employers in one place.</p>
+            <span className="auth-overline"><span className="auth-overline-dot" /> WORK, CONNECT, GROW</span>
+            <h1 id="auth-brand-heading">
+              {isRegister ? <>Build your next chapter <span>with Worker.</span></> : <>Your next opportunity is closer <span>than you think.</span></>}
+            </h1>
+            <p>Discover relevant opportunities, explore jobs across public sources and company career pages, and connect with the right people.</p>
           </div>
           <div className="auth-brand-points">
-            <div><SearchIcon /><span>Discover opportunities across the job market</span></div>
-            <div><ShieldCheck size={17} /><span>One professional profile for smarter matching</span></div>
-            <div><Building2 size={17} /><span>Free job posting and hiring workspace</span></div>
+            <div><span className="auth-point-icon"><Search size={17} /></span><span>Explore opportunities across the job market</span></div>
+            <div><span className="auth-point-icon"><ShieldCheck size={17} /></span><span>Keep control of your profile and applications</span></div>
+            <div><span className="auth-point-icon"><BriefcaseBusiness size={17} /></span><span>Connect with employers and hiring teams</span></div>
           </div>
-          <div className="auth-brand-footer">Nvoid · AI-powered employment platform</div>
+          <div className="auth-brand-footer">worker.com <span>·</span> AI-powered job discovery</div>
         </section>
-        <section className="auth-form-panel">
+
+        <section className="auth-form-panel" aria-labelledby="auth-form-title">
           <div className="auth-form-heading">
             <span className="auth-form-icon">{isRegister ? <UserRound size={20} /> : <LockKeyhole size={20} />}</span>
-            <span className="auth-overline">{isRegister ? "CREATE YOUR ACCOUNT" : "ACCOUNT ACCESS"}</span>
-            <h2>{isRegister ? "Join Nvoid" : "Sign in"}</h2>
-            <p>{isRegister ? "Start with a free candidate or employer account." : "Continue to your Nvoid workspace."}</p>
+            <span className="auth-overline">{isRegister ? "GET STARTED" : "WELCOME BACK"}</span>
+            <h2 id="auth-form-title">{isRegister ? "Create your account" : "Sign in to Worker"}</h2>
+            <p>{isRegister ? "Choose how you want to use Worker to get started." : "Enter your details to continue to your workspace."}</p>
           </div>
+
           <form className="auth-form" onSubmit={submit}>
             {isRegister && (
               <>
-                <div className="auth-role-picker">
-                  <button type="button" className={role === "4" ? "selected" : ""} onClick={() => setRole("4")}><UserRound size={16} /><strong>Job seeker</strong><small>Find opportunities</small></button>
-                  <button type="button" className={role === "3" ? "selected" : ""} onClick={() => setRole("3")}><Building2 size={16} /><strong>Recruiter</strong><small>Hire talent</small></button>
+                <div className="auth-role-picker" role="group" aria-label="Choose account type">
+                  <button type="button" className={role === "4" ? "selected" : ""} aria-pressed={role === "4"} onClick={() => setRole("4")}>
+                    <UserRound size={17} />
+                    <strong>Job seeker</strong>
+                    <small>Find your next opportunity</small>
+                  </button>
+                  <button type="button" className={role === "3" ? "selected" : ""} aria-pressed={role === "3"} onClick={() => setRole("3")}>
+                    <Building2 size={17} />
+                    <strong>Recruiter</strong>
+                    <small>Discover and hire talent</small>
+                  </button>
                 </div>
-                <label>Full name<input required value={name} onChange={(event) => setName(event.target.value)} placeholder="Your full name" autoComplete="name" /></label>
+                <label className="auth-field" htmlFor="auth-name">
+                  <span>Full name</span>
+                  <input id="auth-name" name="name" required value={name} onChange={(event) => setName(event.target.value)} placeholder="Enter your full name" autoComplete="name" />
+                </label>
               </>
             )}
-            <label>Email address<span className="auth-input"><Mail size={16} /><input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" autoComplete="email" /></span></label>
-            <label>Password<span className="auth-input"><LockKeyhole size={16} /><input required minLength={8} type={visible ? "text" : "password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 8 characters" autoComplete={isRegister ? "new-password" : "current-password"} /><button type="button" aria-label={visible ? "Hide password" : "Show password"} onClick={() => setVisible((value) => !value)}>{visible ? <EyeOff size={16} /> : <Eye size={16} />}</button></span></label>
-            {notice && <div className="auth-error" role="alert">{notice}</div>}
-            <button className="auth-submit" type="submit" disabled={busy}>{busy ? "Connecting…" : isRegister ? "Create free account" : "Sign in"}<ArrowRight size={16} /></button>
+
+            <label className="auth-field" htmlFor="auth-email">
+              <span>Email address</span>
+              <span className="auth-input">
+                <Mail size={17} aria-hidden="true" />
+                <input id="auth-email" name="email" required type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" autoComplete="email" />
+              </span>
+            </label>
+
+            <label className="auth-field" htmlFor="auth-password">
+              <span>Password</span>
+              <span className="auth-input">
+                <LockKeyhole size={17} aria-hidden="true" />
+                <input
+                  id="auth-password"
+                  name="password"
+                  required
+                  minLength={isRegister ? 8 : undefined}
+                  type={visible ? "text" : "password"}
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder={isRegister ? "At least 8 characters" : "Enter your password"}
+                  autoComplete={isRegister ? "new-password" : "current-password"}
+                />
+                <button type="button" className="auth-password-toggle" aria-label={visible ? "Hide password" : "Show password"} aria-pressed={visible} onClick={() => setVisible((value) => !value)}>
+                  {visible ? <EyeOff size={17} /> : <Eye size={17} />}
+                </button>
+              </span>
+              {isRegister && <small className="auth-field-hint">Use at least 8 characters for your password.</small>}
+            </label>
+
+            {notice && <div className="auth-error" id="auth-error" role="alert">{notice}</div>}
+
+            <button className="auth-submit" type="submit" disabled={busy}>
+              <span>{busy ? "Connecting…" : isRegister ? "Create free account" : "Sign in"}</span>
+              <ArrowRight size={17} />
+            </button>
           </form>
-          <p className="auth-switch">{isRegister ? "Already have an account?" : "New to Nvoid?"} <Link href={isRegister ? "/auth/signin" : "/auth/register"}>{isRegister ? "Sign in" : "Create an account"}</Link></p>
+
+          <p className="auth-switch">
+            {isRegister ? "Already have an account?" : "New to Worker?"}
+            {" "}<Link href={isRegister ? "/auth/signin" : "/auth/register"}>{isRegister ? "Sign in" : "Create an account"}</Link>
+          </p>
           <p className="auth-terms">By continuing, you agree to the <Link href="/terms">Terms</Link> and acknowledge the <Link href="/privacy">Privacy Policy</Link>.</p>
           {process.env.NODE_ENV !== "production" && (
             <div className="auth-preview">
@@ -94,8 +150,4 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
       </div>
     </main>
   );
-}
-
-function SearchIcon() {
-  return <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>;
 }
