@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import GuestHome from "../../components/guest-home";
+import WorkerHomepage from "../../components/worker-homepage";
 
 export const metadata: Metadata = {
-  title: "Find Jobs Across the Market with Worker",
-  description: "Search job opportunities across connected sources and company career pages. Create a profile and let Worker agent discover relevant jobs for you."
+  title: "Worker — AI Job Discovery Across Connected Sources",
+  description: "Explore job opportunities across public job feeds, company career pages and configured research tools with Worker, an AI-powered job discovery platform."
 };
 
 export default function HomePage() {
-  return <GuestHome />;
+  return <WorkerHomepage />;
 }
