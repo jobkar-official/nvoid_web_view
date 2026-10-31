@@ -5,8 +5,8 @@ import type { FormEvent } from "react";
 import {
   Activity, ArrowRight, ArrowUpRight, Bell, Briefcase, Check, CheckCircle2,
   ChevronRight, CircleHelp, Clock3, Database, ExternalLink, FileText, Filter,
-  Globe2, LayoutDashboard, LoaderCircle, MapPin, Menu, RefreshCw, Search,
-  SearchCheck, Settings, ShieldCheck, Sparkles, Target, UserRound, Workflow,
+  Globe2, LoaderCircle, MapPin, Menu, RefreshCw, Search,
+  SearchCheck, Settings, ShieldCheck, Sparkles, Target, UserRound,
   X, Zap, Building2, SlidersHorizontal, Bookmark, ClipboardList, Link2, Mail,
   Phone, Save, Server, Code2, CircleAlert, ListChecks
 } from "lucide-react";
@@ -218,10 +218,6 @@ export default function HomePage() {
   const [researchResult, setResearchResult] = useState<ResearchResult | null>(null);
 
   const connectedSources = health?.mcp?.connected ?? 0;
-  const matchedJobs = useMemo(() => jobs.filter((job) => job.matchScore >= minMatchScore).length, [jobs, minMatchScore]);
-  const appliedTasks = useMemo(() => tasks.filter((task) => taskStatus(task) === "applied").length, [tasks]);
-  const needsActionTasks = useMemo(() => tasks.filter((task) => taskStatus(task) === "needs_user_action" || taskStatus(task) === "failed").length, [tasks]);
-  const queuedTasks = useMemo(() => tasks.filter((task) => ["waiting", "active", "delayed"].includes(taskStatus(task))).length, [tasks]);
   const currentInfo = pageInfo[view];
   const totalJobPages = Math.max(1, Math.ceil(jobs.length / jobsPageSize));
   const visibleJobPages = Array.from(
@@ -989,12 +985,4 @@ function EmptyState({ icon: Icon, title, description, buttonText, onAction, load
   return <div className="empty-state"><div className="empty-icon"><Icon size={22} /></div><h3>{title}</h3><p>{description}</p><button className="primary-button" onClick={onAction} disabled={loading}>{loading ? <LoaderCircle size={15} className="spin" /> : <Search size={15} />}{buttonText}</button></div>;
 }
 
-function PipelineSteps({ hasJobs, hasTasks, hasSource }: { hasJobs: boolean; hasTasks: boolean; hasSource: boolean }) {
-  const steps = [
-    { label: "Connect job sources", description: hasSource ? "The worker reports at least one connected MCP source." : "The worker reports at least one enabled live job source.", done: hasSource },
-    { label: "Discover and match jobs", description: hasJobs ? "Search results are available in this workspace." : "Search listings and rank them against your candidate profile.", done: hasJobs },
-    { label: "Queue application tasks", description: hasTasks ? "Task records are available from the Redis-backed worker queue." : "Run the agent to enqueue eligible jobs in review-only mode.", done: hasTasks },
-    { label: "Verify the outcome", description: "Check the task result. A queued task is not proof that an application was submitted.", done: false }
-  ];
-  return <div className="step-list">{steps.map((step, index) => <div className={"step" + (step.done ? " done" : "")} key={step.label}><div className="step-index">{step.done ? <Check size={14} /> : index + 1}</div><div className="step-copy"><strong>{step.label}</strong><span>{step.description}</span></div></div>)}</div>;
-}
+
