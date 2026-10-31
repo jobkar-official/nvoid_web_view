@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import {
-  ArrowUpRight, BriefcaseBusiness, Check, ChevronDown, Clock3, FileText,
-  History, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Sparkles, Trash2, UserRound, X
+  ArrowUpRight, BrainCircuit, BriefcaseBusiness, Check, ChevronDown, Clock3, FileText,
+  History, LockKeyhole, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Trash2, UserRound, X
 } from "lucide-react";
 
 export type GuestSearchRecord = {
@@ -136,8 +136,8 @@ export function GuestShell({ children }: { children: ReactNode }) {
         <aside id="nvoid-public-sidebar" aria-label="Explore navigation" aria-hidden={!sidebarOpen} className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
           <div className="public-sidebar-header">
             <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
-              <span className="brand-symbol"><Sparkles size={19} /></span>
-              <span><strong>NVOID</strong><small>AI employment platform</small></span>
+              <span className="brand-symbol"><BrainCircuit size={20} strokeWidth={1.8} /></span>
+              <span className="brand-copy"><strong>nvoid.ai</strong><small>Find opportunities. Let AI find more.</small></span>
             </Link>
             <button className="sidebar-collapse-button" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
           </div>
@@ -215,6 +215,11 @@ export function GuestShell({ children }: { children: ReactNode }) {
           <header className="public-topbar">
             <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
             <div className="topbar-breadcrumb"><span>Explore</span><span className="breadcrumb-dot">/</span><strong>{pathname === "/" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid"}</strong></div>
+            <span className="model-status-pill" role="status" aria-label="Default AI model: Alpha - k1. This model is fixed and cannot be changed here.">
+              <BrainCircuit size={15} />
+              <span className="model-status-copy"><small>DEFAULT MODEL</small><strong>Alpha - k1</strong></span>
+              <LockKeyhole size={12} />
+            </span>
             <div className="topbar-actions">
               <Link href="/security" className="topbar-quiet-link">Security</Link>
               <Link href="/auth/signin" className="topbar-login">Sign in</Link>
