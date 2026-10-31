@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import {
   ArrowUpRight, BriefcaseBusiness, Check, ChevronDown, Clock3, FileText,
-  History, Menu, Pencil, Plus, Search, ShieldCheck, Sparkles, Trash2, UserRound, X
+  History, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Sparkles, Trash2, UserRound, X
 } from "lucide-react";
 
 export type GuestSearchRecord = {
@@ -66,7 +66,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [history, setHistory] = useState<GuestSearchRecord[]>([]);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [ready, setReady] = useState(false);
   const [editing, setEditing] = useState<{ id: string; jobTitle: string; location: string } | null>(null);
 
@@ -112,10 +112,14 @@ export function GuestShell({ children }: { children: ReactNode }) {
 
   const context = useMemo(() => ({ history, saveSearch, updateSearch, removeSearch, clearHistory }), [history, saveSearch, updateSearch, removeSearch, clearHistory]);
 
+  const closeSidebarOnMobile = () => {
+    if (window.matchMedia("(max-width: 850px)").matches) setSidebarOpen(false);
+  };
+
   const selectSearch = (item: GuestSearchRecord) => {
     if (pathname !== "/") router.push("/");
     window.setTimeout(() => window.dispatchEvent(new CustomEvent("nvoid:select-search", { detail: item })), pathname === "/" ? 0 : 250);
-    setMobileOpen(false);
+    closeSidebarOnMobile();
   };
 
   const links = [
@@ -128,14 +132,17 @@ export function GuestShell({ children }: { children: ReactNode }) {
   return (
     <GuestHistoryContext.Provider value={context}>
       <div className="public-shell">
-        {mobileOpen && <button className="sidebar-scrim" aria-label="Close menu" onClick={() => setMobileOpen(false)} />}
-        <aside className={"public-sidebar" + (mobileOpen ? " is-open" : "")}>
-          <Link href="/" className="public-brand" onClick={() => setMobileOpen(false)}>
-            <span className="brand-symbol"><Sparkles size={19} /></span>
-            <span><strong>NVOID</strong><small>AI employment platform</small></span>
-          </Link>
+        {sidebarOpen && <button className="sidebar-scrim" aria-label="Close menu" onClick={() => setSidebarOpen(false)} />}
+        <aside id="nvoid-public-sidebar" aria-label="Explore navigation" aria-hidden={!sidebarOpen} className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
+          <div className="public-sidebar-header">
+            <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
+              <span className="brand-symbol"><Sparkles size={19} /></span>
+              <span><strong>NVOID</strong><small>AI employment platform</small></span>
+            </Link>
+            <button className="sidebar-collapse-button" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
+          </div>
 
-          <Link href="/#job-search" className="sidebar-find-button" onClick={() => setMobileOpen(false)}>
+          <Link href="/#job-search" className="sidebar-find-button" onClick={() => closeSidebarOnMobile()}>
             <Plus size={17} strokeWidth={2.4} />
             <span>Find jobs</span>
           </Link>
@@ -145,13 +152,13 @@ export function GuestShell({ children }: { children: ReactNode }) {
             {links.map((item) => {
               const Icon = item.icon;
               return (
-                <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className={"public-nav-link" + (pathname === item.href ? " active" : "")}>
+                <Link key={item.href} href={item.href} onClick={() => closeSidebarOnMobile()} className={"public-nav-link" + (pathname === item.href ? " active" : "")}>
                   <Icon size={16} />
                   <span>{item.label}</span>
                 </Link>
               );
             })}
-            <Link href="/free-job-posting" className="public-nav-link" onClick={() => setMobileOpen(false)}>
+            <Link href="/free-job-posting" className="public-nav-link" onClick={() => closeSidebarOnMobile()}>
               <BriefcaseBusiness size={16} />
               <span>For employers</span>
             </Link>
@@ -197,8 +204,8 @@ export function GuestShell({ children }: { children: ReactNode }) {
               <ChevronDown size={14} />
             </div>
             <div className="guest-auth-actions">
-              <Link href="/auth/signin" className="sidebar-signin" onClick={() => setMobileOpen(false)}>Sign in</Link>
-              <Link href="/auth/register" className="sidebar-register" onClick={() => setMobileOpen(false)}>Create account</Link>
+              <Link href="/auth/signin" className="sidebar-signin" onClick={() => closeSidebarOnMobile()}>Sign in</Link>
+              <Link href="/auth/register" className="sidebar-register" onClick={() => closeSidebarOnMobile()}>Create account</Link>
             </div>
             <div className="sidebar-trust"><ShieldCheck size={12} /> Search without creating an account</div>
           </div>
@@ -206,7 +213,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
 
         <div className="public-main">
           <header className="public-topbar">
-            <button className="mobile-menu-button" aria-label="Open navigation" onClick={() => setMobileOpen(true)}><Menu size={19} /></button>
+            <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}><PanelLeftOpen size={19} /></button>
             <div className="topbar-breadcrumb"><span>Explore</span><span className="breadcrumb-dot">/</span><strong>{pathname === "/" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid"}</strong></div>
             <div className="topbar-actions">
               <Link href="/security" className="topbar-quiet-link">Security</Link>

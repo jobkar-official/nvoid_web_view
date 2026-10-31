@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
   Activity, ArrowRight, ArrowUpRight, Bell, BriefcaseBusiness, Building2,
   CheckCircle2, ChevronDown, CircleHelp, ClipboardList, Clock3, FileText,
-  LayoutDashboard, LoaderCircle, LogOut, Menu, MessageSquare, Plus, Search,
+  LayoutDashboard, LoaderCircle, LogOut, PanelLeftClose, PanelLeftOpen, MessageSquare, Plus, Search,
   ShieldCheck, Sparkles, Target, UserRound, Users, X
 } from "lucide-react";
 
@@ -79,7 +79,7 @@ function initials(value: string) {
 export default function WorkspaceShell({ initialSession }: { initialSession: AuthSession }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activities, setActivities] = useState<Array<{ id: string; label: string; at: string }>>([]);
   const [notice, setNotice] = useState("");
   const roleId = initialSession.roleId;
@@ -98,9 +98,13 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
   }, [initialSession.user.id, initialSession.user.email]);
 
   useEffect(() => {
-    setMobileOpen(false);
+    if (window.matchMedia("(max-width: 850px)").matches) setSidebarOpen(false);
     setNotice("");
   }, [pathname]);
+
+  const closeSidebarOnMobile = () => {
+    if (window.matchMedia("(max-width: 850px)").matches) setSidebarOpen(false);
+  };
 
   const addActivity = (label: string) => {
     const key = "nvoid.workspace.activity." + (initialSession.user.id || initialSession.user.email || "member");
@@ -111,7 +115,7 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
 
   const navigate = (target: string, label: string) => {
     addActivity(label);
-    setMobileOpen(false);
+    closeSidebarOnMobile();
     router.push(target);
   };
 
@@ -128,12 +132,15 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
 
   return (
     <div className="workspace-shell">
-      {mobileOpen && <button className="workspace-scrim" onClick={() => setMobileOpen(false)} aria-label="Close sidebar" />}
-      <aside className={"workspace-sidebar" + (mobileOpen ? " is-open" : "")}>
-        <Link className="workspace-brand" href="/workspace">
-          <span className="workspace-brand-mark"><Sparkles size={19} /></span>
-          <span><strong>NVOID</strong><small>Employment intelligence</small></span>
-        </Link>
+      {sidebarOpen && <button className="workspace-scrim" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar" />}
+      <aside id="nvoid-workspace-sidebar" aria-label="Workspace navigation" aria-hidden={!sidebarOpen} className={"workspace-sidebar" + (sidebarOpen ? " is-open" : "")}>
+        <div className="workspace-sidebar-header">
+          <Link className="workspace-brand" href="/workspace">
+            <span className="workspace-brand-mark"><Sparkles size={19} /></span>
+            <span><strong>NVOID</strong><small>Employment intelligence</small></span>
+          </Link>
+          <button className="workspace-sidebar-close" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
+        </div>
 
         {roleId !== 7 && <button className="workspace-find-button" onClick={() => navigate("/workspace/find-jobs", "Opened Find jobs")}><Search size={17} /><span>Find jobs</span><ArrowUpRight size={14} /></button>}
 
@@ -164,7 +171,7 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
 
       <div className="workspace-main">
         <header className="workspace-topbar">
-          <button className="workspace-mobile-menu" onClick={() => setMobileOpen(true)} aria-label="Open sidebar"><Menu size={19} /></button>
+          <button className="workspace-sidebar-toggle" type="button" onClick={() => setSidebarOpen((open) => !open)} aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"} aria-expanded={sidebarOpen} aria-controls="nvoid-workspace-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"}><PanelLeftOpen size={19} /></button>
           <div className="workspace-crumb"><span>Workspace</span><span>/</span><strong>{page.title}</strong></div>
           <div className="workspace-top-actions"><span className="workspace-role-pill">{roleNames[roleId]}</span><button className="workspace-icon-button" aria-label="Notifications" onClick={() => navigate("/workspace/notifications", "Opened notifications")}><Bell size={17} /></button><span className="workspace-top-avatar">{initials(displayName(initialSession))}</span></div>
         </header>
