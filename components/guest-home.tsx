@@ -148,10 +148,10 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
       }));
       const found = Array.isArray(result.jobs) ? result.jobs as Job[] : [];
       const savedJobs = cachedJobs(found);
-      setJobs(found);
+      setJobs(savedJobs);
       setSearched(true);
-      updateSearch(recordId, { resultCount: found.length, jobs: savedJobs, error: undefined });
-      setNotice(found.length ? found.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
+      updateSearch(recordId, { resultCount: savedJobs.length, jobs: savedJobs, error: undefined });
+      setNotice(savedJobs.length ? savedJobs.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
       if (searchId !== recordId) router.push(`/search/${recordId}`);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Brewl could not complete this search. Please try again.";
