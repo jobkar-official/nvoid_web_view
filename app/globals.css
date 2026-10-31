@@ -595,3 +595,18 @@ body { background: var(--canvas); color: var(--ink); }
   .job-results-grid, .connector-grid { grid-template-columns: minmax(0,1fr); }
   .job-primary-facts { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
+
+
+.history-edit { display: grid; place-items: center; width: 27px; height: 29px; flex: 0 0 auto; border: 0; border-radius: 7px; color: #829bb9; background: transparent; opacity: 0; }
+.history-item:hover .history-edit, .history-edit:focus-visible { opacity: 1; }
+.history-edit:hover { color: #c6e2ff; background: rgba(71,143,211,.15); }
+.history-editor { display: grid; width: 100%; gap: 6px; padding: 8px; }
+.history-editor input { width: 100%; min-width: 0; height: 29px; padding: 0 7px; border: 1px solid rgba(167,197,231,.24); border-radius: 6px; outline: 0; color: #e5effb; background: rgba(255,255,255,.07); font-size: 9px; }
+.history-editor input:focus { border-color: rgba(150,202,255,.65); }
+.history-editor > div { display: flex; justify-content: flex-end; gap: 6px; }
+.history-editor > div button { display: inline-flex; align-items: center; gap: 4px; min-height: 25px; padding: 0 7px; border: 1px solid rgba(170,201,235,.22); border-radius: 5px; color: #c7d8eb; background: rgba(255,255,255,.05); font-size: 9px; }
+.history-editor > div button:first-child { border-color: rgba(107,181,240,.4); color: #e8f5ff; background: rgba(34,111,184,.28); }
+.history-editor > div button:disabled { opacity: .45; cursor: not-allowed; }
+@media (max-width: 850px) {
+  .history-edit, .history-delete { opacity: 1; }
+}
