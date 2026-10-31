@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, ArrowUpRight, BriefcaseBusiness, Building2, CheckCircle2, Clock3, ExternalLink, LoaderCircle, MapPin, Search, Sparkles, Target, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BrainCircuit, BriefcaseBusiness, Building2, CheckCircle2, Clock3, ExternalLink, LoaderCircle, MapPin, Search, Sparkles, Target, X } from "lucide-react";
 import { useGuestHistory, type GuestSearchRecord } from "./guest-shell";
 
 type Job = {
@@ -142,7 +142,10 @@ export default function GuestHome() {
   return (
     <div className="home-page">
       <section className="home-hero">
-        <div className="hero-overline"><span className="overline-line" /> AI-POWERED EMPLOYMENT DISCOVERY</div>
+        <div className="hero-brand-lockup" aria-label="nvoid.ai">
+          <span className="hero-brand-mark"><BrainCircuit size={29} strokeWidth={1.75} /></span>
+          <span className="hero-brand-name">nvoid.ai</span>
+        </div>
         <h1>Find opportunities.<br /><span>Let AI find more.</span></h1>
         <p className="hero-description">Search jobs across connected sources, company career pages and public listings. Or let your personal Nvoid agent discover opportunities based on your profile.</p>
 
