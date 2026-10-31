@@ -1582,8 +1582,9 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 16px;
   margin: 0 auto 3px;
+  white-space: nowrap;
 }
 
 .hero-brand-mark {
@@ -1595,13 +1596,13 @@ body {
   flex: 0 0 auto;
   border: 0;
   border-radius: 0;
-  color: #3b82f6;
+  color: #ffffff;
   background: transparent;
 }
 
 .hero-brand-name {
-  color: #3b82f6;
-  font-size: clamp(36px, 4.8vw, 46px);
+  color: #ffffff;
+  font-size: clamp(40px, 5.2vw, 50px);
   font-weight: 750;
   letter-spacing: -.055em;
   line-height: 1;
@@ -1613,16 +1614,16 @@ body {
 
 @media (max-width: 620px) {
   .hero-brand-lockup {
-    gap: 11px;
+    gap: 12px;
   }
 
   .hero-brand-mark svg {
-    width: 34px;
-    height: 34px;
+    width: 68px;
+    height: 68px;
   }
 
   .hero-brand-name {
-    font-size: 38px;
+    font-size: 42px;
   }
 }
 
