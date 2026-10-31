@@ -11,16 +11,21 @@ export default function WorkerHomepage() {
           <span className="worker-home-brand-name">worker.com</span>
         </div>
         <div className="worker-home-intro-copy">
-          <span className="worker-home-intro-kicker"><span /> AI-POWERED JOB DISCOVERY</span>
-          <h1>Find your next <span>opportunity.</span></h1>
-          <p>Search across public job boards and company career pages, all from one focused place.</p>
-          <div className="worker-home-highlight-row" aria-label="Worker benefits">
-            <span><Globe2 size={14} /> Multiple job sources</span>
-            <span><ShieldCheck size={14} /> You control every application</span>
+          <span className="worker-home-intro-kicker"><span /> A CLEARER WAY TO DISCOVER WORK</span>
+          <h1>One search. More ways to <span>move forward.</span></h1>
+          <p>Explore opportunities across public job boards, company career pages and connected research sources. Review the details, then decide where to apply.</p>
+          <div className="worker-home-highlight-row" aria-label="Worker search coverage">
+            <span><Globe2 size={14} /> Public job boards</span>
+            <span><BriefcaseBusiness size={14} /> Company career pages</span>
+            <span><Search size={14} /> Research sources</span>
           </div>
         </div>
       </section>
       <section className="worker-home-search-section worker-home-search-v2" aria-labelledby="worker-search-heading">
+        <div className="worker-home-search-caption">
+          <span>START YOUR SEARCH</span>
+          <p>Find roles by title, skill or location.</p>
+        </div>
         <form className="worker-home-search-card" action="/job-search" method="get">
           <label className="worker-home-field" htmlFor="home-role">
             <span>ROLE, SKILL OR KEYWORD</span>
