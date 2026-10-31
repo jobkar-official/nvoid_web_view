@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import WorkerMark from "./worker-mark";
 import {
-  ArrowUpRight, BrainCircuit, BriefcaseBusiness, Bot, Check, ChevronDown, Clock3, FileText,
-  Globe2, History, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Puzzle, Search, ShieldCheck, Trash2, UserRound, X
+  ArrowUpRight, BrainCircuit, BriefcaseBusiness, Check, ChevronDown, Clock3, FileText,
+  History, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Trash2, UserRound, X
 } from "lucide-react";
 
 export type GuestSearchJob = {
@@ -179,9 +179,6 @@ export function GuestShell({ children }: { children: ReactNode }) {
   };
 
   const links = [
-    { href: "/worker", label: "Worker", icon: Bot },
-    { href: "/sources", label: "Job sources", icon: Globe2 },
-    { href: "/plugins", label: "Plugins", icon: Puzzle },
     { href: "/models", label: "AI models", icon: BrainCircuit },
     { href: "/release", label: "Release notes", icon: FileText },
     { href: "/about", label: "About Worker", icon: UserRound }
@@ -306,24 +303,9 @@ export function GuestShell({ children }: { children: ReactNode }) {
                     <div className="topbar-browse-heading">
                       <span className="topbar-browse-kicker">EXPLORE WORKER</span>
                       <strong>Everything in one place</strong>
-                      <p>Discover the tools, sources and resources behind Worker.</p>
+                      <p>Explore product information and the latest updates.</p>
                     </div>
                     <div className="topbar-browse-grid">
-                      <Link href="/worker" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
-                        <span className="topbar-browse-card-icon"><Bot size={18} /></span>
-                        <span><strong>Worker</strong><small>Meet your job discovery agent</small></span>
-                        <ArrowUpRight size={13} />
-                      </Link>
-                      <Link href="/sources" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
-                        <span className="topbar-browse-card-icon"><Globe2 size={18} /></span>
-                        <span><strong>Job sources</strong><small>Explore boards and career pages</small></span>
-                        <ArrowUpRight size={13} />
-                      </Link>
-                      <Link href="/plugins" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
-                        <span className="topbar-browse-card-icon"><Puzzle size={18} /></span>
-                        <span><strong>Plugins</strong><small>Tools and integrations</small></span>
-                        <ArrowUpRight size={13} />
-                      </Link>
                       <Link href="/models" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
                         <span className="topbar-browse-card-icon"><BrainCircuit size={18} /></span>
                         <span><strong>AI models</strong><small>Worker model and engines</small></span>
