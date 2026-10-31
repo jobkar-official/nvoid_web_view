@@ -35,52 +35,6 @@ const capabilities = [
 export default function WorkerHomepage() {
   return (
     <div className="worker-homepage worker-homepage-v2">
-      <section className="worker-home-hero worker-home-hero-v2">
-        <div className="worker-home-copy worker-home-copy-v2">
-          <div className="worker-home-brand-lockup">
-            <span className="worker-home-brand-icon"><WorkerMark size={28} /></span>
-            <span className="worker-home-brand-copy"><strong>Worker</strong><small>CAREER INTELLIGENCE</small></span>
-          </div>
-          <div className="worker-home-eyebrow"><Sparkles size={13} /> AI-POWERED OPPORTUNITY DISCOVERY</div>
-          <h1>Your next move starts with <span>a wider search.</span></h1>
-          <p className="worker-home-description">
-            Explore jobs across public feeds, company career pages and connected research tools—all from one focused workspace.
-          </p>
-          <div className="worker-home-actions">
-            <Link href="/job-search" className="worker-home-primary">Find opportunities <ArrowRight size={17} /></Link>
-            <Link href="/worker" className="worker-home-secondary">Discover Worker <ArrowUpRight size={16} /></Link>
-          </div>
-          <div className="worker-home-proof">
-            <span><CheckCircle2 size={14} /> Start without an account</span>
-            <span><ShieldCheck size={14} /> You review before applying</span>
-          </div>
-        </div>
-
-        <aside className="worker-home-visual worker-home-visual-v2" aria-label="How Worker connects job sources">
-          <div className="worker-brand-visual-top">
-            <div className="worker-brand-visual-title">
-              <span className="worker-brand-visual-mark"><WorkerMark size={22} /></span>
-              <span><strong>One search. A wider market.</strong><small>Worker opportunity discovery</small></span>
-            </div>
-            <span className="worker-brand-visual-tag">THE WORKER WORKFLOW</span>
-          </div>
-          <div className="worker-brand-visual-flow">
-            <div className="worker-brand-source-list">
-              <div className="worker-brand-source"><span className="worker-brand-source-icon"><Globe2 size={16} /></span><span><strong>Public job feeds</strong><small>Compatible job platforms</small></span><span className="worker-brand-source-arrow"><ArrowUpRight size={14} /></span></div>
-              <div className="worker-brand-source"><span className="worker-brand-source-icon"><Building2 size={16} /></span><span><strong>Company career pages</strong><small>Employer opportunities</small></span><span className="worker-brand-source-arrow"><ArrowUpRight size={14} /></span></div>
-              <div className="worker-brand-source"><span className="worker-brand-source-icon"><Network size={16} /></span><span><strong>Connected research tools</strong><small>Configured MCP integrations</small></span><span className="worker-brand-source-arrow"><ArrowUpRight size={14} /></span></div>
-            </div>
-            <div className="worker-brand-flow-line"><span /><span /><span /></div>
-            <div className="worker-brand-output">
-              <div className="worker-brand-output-mark"><WorkerMark size={31} /></div>
-              <div><strong>One focused workspace</strong><small>Discover · Compare · Review</small></div>
-              <span className="worker-brand-output-arrow"><ArrowRight size={17} /></span>
-            </div>
-          </div>
-          <div className="worker-brand-visual-bottom"><span>BUILT FOR THE WAY YOU SEARCH</span><span>WORKER <i>·</i> 01</span></div>
-        </aside>
-      </section>
-
       <section className="worker-home-search-section worker-home-search-v2" aria-labelledby="worker-search-heading">
         <div className="worker-home-search-heading">
           <div>
