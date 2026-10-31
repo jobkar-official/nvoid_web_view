@@ -35,6 +35,12 @@ const capabilities = [
 export default function WorkerHomepage() {
   return (
     <div className="worker-homepage worker-homepage-v2">
+      <section className="worker-home-brand-intro" aria-label="Worker">
+        <div className="worker-home-brand-lockup worker-home-brand-lockup-search">
+          <span className="worker-home-brand-icon"><WorkerMark size={40} /></span>
+          <span className="worker-home-brand-name">Worker</span>
+        </div>
+      </section>
       <section className="worker-home-search-section worker-home-search-v2" aria-labelledby="worker-search-heading">
         <form className="worker-home-search-card" action="/job-search" method="get">
           <label className="worker-home-field" htmlFor="home-role">
