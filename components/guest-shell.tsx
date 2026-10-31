@@ -309,6 +309,8 @@ export function GuestShell({ children }: { children: ReactNode }) {
               </div>
               <Link href="/auth/signin" className="topbar-login">Sign in</Link>
               <Link href="/auth/register" className="topbar-create">Create account <ArrowUpRight size={14} /></Link>
+              <span className="topbar-action-separator" aria-hidden="true">|</span>
+              <Link href="/free-job-posting" className="topbar-employer">Employer</Link>
             </div>
           </header>
           <main className="public-content">{children}</main>
