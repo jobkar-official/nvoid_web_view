@@ -146,7 +146,6 @@ export default function GuestHome() {
           <span className="hero-brand-mark"><BrainCircuit size={29} strokeWidth={1.75} /></span>
           <span className="hero-brand-name">nvoid.ai</span>
         </div>
-        <h1>Find opportunities.<br /><span>Let AI find more.</span></h1>
         <p className="hero-description">Search jobs across connected sources, company career pages and public listings. Or let your personal Nvoid agent discover opportunities based on your profile.</p>
 
         <form id="job-search" className="public-search-panel" onSubmit={runSearch}>
