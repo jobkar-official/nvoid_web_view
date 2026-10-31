@@ -240,13 +240,13 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
         <section className="no-results">
           <div className="no-results-icon"><Search size={21} /></div>
           <h2>No matching jobs returned</h2>
-          <p>Try another role or location. Nvoid only displays opportunities returned by its connected sources; it doesn't generate sample listings.</p>
+          <p>Try another role or location. Worker only displays opportunities returned by its connected sources; it doesn't generate sample listings.</p>
         </section>
       )}
 
       <section className="directory-section">
         <div className="section-heading">
-          <div><span className="section-kicker">EXPLORE THE MARKET</span><h2>Browse by role</h2><p>Start with a role and let Nvoid search the connected job market.</p></div>
+          <div><span className="section-kicker">EXPLORE THE MARKET</span><h2>Browse by role</h2><p>Start with a role and let Worker search the connected job market.</p></div>
         </div>
         <div className="category-grid">
           {[
@@ -270,7 +270,7 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
           <div className="feature-icon"><Sparkles size={20} /></div>
           <span className="section-kicker">FOR CANDIDATES</span>
           <h2>Your job search, on autopilot.</h2>
-          <p>Build a complete professional profile and let Nvoid Bot look for relevant opportunities across connected job platforms and company career pages.</p>
+          <p>Build a complete professional profile and let the Worker agent look for relevant opportunities across connected job platforms and company career pages.</p>
           <a href="/auth/register">Create your free profile <ArrowRight size={15} /></a>
         </article>
         <article className="home-feature-card recruiter-feature">
