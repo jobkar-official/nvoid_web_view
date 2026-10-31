@@ -124,7 +124,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
 
   const links = [
     { href: "/", label: "Find jobs", icon: Search },
-    { href: "/models", label: "AI models", icon: Sparkles },
+    { href: "/models", label: "AI models", icon: BrainCircuit },
     { href: "/release", label: "Release notes", icon: FileText },
     { href: "/about", label: "About Nvoid", icon: UserRound }
   ];
