@@ -228,12 +228,25 @@ export function GuestShell({ children }: { children: ReactNode }) {
           </header>
           <main className="public-content">{children}</main>
           <footer className="public-footer">
-            <span>© {new Date().getFullYear()} Nvoid</span>
-            <div>
-              <Link href="/privacy">Privacy</Link>
-              <Link href="/terms">Terms</Link>
-              <Link href="/cookies">Cookies</Link>
-              <Link href="/security">Security</Link>
+            <div className="public-footer-main">
+              <Link href="/" className="footer-brand" aria-label="brewl.ai home">
+                <span className="footer-brand-mark"><BrainCircuit size={23} strokeWidth={1.75} /></span>
+                <span className="footer-brand-copy"><strong>brewl.ai</strong><small>AI-powered opportunity discovery</small></span>
+              </Link>
+              <nav className="public-footer-links" aria-label="Footer navigation">
+                <span className="footer-links-label">Explore</span>
+                <div className="footer-link-list">
+                  <Link href="/about">About</Link>
+                  <Link href="/privacy">Privacy</Link>
+                  <Link href="/terms">Terms</Link>
+                  <Link href="/cookies">Cookies</Link>
+                  <Link href="/security">Security</Link>
+                </div>
+              </nav>
+            </div>
+            <div className="public-footer-bottom">
+              <span>© {new Date().getFullYear()} brewl.ai. All rights reserved.</span>
+              <span>Built for better opportunity discovery.</span>
             </div>
           </footer>
         </div>
