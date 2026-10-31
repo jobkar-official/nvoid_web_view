@@ -1626,3 +1626,13 @@ body {
     font-size: 30px;
   }
 }
+
+
+/* The hero brand replaces the previous text headline */
+.hero-brand-lockup {
+  margin-bottom: 20px;
+}
+
+.home-hero h1 {
+  display: none;
+}
