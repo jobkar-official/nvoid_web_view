@@ -3567,3 +3567,159 @@ body::-webkit-scrollbar {
     font-size: 37px;
   }
 }
+
+
+/* Center the Worker search experience and place the fixed model below it */
+.public-content:has(.worker-homepage-v2) {
+  display: grid;
+  place-items: center;
+}
+
+.worker-homepage-v2 {
+  display: flex;
+  width: min(100%, 1040px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 22px;
+}
+
+.worker-home-brand-intro {
+  width: 100%;
+  margin: 0 auto 30px;
+}
+
+.worker-home-brand-lockup-search {
+  justify-content: center;
+}
+
+.worker-home-search-v2 {
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.worker-home-search-card {
+  width: 100%;
+}
+
+.worker-home-search-meta {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 11px;
+}
+
+.worker-home-search-meta .worker-home-search-footnote {
+  min-width: 0;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.worker-home-model-status {
+  display: inline-flex;
+  min-height: 39px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 9px;
+  padding: 5px 10px;
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 8px;
+  color: #bfcfe0;
+  background: #292d32;
+}
+
+.worker-home-model-status > svg:first-child {
+  flex: 0 0 auto;
+  color: #a9cefa;
+}
+
+.worker-home-model-status > svg:last-child {
+  flex: 0 0 auto;
+  color: #8a98a8;
+}
+
+.worker-home-model-status > span {
+  display: grid;
+  gap: 2px;
+}
+
+.worker-home-model-status small {
+  color: #8e9baa;
+  font-size: 7px;
+  font-weight: 750;
+  letter-spacing: .1em;
+  line-height: 1.1;
+}
+
+.worker-home-model-status strong {
+  color: #edf3fa;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+@media (max-width: 680px) {
+  .public-content:has(.worker-homepage-v2) {
+    display: grid;
+    align-items: center;
+  }
+
+  .worker-homepage-v2 {
+    padding: 10px 0 22px;
+  }
+
+  .worker-home-brand-intro {
+    margin-bottom: 24px;
+  }
+
+  .worker-home-search-meta {
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .worker-home-search-meta .worker-home-search-footnote {
+    max-width: 58%;
+    font-size: 8px;
+  }
+
+  .worker-home-model-status {
+    min-height: 36px;
+    gap: 6px;
+    padding: 5px 7px;
+  }
+
+  .worker-home-model-status > svg:first-child {
+    width: 15px;
+    height: 15px;
+  }
+
+  .worker-home-model-status > svg:last-child {
+    display: none;
+  }
+
+  .worker-home-model-status small {
+    font-size: 6px;
+  }
+
+  .worker-home-model-status strong {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 390px) {
+  .worker-home-search-meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .worker-home-search-meta .worker-home-search-footnote {
+    max-width: 100%;
+  }
+
+  .worker-home-model-status {
+    align-self: flex-end;
+  }
+}
