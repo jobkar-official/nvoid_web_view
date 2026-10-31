@@ -6,13 +6,10 @@ export default function WorkerHomepage() {
   return (
     <div className="worker-homepage worker-homepage-v2">
       <section className="worker-home-brand-intro" aria-label="Worker">
-        <div className="worker-home-brand-lockup worker-home-brand-lockup-search">
-          <span className="worker-home-brand-icon worker-home-brand-icon-asterisk"><Asterisk size={48} strokeWidth={2.15} /></span>
-          <span className="worker-home-brand-name">worker.com</span>
-        </div>
+        <span className="worker-home-hero-symbol" aria-hidden="true"><Asterisk size={42} strokeWidth={2.1} /></span>
         <div className="worker-home-intro-copy">
           <span className="worker-home-intro-kicker"><span /> AI-POWERED JOB DISCOVERY</span>
-          <h1>Find your next <span>opportunity.</span></h1>
+          <h1>Find your next <span className="worker-home-opportunity-word">opportunity</span><br /><strong>with <span className="worker-home-wordmark-text">worker.com</span></strong></h1>
           <p>Search across public job boards and company career pages, all from one focused place.</p>
           <div className="worker-home-highlight-row" aria-label="Worker benefits">
             <span><Globe2 size={14} /> Public job boards</span>
