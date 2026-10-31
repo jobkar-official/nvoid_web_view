@@ -250,7 +250,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
           <div className="public-sidebar-bottom">
             <div className="guest-identity">
               <span className="guest-avatar">G</span>
-              <span><strong>Guest</strong><small>Browsing Nvoid</small></span>
+              <span><strong>Guest</strong><small>Browsing Brewl</small></span>
               <ChevronDown size={14} />
             </div>
             <div className="guest-auth-actions">
