@@ -276,8 +276,12 @@ export function GuestShell({ children }: { children: ReactNode }) {
             <div className="topbar-actions">
               <div
                 className="topbar-browse-wrap"
-                onMouseEnter={() => setBrowseOpen(true)}
-                onMouseLeave={() => setBrowseOpen(false)}
+                onPointerEnter={(event) => {
+                  if (event.pointerType !== "touch") setBrowseOpen(true);
+                }}
+                onPointerLeave={(event) => {
+                  if (event.pointerType !== "touch") setBrowseOpen(false);
+                }}
                 onFocus={() => setBrowseOpen(true)}
                 onBlur={(event) => {
                   if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setBrowseOpen(false);
