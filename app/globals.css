@@ -3803,3 +3803,35 @@ body::-webkit-scrollbar {
   }
 }
 
+/* Keep the complete Worker homepage block centered with 100px top spacing */
+.public-content:has(.worker-homepage-v2) {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 100px;
+}
+
+.worker-homepage-v2 {
+  width: min(100%, 1040px);
+  margin-inline: auto;
+}
+
+.worker-home-brand-intro,
+.worker-home-search-v2,
+.worker-home-search-card,
+.worker-home-search-footnote-centered {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.worker-home-brand-intro,
+.worker-home-search-footnote-centered {
+  text-align: center;
+  justify-content: center;
+}
+
+@media (max-width: 680px) {
+  .public-content:has(.worker-homepage-v2) {
+    padding-top: 100px;
+  }
+}
