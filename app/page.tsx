@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-type View = "overview" | "jobs" | "research" | "applications" | "profile" | "connections";
+type View = "jobs" | "research" | "applications" | "profile" | "connections";
 type Notice = { type: "error" | "success" | "info"; message: string };
 type CandidateProfile = {
   userId: string;
@@ -118,7 +118,6 @@ const initialProfile: CandidateProfile = {
 };
 
 const navItems: Array<{ id: View; label: string; icon: LucideIcon }> = [
-  { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "jobs", label: "Find jobs", icon: Search },
   { id: "research", label: "Research anything", icon: Globe2 },
   { id: "applications", label: "Applications", icon: ClipboardList },
@@ -127,7 +126,6 @@ const navItems: Array<{ id: View; label: string; icon: LucideIcon }> = [
 ];
 
 const pageInfo: Record<View, { eyebrow: string; title: string; description: string }> = {
-  overview: { eyebrow: "Your job search workspace", title: "Overview", description: "One workspace to discover opportunities, compare your fit, and track every agent task." },
   jobs: { eyebrow: "Opportunity discovery", title: "Find your next role", description: "Search live job boards, company career pages and public listings in one place." },
   research: { eyebrow: "Live web and source research", title: "Research anything", description: "Find companies, opportunities and useful facts from connected public sources." },
   applications: { eyebrow: "Execution history", title: "Application tracker", description: "Review queued tasks, completion states, and jobs that need your attention." },
@@ -200,7 +198,7 @@ function statusLabel(status: string) {
 }
 
 export default function HomePage() {
-  const [view, setView] = useState<View>("overview");
+  const [view, setView] = useState<View>("jobs");
   const [profile, setProfile] = useState<CandidateProfile>(initialProfile);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [tasks, setTasks] = useState<ApplicationTask[]>([]);
@@ -575,40 +573,6 @@ export default function HomePage() {
                 </section>
               )}
             </div>
-          )}
-
-          {view === "overview" && (
-            <>
-              <div className="grid metric-grid">
-                <MetricCard label="Jobs discovered" value={jobs.length} foot={lastSearch ? "Last search at " + lastSearch : "Run a search to populate"} icon={SearchCheck} />
-                <MetricCard label="Strong profile matches" value={matchedJobs} foot={"Match threshold: " + minMatchScore + "%"} icon={Target} tone="blue" />
-                <MetricCard label="Application tasks" value={tasks.length} foot={queuedTasks + " queued or in progress"} icon={Workflow} tone="purple" />
-                <MetricCard label="Need your attention" value={needsActionTasks} foot={appliedTasks + " confirmed as applied"} icon={Clock3} tone="amber" />
-              </div>
-              <div className="grid content-grid">
-                <section className="panel">
-                  <div className="panel-header"><div><h2 className="panel-title">Recommended opportunities</h2><p className="panel-subtitle">Best scoring jobs from your latest search</p></div><button className="text-link" onClick={() => goTo("jobs")}>View all <ArrowUpRight size={14} /></button></div>
-                  <div className="panel-body">
-                    {jobs.length > 0 ? <div className="job-list">{jobs.slice(0, 3).map((job) => <JobCard key={job.id} job={job} />)}</div> : <EmptyState icon={SearchCheck} title="No jobs discovered yet" description="Search the connected live job source to load current listings and rank them against your target role and location preferences." buttonText="Search live jobs" onAction={() => void searchJobs()} loading={busy === "search"} />}
-                  </div>
-                </section>
-                <div className="grid">
-                  <section className="panel">
-                    <div className="panel-header"><div><h2 className="panel-title">Agent pipeline</h2><p className="panel-subtitle">Your job search, from source to tracked task</p></div><Workflow size={17} color="#6b83ad" /></div>
-                    <div className="panel-body"><PipelineSteps hasJobs={jobs.length > 0} hasTasks={tasks.length > 0} hasSource={connectedSources > 0} /></div>
-                  </section>
-                  <section className="panel">
-                    <div className="panel-header"><div><h2 className="panel-title">Connection status</h2><p className="panel-subtitle">Worker health and active sources</p></div><button className="icon-button" aria-label="Refresh status" onClick={refreshWorkspace} disabled={busy !== null}><RefreshCw size={14} className={busy === "refresh" ? "spin" : ""} /></button></div>
-                    <div className="panel-body">
-                      <div className="info-row"><div className="info-row-icon"><Server size={15} /></div><div className="info-row-copy"><strong>{agentState === "online" ? "Agent API reachable" : agentState === "checking" ? "Checking agent API" : "Agent API unavailable"}</strong><span>{health?.service || "job-agent-worker"}{health?.status ? " · " + health.status : ""}</span></div></div>
-                      <div className="info-row"><div className="info-row-icon"><Database size={15} /></div><div className="info-row-copy"><strong>{connectedSources} source(s) connected</strong><span>Searches use the enabled live source IDs configured on the worker. Listings retain provider attribution and are ranked against your profile.</span></div></div>
-                      <div className="info-row"><div className="info-row-icon"><ShieldCheck size={15} /></div><div className="info-row-copy"><strong>Review-only submission</strong><span>The UI passes autoSubmit=false on every agent run.</span></div></div>
-                      <button className="secondary-button full-width" style={{ marginTop: 17 }} onClick={() => goTo("connections")}>Connection settings <ArrowRight size={14} /></button>
-                    </div>
-                  </section>
-                </div>
-              </div>
-            </>
           )}
 
           {view === "jobs" && (
