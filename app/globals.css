@@ -1582,25 +1582,26 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 13px;
+  gap: 14px;
   margin: 0 auto 3px;
 }
 
 .hero-brand-mark {
-  display: grid;
-  width: 50px;
-  height: 50px;
-  flex: 0 0 50px;
-  place-items: center;
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 15px;
-  color: #ececec;
-  background: #3a3a3a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 0;
+  color: #3b82f6;
+  background: transparent;
 }
 
 .hero-brand-name {
-  color: #ececec;
-  font-size: clamp(28px, 4vw, 38px);
+  color: #3b82f6;
+  font-size: clamp(36px, 4.8vw, 46px);
   font-weight: 750;
   letter-spacing: -.055em;
   line-height: 1;
@@ -1612,18 +1613,16 @@ body {
 
 @media (max-width: 620px) {
   .hero-brand-lockup {
-    gap: 10px;
+    gap: 11px;
   }
 
-  .hero-brand-mark {
-    width: 44px;
-    height: 44px;
-    flex-basis: 44px;
-    border-radius: 13px;
+  .hero-brand-mark svg {
+    width: 34px;
+    height: 34px;
   }
 
   .hero-brand-name {
-    font-size: 30px;
+    font-size: 38px;
   }
 }
 
