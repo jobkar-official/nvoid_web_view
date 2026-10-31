@@ -1,9 +1,8 @@
 import Link from "next/link";
 import {
-  ArrowRight, ArrowUpRight, BrainCircuit, BriefcaseBusiness, Building2,
+  Asterisk, ArrowRight, ArrowUpRight, BrainCircuit, BriefcaseBusiness, Building2,
   CheckCircle2, Globe2, Network, Puzzle, Search, ShieldCheck, Sparkles
 } from "lucide-react";
-import WorkerMark from "./worker-mark";
 
 const capabilities = [
   {
@@ -37,7 +36,7 @@ export default function WorkerHomepage() {
     <div className="worker-homepage worker-homepage-v2">
       <section className="worker-home-brand-intro" aria-label="Worker">
         <div className="worker-home-brand-lockup worker-home-brand-lockup-search">
-          <span className="worker-home-brand-icon worker-home-brand-icon-standalone"><WorkerMark size={54} /></span>
+          <span className="worker-home-brand-icon worker-home-brand-icon-asterisk"><Asterisk size={48} strokeWidth={2.15} /></span>
           <span className="worker-home-brand-name">worker.com</span>
         </div>
       </section>
