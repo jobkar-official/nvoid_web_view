@@ -1507,3 +1507,115 @@ body {
   outline: 0 !important;
   box-shadow: none !important;
 }
+
+
+/* Final Nvoid wordmark, breadcrumb and search-field polish */
+.hero-brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0 auto 3px;
+  white-space: nowrap;
+}
+
+.hero-brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 0;
+  color: #ffffff !important;
+  background: transparent !important;
+}
+
+.hero-brand-mark svg {
+  display: block;
+  width: 58px;
+  height: 58px;
+  color: #ffffff !important;
+}
+
+.hero-brand-name {
+  color: #3b82f6 !important;
+  font-size: clamp(40px, 5.2vw, 50px);
+  font-weight: 750;
+  letter-spacing: -.055em;
+  line-height: 1;
+}
+
+.public-brand strong,
+.workspace-brand strong {
+  color: #3b82f6 !important;
+}
+
+.public-search-panel .search-input-line input {
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  appearance: none;
+}
+
+.public-search-panel .search-input-line:focus-within {
+  box-shadow: 0 1px 0 rgba(255,255,255,.28);
+}
+
+.public-search-panel .search-input-line input:focus-visible {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+.topbar-breadcrumb,
+.workspace-crumb {
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.topbar-breadcrumb strong,
+.workspace-crumb strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.model-status-pill {
+  flex-shrink: 0;
+}
+
+@media (max-width: 620px) {
+  .hero-brand-lockup {
+    gap: 12px;
+  }
+
+  .hero-brand-mark svg {
+    width: 58px;
+    height: 58px;
+  }
+
+  .hero-brand-name {
+    font-size: 42px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-login {
+    display: none;
+  }
+
+  .topbar-breadcrumb,
+  .workspace-crumb {
+    font-size: 10px;
+    gap: 6px;
+  }
+
+  .topbar-actions {
+    gap: 8px;
+  }
+}
