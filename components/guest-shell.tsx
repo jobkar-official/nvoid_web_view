@@ -274,35 +274,76 @@ export function GuestShell({ children }: { children: ReactNode }) {
             <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
             <div className="topbar-breadcrumb"><span>Explore</span><span className="breadcrumb-dot">/</span><strong>{pathname.startsWith("/search/") ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search" : pathname === "/" ? "Home" : pathname === "/job-search" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Worker"}</strong></div>
             <div className="topbar-actions">
-              <div className="topbar-browse-wrap">
+              <div
+                className="topbar-browse-wrap"
+                onMouseEnter={() => setBrowseOpen(true)}
+                onMouseLeave={() => setBrowseOpen(false)}
+                onFocus={() => setBrowseOpen(true)}
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setBrowseOpen(false);
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") setBrowseOpen(false);
+                }}
+              >
                 <button
                   type="button"
                   className="topbar-browse-trigger"
+                  id="worker-browse-trigger"
                   aria-expanded={browseOpen}
+                  aria-controls="worker-browse-menu"
                   aria-haspopup="menu"
                   onClick={() => setBrowseOpen((open) => !open)}
                 >
                   Browse <ChevronDown size={14} />
                 </button>
                 {browseOpen && (
-                  <div className="topbar-browse-menu" role="menu" aria-label="Browse Worker pages">
-                    <span className="topbar-browse-label">WORKER ECOSYSTEM</span>
-                    <Link href="/worker" role="menuitem" onClick={() => setBrowseOpen(false)}><Bot size={16} /><span><strong>Worker</strong><small>Agent runtime and capabilities</small></span></Link>
-                    <Link href="/sources" role="menuitem" onClick={() => setBrowseOpen(false)}><Globe2 size={16} /><span><strong>Job sources</strong><small>Boards and career platforms</small></span></Link>
-                    <Link href="/plugins" role="menuitem" onClick={() => setBrowseOpen(false)}><Puzzle size={16} /><span><strong>Plugins</strong><small>MCP tools and integrations</small></span></Link>
-                    <div className="topbar-browse-divider" />
-                    <span className="topbar-browse-label">PRODUCT</span>
-                    <Link href="/models" role="menuitem" onClick={() => setBrowseOpen(false)}><BrainCircuit size={16} /><span><strong>AI models</strong><small>Worker model and engines</small></span></Link>
-                    <Link href="/release" role="menuitem" onClick={() => setBrowseOpen(false)}><FileText size={16} /><span><strong>Release notes</strong><small>Capabilities and updates</small></span></Link>
-                    <Link href="/about" role="menuitem" onClick={() => setBrowseOpen(false)}><UserRound size={16} /><span><strong>About Worker</strong><small>Product overview</small></span></Link>
-                    <div className="topbar-browse-divider" />
-                    <span className="topbar-browse-label">INFORMATION</span>
-                    <div className="topbar-browse-legal">
-                      <Link href="/free-job-posting" onClick={() => setBrowseOpen(false)}>For employers</Link>
-                      <Link href="/privacy" onClick={() => setBrowseOpen(false)}>Privacy</Link>
-                      <Link href="/terms" onClick={() => setBrowseOpen(false)}>Terms</Link>
-                      <Link href="/cookies" onClick={() => setBrowseOpen(false)}>Cookies</Link>
-                      <Link href="/security" onClick={() => setBrowseOpen(false)}>Security</Link>
+                  <div className="topbar-browse-menu" id="worker-browse-menu" role="menu" aria-label="Browse Worker pages">
+                    <div className="topbar-browse-heading">
+                      <span className="topbar-browse-kicker">EXPLORE WORKER</span>
+                      <strong>Everything in one place</strong>
+                      <p>Discover the tools, sources and resources behind Worker.</p>
+                    </div>
+                    <div className="topbar-browse-grid">
+                      <Link href="/worker" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
+                        <span className="topbar-browse-card-icon"><Bot size={18} /></span>
+                        <span><strong>Worker</strong><small>Meet your job discovery agent</small></span>
+                        <ArrowUpRight size={13} />
+                      </Link>
+                      <Link href="/sources" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
+                        <span className="topbar-browse-card-icon"><Globe2 size={18} /></span>
+                        <span><strong>Job sources</strong><small>Explore boards and career pages</small></span>
+                        <ArrowUpRight size={13} />
+                      </Link>
+                      <Link href="/plugins" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
+                        <span className="topbar-browse-card-icon"><Puzzle size={18} /></span>
+                        <span><strong>Plugins</strong><small>Tools and integrations</small></span>
+                        <ArrowUpRight size={13} />
+                      </Link>
+                      <Link href="/models" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
+                        <span className="topbar-browse-card-icon"><BrainCircuit size={18} /></span>
+                        <span><strong>AI models</strong><small>Worker model and engines</small></span>
+                        <ArrowUpRight size={13} />
+                      </Link>
+                      <Link href="/release" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
+                        <span className="topbar-browse-card-icon"><FileText size={18} /></span>
+                        <span><strong>Release notes</strong><small>See what's new in Worker</small></span>
+                        <ArrowUpRight size={13} />
+                      </Link>
+                      <Link href="/about" className="topbar-browse-card" role="menuitem" onClick={() => setBrowseOpen(false)}>
+                        <span className="topbar-browse-card-icon"><UserRound size={18} /></span>
+                        <span><strong>About Worker</strong><small>Learn about the platform</small></span>
+                        <ArrowUpRight size={13} />
+                      </Link>
+                    </div>
+                    <div className="topbar-browse-footer">
+                      <span>WORKER RESOURCES</span>
+                      <div>
+                        <Link href="/privacy" onClick={() => setBrowseOpen(false)}>Privacy</Link>
+                        <Link href="/terms" onClick={() => setBrowseOpen(false)}>Terms</Link>
+                        <Link href="/cookies" onClick={() => setBrowseOpen(false)}>Cookies</Link>
+                        <Link href="/security" onClick={() => setBrowseOpen(false)}>Security</Link>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -310,7 +351,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
               <Link href="/auth/signin" className="topbar-login">Sign in</Link>
               <Link href="/auth/register" className="topbar-create">Create account <ArrowUpRight size={14} /></Link>
               <span className="topbar-action-separator" aria-hidden="true">|</span>
-              <Link href="/free-job-posting" className="topbar-employer">Employer</Link>
+              <Link href="/free-job-posting" className="topbar-employer"><BriefcaseBusiness size={13} /> Free Hiring</Link>
             </div>
           </header>
           <main className="public-content">{children}</main>
