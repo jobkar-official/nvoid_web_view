@@ -137,7 +137,7 @@ export default function WorkspaceShell({ initialSession }: { initialSession: Aut
         <div className="workspace-sidebar-header">
           <Link className="workspace-brand" href="/workspace">
             <span className="workspace-brand-mark"><BrainCircuit size={20} strokeWidth={1.8} /></span>
-            <span className="brand-copy"><strong>nvoid.ai</strong><small>Find opportunities. Let AI find more.</small></span>
+            <span className="brand-copy"><strong>brewl.ai</strong><small>Find opportunities. Let AI find more.</small></span>
           </Link>
           <button className="workspace-sidebar-close" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
         </div>
