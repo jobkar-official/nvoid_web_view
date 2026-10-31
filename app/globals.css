@@ -3519,3 +3519,51 @@ body::-webkit-scrollbar {
     font-size: 39px;
   }
 }
+
+
+/* Clean, straight worker.com logo lockup with an asterisk symbol */
+.worker-home-brand-lockup-search {
+  gap: 10px;
+}
+
+.worker-home-brand-lockup-search .worker-home-brand-icon-asterisk {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 0;
+  color: #8bbcff;
+  background: transparent;
+  box-shadow: none;
+}
+
+.worker-home-brand-lockup-search .worker-home-brand-icon-asterisk svg {
+  display: block;
+  filter: none;
+}
+
+.worker-home-brand-lockup-search .worker-home-brand-name {
+  color: #f2f4f7;
+  font-size: clamp(38px,4.4vw,48px);
+  font-weight: 650;
+  letter-spacing: -.055em;
+  line-height: 1;
+}
+
+@media (max-width: 680px) {
+  .worker-home-brand-lockup-search {
+    gap: 8px;
+  }
+
+  .worker-home-brand-lockup-search .worker-home-brand-icon-asterisk svg {
+    width: 39px;
+    height: 39px;
+  }
+
+  .worker-home-brand-lockup-search .worker-home-brand-name {
+    font-size: 37px;
+  }
+}
