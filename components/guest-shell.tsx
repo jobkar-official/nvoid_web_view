@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import WorkerMark from "./worker-mark";
 import {
   ArrowUpRight, BrainCircuit, BriefcaseBusiness, Bot, Check, ChevronDown, Clock3, FileText,
   Globe2, History, LockKeyhole, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Puzzle, Search, ShieldCheck, Trash2, UserRound, X
@@ -193,7 +194,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
         <aside id="nvoid-public-sidebar" aria-label="Explore navigation" aria-hidden={!sidebarOpen} className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
           <div className="public-sidebar-header">
             <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
-              <span className="brand-symbol"><BrainCircuit size={20} strokeWidth={1.8} /></span>
+              <span className="brand-symbol"><WorkerMark size={22} /></span>
               <span className="brand-copy"><strong>Worker</strong><small>AI discovery & integrations</small></span>
             </Link>
             <button className="sidebar-collapse-button" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
