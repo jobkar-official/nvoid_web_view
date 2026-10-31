@@ -8,7 +8,7 @@ import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
 type Job = GuestSearchJob;
 
 function clean(value?: string) {
-  return (value || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
+  return typeof value === "string" ? value.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim() : "";
 }
 
 function postedDate(value?: string) {
@@ -35,7 +35,7 @@ async function responseData(response: Response) {
 }
 
 function cachedJobs(jobs: Job[]): Job[] {
-  return jobs.slice(0, 100).map((job, index) => ({
+  return jobs.filter((job): job is Job => Boolean(job && typeof job === "object")).slice(0, 100).map((job, index) => ({
     id: clean(job.id).slice(0, 180) || `saved-job-${index + 1}`,
     title: clean(job.title).slice(0, 180) || "Untitled opportunity",
     company: clean(job.company).slice(0, 140) || undefined,
@@ -166,6 +166,7 @@ export default function GuestHome({ searchId }: { searchId?: string }) {
 
   const chooseCategory = (value: string) => {
     setJobTitle(value);
+    setActiveSearch("");
     document.getElementById("job-search")?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
