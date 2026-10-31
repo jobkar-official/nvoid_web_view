@@ -1761,3 +1761,18 @@ body {
 .footer-brand-copy strong {
   color: #ffffff !important;
 }
+
+
+/* Recent-search selection follows the active conversation pattern */
+.history-item.active {
+  background: #2f2f2f;
+}
+
+.history-item.active .history-copy strong,
+.history-item.active .history-select {
+  color: #ffffff !important;
+}
+
+.history-item.active .history-search-icon {
+  color: #ececec !important;
+}
