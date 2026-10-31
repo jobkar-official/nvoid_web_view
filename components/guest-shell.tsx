@@ -224,7 +224,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
             ) : (
               <div className="history-list">
                 {history.map((item) => (
-                  <div className="history-item" key={item.id}>
+                  <div className={"history-item" + (pathname === `/search/${item.id}` ? " active" : "")} key={item.id}>
                     {editing?.id === item.id ? (
                       <div className="history-editor">
                         <input aria-label="Edit job title" value={editing.jobTitle} onChange={(event) => setEditing({ ...editing, jobTitle: event.target.value })} />
@@ -233,7 +233,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
                       </div>
                     ) : (
                       <>
-                        <Link href={`/search/${item.id}`} className="history-select" onClick={closeSidebarOnMobile} title={item.jobTitle + " in " + item.location}>
+                        <Link href={`/search/${item.id}`} className="history-select" aria-current={pathname === `/search/${item.id}` ? "page" : undefined} onClick={closeSidebarOnMobile} title={item.jobTitle + " in " + item.location}>
                           <span className="history-search-icon"><Clock3 size={13} /></span>
                           <span className="history-copy"><strong>{item.jobTitle}</strong><small>{item.location} · {item.resultCount === undefined ? "Saved search" : `${item.resultCount} jobs`} · {formatTime(item.searchedAt)}</small></span>
                         </Link>
@@ -264,7 +264,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
         <div className="public-main">
           <header className="public-topbar">
             <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
-            <div className="topbar-breadcrumb"><span>Explore</span><span className="breadcrumb-dot">/</span><strong>{pathname === "/" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid"}</strong></div>
+            <div className="topbar-breadcrumb"><span>Explore</span><span className="breadcrumb-dot">/</span><strong>{pathname.startsWith("/search/") ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search" : pathname === "/" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Brewl"}</strong></div>
             <span className="model-status-pill" role="status" aria-label="Default AI model: Alpha - k1. This model is fixed and cannot be changed here.">
               <BrainCircuit size={15} />
               <span className="model-status-copy"><small>DEFAULT MODEL</small><strong>Alpha - k1</strong></span>
