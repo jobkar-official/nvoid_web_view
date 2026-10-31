@@ -10,6 +10,15 @@ export default function WorkerHomepage() {
           <span className="worker-home-brand-icon worker-home-brand-icon-asterisk"><Asterisk size={48} strokeWidth={2.15} /></span>
           <span className="worker-home-brand-name">worker.com</span>
         </div>
+        <div className="worker-home-intro-copy">
+          <span className="worker-home-intro-kicker"><span /> AI-POWERED JOB DISCOVERY</span>
+          <h1>Find your next <span>opportunity.</span></h1>
+          <p>Search across public job boards and company career pages, all from one focused place.</p>
+          <div className="worker-home-highlight-row" aria-label="Worker benefits">
+            <span><Globe2 size={14} /> Multiple job sources</span>
+            <span><ShieldCheck size={14} /> You control every application</span>
+          </div>
+        </div>
       </section>
       <section className="worker-home-search-section worker-home-search-v2" aria-labelledby="worker-search-heading">
         <form className="worker-home-search-card" action="/job-search" method="get">
