@@ -1227,3 +1227,198 @@ body,
   outline-offset: 2px;
 }
 
+
+
+/* Nvoid ChatGPT dark theme — development branch */
+:root {
+  color-scheme: dark;
+  --navy: #171717;
+  --navy-2: #212121;
+  --navy-3: #2f2f2f;
+  --blue: #ececec;
+  --blue-dark: #ffffff;
+  --blue-soft: #3a3a3a;
+  --ink: #ececec;
+  --muted: #b4b4b4;
+  --soft-muted: #9b9b9b;
+  --line: rgba(255,255,255,.10);
+  --canvas: #212121;
+}
+html, body,
+.public-shell, .public-main, .public-content,
+.workspace-shell, .workspace-main, .workspace-content,
+.auth-page, .home-page, .catalog-page, .info-page {
+  min-height: 100%;
+  color: #ececec !important;
+  background: #212121 !important;
+}
+body { color: #ececec !important; }
+.public-sidebar, .workspace-sidebar {
+  color: #ececec !important;
+  background: #171717 !important;
+  border-right: 1px solid rgba(255,255,255,.08) !important;
+  box-shadow: none !important;
+}
+.public-topbar, .workspace-topbar {
+  color: #ececec !important;
+  background: rgba(33,33,33,.97) !important;
+  border-bottom: 1px solid rgba(255,255,255,.10) !important;
+  backdrop-filter: blur(16px);
+}
+.public-footer {
+  color: #b4b4b4 !important;
+  background: #171717 !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+.public-footer a, .topbar-quiet-link, .topbar-login,
+.topbar-breadcrumb, .workspace-crumb { color: #b4b4b4 !important; }
+.public-footer a:hover, .topbar-quiet-link:hover,
+.topbar-login:hover { color: #fff !important; }
+.public-brand, .workspace-brand, .public-brand strong,
+.workspace-brand strong, .topbar-breadcrumb strong,
+.workspace-crumb strong, .home-hero h1, .section-heading h2,
+.catalog-hero h1, .info-hero h1, .info-section h2,
+.workspace-page-heading h1, .info-cta h2 {
+  color: #ececec !important;
+}
+.public-brand small, .workspace-brand small, .sidebar-section-label,
+.workspace-nav-label, .history-copy small, .history-placeholder,
+.history-empty, .guest-identity small, .account-copy small,
+.sidebar-trust, .topbar-breadcrumb, .workspace-crumb,
+.hero-description, .section-heading p, .catalog-hero > p,
+.info-hero > p, .catalog-meta, .info-section p, .info-updated,
+.workspace-page-heading p { color: #b4b4b4 !important; }
+.hero-overline, .section-kicker, .hero-description strong,
+.home-hero h1 span, .workspace-eyebrow { color: #d4d4d4 !important; }
+.public-nav-link, .workspace-nav-link, .history-select,
+.workspace-activity-item, .workspace-logout { color: #b4b4b4 !important; }
+.public-nav-link svg, .workspace-nav-link svg,
+.workspace-activity-item svg { color: #9b9b9b !important; }
+.public-nav-link:hover, .workspace-nav-link:hover,
+.history-item:hover, .sidebar-collapse-button:hover,
+.workspace-sidebar-close:hover, .sidebar-toggle-button:hover,
+.workspace-sidebar-toggle:hover, .workspace-icon-button:hover,
+.account-menu-button:hover {
+  color: #fff !important;
+  background: #2f2f2f !important;
+}
+.public-nav-link.active, .workspace-nav-link.active {
+  color: #fff !important;
+  background: #2f2f2f !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: inset 3px 0 #ececec !important;
+}
+.public-nav-link.active svg, .workspace-nav-link.active svg { color: #ececec !important; }
+.public-search-panel, .public-job-card, .category-card,
+.home-feature-card, .model-card, .release-card, .catalog-callout,
+.info-aside, .info-cta, .employer-benefit-grid article,
+.workspace-welcome-card, .workspace-shortcut-card,
+.workspace-content-card, .workspace-tip-card, .auth-layout,
+.auth-form-panel, .bot-promo, .no-results {
+  color: #ececec !important;
+  background: #2f2f2f !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  box-shadow: none !important;
+}
+.public-search-panel input, .search-input-line input,
+.workspace-search-form input, .workspace-form-grid input,
+.workspace-form-grid textarea, .workspace-form-grid select,
+.auth-form label > input, .auth-input, .auth-input input,
+.history-editor input {
+  color: #ececec !important;
+  background: #212121 !important;
+  border-color: rgba(255,255,255,.16) !important;
+}
+.public-search-panel input::placeholder,
+.workspace-search-form input::placeholder,
+.workspace-form-grid input::placeholder,
+.workspace-form-grid textarea::placeholder,
+.auth-input input::placeholder { color: #858585 !important; }
+.public-job-card h1, .public-job-card h2, .public-job-card h3,
+.category-card strong, .home-feature-card h2, .home-feature-card h3,
+.model-card h2, .model-card h3, .release-card h2, .release-card h3,
+.workspace-content-card h2, .workspace-content-card h3,
+.workspace-tip-card h2, .workspace-tip-card h3,
+.workspace-shortcut-card strong, .info-aside h2,
+.info-aside strong, .info-cta h2 { color: #ececec !important; }
+.public-job-card p, .public-job-card small, .category-card p,
+.home-feature-card p, .model-card p, .release-card p,
+.workspace-content-card p, .workspace-tip-card p,
+.workspace-shortcut-card p, .info-aside p, .info-aside li,
+.info-cta p { color: #b4b4b4 !important; }
+.public-job-details span, .source-chip, .workspace-role-pill,
+.result-count, .release-status, .company-monogram {
+  color: #d4d4d4 !important;
+  background: #3a3a3a !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.brand-symbol, .workspace-brand-mark, .guest-avatar,
+.account-avatar, .workspace-top-avatar, .feature-icon,
+.category-icon, .shortcut-icon, .workspace-empty-icon,
+.workspace-tip-icon, .release-icon, .model-icon, .auth-form-icon,
+.info-aside-icon, .bot-promo-icon, .art-center {
+  color: #dedede !important;
+  background: #3a3a3a !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.sidebar-find-button, .workspace-find-button, .sidebar-register,
+.topbar-create, .workspace-primary-button, .search-submit,
+.auth-submit, .info-cta-link {
+  color: #171717 !important;
+  background: #ececec !important;
+  border: 1px solid #ececec !important;
+  font-weight: 700;
+}
+.sidebar-find-button:hover, .workspace-find-button:hover,
+.sidebar-register:hover, .topbar-create:hover,
+.workspace-primary-button:hover, .search-submit:hover,
+.auth-submit:hover, .info-cta-link:hover {
+  color: #000 !important;
+  background: #fff !important;
+}
+.sidebar-signin, .workspace-icon-button, .mobile-menu-button,
+.sidebar-toggle-button, .workspace-sidebar-toggle,
+.sidebar-collapse-button, .workspace-sidebar-close {
+  color: #d4d4d4 !important;
+  background: #2f2f2f !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.sidebar-section-label, .workspace-nav-label, .history-clear,
+.history-search-icon, .history-copy strong,
+.history-delete, .history-edit, .account-menu-button {
+  color: #a3a3a3 !important;
+}
+.history-delete:hover { color: #fff !important; background: #493033 !important; }
+.history-edit:hover { color: #fff !important; background: #3a3a3a !important; }
+.auth-brand-panel {
+  color: #ececec !important;
+  background: radial-gradient(circle at 85% 78%, rgba(255,255,255,.07), transparent 34%), linear-gradient(145deg, #171717, #292929) !important;
+}
+.auth-role-picker button {
+  color: #b4b4b4 !important;
+  background: #2f2f2f !important;
+  border-color: rgba(255,255,255,.10) !important;
+}
+.auth-role-picker button.selected {
+  color: #fff !important;
+  background: #454545 !important;
+  border-color: #777 !important;
+}
+.auth-error { color: #f0a6ad !important; background: #3a2528 !important; border-color: rgba(255,255,255,.10) !important; }
+.preview-banner { color: #e7c98b !important; background: #393225 !important; border-color: rgba(255,255,255,.10) !important; }
+.workspace-inline-notice, .search-notice {
+  color: #a7e0bf !important;
+  background: #20352a !important;
+  border-color: rgba(125,210,158,.18) !important;
+}
+.info-aside.green .info-aside-icon, .workspace-tip-icon {
+  color: #a7e0bf !important;
+  background: #20352a !important;
+}
+.search-notice.muted { color: #b4b4b4 !important; background: #292929 !important; border-color: rgba(255,255,255,.10) !important; }
+.sidebar-scrim, .workspace-scrim { background: rgba(0,0,0,.65) !important; }
+::selection { color: #171717; background: #d4d4d4; }
+:focus-visible { outline: 2px solid #bdbdbd !important; outline-offset: 2px; }
+@media (max-width: 850px) {
+  .public-sidebar, .workspace-sidebar { background: #171717 !important; }
+}
