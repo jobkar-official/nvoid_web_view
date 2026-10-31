@@ -3404,3 +3404,19 @@ body::-webkit-scrollbar {
     margin-top: 58px;
   }
 }
+
+
+/* Homepage now opens directly on the primary job search */
+.worker-homepage-v2 {
+  padding-top: 10px;
+}
+
+.worker-home-search-v2 {
+  margin-top: 0;
+}
+
+@media (max-width: 680px) {
+  .worker-home-search-v2 {
+    margin-top: 0;
+  }
+}
