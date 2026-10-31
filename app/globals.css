@@ -770,3 +770,37 @@ body { color: #e8f0fb; }
     box-shadow: 18px 0 45px rgba(0,0,0,.35);
   }
 }
+
+
+/* Nvoid unified brand canvas */
+:root {
+  --navy: #151c62;
+  --navy-2: #151c62;
+  --navy-3: #202b7e;
+  --blue: #8ebaff;
+  --blue-dark: #5d8ee8;
+  --blue-soft: #202b7e;
+  --ink: #f1f4ff;
+  --muted: #c1c9ed;
+  --soft-muted: #a4afe0;
+  --line: rgba(191, 202, 255, .2);
+  --canvas: #151c62;
+}
+html, body,
+.public-shell, .public-main, .public-content,
+.workspace-shell, .workspace-main, .workspace-content,
+.auth-page, .home-page, .catalog-page, .info-page {
+  min-height: 100%;
+  background-color: #151c62;
+}
+body { color: #f1f4ff; }
+.public-topbar, .workspace-topbar {
+  background: rgba(21,28,98,.97);
+  border-bottom-color: rgba(191,202,255,.2);
+}
+.public-sidebar, .workspace-sidebar {
+  color: #eef1ff;
+  background: #101747;
+  border-right-color: rgba(191,202,255,.16);
+}
+.sidebar-scrim, .workspace-scrim { background: rgba(4,7,35,.72); }
