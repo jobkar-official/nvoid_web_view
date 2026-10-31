@@ -39,7 +39,7 @@ export default function WorkerHomepage() {
         <div className="worker-home-copy worker-home-copy-v2">
           <div className="worker-home-brand-lockup">
             <span className="worker-home-brand-icon"><WorkerMark size={28} /></span>
-            <span className="worker-home-brand-copy"><strong>worker</strong><small>CAREER INTELLIGENCE</small></span>
+            <span className="worker-home-brand-copy"><strong>Worker</strong><small>CAREER INTELLIGENCE</small></span>
           </div>
           <div className="worker-home-eyebrow"><Sparkles size={13} /> AI-POWERED OPPORTUNITY DISCOVERY</div>
           <h1>Your next move starts with <span>a wider search.</span></h1>
