@@ -56,39 +56,6 @@ export default function WorkerHomepage() {
         <div className="worker-home-search-footnote"><ShieldCheck size={14} /> No account required to start. You stay in control of every application.</div>
       </section>
 
-      <section className="worker-home-capabilities worker-home-capabilities-v2">
-        <div className="worker-home-section-heading">
-          <div><span className="worker-home-section-label">THE WORKER ADVANTAGE</span><h2>Everything connected. Search made simpler.</h2></div>
-          <Link href="/worker">Explore the platform <ArrowUpRight size={15} /></Link>
-        </div>
-        <div className="worker-home-capability-grid">
-          {capabilities.map((item, index) => {
-            const Icon = item.icon;
-            return (
-              <article className="worker-home-capability" key={item.title}>
-                <div className="worker-home-capability-top"><span className="worker-home-capability-icon"><Icon size={19} /></span><span>0{index + 1}</span></div>
-                <span className="worker-home-capability-label">{item.label}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <Link href={item.href}>{item.action} <ArrowRight size={14} /></Link>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="worker-home-flow worker-home-flow-v2">
-        <div className="worker-home-flow-copy">
-          <span className="worker-home-section-label">YOUR SEARCH. YOUR DECISION.</span>
-          <h2>Find it. Understand it. Choose your next step.</h2>
-          <p>Worker helps organize discovery. You decide which opportunities deserve your time.</p>
-        </div>
-        <div className="worker-home-flow-steps">
-          <div><span>01</span><div><strong>Tell Worker what you want</strong><small>Start with a role, skill or location.</small></div></div>
-          <div><span>02</span><div><strong>Explore connected opportunities</strong><small>Review results returned by available sources.</small></div></div>
-          <div><span>03</span><div><strong>Choose where to apply</strong><small>Open the original listing and make the decision yourself.</small></div></div>
-        </div>
-      </section>
     </div>
   );
 }
