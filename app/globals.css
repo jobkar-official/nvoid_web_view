@@ -804,3 +804,182 @@ body { color: #f1f4ff; }
   border-right-color: rgba(191,202,255,.16);
 }
 .sidebar-scrim, .workspace-scrim { background: rgba(4,7,35,.72); }
+
+:root {
+  --navy: #000435;
+  --navy-2: #000435;
+  --navy-3: #000435;
+  --blue-soft: #000435;
+  --canvas: #000435;
+  --line: rgba(190, 202, 255, .2);
+}
+
+html,
+body,
+.public-shell,
+.public-main,
+.public-content,
+.workspace-shell,
+.workspace-main,
+.workspace-content,
+.auth-page,
+.home-page,
+.catalog-page,
+.info-page,
+.public-sidebar,
+.workspace-sidebar,
+.public-topbar,
+.workspace-topbar,
+.public-footer,
+.auth-layout,
+.auth-brand-panel,
+.auth-form-panel,
+.public-search-panel,
+.public-job-card,
+.category-card,
+.home-feature-card,
+.model-card,
+.release-card,
+.catalog-callout,
+.info-aside,
+.info-cta,
+.employer-benefit-grid article,
+.workspace-welcome-card,
+.workspace-shortcut-card,
+.workspace-content-card,
+.workspace-tip-card,
+.workspace-data-layout,
+.workspace-search-form,
+.workspace-form-grid,
+.auth-form,
+.auth-role-picker button,
+.auth-form label > input,
+.auth-input,
+.auth-submit,
+.search-submit,
+.workspace-primary-button,
+.topbar-create,
+.sidebar-find-button,
+.workspace-find-button,
+.sidebar-signin,
+.sidebar-register,
+.workspace-role-pill,
+.workspace-icon-button,
+.mobile-menu-button,
+.sidebar-toggle-button,
+.workspace-sidebar-toggle,
+.workspace-nav-link.active,
+.public-nav-link.active,
+.bot-promo,
+.bot-promo-icon,
+.result-count,
+.company-monogram,
+.source-chip,
+.public-job-details span,
+.no-results,
+.no-results-icon,
+.category-icon,
+.feature-icon,
+.release-icon,
+.model-icon,
+.release-status,
+.info-aside-icon,
+.info-cta-link,
+.auth-form-icon,
+.auth-error,
+.preview-banner,
+.workspace-inline-notice,
+.shortcut-icon,
+.workspace-empty-icon,
+.workspace-tip-icon,
+.art-center,
+.guest-avatar,
+.account-avatar,
+.workspace-top-avatar,
+.history-editor input,
+.history-editor > div button,
+.workspace-search-form input,
+.workspace-form-grid input,
+.workspace-form-grid textarea,
+.workspace-form-grid select {
+  background-color: #000435 !important;
+  background-image: none !important;
+}
+
+.public-sidebar,
+.workspace-sidebar,
+.public-topbar,
+.workspace-topbar,
+.public-footer,
+.auth-layout,
+.public-search-panel,
+.public-job-card,
+.category-card,
+.home-feature-card,
+.model-card,
+.release-card,
+.catalog-callout,
+.info-aside,
+.info-cta,
+.workspace-welcome-card,
+.workspace-shortcut-card,
+.workspace-content-card,
+.workspace-tip-card,
+.auth-input,
+.auth-form label > input,
+.workspace-search-form input,
+.workspace-form-grid input,
+.workspace-form-grid textarea,
+.workspace-form-grid select {
+  border-color: rgba(190, 202, 255, .2);
+}
+
+.public-topbar,
+.workspace-topbar {
+  background: #000435 !important;
+  backdrop-filter: none;
+}
+
+.public-footer {
+  background: #000435 !important;
+}
+
+.public-sidebar,
+.workspace-sidebar {
+  box-shadow: 12px 0 36px rgba(0, 0, 0, .24);
+}
+
+.public-nav-link:hover,
+.workspace-nav-link:hover,
+.sidebar-collapse-button:hover,
+.workspace-sidebar-close:hover,
+.sidebar-toggle-button:hover,
+.workspace-sidebar-toggle:hover,
+.workspace-icon-button:hover,
+.workspace-logout:hover,
+.history-item:hover,
+.history-delete:hover,
+.history-edit:hover,
+.sidebar-find-button:hover,
+.workspace-find-button:hover,
+.topbar-create:hover,
+.workspace-primary-button:hover,
+.search-submit:hover,
+.sidebar-register:hover,
+.sidebar-signin:hover {
+  background-color: #000435 !important;
+}
+
+.auth-brand-panel,
+.workspace-welcome-card,
+.bot-promo,
+.home-feature-card,
+.catalog-callout {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .18);
+}
+
+::selection {
+  background: rgba(142, 186, 255, .3);
+  color: #ffffff;
+}
+
