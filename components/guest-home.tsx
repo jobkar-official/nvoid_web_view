@@ -24,6 +24,18 @@ type SearchOrchestration = {
   executedSearchTools?: number;
   queryPlanner?: string;
 };
+type SearchTimings = {
+  titlePlanning?: number;
+  sourceSearch?: number;
+  detailEnrichment?: number;
+  aiReranking?: number;
+  total?: number;
+};
+
+function formatDuration(milliseconds?: number) {
+  if (typeof milliseconds !== "number" || !Number.isFinite(milliseconds)) return "";
+  return milliseconds >= 1000 ? (milliseconds / 1000).toFixed(1) + "s" : milliseconds + "ms";
+}
 
 function clean(value?: string) {
   return typeof value === "string" ? value.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim() : "";
@@ -87,6 +99,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
   const [jobs, setJobs] = useState<Job[]>([]);
   const [sources, setSources] = useState<SourceDiagnostic[]>([]);
   const [orchestration, setOrchestration] = useState<SearchOrchestration | null>(null);
+  const [searchTimings, setSearchTimings] = useState<SearchTimings | null>(null);
   const [sourceActivityIssue, setSourceActivityIssue] = useState("");
   const [searched, setSearched] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -110,6 +123,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setJobs([]);
       setSources([]);
       setOrchestration(null);
+      setSearchTimings(null);
       setSourceActivityIssue("");
       setSearched(false);
       setActiveSearch("");
@@ -136,6 +150,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setJobs(savedJobs);
     setSources(Array.isArray(saved.sources) ? saved.sources as SourceDiagnostic[] : []);
     setOrchestration(saved.orchestration ? saved.orchestration as SearchOrchestration : null);
+    setSearchTimings(saved.timingsMs ? saved.timingsMs as SearchTimings : null);
     setSourceActivityIssue(!saved.sources?.length && !saved.orchestration && Array.isArray(saved.jobs)
       ? "This saved search does not contain source-level execution details. Run it again to inspect which providers were queried."
       : "");
@@ -165,6 +180,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setJobs([]);
     setSources([]);
     setOrchestration(null);
+    setSearchTimings(null);
     setSourceActivityIssue("");
     setSearched(false);
     const recordId = values?.forceNewRecord
@@ -208,18 +224,21 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setJobs(savedJobs);
       setSources(sourceRows);
       setOrchestration(searchSummary);
+      const timings = result.timingsMs && typeof result.timingsMs === "object" ? result.timingsMs as SearchTimings : null;
+      setSearchTimings(timings);
       setSourceActivityIssue(sourceRows.length === 0 && !searchSummary
         ? "The agent returned no source activity data. Check that the deployed Nvoid worker is running the current search API."
         : sourceRows.length === 0
           ? "The worker completed the request but reported no eligible MCP job-search sources for this query."
           : "");
       setSearched(true);
-      updateSearch(recordId, { resultCount: savedJobs.length, jobs: savedJobs, sources: sourceRows, orchestration: searchSummary || undefined, error: undefined });
+      updateSearch(recordId, { resultCount: savedJobs.length, jobs: savedJobs, sources: sourceRows, orchestration: searchSummary || undefined, timingsMs: timings || undefined, error: undefined });
       setNotice(savedJobs.length ? savedJobs.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Nvoid could not complete this search. Please try again.";
       setSearched(true);
       setSourceActivityIssue(message);
+      setSearchTimings(null);
       setNotice(message);
       updateSearch(recordId, { resultCount: 0, jobs: [], sources: [], orchestration: undefined, error: message });
     } finally {
@@ -281,6 +300,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
             <div>
               <strong>Agent source activity</strong>
               <span>{orchestration?.connectedMcpServers ?? 0} connected MCP servers · {orchestration?.executedSearchTools ?? 0} search tools executed</span>
+              {searchTimings?.total !== undefined && <span>Completed in {formatDuration(searchTimings.total)} · providers {formatDuration(searchTimings.sourceSearch)} · details {formatDuration(searchTimings.detailEnrichment)} · AI ranking {formatDuration(searchTimings.aiReranking)}</span>}
             </div>
             {orchestration?.queryPlanner && <span className="nvoid-search-planner">{orchestration.queryPlanner === "llm-assisted" ? "AI-assisted planning" : "Structured planning"}</span>}
           </div>

@@ -35,6 +35,13 @@ export type GuestSearchRecord = {
   error?: string;
   sources?: Array<Record<string, unknown>>;
   orchestration?: Record<string, unknown>;
+  timingsMs?: {
+    titlePlanning?: number;
+    sourceSearch?: number;
+    detailEnrichment?: number;
+    aiReranking?: number;
+    total?: number;
+  };
 };
 
 type GuestHistoryContextValue = {
@@ -85,7 +92,8 @@ function readHistory(): GuestSearchRecord[] {
         jobs,
         error: typeof item.error === "string" ? item.error : undefined,
         sources: Array.isArray(item.sources) ? item.sources.filter((source): source is Record<string, unknown> => Boolean(source && typeof source === "object")) : undefined,
-        orchestration: item.orchestration && typeof item.orchestration === "object" ? item.orchestration as Record<string, unknown> : undefined
+        orchestration: item.orchestration && typeof item.orchestration === "object" ? item.orchestration as Record<string, unknown> : undefined,
+        timingsMs: item.timingsMs && typeof item.timingsMs === "object" ? item.timingsMs as GuestSearchRecord["timingsMs"] : undefined
       }];
     }).slice(0, MAX_HISTORY_RECORDS);
   } catch {
