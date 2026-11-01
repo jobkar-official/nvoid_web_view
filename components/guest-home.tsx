@@ -59,7 +59,7 @@ async function responseData(response: Response) {
 }
 
 function cachedJobs(jobs: Job[]): Job[] {
-  return jobs.filter((job): job is Job => Boolean(job && typeof job === "object")).slice(0, 100).map((job, index) => ({
+  return jobs.filter((job): job is Job => Boolean(job && typeof job === "object")).slice(0, 1000).map((job, index) => ({
     id: clean(job.id).slice(0, 180) || `saved-job-${index + 1}`,
     title: clean(job.title).slice(0, 180) || "Untitled opportunity",
     company: clean(job.company).slice(0, 140) || undefined,
@@ -199,7 +199,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       const result = await responseData(await fetch("/api/agent/search", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ profile, limit: 100, syncToBackend: false })
+        body: JSON.stringify({ profile, limit: 1000, syncToBackend: false })
       }));
       const found = Array.isArray(result.jobs) ? result.jobs as Job[] : [];
       const savedJobs = cachedJobs(found);

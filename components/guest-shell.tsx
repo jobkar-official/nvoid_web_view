@@ -49,7 +49,7 @@ type GuestHistoryContextValue = {
 const GuestHistoryContext = createContext<GuestHistoryContextValue | null>(null);
 const STORAGE_KEY = "nvoid.guest-search-history.v1";
 const MAX_HISTORY_RECORDS = 30;
-const MAX_SAVED_JOBS = 100;
+const MAX_SAVED_JOBS = 1000;
 
 export function useGuestHistory() {
   const value = useContext(GuestHistoryContext);
@@ -130,17 +130,27 @@ export function GuestShell({ children }: { children: ReactNode }) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(limited));
     } catch {
-      const compacted = limited.map((item, index) => index < 8
-        ? { ...item, jobs: item.jobs?.slice(0, 40).map((job) => ({ ...job, description: job.description?.slice(0, 240), matchReasons: job.matchReasons?.slice(0, 3) })) }
-        : { ...item, jobs: undefined }
+      const compacted = limited.map((item, index) => index === 0
+        ? { ...item, jobs: item.jobs?.slice(0, 1000).map((job) => ({ ...job, description: job.description?.slice(0, 180), matchReasons: job.matchReasons?.slice(0, 3) })) }
+        : index < 4
+          ? { ...item, jobs: item.jobs?.slice(0, 100).map((job) => ({ ...job, description: job.description?.slice(0, 120), matchReasons: job.matchReasons?.slice(0, 2) })) }
+          : { ...item, jobs: undefined }
       );
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(compacted));
       } catch {
-        const historyOnly = limited.slice(0, 20).map(({ jobs, ...item }) => item);
+        const reduced = limited.slice(0, 4).map((item, index) => index === 0
+          ? { ...item, jobs: item.jobs?.slice(0, 400).map((job) => ({ ...job, description: job.description?.slice(0, 100), matchReasons: job.matchReasons?.slice(0, 2) })) }
+          : { ...item, jobs: item.jobs?.slice(0, 25).map((job) => ({ ...job, description: job.description?.slice(0, 80), matchReasons: job.matchReasons?.slice(0, 1) })) }
+        );
         try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(historyOnly));
-        } catch {}
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(reduced));
+        } catch {
+          const historyOnly = limited.slice(0, 20).map(({ jobs, ...item }) => item);
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(historyOnly));
+          } catch {}
+        }
       }
     }
   }, []);
