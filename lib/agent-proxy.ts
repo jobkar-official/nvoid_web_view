@@ -66,10 +66,40 @@ export async function requestAgent(path: string, options: AgentRequestOptions = 
       data = { error: raw || "Agent returned an empty response." };
     }
     return NextResponse.json(data, { status: response.status });
-  } catch {
+  } catch (error) {
+    const failure = describeAgentConnectionFailure(error);
+    console.error("Nvoid Agent proxy transport failure", { path, method, ...failure });
     return NextResponse.json(
-      { error: "Could not reach the Nvoid Agent. Check that the worker is running and NVOID_AGENT_URL is correct." },
+      {
+        error: "Could not reach the Nvoid Agent.",
+        detail: failure.detail,
+        code: failure.code,
+        hint: "Verify that the worker is running, that NVOID_AGENT_URL is reachable from the Next.js server/container, and that both services share the required private network."
+      },
       { status: 502 },
     );
   }
+}
+
+function describeAgentConnectionFailure(error: unknown): { code?: string; detail: string } {
+  const outer = error instanceof Error ? error : new Error(String(error));
+  const cause = outer.cause && typeof outer.cause === "object" ? outer.cause as { code?: unknown; message?: unknown } : undefined;
+  const code = typeof cause?.code === "string" && /^[A-Z0-9_]+$/.test(cause.code) ? cause.code : undefined;
+  const message = typeof cause?.message === "string" ? cause.message : outer.message;
+  if (outer.name === "TimeoutError" || outer.name === "AbortError" || /timed? out/i.test(message)) {
+    return { code: code || "ETIMEDOUT", detail: "The worker connection timed out before it returned a response." };
+  }
+  if (code === "ECONNREFUSED") {
+    return { code, detail: "The connection was refused. Nothing is listening at the configured worker address and port, or the port is not reachable from this web process." };
+  }
+  if (code === "ENOTFOUND" || code === "EAI_AGAIN") {
+    return { code, detail: "The worker hostname could not be resolved from the Next.js server." };
+  }
+  if (code === "ECONNRESET" || code === "EHOSTUNREACH" || code === "ENETUNREACH") {
+    return { code, detail: "The network path to the worker was reset or is unreachable." };
+  }
+  if (/certificate|tls|ssl/i.test(message)) {
+    return { code: code || "TLS_ERROR", detail: "The secure connection to the worker failed certificate or TLS validation." };
+  }
+  return { ...(code ? { code } : {}), detail: "The Next.js server could not establish an HTTP connection to the worker. Check the server logs for the underlying network error." };
 }

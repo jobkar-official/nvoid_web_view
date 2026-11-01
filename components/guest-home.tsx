@@ -6,6 +6,24 @@ import { ArrowRight, Asterisk, BriefcaseBusiness, Clock3, ExternalLink, LoaderCi
 import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
 
 type Job = GuestSearchJob;
+type SourceDiagnostic = {
+  serverId: string;
+  tool?: string;
+  found?: number;
+  fetchedCount?: number;
+  normalizedCount?: number;
+  roleMatchedCount?: number;
+  locationMatchedCount?: number;
+  connectionStatus: string;
+  error?: string;
+  skipReason?: string;
+};
+type SearchOrchestration = {
+  connectedMcpServers?: number;
+  connectedSearchTools?: number;
+  executedSearchTools?: number;
+  queryPlanner?: string;
+};
 
 function clean(value?: string) {
   return typeof value === "string" ? value.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim() : "";
@@ -30,7 +48,13 @@ function sourceName(value?: string) {
 
 async function responseData(response: Response) {
   const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(typeof payload.error === "string" ? payload.error : "The job search could not be completed.");
+  if (!response.ok) {
+    const message = typeof payload.error === "string" ? payload.error : "The job search could not be completed.";
+    const detail = typeof payload.detail === "string" ? payload.detail : "";
+    const hint = typeof payload.hint === "string" ? payload.hint : "";
+    const code = typeof payload.code === "string" ? payload.code : "";
+    throw new Error([message, detail, code ? "(" + code + ")" : "", hint].filter(Boolean).join(" "));
+  }
   return payload;
 }
 
@@ -61,6 +85,8 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
   const [jobTitle, setJobTitle] = useState(initialJobTitle);
   const [location, setLocation] = useState(initialLocation || "Worldwide");
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [sources, setSources] = useState<SourceDiagnostic[]>([]);
+  const [orchestration, setOrchestration] = useState<SearchOrchestration | null>(null);
   const [searched, setSearched] = useState(false);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -81,6 +107,8 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setJobTitle(initialJobTitle);
       setLocation(initialLocation || "Worldwide");
       setJobs([]);
+      setSources([]);
+      setOrchestration(null);
       setSearched(false);
       setActiveSearch("");
       setNotice("");
@@ -92,6 +120,8 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setJobTitle("");
       setLocation("Worldwide");
       setJobs([]);
+      setSources([]);
+      setOrchestration(null);
       setSearched(false);
       setActiveSearch("");
       setNotice("This saved search is not available in this browser. Start a new search to continue.");
@@ -102,6 +132,8 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setJobTitle(saved.jobTitle);
     setLocation(saved.location);
     setJobs(savedJobs);
+    setSources(Array.isArray(saved.sources) ? saved.sources as SourceDiagnostic[] : []);
+    setOrchestration(saved.orchestration ? saved.orchestration as SearchOrchestration : null);
     setSearched(Array.isArray(saved.jobs));
     setActiveSearch(saved.id);
     setNotice(saved.error || (Array.isArray(saved.jobs)
@@ -126,6 +158,8 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setBusy(true);
     setNotice("");
     setJobs([]);
+    setSources([]);
+    setOrchestration(null);
     setSearched(false);
     const recordId = values?.forceNewRecord
       ? saveSearch({ jobTitle: role, location: place, resultCount: 0 })
@@ -163,15 +197,19 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       }));
       const found = Array.isArray(result.jobs) ? result.jobs as Job[] : [];
       const savedJobs = cachedJobs(found);
+      const sourceRows = Array.isArray(result.sources) ? result.sources as SourceDiagnostic[] : [];
+      const searchSummary = result.orchestration && typeof result.orchestration === "object" ? result.orchestration as SearchOrchestration : null;
       setJobs(savedJobs);
+      setSources(sourceRows);
+      setOrchestration(searchSummary);
       setSearched(true);
-      updateSearch(recordId, { resultCount: savedJobs.length, jobs: savedJobs, error: undefined });
+      updateSearch(recordId, { resultCount: savedJobs.length, jobs: savedJobs, sources: sourceRows, orchestration: searchSummary || undefined, error: undefined });
       setNotice(savedJobs.length ? savedJobs.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Nvoid could not complete this search. Please try again.";
       setSearched(true);
       setNotice(message);
-      updateSearch(recordId, { resultCount: 0, jobs: [], error: message });
+      updateSearch(recordId, { resultCount: 0, jobs: [], sources: [], orchestration: undefined, error: message });
     } finally {
       setBusy(false);
     }
@@ -224,6 +262,38 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
 
       {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching connected job sources for {jobTitle} in {location}…</div>}
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
+
+      {(sources.length > 0 || orchestration) && (
+        <section className="nvoid-search-diagnostics" aria-label="Agent source activity">
+          <div className="nvoid-search-diagnostics-heading">
+            <div>
+              <strong>Agent source activity</strong>
+              <span>{orchestration?.connectedMcpServers ?? 0} connected MCP servers · {orchestration?.executedSearchTools ?? 0} search tools executed</span>
+            </div>
+            {orchestration?.queryPlanner && <span className="nvoid-search-planner">{orchestration.queryPlanner === "llm-assisted" ? "AI-assisted planning" : "Structured planning"}</span>}
+          </div>
+          {sources.length > 0 && (
+            <div className="nvoid-search-source-grid">
+              {sources.map((source) => (
+                <article className="nvoid-search-source-row" key={source.serverId + (source.tool || "")}>
+                  <div className="nvoid-search-source-main">
+                    <span className={"nvoid-search-source-dot " + source.connectionStatus} />
+                    <div><strong>{source.serverId}</strong><small>{source.tool || "No compatible search tool"}</small></div>
+                    <span className={"nvoid-search-source-status " + source.connectionStatus}>{source.connectionStatus.replace(/-/g, " ")}</span>
+                  </div>
+                  <div className="nvoid-search-source-counts">
+                    <span>{source.fetchedCount ?? 0} fetched</span>
+                    <span>{source.found ?? 0} matched</span>
+                    <span>{source.locationMatchedCount ?? 0} location fit</span>
+                  </div>
+                  {(source.error || source.skipReason) && <p>{source.error || source.skipReason}</p>}
+                </article>
+              ))}
+            </div>
+          )}
+          <Link href="/connections" className="nvoid-search-diagnostics-link">Inspect all agent connections <ArrowRight size={13} /></Link>
+        </section>
+      )}
 
       {!searched && !busy && !searchId && (
         <section className="worker-search-guide" aria-label="How Nvoid search works">
