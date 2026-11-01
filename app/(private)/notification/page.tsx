@@ -1,2 +1,5 @@
-import { redirect } from "next/navigation";
-export default function NotificationPage() { redirect("/workspace/notifications"); }
+import PrivateSectionPage from "../../../components/private-section-page";
+
+export default function NotificationPage() {
+  return <PrivateSectionPage section="notification" />;
+}
