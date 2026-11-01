@@ -3,8 +3,8 @@ import Link from "next/link";
 import { ArrowUpRight, BrainCircuit, CalendarDays, ChevronRight, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Worker AI Model — Alpha - k1 | Smarter Job Discovery",
-  description: "Explore Worker Alpha - k1, the job discovery model designed to help job seekers search wider, understand role relevance and review opportunities with more clarity."
+  title: "Worker — AI Job Discovery & Free Hiring Platform",
+  description: "Discover opportunities with Worker Alpha - k1 and hire at zero Worker platform cost. Post jobs, review applications and manage hiring in one workspace."
 };
 
 const overviewRows = [
@@ -46,6 +46,39 @@ const choiceRows = [
   {
     title: "Losing the original job source",
     detail: "Original listing links and source context are kept where a provider supplies them, so you can inspect the employer’s information before applying."
+  }
+];
+
+const hiringRows = [
+  {
+    title: "Company workspace",
+    detail: "Create your employer presence, maintain company information and keep your hiring activity connected to your organisation.",
+    outcome: "Candidates can understand the company behind an opening, while your team keeps its hiring identity in one place."
+  },
+  {
+    title: "Publish job openings",
+    detail: "Create vacancies with the role, responsibilities, skills, location, experience and work details candidates need to review.",
+    outcome: "Present opportunities to people exploring roles across the Worker network without a Worker job-posting fee."
+  },
+  {
+    title: "Manage applications",
+    detail: "Review applications received for your company's published openings and keep candidate details connected to the relevant job.",
+    outcome: "Spend less time switching between scattered applicant records and more time reviewing people."
+  },
+  {
+    title: "Shortlists and hiring stages",
+    detail: "Organise candidate review, build shortlists and track applicants as they move through your hiring stages.",
+    outcome: "See who is ready for review, who is shortlisted and what needs attention next."
+  },
+  {
+    title: "Messages and notifications",
+    detail: "Keep up with candidate conversations and important hiring or account updates from your employer workspace.",
+    outcome: "Keep communication and follow-up connected to your hiring activity."
+  },
+  {
+    title: "AI-assisted candidate relevance",
+    detail: "Use available skills, experience and role-fit information to help prioritise which applications deserve a closer review.",
+    outcome: "Get useful decision support while your hiring team keeps control of interviews, selection and offers."
   }
 ];
 
@@ -212,18 +245,19 @@ export default function ModelsPage() {
       <div className="model-docs-layout">
         <aside className="model-docs-sidebar">
           <div className="model-docs-sidebar-heading">
-            <span>WORKER DOCUMENTATION</span>
-            <strong>Model guide</strong>
+            <span>WORKER PLATFORM GUIDE</span>
+            <strong>Worker guide</strong>
           </div>
           <nav aria-label="Model guide sections" className="model-docs-nav">
             <a href="#overview"><span>01</span>Overview</a>
             <a href="#why-worker"><span>02</span>Why choose Worker</a>
-            <a href="#how-it-works"><span>03</span>How it works</a>
-            <a href="#capabilities"><span>04</span>What it can do</a>
-            <a href="#limitations"><span>05</span>What it cannot do</a>
-            <a href="#matching"><span>06</span>Understanding matches</a>
-            <a href="#coverage"><span>07</span>Search coverage and speed</a>
-            <a href="#quality"><span>08</span>Finding quality</a>
+            <a href="#hiring"><span>03</span>Free hiring for employers</a>
+            <a href="#how-it-works"><span>04</span>Job discovery workflow</a>
+            <a href="#capabilities"><span>05</span>Model capabilities</a>
+            <a href="#limitations"><span>06</span>Model limitations</a>
+            <a href="#matching"><span>07</span>Understanding matches</a>
+            <a href="#coverage"><span>08</span>Search coverage and speed</a>
+            <a href="#quality"><span>09</span>Finding quality</a>
           </nav>
           <div className="model-docs-sidebar-model">
             <span>THE CURRENT MODEL</span>
@@ -238,21 +272,26 @@ export default function ModelsPage() {
           </div>
 
           <header className="model-docs-header">
-            <span className="model-docs-eyebrow"><BrainCircuit size={15} /> WORKER MODEL GUIDE</span>
-            <h1>Worker Alpha - k1</h1>
-            <p>A job discovery model built to help you search beyond a single job board, understand why opportunities may fit and make more informed decisions about where to apply.</p>
+            <span className="model-docs-eyebrow"><BrainCircuit size={15} /> WORKER / EMPLOYMENT PLATFORM</span>
+            <h1>Discover opportunities. Hire talent. Manage hiring.</h1>
+            <p>Worker brings AI-assisted job discovery and a free hiring workspace together. Job seekers can explore opportunities with Alpha - k1. Employers can build a company presence, publish jobs, review applications, organise shortlists and manage hiring activity with zero Worker platform fees for core hiring and job management.</p>
             <div className="model-docs-meta">
+              <span><BrainCircuit size={15} /> Current discovery model: Alpha - k1</span>
               <span><CalendarDays size={15} /> Released 2 October 2026</span>
-              <span><ShieldCheck size={15} /> Current model</span>
+              <span><ShieldCheck size={15} /> Free employer platform</span>
+            </div>
+            <div className="model-docs-header-actions">
+              <Link href="/" className="model-docs-action-link">Explore jobs <ArrowUpRight size={15} /></Link>
+              <Link href="/free-job-posting" className="model-docs-action-link">For employers <ArrowUpRight size={15} /></Link>
             </div>
           </header>
 
           <section className="model-docs-section" id="overview">
             <div className="model-docs-section-heading">
               <span>01</span>
-              <div><p>OVERVIEW</p><h2>What is the current Worker model?</h2></div>
+              <div><p>OVERVIEW</p><h2>One employment platform for candidates and employers.</h2></div>
             </div>
-            <p className="model-docs-intro">Alpha - k1 powers Worker’s current job discovery and matching experience. It is designed to make the search process more organised and relevant, while keeping the original job information available for your review.</p>
+            <p className="model-docs-intro">Worker serves both sides of the employment journey. Candidates discover opportunities and understand role relevance. Employers publish openings and manage candidate review. Alpha - k1 is the current model behind the job discovery and matching experience.</p>
             <DetailRows rows={overviewRows} />
           </section>
 
@@ -267,10 +306,24 @@ export default function ModelsPage() {
             <p className="model-docs-footnote">The sources and features available can vary by search. This describes Worker’s intended workflow, not a claim that every other job platform works in the same way.</p>
           </section>
 
-          <section className="model-docs-section" id="how-it-works">
+          <section className="model-docs-section" id="hiring">
             <div className="model-docs-section-heading">
               <span>03</span>
-              <div><p>HOW IT WORKS</p><h2>From your search to a shortlist worth reviewing.</h2></div>
+              <div><p>FREE HIRING FOR EMPLOYERS</p><h2>Hire and manage your hiring workflow at zero Worker platform cost.</h2></div>
+            </div>
+            <p className="model-docs-intro">Worker is built to make core hiring accessible without charging employers a Worker platform fee for job posting and hiring management. Bring your company presence, vacancies, applicants and candidate conversations into one employer workspace.</p>
+            <DetailRows rows={hiringRows} showOutcome />
+            <p className="model-docs-footnote">AI-assisted matching supports candidate review. Employers remain responsible for evaluating applicants and making every hiring decision.</p>
+            <div className="model-docs-section-actions">
+              <Link href="/free-job-posting" className="model-docs-action-link">Explore free job posting <ArrowUpRight size={15} /></Link>
+              <Link href="/auth/register?role=3" className="model-docs-action-link">Create employer account <ArrowUpRight size={15} /></Link>
+            </div>
+          </section>
+
+          <section className="model-docs-section" id="how-it-works">
+            <div className="model-docs-section-heading">
+              <span>04</span>
+              <div><p>JOB DISCOVERY WORKFLOW</p><h2>From your search to a shortlist worth reviewing.</h2></div>
             </div>
             <p className="model-docs-intro">You stay in control at every step. Worker organises the search and helps prioritise the information it can access.</p>
             <DetailRows rows={workflowRows} showOutcome />
@@ -278,16 +331,16 @@ export default function ModelsPage() {
 
           <section className="model-docs-section" id="capabilities">
             <div className="model-docs-section-heading">
-              <span>04</span>
-              <div><p>CAPABILITIES</p><h2>What Alpha - k1 can help you do.</h2></div>
+              <span>05</span>
+              <div><p>MODEL CAPABILITIES</p><h2>What Alpha - k1 can help you do.</h2></div>
             </div>
             <DetailRows rows={capabilityRows} showOutcome />
           </section>
 
           <section className="model-docs-section" id="limitations">
             <div className="model-docs-section-heading">
-              <span>05</span>
-              <div><p>LIMITATIONS</p><h2>What it cannot promise.</h2></div>
+              <span>06</span>
+              <div><p>MODEL LIMITATIONS</p><h2>What it cannot promise.</h2></div>
             </div>
             <p className="model-docs-intro">Clear limits help you use search results responsibly. Worker is an assistant for discovery and comparison, not a guarantee about the job market or hiring decisions.</p>
             <DetailRows rows={limitRows} />
@@ -295,7 +348,7 @@ export default function ModelsPage() {
 
           <section className="model-docs-section" id="matching">
             <div className="model-docs-section-heading">
-              <span>06</span>
+              <span>07</span>
               <div><p>UNDERSTANDING MATCHES</p><h2>A match score helps you prioritise. It does not predict hiring.</h2></div>
             </div>
             <p className="model-docs-intro">When Worker displays a score from 0 to 100, it represents how closely the available listing information aligns with your search and profile signals. It is not a probability of getting an interview or offer.</p>
@@ -305,7 +358,7 @@ export default function ModelsPage() {
 
           <section className="model-docs-section" id="coverage">
             <div className="model-docs-section-heading">
-              <span>07</span>
+              <span>08</span>
               <div><p>SEARCH COVERAGE AND SPEED</p><h2>Why a worldwide search can take longer.</h2></div>
             </div>
             <DetailRows rows={coverageRows} />
@@ -313,7 +366,7 @@ export default function ModelsPage() {
 
           <section className="model-docs-section" id="quality">
             <div className="model-docs-section-heading">
-              <span>08</span>
+              <span>09</span>
               <div><p>FINDING QUALITY</p><h2>Useful findings matter more than an unsupported 100% claim.</h2></div>
             </div>
             <p className="model-docs-intro">No search service can truthfully promise that it finds every job on the internet or that every external listing is perfectly current. There is no independently verified benchmark for Worker that supports a 100% finding or accuracy rate, so we do not present one as fact.</p>
@@ -323,11 +376,14 @@ export default function ModelsPage() {
 
           <footer className="model-docs-footer">
             <div>
-              <span>READY TO SEARCH</span>
-              <h2>Put a more focused search to work.</h2>
-              <p>Set your target role and preferences, review the results and choose the opportunities that make sense for you.</p>
+              <span>ONE PLATFORM. TWO SIDES OF OPPORTUNITY.</span>
+              <h2>Find your next opportunity or start building your team.</h2>
+              <p>Search for roles as a candidate, or publish vacancies and manage applicants as an employer. Worker brings both journeys together.</p>
             </div>
-            <Link href="/" className="model-docs-cta">Explore jobs <ArrowUpRight size={16} /></Link>
+            <div className="model-docs-footer-actions">
+              <Link href="/" className="model-docs-cta">Explore jobs <ArrowUpRight size={16} /></Link>
+              <Link href="/free-job-posting" className="model-docs-cta">Hire with Worker <ArrowUpRight size={16} /></Link>
+            </div>
           </footer>
         </div>
       </div>
