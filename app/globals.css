@@ -6013,7 +6013,7 @@ body::-webkit-scrollbar {
   margin: 0;
   padding: 32px clamp(18px, 3.2vw, 48px) 56px;
   color: #ffffff;
-  background: #071a33;
+  background: #171717;
 }
 
 .model-docs-layout {
@@ -6033,17 +6033,17 @@ body::-webkit-scrollbar {
   min-width: 0;
   min-height: calc(100vh - 60px);
   padding: 19px 15px;
-  border: 1px solid rgba(255,255,255,.24);
-  border-radius: 14px;
-  background: #071a33;
-  box-shadow: 0 18px 42px rgba(0,0,0,.2), inset 0 1px rgba(255,255,255,.045);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .model-docs-sidebar-heading {
   display: grid;
   gap: 6px;
   padding: 2px 7px 17px;
-  border-bottom: 1px solid rgba(255,255,255,.26);
+  border-bottom: 1px solid #ffffff;
 }
 
 .model-docs-sidebar-heading > span,
@@ -6095,7 +6095,7 @@ body::-webkit-scrollbar {
 .model-docs-nav a:hover,
 .model-docs-nav a:focus-visible {
   color: #ffffff;
-  background: rgba(255,255,255,.08);
+  background: transparent;
 }
 
 .model-docs-sidebar-model {
@@ -6103,7 +6103,7 @@ body::-webkit-scrollbar {
   gap: 5px;
   margin-top: auto;
   padding: 17px 7px 2px;
-  border-top: 1px solid rgba(255,255,255,.26);
+  border-top: 1px solid #ffffff;
 }
 
 .model-docs-sidebar-model strong {
@@ -6124,11 +6124,11 @@ body::-webkit-scrollbar {
   width: 100%;
   max-width: 1050px;
   padding: clamp(22px, 3vw, 36px);
-  border: 1px solid rgba(255,255,255,.24);
-  border-radius: 15px;
+  border: 0;
+  border-radius: 0;
   color: #ffffff;
-  background: #071a33;
-  box-shadow: 0 18px 48px rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.045);
+  background: transparent;
+  box-shadow: none;
 }
 
 .model-docs-breadcrumb {
@@ -6152,7 +6152,7 @@ body::-webkit-scrollbar {
 
 .model-docs-header {
   padding: 0 0 27px;
-  border-bottom: 1px solid rgba(255,255,255,.26);
+  border-bottom: 1px solid #ffffff;
 }
 
 .model-docs-header .model-docs-eyebrow {
@@ -6206,7 +6206,7 @@ body::-webkit-scrollbar {
 
 .model-docs-section {
   padding: 31px 0 33px;
-  border-bottom: 1px solid rgba(255,255,255,.26);
+  border-bottom: 1px solid #ffffff;
   scroll-margin-top: 24px;
 }
 
@@ -6254,7 +6254,7 @@ body::-webkit-scrollbar {
   gap: 26px;
   margin: 19px 0 0;
   padding: 0 0 9px;
-  border-bottom: 1px solid rgba(255,255,255,.26);
+  border-bottom: 1px solid #ffffff;
 }
 
 .model-docs-comparison-labels span {
@@ -6276,8 +6276,8 @@ body::-webkit-scrollbar {
   align-items: start;
   gap: 26px;
   padding: 16px 14px;
-  border-bottom: 1px solid rgba(255,255,255,.24);
-  background: rgba(255,255,255,.045);
+  border-bottom: 1px solid #ffffff;
+  background: transparent;
 }
 
 .model-docs-row:last-child {
@@ -6309,9 +6309,9 @@ body::-webkit-scrollbar {
   gap: 12px;
   margin-top: 11px;
   padding: 10px 12px;
-  border: 1px solid rgba(255,255,255,.24);
+  border: 1px solid #ffffff;
   border-radius: 6px;
-  background: rgba(255,255,255,.08);
+  background: transparent;
 }
 
 .model-docs-outcome > span {
@@ -6338,10 +6338,10 @@ body::-webkit-scrollbar {
 .model-docs-note {
   margin: 17px 0 0 47px;
   padding: 13px 16px;
-  border: 1px solid rgba(255,255,255,.24);
-  border-left: 3px solid #ffffff;
+  border: 1px solid #ffffff;
+  border-left: 2px solid #ffffff;
   border-radius: 5px;
-  background: rgba(255,255,255,.045);
+  background: transparent;
 }
 
 .model-docs-note strong {
