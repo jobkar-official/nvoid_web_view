@@ -30,7 +30,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ ac
   let upstream: URL;
   try {
     const path = action === "signin"
-      ? process.env.NVOID_AUTH_SIGNIN_PATH || "/backend/auth/login"
+      ? "/authentication/authController/login"
       : action === "register"
         ? process.env.NVOID_AUTH_REGISTER_PATH || "/backend/auth/register"
         : process.env.NVOID_AUTH_FORGOT_PASSWORD_PATH || "/backend/auth/OAuthGenPassword";
