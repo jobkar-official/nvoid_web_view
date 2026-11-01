@@ -6,7 +6,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import WorkerMark from "./worker-mark";
 import { useAuth } from "../lib/context/AuthContext";
 import {
-  Activity, ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, Building2, Check, ChevronDown,
+  Activity, ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, Check, ChevronDown,
   CircleHelp, ClipboardList, Clock3, Code2, FileText, GraduationCap, History, LayoutDashboard,
   MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Target,
   Trash2, UserRound, X
@@ -287,7 +287,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
             {signedIn && user ? (
               <>
                 <div className="guest-identity">
-                  <span className="guest-avatar">{user.name.split(/\\s+/).filter(Boolean).slice(0, 2).map(part => part[0]?.toUpperCase()).join("") || "W"}</span>
+                  <span className="guest-avatar">{user.name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]?.toUpperCase()).join("") || "W"}</span>
                   <span><strong>{user.name}</strong><small>{user.role === "recruiter" ? "Recruiter" : "Job seeker"}</small></span>
                 </div>
                 <div className="guest-auth-actions">
@@ -316,7 +316,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
         <div className="public-main">
           <header className="public-topbar">
             <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
-            <div className="topbar-breadcrumb"><span>Explore</span><span className="breadcrumb-dot">/</span><strong>{pathname.startsWith("/search/") ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search" : pathname === "/" ? "Home" : pathname === "/job-search" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Worker"}</strong></div>
+            <div className="topbar-breadcrumb"><span>{signedIn ? "Workspace" : "Explore"}</span><span className="breadcrumb-dot">/</span><strong>{pathname.startsWith("/search/") ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search" : pathname === "/" ? "Home" : pathname === "/job-search" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Worker"}</strong></div>
             <div className="topbar-actions">
               <div
                 className="topbar-browse-wrap"
