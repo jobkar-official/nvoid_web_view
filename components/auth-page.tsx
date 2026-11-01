@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowLeft, ArrowRight, BriefcaseBusiness, Building2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, Sparkles, UserRound } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, Sparkles, UserRound } from "lucide-react";
 import { signInWithJobkar } from "../lib/context/auth-client";
 
 export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
@@ -69,7 +69,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
             <span className="auth-form-icon">{isRegister ? <UserRound size={20} /> : <LockKeyhole size={20} />}</span>
             <span className="auth-overline">{isRegister ? "CREATE YOUR ACCOUNT" : "ACCOUNT ACCESS"}</span>
             <h2>{isRegister ? "Join Nvoid" : "Sign in"}</h2>
-            <p>{isRegister ? "Start with a free candidate or employer account." : "Continue to your Nvoid workspace."}</p>
+            <p>{isRegister ? "Start with a free candidate or employer account." : "Continue to Worker."}</p>
           </div>
           <form className="auth-form" onSubmit={submit}>
             {isRegister && (
@@ -86,12 +86,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
           </form>
           <p className="auth-switch">{isRegister ? "Already have an account?" : "New to Nvoid?"} <Link href={isRegister ? "/auth/signin" : "/auth/register"}>{isRegister ? "Sign in" : "Create an account"}</Link></p>
           <p className="auth-terms">By continuing, you agree to the <Link href="/terms">Terms</Link> and acknowledge the <Link href="/privacy">Privacy Policy</Link>.</p>
-          {process.env.NODE_ENV !== "production" && (
-            <div className="auth-preview">
-              <span>Workspace UI preview · development only</span>
-              <div><Link href="/preview/workspace/4"><BriefcaseBusiness size={13} /> Seeker</Link><Link href="/preview/workspace/3"><Building2 size={13} /> Recruiter</Link><Link href="/preview/workspace/7"><ShieldCheck size={13} /> Support</Link></div>
-            </div>
-          )}
+
         </section>
       </div>
     </main>
