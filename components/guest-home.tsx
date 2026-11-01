@@ -87,6 +87,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
   const [jobs, setJobs] = useState<Job[]>([]);
   const [sources, setSources] = useState<SourceDiagnostic[]>([]);
   const [orchestration, setOrchestration] = useState<SearchOrchestration | null>(null);
+  const [sourceActivityIssue, setSourceActivityIssue] = useState("");
   const [searched, setSearched] = useState(false);
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
@@ -109,6 +110,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setJobs([]);
       setSources([]);
       setOrchestration(null);
+      setSourceActivityIssue("");
       setSearched(false);
       setActiveSearch("");
       setNotice("");
@@ -134,6 +136,9 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setJobs(savedJobs);
     setSources(Array.isArray(saved.sources) ? saved.sources as SourceDiagnostic[] : []);
     setOrchestration(saved.orchestration ? saved.orchestration as SearchOrchestration : null);
+    setSourceActivityIssue(!saved.sources?.length && !saved.orchestration && Array.isArray(saved.jobs)
+      ? "This saved search does not contain source-level execution details. Run it again to inspect which providers were queried."
+      : "");
     setSearched(Array.isArray(saved.jobs));
     setActiveSearch(saved.id);
     setNotice(saved.error || (Array.isArray(saved.jobs)
@@ -160,6 +165,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setJobs([]);
     setSources([]);
     setOrchestration(null);
+    setSourceActivityIssue("");
     setSearched(false);
     const recordId = values?.forceNewRecord
       ? saveSearch({ jobTitle: role, location: place, resultCount: 0 })
@@ -202,12 +208,18 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setJobs(savedJobs);
       setSources(sourceRows);
       setOrchestration(searchSummary);
+      setSourceActivityIssue(sourceRows.length === 0 && !searchSummary
+        ? "The agent returned no source activity data. Check that the deployed Nvoid worker is running the current search API."
+        : sourceRows.length === 0
+          ? "The worker completed the request but reported no eligible MCP job-search sources for this query."
+          : "");
       setSearched(true);
       updateSearch(recordId, { resultCount: savedJobs.length, jobs: savedJobs, sources: sourceRows, orchestration: searchSummary || undefined, error: undefined });
       setNotice(savedJobs.length ? savedJobs.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Nvoid could not complete this search. Please try again.";
       setSearched(true);
+      setSourceActivityIssue(message);
       setNotice(message);
       updateSearch(recordId, { resultCount: 0, jobs: [], sources: [], orchestration: undefined, error: message });
     } finally {
@@ -263,7 +275,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching connected job sources for {jobTitle} in {location}…</div>}
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
 
-      {(sources.length > 0 || orchestration) && (
+      {searched && (
         <section className="nvoid-search-diagnostics" aria-label="Agent source activity">
           <div className="nvoid-search-diagnostics-heading">
             <div>
@@ -272,7 +284,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
             </div>
             {orchestration?.queryPlanner && <span className="nvoid-search-planner">{orchestration.queryPlanner === "llm-assisted" ? "AI-assisted planning" : "Structured planning"}</span>}
           </div>
-          {sources.length > 0 && (
+          {sources.length > 0 ? (
             <div className="nvoid-search-source-grid">
               {sources.map((source) => (
                 <article className="nvoid-search-source-row" key={source.serverId + (source.tool || "")}>
@@ -289,6 +301,11 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                   {(source.error || source.skipReason) && <p>{source.error || source.skipReason}</p>}
                 </article>
               ))}
+            </div>
+          ) : (
+            <div className="nvoid-search-source-empty">
+              <strong>{orchestration ? "No MCP job-search sources were executed" : "Source activity unavailable"}</strong>
+              <span>{sourceActivityIssue || "The search response did not include per-source execution details. Open Connections to inspect the worker and configured MCP providers."}</span>
             </div>
           )}
           <Link href="/connections" className="nvoid-search-diagnostics-link">Inspect all agent connections <ArrowRight size={13} /></Link>
