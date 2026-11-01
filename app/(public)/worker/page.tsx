@@ -82,7 +82,7 @@ const config: WorkerDirectoryConfig = {
       description: "The model displayed as the default Worker model in the interface. Model selection is managed by the service rather than by the user.",
       detail: "The current UI does not expose a model switcher.",
       icon: "cpu",
-      href: "/models",
+      href: "/models/alpha-k1",
       linkLabel: "Model details"
     }
   ],
