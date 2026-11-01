@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, BrainCircuit, CalendarDays } from "lucide-react";
+import { ArrowUpRight, BrainCircuit, CalendarDays } from "lucide-react";
 import { notFound } from "next/navigation";
 
 const modelCatalog = {
