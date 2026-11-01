@@ -19,7 +19,7 @@ type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 interface RequestOptions {
   method?: HttpMethod;
-  body?: BodyInit | Record<string, unknown> | null;
+  body?: any;
   headers?: Record<string, string>;
 }
 
@@ -55,7 +55,7 @@ function proxyEndpoint(endpoint: string): string {
 async function request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
   const isFormData = typeof FormData !== "undefined" && options.body instanceof FormData;
   const headers: Record<string, string> = { accept: "application/json", ...options.headers };
-  if (options.body !== undefined && options.body !== null && !isFormData && typeof options.body !== "string") {
+  if (options.body !== undefined && options.body !== null && !isFormData && typeof options.body !== "string" && !(options.body instanceof Blob)) {
     headers["Content-Type"] = headers["Content-Type"] || "application/json";
   }
 
