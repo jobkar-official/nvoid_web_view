@@ -222,3 +222,69 @@
  .nv-panel-spaced{padding:15px}.nv-notification{gap:8px}.nv-notification-actions{flex-direction:column}
  .nv-agent-job,.nv-status-card{align-items:flex-start;flex-direction:column}.nv-live-pill{display:none}
 }
+
+.nv-profile-tabs {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: -7px 0 20px;
+  padding: 0 0 12px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--nv-line);
+  scrollbar-width: none;
+}
+.nv-profile-tabs::-webkit-scrollbar {
+  display: none;
+}
+.nv-profile-tab {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  color: #aab7da;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color .16s ease, background .16s ease, border-color .16s ease;
+}
+.nv-profile-tab:hover {
+  color: #f4f6ff;
+  border-color: rgba(177,191,255,.15);
+  background: rgba(255,255,255,.045);
+}
+.nv-profile-tab.active {
+  color: #fff;
+  border-color: rgba(124,156,255,.26);
+  background: rgba(85,119,234,.18);
+}
+.nv-profile-tab.active svg {
+  color: #a9bbff;
+}
+.nv-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nv-form-actions [hidden] {
+  display: none;
+}
+@media(max-width:540px) {
+  .nv-profile-tabs {
+    gap: 5px;
+    margin-top: -2px;
+  }
+  .nv-profile-tab {
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 9px;
+  }
+  .nv-form-actions {
+    flex-wrap: wrap;
+  }
+}
