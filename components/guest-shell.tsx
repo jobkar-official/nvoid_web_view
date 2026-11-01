@@ -7,7 +7,7 @@ import WorkerMark from "./worker-mark";
 import { useAuth } from "../lib/context/AuthContext";
 import {
   ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, Check, ChevronDown,
-  CircleHelp, ClipboardList, Clock3, Code2, FileText, History, LayoutDashboard,
+  CircleHelp, Clock3, FileText, History, LayoutDashboard,
   MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Target,
   Trash2, UserRound, X
 } from "lucide-react";
@@ -71,8 +71,8 @@ const MAX_HISTORY_RECORDS = 30;
 const MAX_SAVED_JOBS = 100;
 
 const privateNavigation = [
-  { label: "Workspace", items: [{ href: "/workspace", label: "Overview", icon: LayoutDashboard }, { href: "/workspace/connections", label: "API connections", icon: Code2 }] },
-  { label: "Discover", items: [{ href: "/workspace/find-jobs", label: "Find jobs", icon: Search }, { href: "/workspace/recommendations", label: "Recommended jobs", icon: BrainCircuit }, { href: "/workspace/saved", label: "Saved jobs", icon: BriefcaseBusiness }, { href: "/workspace/applications", label: "Applications", icon: ClipboardList }] },
+  { label: "Workspace", items: [{ href: "/workspace", label: "Overview", icon: LayoutDashboard }] },
+  { label: "Discover", items: [{ href: "/workspace/find-jobs", label: "Find jobs", icon: Search }, { href: "/workspace/recommendations", label: "Recommended jobs", icon: BrainCircuit }, { href: "/workspace/activity", label: "Saved & applications", icon: BriefcaseBusiness }] },
   { label: "Profile", items: [{ href: "/workspace/profile", label: "Profile", icon: UserRound }] },
   { label: "Activity", items: [{ href: "/workspace/highlights", label: "Open to work", icon: Target }, { href: "/workspace/messages", label: "Messages", icon: MessageSquare }, { href: "/workspace/notifications", label: "Notifications", icon: Bell }] },
   { label: "Help", items: [{ href: "/workspace/support", label: "Support", icon: CircleHelp }] }
@@ -221,7 +221,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
                 <span className="sidebar-section-label">{group.label}</span>
                 {group.items.map((item) => {
                   const Icon = item.icon;
-                  const active = item.href === "/workspace" ? pathname === "/workspace" || pathname === "/" : pathname === item.href;
+                  const active = item.href === "/workspace" ? pathname === "/workspace" || pathname === "/" : item.href === "/workspace/activity" ? ["/workspace/activity", "/workspace/saved", "/workspace/applications"].includes(pathname) : pathname === item.href;
                   return (
                     <Link key={item.href} href={item.href} onClick={() => closeSidebarOnMobile()} className={"public-nav-link" + (active ? " active" : "")}>
                       <Icon size={16} />
