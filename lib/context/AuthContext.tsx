@@ -7,7 +7,7 @@ import type { User, UserRole } from "./types";
 
 type AuthContextType = {
   user: User | null;
-  token: null;
+  token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
   oauthError: string;
