@@ -6,11 +6,14 @@ import { AlertCircle, ArrowUpRight, CheckCircle2, FlaskConical, LoaderCircle, Pl
 type JsonRecord = Record<string, unknown>;
 type ResearchTool = { serverId: string; serverName: string; name: string; description?: string; safety?: string };
 type Connector = { serverId: string; serverName: string; enabled: boolean; connected: boolean; connectionError?: string; readOnlyTools?: number; callsSucceeded?: number; callsFailed?: number; recordsReturned?: number };
+type ResearchCall = { serverId: string; serverName: string; toolName: string; status: string; recordsReturned: number; durationMs: number; reason: string; error?: string };
+type ResearchRecord = { id: string; serverId: string; serverName: string; toolName: string; title?: string; url?: string; data: JsonRecord };
 type ResearchResult = {
   query?: string;
   planner?: string;
   report?: {
     connectedServers?: number;
+    selectedConnectedServers?: number;
     configuredServers?: number;
     toolsDiscovered?: number;
     readOnlyToolsDiscovered?: number;
@@ -21,8 +24,8 @@ type ResearchResult = {
     duplicatesRemoved?: number;
     perConnector?: Connector[];
   };
-  calls?: Array<{ serverId: string; serverName: string; toolName: string; status: string; recordsReturned: number; durationMs: number; reason: string; error?: string }>;
-  records?: Array<{ id: string; serverId: string; serverName: string; toolName: string; title?: string; url?: string; data: JsonRecord }>;
+  calls?: ResearchCall[];
+  records?: ResearchRecord[];
   warnings?: string[];
 };
 
@@ -147,9 +150,9 @@ export default function AgentResearch() {
           <section className="nvoid-agent-panel">
             <div className="nvoid-agent-panel-heading"><div><h2>Research report</h2><p>{result.query}</p></div><CheckCircle2 size={18} /></div>
             <div className="nvoid-agent-metrics nvoid-research-metrics">
-              <article><span>Unique records</span><strong>{result.report?.uniqueRecords ?? array(result.records).length}</strong><small>After deduplication</small></article>
+              <article><span>Unique records</span><strong>{result.report?.uniqueRecords ?? array<ResearchRecord>(result.records).length}</strong><small>After deduplication</small></article>
               <article><span>Successful calls</span><strong>{result.report?.successfulCalls ?? 0}</strong><small>{result.report?.failedCalls ?? 0} failed</small></article>
-              <article><span>Planned tools</span><strong>{result.report?.plannedCalls ?? array(result.calls).length}</strong><small>{result.planner || "Schema-based"}</small></article>
+              <article><span>Planned tools</span><strong>{result.report?.plannedCalls ?? array<ResearchCall>(result.calls).length}</strong><small>{result.planner || "Schema-based"}</small></article>
               <article><span>Connected sources</span><strong>{result.report?.selectedConnectedServers ?? result.report?.connectedServers ?? connectedCount}</strong><small>Selected for this run</small></article>
             </div>
             {array<string>(result.warnings).map((warning, index) => <p className="nvoid-research-warning" key={index}><AlertCircle size={14} /> {warning}</p>)}
@@ -158,24 +161,24 @@ export default function AgentResearch() {
           <section className="nvoid-agent-panel">
             <div className="nvoid-agent-panel-heading"><div><h2>Tool execution</h2><p>Actual calls made by the worker and their returned counts.</p></div></div>
             <div className="nvoid-research-call-list">
-              {array(result.calls).map((call, index) => <article key={call.serverId + call.toolName + index}>
+              {array<ResearchCall>(result.calls).map((call, index) => <article key={call.serverId + call.toolName + index}>
                 <span className={"nvoid-call-status " + call.status}>{call.status === "success" ? <CheckCircle2 size={14} /> : <AlertCircle size={14} />}</span>
                 <div><strong>{call.serverName} · {call.toolName}</strong><small>{call.reason}</small>{call.error && <small className="nvoid-connection-error">{call.error}</small>}</div>
                 <span className="nvoid-call-count">{call.recordsReturned} records</span>
               </article>)}
-              {array(result.calls).length === 0 && <div className="nvoid-agent-empty">No tools were called for this query.</div>}
+              {array<ResearchCall>(result.calls).length === 0 && <div className="nvoid-agent-empty">No tools were called for this query.</div>}
             </div>
           </section>
 
           <section className="nvoid-agent-panel">
-            <div className="nvoid-agent-panel-heading"><div><h2>Returned records</h2><p>{array(result.records).length} unique records from connected sources.</p></div></div>
+            <div className="nvoid-agent-panel-heading"><div><h2>Returned records</h2><p>{array<ResearchRecord>(result.records).length} unique records from connected sources.</p></div></div>
             <div className="nvoid-research-records">
-              {array(result.records).map((record) => <article key={record.id}>
+              {array<ResearchRecord>(result.records).map((record) => <article key={record.id}>
                 <div><span>{record.serverName} · {record.toolName}</span><strong>{record.title || "Research record"}</strong></div>
                 {record.url?.startsWith("https://") && <a href={record.url} target="_blank" rel="noreferrer">Open source <ArrowUpRight size={13} /></a>}
                 <details><summary>Inspect returned data</summary><pre>{JSON.stringify(record.data, null, 2)}</pre></details>
               </article>)}
-              {array(result.records).length === 0 && <div className="nvoid-agent-empty">No records were returned. Review tool execution and warnings above to see why.</div>}
+              {array<ResearchRecord>(result.records).length === 0 && <div className="nvoid-agent-empty">No records were returned. Review tool execution and warnings above to see why.</div>}
             </div>
           </section>
         </div>

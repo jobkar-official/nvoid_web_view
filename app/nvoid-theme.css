@@ -609,3 +609,58 @@ body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
   .public-sidebar.is-open + .public-main { width: 100% !important; margin-left: 0 !important; }
   .public-topbar { padding: 0 13px; }
 }
+
+
+/* Final reference palette: black conversation canvas with a near-black rail. */
+:root {
+  --nvoid-bg: #000000;
+  --nvoid-sidebar: #0a0a0a;
+  --nvoid-surface: #212121;
+  --nvoid-surface-raised: #171717;
+  --nvoid-hover: #242424;
+  --nvoid-border: #292929;
+  --nvoid-text: #ececec;
+  --nvoid-muted: #a5a5a5;
+}
+html,
+body,
+.public-shell,
+.public-main,
+.public-content {
+  background: #000000 !important;
+}
+.public-sidebar {
+  background: #0a0a0a !important;
+  border-right-color: #242424 !important;
+}
+.public-topbar {
+  background: #000000 !important;
+  border-bottom-color: #202020 !important;
+}
+.sidebar-find-button {
+  border-color: #333333 !important;
+  background: transparent !important;
+}
+.sidebar-find-button:hover,
+.public-nav-link:hover,
+.public-nav-link.active,
+.history-item:hover,
+.history-item.active {
+  background: #242424 !important;
+}
+.sidebar-history,
+.public-sidebar-bottom,
+.nvoid-workspace-nav {
+  border-color: #292929 !important;
+}
+.nvoid-agent-panel,
+.nvoid-search-diagnostics {
+  background: #171717 !important;
+  border-color: #292929 !important;
+}
+.nvoid-connection-card,
+.nvoid-search-source-row,
+.nvoid-research-records > article {
+  background: #101010 !important;
+  border-color: #292929 !important;
+}
