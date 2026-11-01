@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import InfoPage from "../../../components/info-page";
 
 export const metadata: Metadata = {
-  title: "Security & Responsible Disclosure — Worker",
+  title: "Security & Responsible Disclosure",
   description: "Learn about Worker's security principles, service boundaries, account protections and responsible vulnerability reporting."
 };
 
