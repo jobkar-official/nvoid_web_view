@@ -158,7 +158,7 @@ The web app provides same-origin authentication routes:
 - `POST /api/auth/logout`
 - `GET /api/auth/session`
 
-The sign-in route sends requests to the exact Jobkar authentication endpoint `https://edge.jobkar.in/authentication/auth/login`. Configure `NVOID_AUTH_BASE_URL=https://edge.jobkar.in` server-side. Registration and forgot-password continue to use their existing separately configurable paths:
+The sign-in route sends requests to the exact Jobkar authentication endpoint `https://edge.jobkar.in/authentication/authController/login`. Configure `NVOID_AUTH_BASE_URL=https://edge.jobkar.in` server-side. Registration and forgot-password continue to use their existing separately configurable paths:
 
 - `NVOID_AUTH_REGISTER_PATH=/backend/auth/register`
 - `NVOID_AUTH_FORGOT_PASSWORD_PATH=/backend/auth/OAuthGenPassword`
