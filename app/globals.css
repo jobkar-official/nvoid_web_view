@@ -6033,9 +6033,9 @@ body::-webkit-scrollbar {
   min-width: 0;
   min-height: calc(100vh - 60px);
   padding: 19px 15px;
-  border: 1px solid rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.24);
   border-radius: 14px;
-  background: linear-gradient(115deg, #30343a 0%, #2b2e33 100%);
+  background: #091d35;
   box-shadow: 0 18px 42px rgba(0,0,0,.2), inset 0 1px rgba(255,255,255,.045);
 }
 
@@ -6043,7 +6043,7 @@ body::-webkit-scrollbar {
   display: grid;
   gap: 6px;
   padding: 2px 7px 17px;
-  border-bottom: 1px solid rgba(177, 204, 235, .15);
+  border-bottom: 1px solid rgba(255,255,255,.26);
 }
 
 .model-docs-sidebar-heading > span,
@@ -6051,7 +6051,7 @@ body::-webkit-scrollbar {
 .model-docs-header .model-docs-eyebrow,
 .model-docs-section-heading p,
 .model-docs-footer > div > span {
-  color: #d5e2f2;
+  color: #ffffff;
   font-size: 10px;
   font-weight: 750;
   letter-spacing: .105em;
@@ -6078,7 +6078,7 @@ body::-webkit-scrollbar {
   padding: 7px 8px;
   border: 1px solid transparent;
   border-radius: 6px;
-  color: #f1f6fd;
+  color: #ffffff;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.45;
@@ -6087,7 +6087,7 @@ body::-webkit-scrollbar {
 
 .model-docs-nav a > span {
   min-width: 19px;
-  color: #c6d7eb;
+  color: #ffffff;
   font-size: 10px;
   font-variant-numeric: tabular-nums;
 }
@@ -6095,7 +6095,7 @@ body::-webkit-scrollbar {
 .model-docs-nav a:hover,
 .model-docs-nav a:focus-visible {
   color: #ffffff;
-  background: #383c42;
+  background: #102744;
 }
 
 .model-docs-sidebar-model {
@@ -6103,7 +6103,7 @@ body::-webkit-scrollbar {
   gap: 5px;
   margin-top: auto;
   padding: 17px 7px 2px;
-  border-top: 1px solid rgba(177, 204, 235, .15);
+  border-top: 1px solid rgba(255,255,255,.26);
 }
 
 .model-docs-sidebar-model strong {
@@ -6114,7 +6114,7 @@ body::-webkit-scrollbar {
 
 .model-docs-sidebar-model p {
   margin: 0;
-  color: #e0eafa;
+  color: #ffffff;
   font-size: 11px;
   line-height: 1.6;
 }
@@ -6124,10 +6124,10 @@ body::-webkit-scrollbar {
   width: 100%;
   max-width: 1050px;
   padding: clamp(22px, 3vw, 36px);
-  border: 1px solid rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.24);
   border-radius: 15px;
   color: #ffffff;
-  background: linear-gradient(115deg, #30343a 0%, #2b2e33 100%);
+  background: #091d35;
   box-shadow: 0 18px 48px rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.045);
 }
 
@@ -6137,12 +6137,12 @@ body::-webkit-scrollbar {
   flex-wrap: wrap;
   gap: 7px;
   margin: 1px 0 24px;
-  color: #d6e1ef;
+  color: #ffffff;
   font-size: 11px;
 }
 
 .model-docs-breadcrumb svg {
-  color: #c0d0e3;
+  color: #ffffff;
 }
 
 .model-docs-breadcrumb strong {
@@ -6152,18 +6152,18 @@ body::-webkit-scrollbar {
 
 .model-docs-header {
   padding: 0 0 27px;
-  border-bottom: 1px solid rgba(177, 204, 235, .18);
+  border-bottom: 1px solid rgba(255,255,255,.26);
 }
 
 .model-docs-header .model-docs-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: #e2edf9;
+  color: #ffffff;
 }
 
 .model-docs-header .model-docs-eyebrow svg {
-  color: #dcecff;
+  color: #ffffff;
 }
 
 .model-docs-header h1 {
@@ -6178,7 +6178,7 @@ body::-webkit-scrollbar {
 .model-docs-header > p {
   max-width: 820px;
   margin: 0;
-  color: #edf3fb;
+  color: #ffffff;
   font-size: 15px;
   line-height: 1.85;
 }
@@ -6195,18 +6195,18 @@ body::-webkit-scrollbar {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  color: #e1eaf5;
+  color: #ffffff;
   font-size: 11px;
   font-weight: 600;
 }
 
 .model-docs-meta svg {
-  color: #d8e8fb;
+  color: #ffffff;
 }
 
 .model-docs-section {
   padding: 31px 0 33px;
-  border-bottom: 1px solid rgba(177, 204, 235, .18);
+  border-bottom: 1px solid rgba(255,255,255,.26);
   scroll-margin-top: 24px;
 }
 
@@ -6220,7 +6220,7 @@ body::-webkit-scrollbar {
 
 .model-docs-section-heading > span {
   padding-top: 3px;
-  color: #d4e1f0;
+  color: #ffffff;
   font-size: 11px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
@@ -6243,7 +6243,7 @@ body::-webkit-scrollbar {
 .model-docs-intro {
   max-width: 900px;
   margin: 0 0 18px 47px;
-  color: #edf3fb;
+  color: #ffffff;
   font-size: 14px;
   line-height: 1.85;
 }
@@ -6254,11 +6254,11 @@ body::-webkit-scrollbar {
   gap: 26px;
   margin: 19px 0 0;
   padding: 0 0 9px;
-  border-bottom: 1px solid rgba(177, 204, 235, .2);
+  border-bottom: 1px solid rgba(255,255,255,.26);
 }
 
 .model-docs-comparison-labels span {
-  color: #d8e4f2;
+  color: #ffffff;
   font-size: 10px;
   font-weight: 750;
   letter-spacing: .075em;
@@ -6277,7 +6277,7 @@ body::-webkit-scrollbar {
   gap: 26px;
   padding: 16px 14px;
   border-bottom: 1px solid rgba(255,255,255,.09);
-  background: rgba(20,23,28,.28);
+  background: #0b213b;
 }
 
 .model-docs-row:last-child {
@@ -6298,7 +6298,7 @@ body::-webkit-scrollbar {
 
 .model-docs-row-copy > p {
   margin: 0;
-  color: #edf3fb;
+  color: #ffffff;
   font-size: 13px;
   line-height: 1.85;
 }
@@ -6309,13 +6309,13 @@ body::-webkit-scrollbar {
   gap: 12px;
   margin-top: 11px;
   padding: 10px 12px;
-  border: 1px solid rgba(177, 204, 235, .15);
+  border: 1px solid rgba(255,255,255,.24);
   border-radius: 6px;
-  background: #102e50;
+  background: #102744;
 }
 
 .model-docs-outcome > span {
-  color: #e0eafa;
+  color: #ffffff;
   font-size: 10px;
   font-weight: 700;
   line-height: 1.7;
@@ -6330,7 +6330,7 @@ body::-webkit-scrollbar {
 
 .model-docs-footnote {
   margin: 15px 0 0 47px;
-  color: #d9e5f3;
+  color: #ffffff;
   font-size: 11px;
   line-height: 1.8;
 }
@@ -6338,10 +6338,10 @@ body::-webkit-scrollbar {
 .model-docs-note {
   margin: 17px 0 0 47px;
   padding: 13px 16px;
-  border: 1px solid rgba(177, 204, 235, .18);
-  border-left: 3px solid #7ea9d7;
+  border: 1px solid rgba(255,255,255,.24);
+  border-left: 3px solid #ffffff;
   border-radius: 5px;
-  background: #292d32;
+  background: #0b213b;
 }
 
 .model-docs-note strong {
@@ -6352,7 +6352,7 @@ body::-webkit-scrollbar {
 
 .model-docs-note p {
   margin: 5px 0 0;
-  color: #edf3fb;
+  color: #ffffff;
   font-size: 12px;
   line-height: 1.8;
 }
@@ -6376,7 +6376,7 @@ body::-webkit-scrollbar {
 .model-docs-footer p {
   max-width: 700px;
   margin: 0;
-  color: #edf3fb;
+  color: #ffffff;
   font-size: 13px;
   line-height: 1.8;
 }
@@ -6387,7 +6387,7 @@ body::-webkit-scrollbar {
   gap: 7px;
   flex: 0 0 auto;
   padding: 8px 0;
-  border-bottom: 1px solid #c4d8ee;
+  border-bottom: 1px solid #ffffff;
   color: #ffffff;
   font-size: 12px;
   font-weight: 750;
