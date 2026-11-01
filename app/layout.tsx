@@ -1,19 +1,20 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import "./nvoid-theme.css";
 import { AuthProvider } from "../lib/context/AuthContext";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nvoid.ai"),
   title: {
-    default: "Worker — AI-Powered Job Discovery",
-    template: "%s | Worker"
+    default: "Nvoid — Global AI Career Agent",
+    template: "%s | Nvoid"
   },
-  description: "Discover job opportunities across connected sources and company career pages. Build your professional profile and let Worker agent find relevant opportunities for you.",
-  applicationName: "Worker",
+  description: "Discover job opportunities across connected sources and company career pages. Build your professional profile and let Nvoid agent find relevant opportunities for you.",
+  applicationName: "Nvoid",
   openGraph: {
     type: "website",
-    siteName: "Worker",
-    title: "Worker — AI-Powered Employment Discovery",
+    siteName: "Nvoid",
+    title: "Nvoid — Global AI Career Agent",
     description: "Explore opportunities across the job market and let your AI job agent discover relevant roles."
   },
   robots: {
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#121A48"
+  themeColor: "#212121"
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

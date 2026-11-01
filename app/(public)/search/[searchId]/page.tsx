@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import GuestHome from "../../../../components/guest-home";
 
 export const metadata: Metadata = {
-  title: "Saved job search | Worker",
-  description: "Review job opportunities from a saved Worker search.",
+  title: "Saved job search | Nvoid",
+  description: "Review job opportunities from a saved Nvoid search.",
   robots: { index: false, follow: false }
 };
 

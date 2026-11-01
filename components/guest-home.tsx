@@ -54,11 +54,11 @@ function cachedJobs(jobs: Job[]): Job[] {
   })).filter((job) => job.title !== "Untitled opportunity" || Boolean(job.jobUrl || job.applicationUrl));
 }
 
-export default function GuestHome({ searchId, initialJobTitle = "", initialLocation = "India", autoSearch = false }: { searchId?: string; initialJobTitle?: string; initialLocation?: string; autoSearch?: boolean }) {
+export default function GuestHome({ searchId, initialJobTitle = "", initialLocation = "Worldwide", autoSearch = false }: { searchId?: string; initialJobTitle?: string; initialLocation?: string; autoSearch?: boolean }) {
   const { saveSearch, updateSearch, getSearch } = useGuestHistory();
   const autoSearchKey = useRef("");
   const [jobTitle, setJobTitle] = useState(initialJobTitle);
-  const [location, setLocation] = useState(initialLocation || "India");
+  const [location, setLocation] = useState(initialLocation || "Worldwide");
   const [jobs, setJobs] = useState<Job[]>([]);
   const [searched, setSearched] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -78,7 +78,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
   useEffect(() => {
     if (!searchId) {
       setJobTitle(initialJobTitle);
-      setLocation(initialLocation || "India");
+      setLocation(initialLocation || "Worldwide");
       setJobs([]);
       setSearched(false);
       setActiveSearch("");
@@ -89,7 +89,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     const saved = getSearch(searchId);
     if (!saved) {
       setJobTitle("");
-      setLocation("India");
+      setLocation("Worldwide");
       setJobs([]);
       setSearched(false);
       setActiveSearch("");
@@ -167,7 +167,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       updateSearch(recordId, { resultCount: savedJobs.length, jobs: savedJobs, error: undefined });
       setNotice(savedJobs.length ? savedJobs.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "Worker could not complete this search. Please try again.";
+      const message = error instanceof Error ? error.message : "Nvoid could not complete this search. Please try again.";
       setSearched(true);
       setNotice(message);
       updateSearch(recordId, { resultCount: 0, jobs: [], error: message });
@@ -178,7 +178,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
 
   useEffect(() => {
     const role = initialJobTitle.trim();
-    const place = initialLocation.trim() || "India";
+    const place = initialLocation.trim() || "Worldwide";
     if (!autoSearch || !role) {
       autoSearchKey.current = "";
       return;
@@ -197,7 +197,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     <div className="worker-results-page">
       <section className="worker-results-header">
         <div className="worker-results-heading">
-          <span className="worker-results-eyebrow"><Asterisk size={13} /> WORKER SEARCH</span>
+          <span className="worker-results-eyebrow"><Asterisk size={13} /> NVOID SEARCH</span>
           <h1>{searchId ? "Saved search" : "Explore opportunities"}</h1>
           <p>Search across connected job boards and company career pages. Review each opportunity and choose where to apply.</p>
         </div>
@@ -225,7 +225,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
 
       {!searched && !busy && !searchId && (
-        <section className="worker-search-guide" aria-label="How Worker job search works">
+        <section className="worker-search-guide" aria-label="How Nvoid search works">
           <div><span>01</span><strong>Search by role and location</strong><p>Describe the opportunity you want to find.</p></div>
           <div><span>02</span><strong>Compare available results</strong><p>Review the details returned by connected sources.</p></div>
           <div><span>03</span><strong>Choose your next step</strong><p>Open the original listing and apply on the destination provided.</p></div>
@@ -235,12 +235,12 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {jobs.length > 0 && (
         <section className="public-results-section">
           <div className="section-heading">
-            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE SEARCH RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Results are returned by the sources currently connected to Worker."}</p></div>
+            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE SEARCH RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Results are returned by the sources currently connected to Nvoid."}</p></div>
             <span className="result-count">{jobs.length.toLocaleString()} found</span>
           </div>
           <div className="worker-results-toolbar">
             <div className="worker-results-result-context"><strong>{jobs.length.toLocaleString()} opportunities</strong><span>Review the source details and choose where to apply.</span></div>
-            <label className="worker-results-sort"><span>Sort results</span><select value={sortMode} onChange={(event) => setSortMode(event.target.value as "relevance" | "newest" | "title")}><option value="relevance">Worker relevance</option><option value="newest">Newest first</option><option value="title">Job title</option></select></label>
+            <label className="worker-results-sort"><span>Sort results</span><select value={sortMode} onChange={(event) => setSortMode(event.target.value as "relevance" | "newest" | "title")}><option value="relevance">Nvoid relevance</option><option value="newest">Newest first</option><option value="title">Job title</option></select></label>
           </div>
           <div className="public-job-grid">
             {displayedJobs.map((job, index) => {
@@ -280,7 +280,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <section className="no-results">
           <div className="no-results-icon"><Search size={21} /></div>
           <h2>No matching jobs returned</h2>
-          <p>Try another role or location. Worker only displays opportunities returned by its connected sources; it doesn't generate sample listings.</p>
+          <p>Try another role or location. Nvoid only displays opportunities returned by its connected sources; it doesn't generate sample listings.</p>
         </section>
       )}
 

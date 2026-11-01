@@ -69,7 +69,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
             <span className="auth-form-icon">{isRegister ? <UserRound size={20} /> : <LockKeyhole size={20} />}</span>
             <span className="auth-overline">{isRegister ? "CREATE YOUR ACCOUNT" : "ACCOUNT ACCESS"}</span>
             <h2>{isRegister ? "Join Nvoid" : "Sign in"}</h2>
-            <p>{isRegister ? "Start with a free candidate or employer account." : "Continue to Worker."}</p>
+            <p>{isRegister ? "Start with a free candidate or employer account." : "Continue to Nvoid."}</p>
           </div>
           <form className="auth-form" onSubmit={submit}>
             {isRegister && (

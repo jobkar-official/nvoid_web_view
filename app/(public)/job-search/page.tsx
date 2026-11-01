@@ -3,7 +3,7 @@ import GuestHome from "../../../components/guest-home";
 
 export const metadata: Metadata = {
   title: "Find Jobs Across Connected Sources",
-  description: "Search opportunities across the job sources configured for Worker.",
+  description: "Search opportunities across the job sources configured for Nvoid.",
   robots: { index: false, follow: true }
 };
 
@@ -23,7 +23,7 @@ export default async function JobSearchPage({
 }) {
   const params = await searchParams;
   const initialJobTitle = firstValue(params.role).trim();
-  const initialLocation = firstValue(params.location).trim() || "India";
+  const initialLocation = firstValue(params.location).trim() || "Worldwide";
   return (
     <GuestHome
       initialJobTitle={initialJobTitle}

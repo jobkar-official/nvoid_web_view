@@ -1170,3 +1170,145 @@
 
 .public-content:has(.nv-private-page){max-width:none;padding:0}
 .nv-private-page{min-height:calc(100vh - 68px)}
+
+
+/* Keep account and application pages visually consistent with the Nvoid workspace. */
+.nv-private-page,
+.nv-private-page .nv-content {
+  min-height: calc(100vh - 58px);
+  color: #ececec !important;
+  background: #212121 !important;
+}
+.nv-private-page .nv-content {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: 30px clamp(18px, 3vw, 42px) 56px;
+}
+.nv-private-page .nv-page-heading h1,
+.nv-private-page .nv-panel-heading h2,
+.nv-private-page .nv-record strong,
+.nv-private-page .nv-notification strong,
+.nv-private-page .nv-job-card h3,
+.nv-private-page .nv-job-bottom strong,
+.nv-private-page .nv-empty h3,
+.nv-private-page .nv-welcome h2 { color: #ececec !important; }
+.nv-private-page .nv-page-heading p,
+.nv-private-page .nv-panel-heading p,
+.nv-private-page .nv-record small,
+.nv-private-page .nv-notification p,
+.nv-private-page .nv-notification small,
+.nv-private-page .nv-job-card > p,
+.nv-private-page .nv-empty p,
+.nv-private-page .nv-muted-copy,
+.nv-private-page .nv-stat-label,
+.nv-private-page .nv-stat-card small { color: #a8a8a8 !important; }
+.nv-private-page .nv-eyebrow,
+.nv-private-page .nv-secure-label,
+.nv-private-page .nv-panel-heading,
+.nv-private-page .nv-text-action,
+.nv-private-page .nv-agent-job a { color: #d0d0d0 !important; }
+.nv-private-page .nv-panel,
+.nv-private-page .nv-stat-card,
+.nv-private-page .nv-job-card {
+  color: #ececec !important;
+  background: #2f2f2f !important;
+  border-color: rgba(255,255,255,.1) !important;
+  box-shadow: none !important;
+}
+.nv-private-page .nv-panel-spaced { padding: 20px; }
+.nv-private-page .nv-profile-tabs { border-bottom-color: rgba(255,255,255,.1) !important; }
+.nv-private-page .nv-profile-tab {
+  color: #b5b5b5 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+.nv-private-page .nv-profile-tab:hover,
+.nv-private-page .nv-profile-tab.active {
+  color: #f5f5f5 !important;
+  background: #303030 !important;
+  border-color: rgba(255,255,255,.1) !important;
+}
+.nv-private-page .nv-form-grid label,
+.nv-private-page .nv-search-form label { color: #c8c8c8 !important; }
+.nv-private-page .nv-form-grid input,
+.nv-private-page .nv-form-grid textarea,
+.nv-private-page .nv-form-grid select,
+.nv-private-page .nv-search-form input {
+  color: #f1f1f1 !important;
+  background: #262626 !important;
+  border-color: #454545 !important;
+}
+.nv-private-page .nv-form-grid input::placeholder,
+.nv-private-page .nv-form-grid textarea::placeholder,
+.nv-private-page .nv-search-form input::placeholder { color: #898989 !important; }
+.nv-private-page .nv-form-grid input:focus,
+.nv-private-page .nv-form-grid textarea:focus,
+.nv-private-page .nv-form-grid select:focus,
+.nv-private-page .nv-search-form input:focus {
+  border-color: #777 !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.06) !important;
+}
+.nv-private-page .nv-primary {
+  color: #171717 !important;
+  background: #ececec !important;
+  border-color: #ececec !important;
+  box-shadow: none !important;
+}
+.nv-private-page .nv-primary:hover:not(:disabled) { background: #ffffff !important; }
+.nv-private-page .nv-secondary,
+.nv-private-page .nv-icon-action {
+  color: #e1e1e1 !important;
+  background: #383838 !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.nv-private-page .nv-secondary:hover,
+.nv-private-page .nv-icon-action:hover { background: #454545 !important; }
+.nv-private-page .nv-record,
+.nv-private-page .nv-notification,
+.nv-private-page .nv-connection-row { border-color: rgba(255,255,255,.1) !important; }
+.nv-private-page .nv-record-icon,
+.nv-private-page .nv-job-company,
+.nv-private-page .nv-notification-mark {
+  color: #dedede !important;
+  background: #383838 !important;
+  border-color: rgba(255,255,255,.1) !important;
+}
+.nv-private-page .nv-info-strip,
+.nv-private-page .nv-footer-note,
+.nv-private-page .nv-alert-success,
+.nv-private-page .nv-alert-error {
+  color: #d2d2d2 !important;
+  background: #292929 !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.nv-private-page .nv-status-good,
+.nv-private-page .nv-status-warning,
+.nv-private-page .nv-status-neutral {
+  color: #dedede !important;
+  background: #383838 !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.nv-private-page .nv-empty > span {
+  color: #e0e0e0 !important;
+  background: #383838 !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+.nv-private-page .nv-thread-list,
+.nv-private-page .nv-chat-preview {
+  background: #262626 !important;
+  border-color: rgba(255,255,255,.1) !important;
+}
+.nv-private-page .nv-thread:hover,
+.nv-private-page .nv-thread.active {
+  background: #383838 !important;
+  border-color: rgba(255,255,255,.1) !important;
+}
+.nv-private-page button:focus-visible,
+.nv-private-page a:focus-visible,
+.nv-private-page input:focus-visible,
+.nv-private-page textarea:focus-visible,
+.nv-private-page select:focus-visible { outline-color: rgba(255,255,255,.35) !important; }
+@media (max-width: 760px) {
+  .nv-private-page .nv-content { padding: 22px 14px 38px; }
+  .nv-private-page .nv-panel-spaced { padding: 16px; }
+}

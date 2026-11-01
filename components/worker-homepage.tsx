@@ -1,50 +1,30 @@
 "use client";
 
-import {
-  Asterisk, ArrowRight, BrainCircuit, BriefcaseBusiness, Globe2, LockKeyhole, Search, ShieldCheck
-} from "lucide-react";
-import { useAuth } from "../lib/context/AuthContext";
+import { Asterisk, ArrowUpRight, Globe2, Search } from "lucide-react";
 
 export default function WorkerHomepage() {
-  const { isAuthenticated } = useAuth();
-
   return (
-    <div className="worker-homepage worker-homepage-v2">
-      <section className="worker-home-brand-intro" aria-label="Worker">
-        <span className="worker-home-hero-symbol" aria-hidden="true"><Asterisk size={42} strokeWidth={2.1} /></span>
-        <div className="worker-home-intro-copy">
-          <span className="worker-home-intro-kicker"><span /> AI-POWERED JOB DISCOVERY</span>
-          <h1>Find your next <span className="worker-home-opportunity-word">opportunity</span><br /><strong>with <span className="worker-home-wordmark-text">worker.com</span></strong></h1>
-          <p>Search across public job boards and company career pages, all from one focused place.</p>
-          <div className="worker-home-highlight-row" aria-label="Worker benefits">
-            <span><Globe2 size={14} /> Public job boards</span>
-            <span><BriefcaseBusiness size={14} /> Company career pages</span>
-            <span><ShieldCheck size={14} /> You control every application</span>
-          </div>
+    <div className="nvoid-homepage">
+      <div className="nvoid-home-mark" aria-hidden="true"><Asterisk size={28} strokeWidth={1.7} /></div>
+      <span className="nvoid-home-eyebrow">YOUR GLOBAL CAREER AGENT</span>
+      <h1>What opportunity are you looking for?</h1>
+      <p className="nvoid-home-description">Tell Nvoid what you want to do next. Discover relevant opportunities across global job sources and company career pages in one place.</p>
+
+      <form className="nvoid-search-composer" action="/job-search" method="get">
+        <label className="nvoid-composer-field" htmlFor="home-role">
+          <span>Role, skills or keywords</span>
+          <input id="home-role" name="role" placeholder="e.g. Senior Product Designer, Java Developer" autoComplete="off" required />
+        </label>
+        <label className="nvoid-composer-field" htmlFor="home-location">
+          <span><Globe2 size={13} /> Location</span>
+          <input id="home-location" name="location" defaultValue="Worldwide" placeholder="Country, city or remote" autoComplete="off" required />
+        </label>
+        <div className="nvoid-composer-footer">
+          <span>Review every result before taking action.</span>
+          <button type="submit"><Search size={16} /> Find opportunities <ArrowUpRight size={15} /></button>
         </div>
-      </section>
-      <section className="worker-home-search-section worker-home-search-v2" aria-label="Search jobs by role and location">
-        <form className="worker-home-search-card" action="/job-search" method="get">
-          <label className="worker-home-field" htmlFor="home-role">
-            <span>ROLE, SKILL OR KEYWORD</span>
-            <span className="worker-home-field-control"><BriefcaseBusiness size={18} /><input id="home-role" name="role" placeholder="e.g. Product Designer, Java Developer" autoComplete="off" required /></span>
-          </label>
-          <span className="worker-home-field-divider" aria-hidden="true" />
-          <label className="worker-home-field" htmlFor="home-location">
-            <span>LOCATION</span>
-            <span className="worker-home-field-control"><Globe2 size={18} /><input id="home-location" name="location" defaultValue="India" placeholder="City, country or Remote" autoComplete="off" required /></span>
-          </label>
-          <button type="submit" className="worker-home-search-button"><Search size={17} /> Search jobs <ArrowRight size={16} /></button>
-        </form>
-        <div className="worker-home-search-meta">
-          <div className="worker-home-search-footnote"><ShieldCheck size={14} /> {isAuthenticated ? "Your signed-in workspace is ready. You stay in control of every application." : "No account required to start. You stay in control of every application."}</div>
-          <span className="worker-home-model-status" role="status" aria-label="Default AI model: Alpha - k1. This model is fixed and cannot be changed here.">
-            <BrainCircuit size={15} />
-            <span><small>DEFAULT MODEL</small><strong>Alpha - k1</strong></span>
-            <LockKeyhole size={12} />
-          </span>
-        </div>
-      </section>
+      </form>
+      <div className="nvoid-home-footnote">Global discovery · Source-linked results · You stay in control</div>
     </div>
   );
 }
