@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import InfoPage from "../../../components/info-page";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — Worker",
+  title: "Terms of Service",
   description: "Review the terms for using Worker's job discovery, professional profile and employer hiring services."
 };
 
