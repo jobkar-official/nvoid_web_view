@@ -1,30 +1,36 @@
 "use client";
 
-import { Asterisk, ArrowUpRight, Globe2, Search } from "lucide-react";
+import { Asterisk, ArrowRight, BriefcaseBusiness, Globe2, Search } from "lucide-react";
 
 export default function WorkerHomepage() {
   return (
-    <div className="nvoid-homepage">
-      <div className="nvoid-home-mark" aria-hidden="true"><Asterisk size={28} strokeWidth={1.7} /></div>
-      <span className="nvoid-home-eyebrow">YOUR GLOBAL CAREER AGENT</span>
-      <h1>What opportunity are you looking for?</h1>
-      <p className="nvoid-home-description">Tell Nvoid what you want to do next. Discover relevant opportunities across global job sources and company career pages in one place.</p>
-
-      <form className="nvoid-search-composer" action="/job-search" method="get">
-        <label className="nvoid-composer-field" htmlFor="home-role">
-          <span>Role, skills or keywords</span>
-          <input id="home-role" name="role" placeholder="e.g. Senior Product Designer, Java Developer" autoComplete="off" required />
-        </label>
-        <label className="nvoid-composer-field" htmlFor="home-location">
-          <span><Globe2 size={13} /> Location</span>
-          <input id="home-location" name="location" defaultValue="Worldwide" placeholder="Country, city or remote" autoComplete="off" required />
-        </label>
-        <div className="nvoid-composer-footer">
-          <span>Review every result before taking action.</span>
-          <button type="submit"><Search size={16} /> Find opportunities <ArrowUpRight size={15} /></button>
+    <div className="worker-homepage worker-homepage-v2 nvoid-homepage-restored">
+      <section className="worker-home-brand-intro" aria-label="Nvoid">
+        <span className="worker-home-hero-symbol" aria-hidden="true"><Asterisk size={42} strokeWidth={1.8} /></span>
+        <div className="worker-home-intro-copy">
+          <span className="worker-home-intro-kicker"><span /> NVOID CAREER SEARCH</span>
+          <h1>Find your next <span>opportunity</span><br /><strong>with Nvoid</strong></h1>
+          <p>Search across global job sources and company career pages, all from one focused place.</p>
         </div>
-      </form>
-      <div className="nvoid-home-footnote">Global discovery · Source-linked results · You stay in control</div>
+      </section>
+
+      <section className="worker-home-search-section worker-home-search-v2" aria-label="Search jobs by role and location">
+        <form className="worker-home-search-card" action="/job-search" method="get">
+          <label className="worker-home-field" htmlFor="home-role">
+            <span>ROLE, SKILL OR KEYWORD</span>
+            <span className="worker-home-field-control"><BriefcaseBusiness size={18} /><input id="home-role" name="role" placeholder="e.g. Product Designer, Java Developer" autoComplete="off" required /></span>
+          </label>
+          <span className="worker-home-field-divider" aria-hidden="true" />
+          <label className="worker-home-field" htmlFor="home-location">
+            <span>LOCATION</span>
+            <span className="worker-home-field-control"><Globe2 size={18} /><input id="home-location" name="location" defaultValue="Worldwide" placeholder="Country, city or remote" autoComplete="off" required /></span>
+          </label>
+          <button type="submit" className="worker-home-search-button"><Search size={17} /> Search jobs <ArrowRight size={16} /></button>
+        </form>
+        <div className="worker-home-search-meta nvoid-home-search-meta">
+          <div className="worker-home-search-footnote"><Search size={14} /> Search across connected sources. Review every result before taking action.</div>
+        </div>
+      </section>
     </div>
   );
 }
