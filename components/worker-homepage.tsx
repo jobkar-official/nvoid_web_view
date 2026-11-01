@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import {
-  Asterisk, ArrowRight, ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness,
-  Globe2, LockKeyhole, MessageSquare, Search, ShieldCheck, Sparkles, UserRound
+  Asterisk, ArrowRight, BrainCircuit, BriefcaseBusiness, Globe2, LockKeyhole, Search, ShieldCheck
 } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
 
