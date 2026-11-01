@@ -1,2 +1,5 @@
-import { redirect } from "next/navigation";
-export default function HighlightsPage() { redirect("/workspace/highlights"); }
+import PrivateSectionPage from "../../../components/private-section-page";
+
+export default function HighlightsPage() {
+  return <PrivateSectionPage section="highlights" />;
+}
