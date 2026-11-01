@@ -186,7 +186,7 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
         if (profileTab === "skills") setSkills(await skillsApi.getSkillsByUserId(id));
         if (profileTab === "education") setEducation(await qualificationApi.getQualificationsByUserId(id));
         if (profileTab === "experience") setExperience(await experienceApi.getExperienceList(id));
-        if (profileTab === "languages") setLanguages(await languageApi.getLanguagesByUserId(id));
+        if (profileTab === "languages") setLanguages(rows(await languageApi.getLanguagesByUserId(id)));
         if (profileTab === "resume") setResumes(await resumeApi.getResumesByUserId(id));
         return;
       }
@@ -281,7 +281,8 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
           await languageApi.deleteLanguage(existing.id, { userId, language: existing.language });
         } catch {
           setEditingLanguageId(null);
-          await languageApi.getLanguagesByUserId(id).then(setLanguages).catch(() => undefined);
+          const refreshedLanguages = await languageApi.getLanguagesByUserId(id).catch(() => []);
+          setLanguages(rows(refreshedLanguages));
           throw new Error("The new language entry was saved, but the previous entry could not be removed. Review your language list for a duplicate.");
         }
       }
