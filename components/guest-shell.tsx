@@ -4,9 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import WorkerMark from "./worker-mark";
+import { useAuth } from "../lib/context/AuthContext";
 import {
-  ArrowUpRight, BrainCircuit, BriefcaseBusiness, Check, ChevronDown, Clock3, FileText,
-  History, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Trash2, UserRound, X
+  Activity, ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, Building2, Check, ChevronDown,
+  CircleHelp, ClipboardList, Clock3, Code2, FileText, GraduationCap, History, LayoutDashboard,
+  MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Target,
+  Trash2, UserRound, X
 } from "lucide-react";
 
 export type GuestSearchJob = {
@@ -67,6 +70,14 @@ function makeId() {
 const MAX_HISTORY_RECORDS = 30;
 const MAX_SAVED_JOBS = 100;
 
+const privateNavigation = [
+  { label: "Workspace", items: [{ href: "/workspace", label: "Overview", icon: LayoutDashboard }, { href: "/workspace/connections", label: "API connections", icon: Code2 }] },
+  { label: "Discover", items: [{ href: "/workspace/find-jobs", label: "Find jobs", icon: Search }, { href: "/workspace/recommendations", label: "Recommended jobs", icon: BrainCircuit }, { href: "/workspace/saved", label: "Saved jobs", icon: BriefcaseBusiness }, { href: "/workspace/applications", label: "Applications", icon: ClipboardList }] },
+  { label: "Profile", items: [{ href: "/workspace/profile", label: "Profile", icon: UserRound }, { href: "/workspace/skills", label: "Skills", icon: Target }, { href: "/workspace/education", label: "Education", icon: GraduationCap }, { href: "/workspace/experience", label: "Experience", icon: Activity }, { href: "/workspace/resume", label: "Resume", icon: FileText }] },
+  { label: "Activity", items: [{ href: "/workspace/highlights", label: "Open to work", icon: Target }, { href: "/workspace/messages", label: "Messages", icon: MessageSquare }, { href: "/workspace/notifications", label: "Notifications", icon: Bell }] },
+  { label: "Help", items: [{ href: "/workspace/support", label: "Support", icon: CircleHelp }] }
+];
+
 function readHistory(): GuestSearchRecord[] {
   try {
     const parsed: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
@@ -108,6 +119,8 @@ function formatTime(value: string) {
 
 export function GuestShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const { user, isAuthenticated, logout } = useAuth();
+  const signedIn = isAuthenticated && Boolean(user);
   const [history, setHistory] = useState<GuestSearchRecord[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [browseOpen, setBrowseOpen] = useState(false);
@@ -197,26 +210,44 @@ export function GuestShell({ children }: { children: ReactNode }) {
             <button className="sidebar-collapse-button" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
           </div>
 
-          <Link href="/job-search" className="sidebar-find-button" onClick={() => closeSidebarOnMobile()}>
+          <Link href={signedIn ? "/workspace/find-jobs" : "/job-search"} className="sidebar-find-button" onClick={() => closeSidebarOnMobile()}>
             <Plus size={17} strokeWidth={2.4} />
             <span>Find jobs</span>
           </Link>
 
           <nav className="public-nav" aria-label="Main navigation">
-            <span className="sidebar-section-label">Explore</span>
-            {links.map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link key={item.href} href={item.href} onClick={() => closeSidebarOnMobile()} className={"public-nav-link" + (pathname === item.href ? " active" : "")}>
-                  <Icon size={16} />
-                  <span>{item.label}</span>
+            {signedIn ? privateNavigation.map((group) => (
+              <div className="private-nav-group" key={group.label}>
+                <span className="sidebar-section-label">{group.label}</span>
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const active = item.href === "/workspace" ? pathname === "/workspace" : pathname === item.href;
+                  return (
+                    <Link key={item.href} href={item.href} onClick={() => closeSidebarOnMobile()} className={"public-nav-link" + (active ? " active" : "")}>
+                      <Icon size={16} />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )) : (
+              <>
+                <span className="sidebar-section-label">Explore</span>
+                {links.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <Link key={item.href} href={item.href} onClick={() => closeSidebarOnMobile()} className={"public-nav-link" + (pathname === item.href ? " active" : "")}>
+                      <Icon size={16} />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+                <Link href="/free-job-posting" className="public-nav-link" onClick={() => closeSidebarOnMobile()}>
+                  <BriefcaseBusiness size={16} />
+                  <span>For employers</span>
                 </Link>
-              );
-            })}
-            <Link href="/free-job-posting" className="public-nav-link" onClick={() => closeSidebarOnMobile()}>
-              <BriefcaseBusiness size={16} />
-              <span>For employers</span>
-            </Link>
+              </>
+            )}
           </nav>
 
           <div className="sidebar-history">
@@ -253,16 +284,32 @@ export function GuestShell({ children }: { children: ReactNode }) {
           </div>
 
           <div className="public-sidebar-bottom">
-            <div className="guest-identity">
-              <span className="guest-avatar">G</span>
-              <span><strong>Guest</strong><small>Browsing Worker</small></span>
-              <ChevronDown size={14} />
-            </div>
-            <div className="guest-auth-actions">
-              <Link href="/auth/signin" className="sidebar-signin" onClick={() => closeSidebarOnMobile()}>Sign in</Link>
-              <Link href="/auth/register" className="sidebar-register" onClick={() => closeSidebarOnMobile()}>Create account</Link>
-            </div>
-            <div className="sidebar-trust"><ShieldCheck size={12} /> Search without creating an account</div>
+            {signedIn && user ? (
+              <>
+                <div className="guest-identity">
+                  <span className="guest-avatar">{user.name.split(/\\s+/).filter(Boolean).slice(0, 2).map(part => part[0]?.toUpperCase()).join("") || "W"}</span>
+                  <span><strong>{user.name}</strong><small>{user.role === "recruiter" ? "Recruiter" : "Job seeker"}</small></span>
+                </div>
+                <div className="guest-auth-actions">
+                  <Link href="/workspace" className="sidebar-signin" onClick={() => closeSidebarOnMobile()}>Workspace</Link>
+                  <button type="button" className="sidebar-register" onClick={() => void logout()}>Sign out</button>
+                </div>
+                <div className="sidebar-trust"><ShieldCheck size={12} /> Your private workspace is active</div>
+              </>
+            ) : (
+              <>
+                <div className="guest-identity">
+                  <span className="guest-avatar">G</span>
+                  <span><strong>Guest</strong><small>Browsing Worker</small></span>
+                  <ChevronDown size={14} />
+                </div>
+                <div className="guest-auth-actions">
+                  <Link href="/auth/signin" className="sidebar-signin" onClick={() => closeSidebarOnMobile()}>Sign in</Link>
+                  <Link href="/auth/register" className="sidebar-register" onClick={() => closeSidebarOnMobile()}>Create account</Link>
+                </div>
+                <div className="sidebar-trust"><ShieldCheck size={12} /> Search without creating an account</div>
+              </>
+            )}
           </div>
         </aside>
 
@@ -334,10 +381,19 @@ export function GuestShell({ children }: { children: ReactNode }) {
                   </div>
                 )}
               </div>
-              <Link href="/auth/signin" className="topbar-login">Sign in</Link>
-              <Link href="/auth/register" className="topbar-create">Create account <ArrowUpRight size={14} /></Link>
-              <span className="topbar-action-separator" aria-hidden="true">|</span>
-              <Link href="/free-job-posting" className="topbar-employer"><BriefcaseBusiness size={13} /> Free Hiring</Link>
+              {signedIn ? (
+                <>
+                  <Link href="/workspace" className="topbar-login">Workspace</Link>
+                  <button type="button" className="topbar-create" onClick={() => void logout()}>Sign out</button>
+                </>
+              ) : (
+                <>
+                  <Link href="/auth/signin" className="topbar-login">Sign in</Link>
+                  <Link href="/auth/register" className="topbar-create">Create account <ArrowUpRight size={14} /></Link>
+                  <span className="topbar-action-separator" aria-hidden="true">|</span>
+                  <Link href="/free-job-posting" className="topbar-employer"><BriefcaseBusiness size={13} /> Free Hiring</Link>
+                </>
+              )}
             </div>
           </header>
           <main className="public-content">{children}</main>
