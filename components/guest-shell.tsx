@@ -71,11 +71,19 @@ const MAX_HISTORY_RECORDS = 30;
 const MAX_SAVED_JOBS = 100;
 
 const privateNavigation = [
-  { label: "Workspace", items: [{ href: "/workspace", label: "Overview", icon: LayoutDashboard }] },
-  { label: "Discover", items: [{ href: "/workspace/find-jobs", label: "Find jobs", icon: Search }, { href: "/workspace/recommendations", label: "Recommended jobs", icon: BrainCircuit }, { href: "/workspace/activity", label: "Saved & applications", icon: BriefcaseBusiness }] },
-  { label: "Profile", items: [{ href: "/workspace/profile", label: "Profile", icon: UserRound }] },
-  { label: "Activity", items: [{ href: "/workspace/highlights", label: "Open to work", icon: Target }, { href: "/workspace/messages", label: "Messages", icon: MessageSquare }, { href: "/workspace/notifications", label: "Notifications", icon: Bell }] },
-  { label: "Help", items: [{ href: "/workspace/support", label: "Support", icon: CircleHelp }] }
+  {
+    label: "Discover",
+    items: [
+      { href: "/workspace", label: "Overview", icon: LayoutDashboard },
+      { href: "/workspace/find-jobs", label: "Find jobs", icon: Search },
+      { href: "/workspace/activity", label: "Application", icon: BriefcaseBusiness },
+      { href: "/workspace/profile", label: "Profile", icon: UserRound },
+      { href: "/workspace/highlights", label: "Open to work", icon: Target },
+      { href: "/workspace/messages", label: "Messages", icon: MessageSquare },
+      { href: "/workspace/notifications", label: "Notifications", icon: Bell },
+      { href: "/workspace/support", label: "Support", icon: CircleHelp }
+    ]
+  }
 ];
 
 function readHistory(): GuestSearchRecord[] {
@@ -210,10 +218,10 @@ export function GuestShell({ children }: { children: ReactNode }) {
             <button className="sidebar-collapse-button" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
           </div>
 
-          <Link href={signedIn ? "/workspace/find-jobs" : "/job-search"} className="sidebar-find-button" onClick={() => closeSidebarOnMobile()}>
+          {!signedIn && <Link href="/job-search" className="sidebar-find-button" onClick={() => closeSidebarOnMobile()}>
             <Plus size={17} strokeWidth={2.4} />
             <span>Find jobs</span>
-          </Link>
+          </Link>}
 
           <nav className="public-nav" aria-label="Main navigation">
             {signedIn ? privateNavigation.map((group) => (
