@@ -5,6 +5,7 @@ import {
   ArrowUpRight,
   BrainCircuit,
   Building2,
+  Bot,
   CheckCircle2,
   Clock3,
   Database,
