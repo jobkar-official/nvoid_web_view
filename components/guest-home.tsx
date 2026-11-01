@@ -142,7 +142,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         phone: "",
         jobTitle: role,
         location: place,
-        countries: [place],
+        countries: place.toLowerCase() === "worldwide" ? [] : [place],
         skills: [],
         keywords: [role],
         experienceYears: 0,
