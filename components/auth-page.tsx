@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, BriefcaseBusiness, Building2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, Sparkles, UserRound } from "lucide-react";
+import { signInWithJobkar } from "../lib/context/auth-client";
 
 export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
   const isRegister = mode === "register";
@@ -24,14 +25,19 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
     setBusy(true);
     setNotice("");
     try {
-      const response = await fetch("/api/auth/" + mode, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name, email, password, roleId: Number(role) })
-      });
-      const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error || "Authentication could not be completed.");
-      if (!data.authenticated) throw new Error("The authentication service did not confirm this session.");
+      if (isRegister) {
+        const response = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ name, email, password, roleId: Number(role) })
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(data.error || "Registration could not be completed.");
+        if (!data.authenticated) throw new Error("The authentication service did not confirm this session.");
+      } else {
+        const session = await signInWithJobkar(email, password);
+        if (!session.authenticated) throw new Error("Jobkar authentication did not confirm this session.");
+      }
       const next = new URLSearchParams(window.location.search).get("next");
       const destination = next && next.startsWith("/") && !next.startsWith("//") ? next : "/workspace";
       window.location.assign(destination);
