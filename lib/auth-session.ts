@@ -3,60 +3,107 @@ import { cookies } from "next/headers";
 export type NvoidRoleId = 3 | 4 | 7;
 export type NvoidSession = {
   roleId: NvoidRoleId;
-  user: { id?: string; name?: string; fullName?: string; email?: string };
+  user: {
+    id?: string;
+    name?: string;
+    fullName?: string;
+    email?: string;
+    slug?: string;
+    phone?: string;
+    companyId?: string;
+    imageUrl?: string | null;
+  };
 };
 
-const SESSION_COOKIE = "nvoid_session";
+export const nvoidSessionCookie = "nvoid_session";
+export const nvoidRefreshCookie = "nvoid_refresh";
+export const nvoidUserCookie = "nvoid_user";
 
-function objectValue(value: unknown): Record<string, unknown> {
-  return value && typeof value === "object" ? value as Record<string, unknown> : {};
+type JsonObject = Record<string, unknown>;
+
+function objectValue(value: unknown): JsonObject {
+  return value && typeof value === "object" && !Array.isArray(value) ? value as JsonObject : {};
 }
 
-function extractSession(value: unknown): NvoidSession | null {
+function firstValue(...values: unknown[]): unknown {
+  return values.find(value => value !== undefined && value !== null && value !== "");
+}
+
+function decodeToken(token: string): JsonObject {
+  try {
+    const payload = token.split(".")[1];
+    if (!payload) return {};
+    return objectValue(JSON.parse(Buffer.from(payload, "base64url").toString("utf8")));
+  } catch {
+    return {};
+  }
+}
+
+function extractSession(value: unknown, token = ""): NvoidSession | null {
   const root = objectValue(value);
   const data = objectValue(root.data);
-  const user = objectValue(root.user || data.user || root.account || data.account);
-  const roleId = Number(user.roleId ?? user.role_id ?? root.roleId ?? root.role_id ?? data.roleId ?? data.role_id);
+  const result = objectValue(root.result);
+  const nested = objectValue(data.data || data.result || result.data || result.result);
+  const user = objectValue(firstValue(root.user, data.user, result.user, nested.user, root.account, data.account, result.account, data, result));
+  const claims = decodeToken(token);
+  const roleId = Number(firstValue(
+    user.roleId, user.role_id, root.roleId, root.role_id, data.roleId, data.role_id,
+    result.roleId, result.role_id, nested.roleId, nested.role_id, claims.roleId, claims.role_id
+  ));
   if (roleId !== 3 && roleId !== 4 && roleId !== 7) return null;
+  const id = firstValue(user.id, user.userId, user.user_id, claims.userId, claims.user_id, claims.sub);
+  const name = firstValue(user.fullName, user.full_name, user.name, claims.name);
   return {
     roleId,
     user: {
-      id: String(user.id ?? user.userId ?? user.user_id ?? "") || undefined,
-      name: String(user.name ?? "") || undefined,
-      fullName: String(user.fullName ?? user.full_name ?? user.name ?? "") || undefined,
-      email: String(user.email ?? "") || undefined
+      id: id === undefined ? undefined : String(id),
+      name: name === undefined ? undefined : String(name),
+      fullName: name === undefined ? undefined : String(name),
+      email: firstValue(user.email, claims.email) ? String(firstValue(user.email, claims.email)) : undefined,
+      slug: firstValue(user.slug, claims.slug) ? String(firstValue(user.slug, claims.slug)) : undefined,
+      phone: firstValue(user.phone, user.phoneNumber) ? String(firstValue(user.phone, user.phoneNumber)) : undefined,
+      companyId: firstValue(user.companyId, user.company_id) ? String(firstValue(user.companyId, user.company_id)) : undefined,
+      imageUrl: firstValue(user.imageUrl, user.image_url) ? String(firstValue(user.imageUrl, user.image_url)) : null
     }
   };
 }
 
 export async function getNvoidSession(): Promise<NvoidSession | null> {
-  const base = process.env.NVOID_AUTH_BASE_URL?.trim();
   const cookieStore = await cookies();
-  const token = cookieStore.get(SESSION_COOKIE)?.value;
-  if (!base || !token) return null;
+  const token = cookieStore.get(nvoidSessionCookie)?.value;
+  const userCookie = cookieStore.get(nvoidUserCookie)?.value;
+  if (!token || !userCookie) return null;
 
   try {
-    const target = new URL(process.env.NVOID_AUTH_SESSION_PATH || "/auth/me", base);
-    const response = await fetch(target, {
-      method: "GET",
-      headers: { accept: "application/json", authorization: "Bearer " + token },
-      cache: "no-store",
-      signal: AbortSignal.timeout(8000)
-    });
-    if (!response.ok) return null;
-    return extractSession(await response.json());
+    const savedUser = JSON.parse(userCookie) as JsonObject;
+    const session = extractSession(savedUser, token);
+    if (!session) return null;
+    const claims = decodeToken(token);
+    const expiresAt = Number(claims.exp);
+    if (Number.isFinite(expiresAt) && expiresAt > 0 && expiresAt * 1000 <= Date.now()) return null;
+    return session;
   } catch {
     return null;
   }
 }
 
-export function parseAuthenticatedResponse(value: unknown): { token: string; session: NvoidSession } | null {
+export function parseAuthenticatedResponse(value: unknown): { token: string; refreshToken?: string; session: NvoidSession } | null {
   const root = objectValue(value);
   const data = objectValue(root.data);
-  const token = String(root.accessToken ?? root.access_token ?? root.token ?? root.jwt ?? data.accessToken ?? data.access_token ?? data.token ?? data.jwt ?? "");
-  const session = extractSession(value);
-  if (!token || !session) return null;
-  return { token, session };
+  const result = objectValue(root.result);
+  const nested = objectValue(data.data || data.result || result.data || result.result);
+  const token = String(firstValue(
+    root.accessToken, root.access_token, root.token, root.jwt,
+    data.accessToken, data.access_token, data.token, data.jwt,
+    result.accessToken, result.access_token, result.token, result.jwt,
+    nested.accessToken, nested.access_token, nested.token, nested.jwt
+  ) || "");
+  const refreshToken = String(firstValue(
+    root.refreshToken, root.refresh_token, data.refreshToken, data.refresh_token,
+    result.refreshToken, result.refresh_token, nested.refreshToken, nested.refresh_token
+  ) || "");
+  if (!token) return null;
+  const session = extractSession(value, token);
+  if (!session) return null;
+  return { token, refreshToken: refreshToken || undefined, session };
 }
-
-export const nvoidSessionCookie = SESSION_COOKIE;
