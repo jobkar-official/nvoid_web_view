@@ -150,27 +150,51 @@ Guest search history is stored in the current browser's local storage under `nvo
 
 ### Authentication service adapter
 
-The web app now provides same-origin authentication routes:
+The web app provides same-origin authentication routes:
 
 - `POST /api/auth/signin`
 - `POST /api/auth/register`
 - `POST /api/auth/forgot-password`
 - `POST /api/auth/logout`
+- `GET /api/auth/session`
 
-Configure these server-side values in the web app environment:
+The production defaults use the Jobkar Edge Gateway. Configure these server-side values in the web app environment:
 
-- `NVOID_AUTH_BASE_URL` — base URL of the existing authentication service.
-- `NVOID_AUTH_SIGNIN_PATH` — defaults to `/auth/signin`.
-- `NVOID_AUTH_REGISTER_PATH` — defaults to `/auth/register`.
-- `NVOID_AUTH_FORGOT_PASSWORD_PATH` — defaults to `/auth/forgot-password`.
-- `NVOID_AUTH_SESSION_PATH` — defaults to `/auth/me`.
+- `NVOID_AUTH_BASE_URL=https://edge.jobkar.in`
+- `NVOID_AUTH_SIGNIN_PATH=/backend/auth/login`
+- `NVOID_AUTH_REGISTER_PATH=/backend/auth/register`
+- `NVOID_AUTH_FORGOT_PASSWORD_PATH=/backend/auth/OAuthGenPassword`
+- `NVOID_API_BASE_URL=https://edge.jobkar.in`
+- `NEXT_PUBLIC_API_URL=https://edge.jobkar.in`
+- `NEXT_PUBLIC_SOCKET_URL=https://chat.jobkar.in`
 
-The sign-in/register service must accept the submitted JSON fields and return an access token plus a user object carrying role ID 3, 4 or 7. The forgot-password service must accept `{ "email": "..." }` and trigger its secure email recovery flow; the web adapter returns a generic confirmation to avoid revealing whether an email address has an account. The web server stores the token in an HttpOnly, SameSite=Lax cookie and validates it against the configured session endpoint before rendering `/workspace`. Adapt the configurable endpoint paths or response mapping to the actual Jobkar/Nvoid authentication contract before production rollout. The web view does not create a new identity database.
+Sign-in and registration send the selected WEB platform and role ID. The upstream auth response must include an access token and a supported role ID (3, 4 or 7); it should also return an account ID and email for account-specific API calls and refresh-token rotation.
 
-### Workspace integration status
+The web server stores the access token, refresh token and minimal account context in HttpOnly, SameSite=Lax cookies. The token is not read by browser JavaScript and is not written to local storage. The private route group checks the cookie session before rendering. If an API returns 401, the server proxy calls `/backend/auth/refreshToken`, rotates the access/refresh cookies when the refresh succeeds and retries the original request. An unsuccessful refresh clears the session cookies.
 
-The role-specific navigation, dashboard, recent activity, Find Jobs interaction, post-job form and page states are implemented in the UI. The existing Nvoid job-search proxy is reused. The authenticated account session is checked server-side against the configured auth service.
+All browser API calls use same-origin `/api/jobkar/*` routes. The proxy attaches the bearer token server-side and forwards requests to the configured Edge Gateway or Jobkar Chat service. This avoids browser CORS dependencies and keeps access/refresh tokens out of client code. Keep the API and auth base URLs server-controlled; do not place private service credentials in `NEXT_PUBLIC_*` variables.
 
-The current repository does not yet expose verified Jobkar hiring endpoints for job creation, applicant lists, messaging, company data, notifications, support cases, or persistent professional profile updates. Those sections therefore render honest integration states rather than fabricated records. Connect each section to its authorized backend API before production use. UI navigation is not a substitute for authorization checks in the corresponding backend APIs.
+Forgot-password uses the existing `OAuthGenPassword` endpoint and returns a generic confirmation so the page does not reveal whether an email address has an account. This web view does not create a separate identity database.
+
+### Private workspace and Jobkar API integration
+
+The authenticated workspace is available at `/workspace` and its sections are served from the private route group. It redirects unauthenticated visitors to `/auth/signin?next=/workspace` and is marked `noindex,nofollow`.
+
+The private workspace uses the API modules in `lib/api` and the shared request client in `lib/context/client.ts`. Connected account operations include:
+
+- Profile lookup and updates through `usersApi`.
+- Skill, qualification and experience read/create/update/delete operations.
+- Resume listing, upload and deletion.
+- Recommended and saved jobs, including save/remove actions.
+- Open-to-work preferences and availability status.
+- Notifications, mark-as-read and delete actions.
+- Support ticket listing, creation and closure.
+- Chat thread listing and conversation history.
+
+The **API connections** section runs live read checks using the signed-in account session and distinguishes an empty successful response from a failed request. **Find jobs** uses the Nvoid agent's live source search and keeps `syncToBackend=false`; it does not submit applications.
+
+The current API modules do not define a personal application-history endpoint, a verified job-create/applicant-management contract, or a send-message operation. Those actions are explicitly identified as unavailable instead of showing fabricated records or claiming that an operation succeeded. Backend authorization must still be enforced by the Jobkar APIs for every read and mutation; hiding a UI control is not authorization.
+
+The role-aware private navigation supports account roles 3 (recruiter), 4 (job seeker) and 7 (support). The workspace is private and is not included in public indexing.
 
 Guest job search is publicly reachable and should be protected with server-side rate limiting, abuse monitoring and provider-cost controls before a public launch. Policy pages are implementation drafts; insert the operator's legal identity, contact details, retention periods and final reviewed legal wording before treating them as binding policies.
