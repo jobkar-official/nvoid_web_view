@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Asterisk, BriefcaseBusiness, Clock3, ExternalLink, LoaderCircle, MapPin, Search, ShieldCheck, Target, X } from "lucide-react";
 import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
 
@@ -64,6 +64,16 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [activeSearch, setActiveSearch] = useState("");
+  const [sortMode, setSortMode] = useState<"relevance" | "newest" | "title">("relevance");
+  const displayedJobs = useMemo(() => jobs.map((job, index) => ({ job, index })).sort((left, right) => {
+    if (sortMode === "newest") {
+      const leftDate = Date.parse(left.job.postedAt || "") || 0;
+      const rightDate = Date.parse(right.job.postedAt || "") || 0;
+      return rightDate - leftDate || left.index - right.index;
+    }
+    if (sortMode === "title") return left.job.title.localeCompare(right.job.title) || left.index - right.index;
+    return (right.job.matchScore ?? -1) - (left.job.matchScore ?? -1) || left.index - right.index;
+  }).map((item) => item.job), [jobs, sortMode]);
 
   useEffect(() => {
     if (!searchId) {
@@ -214,14 +224,26 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching connected job sources for {jobTitle} in {location}…</div>}
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
 
+      {!searched && !busy && !searchId && (
+        <section className="worker-search-guide" aria-label="How Worker job search works">
+          <div><span>01</span><strong>Search by role and location</strong><p>Describe the opportunity you want to find.</p></div>
+          <div><span>02</span><strong>Compare available results</strong><p>Review the details returned by connected sources.</p></div>
+          <div><span>03</span><strong>Choose your next step</strong><p>Open the original listing and apply on the destination provided.</p></div>
+        </section>
+      )}
+
       {jobs.length > 0 && (
         <section className="public-results-section">
           <div className="section-heading">
             <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE SEARCH RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Results are returned by the sources currently connected to Worker."}</p></div>
             <span className="result-count">{jobs.length.toLocaleString()} found</span>
           </div>
+          <div className="worker-results-toolbar">
+            <div className="worker-results-result-context"><strong>{jobs.length.toLocaleString()} opportunities</strong><span>Review the source details and choose where to apply.</span></div>
+            <label className="worker-results-sort"><span>Sort results</span><select value={sortMode} onChange={(event) => setSortMode(event.target.value as "relevance" | "newest" | "title")}><option value="relevance">Worker relevance</option><option value="newest">Newest first</option><option value="title">Job title</option></select></label>
+          </div>
           <div className="public-job-grid">
-            {jobs.map((job, index) => {
+            {displayedJobs.map((job, index) => {
               const company = job.company || "Company not listed";
               const locationText = job.location || job.country || "Location not provided";
               const listing = job.jobUrl || job.applicationUrl;
@@ -236,6 +258,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                   <p className="public-job-company">{company}</p>
                   <div className="public-job-meta"><span><MapPin size={13} />{locationText}</span>{job.employmentType && <span><BriefcaseBusiness size={13} />{job.employmentType}</span>}</div>
                   <p className="public-job-description">{clean(job.description) || "Open the original listing for the full job description and requirements."}</p>
+                  {job.matchReasons && job.matchReasons.length > 0 && <div className="worker-match-reasons">{job.matchReasons.slice(0, 3).map((reason) => <span key={reason}>{reason}</span>)}</div>}
                   <div className="public-job-details">
                     {job.experience && <span>{job.experience}</span>}
                     {job.workMode && <span>{job.workMode}</span>}
