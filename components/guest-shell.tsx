@@ -6,8 +6,8 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import WorkerMark from "./worker-mark";
 import { useAuth } from "../lib/context/AuthContext";
 import {
-  Activity, ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, Check, ChevronDown,
-  CircleHelp, ClipboardList, Clock3, Code2, FileText, GraduationCap, History, LayoutDashboard,
+  ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, Check, ChevronDown,
+  CircleHelp, ClipboardList, Clock3, Code2, FileText, History, LayoutDashboard,
   MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Target,
   Trash2, UserRound, X
 } from "lucide-react";
@@ -73,7 +73,7 @@ const MAX_SAVED_JOBS = 100;
 const privateNavigation = [
   { label: "Workspace", items: [{ href: "/workspace", label: "Overview", icon: LayoutDashboard }, { href: "/workspace/connections", label: "API connections", icon: Code2 }] },
   { label: "Discover", items: [{ href: "/workspace/find-jobs", label: "Find jobs", icon: Search }, { href: "/workspace/recommendations", label: "Recommended jobs", icon: BrainCircuit }, { href: "/workspace/saved", label: "Saved jobs", icon: BriefcaseBusiness }, { href: "/workspace/applications", label: "Applications", icon: ClipboardList }] },
-  { label: "Profile", items: [{ href: "/workspace/profile", label: "Profile", icon: UserRound }, { href: "/workspace/skills", label: "Skills", icon: Target }, { href: "/workspace/education", label: "Education", icon: GraduationCap }, { href: "/workspace/experience", label: "Experience", icon: Activity }, { href: "/workspace/resume", label: "Resume", icon: FileText }] },
+  { label: "Profile", items: [{ href: "/workspace/profile", label: "Profile", icon: UserRound }] },
   { label: "Activity", items: [{ href: "/workspace/highlights", label: "Open to work", icon: Target }, { href: "/workspace/messages", label: "Messages", icon: MessageSquare }, { href: "/workspace/notifications", label: "Notifications", icon: Bell }] },
   { label: "Help", items: [{ href: "/workspace/support", label: "Support", icon: CircleHelp }] }
 ];
