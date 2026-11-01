@@ -14,7 +14,7 @@ import { resumeApi } from "../lib/api/resume.api";
 import { skillsApi } from "../lib/api/skill.api";
 import { supportApi } from "../lib/api/support.api";
 
-type Session = { roleId: 3 | 4 | 7; user: { id?: string; name?: string; fullName?: string; email?: string; slug?: string; phone?: string } };
+type Session = { user: { id?: string; name?: string; fullName?: string; email?: string; slug?: string; phone?: string } };
 type RecordData = Record<string, any>;
 type Page = { title: string; description: string; icon: typeof BriefcaseBusiness };
 const pages: Record<string, Page> = {
@@ -270,7 +270,7 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
   const page = pages[section] || pages.activity;
   const Icon = page.icon;
 
-  return <main className="nv-main">
+  return <div className="nv-main nv-private-page">
     <div className="nv-content">
       <div className="nv-page-heading">
         <div>
@@ -278,7 +278,6 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
           <h1>{page.title}</h1>
           <p>{page.description}</p>
         </div>
-        <a className="nv-secure-label" href="/"><ArrowUpRight size={14} /> Find jobs</a>
       </div>
       {error && <div className="nv-alert nv-alert-error" role="alert"><X size={16} /><span>{error}</span><button onClick={() => setError("")} aria-label="Dismiss"><X size={14} /></button></div>}
       {notice && <div className="nv-alert nv-alert-success" role="status"><CheckCircle2 size={16} /><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss"><X size={14} /></button></div>}
@@ -378,7 +377,7 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
         </section>
       </div>}
     </div>
-  </main>;
+  </div>;
 
 }
 
