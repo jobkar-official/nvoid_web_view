@@ -6830,7 +6830,6 @@ body::-webkit-scrollbar {
 }
 
 
-/* Employer free hiring page */
 .free-hiring-page {
   width: min(100%, 1180px);
   margin: 0 auto;
@@ -6962,7 +6961,6 @@ body::-webkit-scrollbar {
 .free-hiring-disclaimer { display: flex; align-items: flex-start; gap: 7px; max-width: 1000px; margin: 16px auto 0; color: #8795a7; font-size: 9px; line-height: 1.7; }
 .free-hiring-disclaimer svg { flex: 0 0 auto; margin-top: 1px; color: #4d8c70; }
 
-/* Product release hub */
 .release-hub { width: min(100%, 1180px); margin: 0 auto; padding: 4px 0 18px; }
 .release-hub-hero { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 30px; align-items: center; padding: clamp(28px, 4vw, 46px); border: 1px solid #dce6f0; border-radius: 18px; background: linear-gradient(135deg, #f3f7fb, #fff 70%); }
 .release-hub-hero-main { max-width: 760px; }
