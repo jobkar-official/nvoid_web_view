@@ -4,253 +4,342 @@ import {
   ArrowRight,
   ArrowUpRight,
   BrainCircuit,
-  BriefcaseBusiness,
   CalendarDays,
-  CheckCircle2,
-  Clock3,
-  Globe2,
-  GraduationCap,
-  MapPin,
+  Check,
+  ChevronRight,
   Search,
-  ShieldCheck,
-  Sparkles,
-  Target,
-  UserRound,
-  XCircle
+  ShieldCheck
 } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Worker AI Model — Alpha - k1 | Smarter Job Discovery",
-  description: "Meet Worker Alpha - k1. Learn how Worker helps job seekers discover opportunities, understand role relevance, compare matches and stay in control."
+  description: "Explore Worker Alpha - k1, the job discovery model designed to help job seekers search wider, understand role relevance and review opportunities with more clarity."
 };
 
-const reasons = [
+const overviewRows = [
   {
-    icon: Globe2,
-    title: "Jobs are spread everywhere",
-    text: "Useful openings appear across different job boards, public listings and company career pages. One search destination can help reduce the need to repeat the same search site by site."
+    title: "Current model",
+    detail: "Alpha - k1 is the model currently powering Worker’s job discovery and matching experience."
   },
   {
-    icon: Target,
-    title: "The right role is more than a keyword",
-    text: "Two employers can describe similar work with different titles. Worker considers role wording, skills and the details available in each listing to help surface more relevant opportunities."
+    title: "Release date",
+    detail: "2 October 2026."
   },
   {
-    icon: Clock3,
-    title: "Your time should go to good opportunities",
-    text: "Filtering unrelated roles and reducing duplicate listings helps you spend more time reviewing suitable jobs and less time sorting through repeated results."
+    title: "Who it is for",
+    detail: "Freshers, recent graduates, experienced professionals, career changers and people exploring remote or international opportunities."
   },
   {
-    icon: ShieldCheck,
-    title: "You should see where a job came from",
-    text: "Worker keeps the original source context and links where a provider supplies them, so you can inspect the employer's listing before deciding what to do."
+    title: "The outcome",
+    detail: "A more focused set of job opportunities, with relevance signals and source information that help you decide what deserves your attention."
   }
 ];
 
-const audiences = [
+const choiceRows = [
   {
-    icon: GraduationCap,
-    title: "Freshers and recent graduates",
-    text: "Explore entry-level roles and related job-title wording without relying on one search phrase."
+    title: "Searching one website at a time",
+    detail: "Worker can search the job sources available to it in one guided search, reducing the need to repeat the same search across multiple places."
   },
   {
-    icon: BriefcaseBusiness,
-    title: "Experienced professionals",
-    text: "Focus searches around your role, skills, experience and preferred location."
+    title: "Relying only on exact job titles",
+    detail: "Worker can consider related role wording, skills and details in a listing, so a relevant opportunity is not judged by its title alone."
   },
   {
-    icon: UserRound,
-    title: "Career changers",
-    text: "Discover adjacent role titles and opportunities that may use different wording for similar skills."
+    title: "Sorting through repeated listings",
+    detail: "Worker brings listing details into a more consistent format and checks for likely duplicates, helping make a result list easier to review."
   },
   {
-    icon: Globe2,
-    title: "Remote and global job seekers",
-    text: "Explore remote opportunities while paying attention to country and location eligibility—not just the word “remote”."
+    title: "Guessing why a role appeared",
+    detail: "Where enough job information is available, Worker can show the relevance signals that contributed to a match."
+  },
+  {
+    title: "Losing the original job source",
+    detail: "Original listing links and source context are kept where a provider supplies them, so you can inspect the employer’s information before applying."
   }
 ];
 
-const capabilities = [
-  "Understand a job search using role, skills, keywords and location preferences.",
-  "Search across the job sources that are available to Worker at the time of your search.",
-  "Recognise closely related job-title wording where it is appropriate.",
-  "Compare available listing details with your target role and profile signals.",
-  "Rank opportunities by relevance and show reasons that contributed to a match.",
-  "Reduce repeated listings and preserve original job links when sources provide them.",
-  "Take longer on broad searches when more sources, regions or public pages need to be checked."
-];
-
-const boundaries = [
-  "Guarantee that every job published anywhere on the internet has been found.",
-  "Promise a perfect 100% finding rate or a 100% chance of getting hired.",
-  "Know requirements that an employer has not published or a source has not supplied.",
-  "Guarantee that a listing is still open without checking the employer's current application page.",
-  "Treat every remote job as available to applicants in every country.",
-  "Replace your judgement, an employer's selection process or your review of the original job description."
-];
-
-const stages = [
+const workflowRows = [
   {
-    number: "01",
-    icon: UserRound,
-    title: "Understand your goal",
-    text: "You provide the role you want, preferred location, skills and other useful preferences."
+    title: "1. Describe your goal",
+    detail: "Choose the role you want, add skills, set a location and include preferences such as experience or work mode.",
+    outcome: "A search shaped around the opportunity you are actually looking for."
   },
   {
-    number: "02",
-    icon: Search,
-    title: "Look across available sources",
-    text: "Worker searches the connected job sources that can handle your request. Sources respond at different speeds and may have different coverage."
+    title: "2. Discover available jobs",
+    detail: "Worker checks the job sources that are available for your search. Source coverage and response speed can vary.",
+    outcome: "Opportunities gathered from the sources that could be reached for that search."
   },
   {
-    number: "03",
-    icon: ShieldCheck,
-    title: "Clean up the results",
-    text: "Listings are converted into a consistent format, checked for role and location relevance, and compared to reduce duplicates."
+    title: "3. Organise the information",
+    detail: "Listing details are brought into a consistent structure, checked against your search and compared for likely duplicates.",
+    outcome: "A cleaner set of results that is easier to compare."
   },
   {
-    number: "04",
-    icon: Target,
-    title: "Rank relevant opportunities",
-    text: "Worker uses the job details it received to rank results and explain useful match signals. You open the source and make the final decision."
+    title: "4. Review your matches",
+    detail: "Worker ranks opportunities using the information it received and can show the signals that contributed to relevance.",
+    outcome: "A prioritised list for you to inspect, verify and decide whether to apply."
   }
 ];
+
+const capabilityRows = [
+  {
+    title: "Search by role and skills",
+    detail: "Use a target role, keywords, skills and location preferences together.",
+    outcome: "Results can reflect more than one exact phrase."
+  },
+  {
+    title: "Explore related job titles",
+    detail: "Recognise role descriptions that may use different wording for similar work.",
+    outcome: "A wider view of roles that may fit your direction."
+  },
+  {
+    title: "Compare opportunities",
+    detail: "Use the available job description, skills, location, work mode and compensation details.",
+    outcome: "More context when deciding which roles deserve a closer look."
+  },
+  {
+    title: "Prioritise relevant listings",
+    detail: "Rank results using the job details and profile or preference signals available.",
+    outcome: "A shortlist ordered by relevance, not a promise of being selected."
+  },
+  {
+    title: "Reduce repeated results",
+    detail: "Compare listing details to identify likely duplicates.",
+    outcome: "Less time spent reviewing the same opportunity more than once."
+  },
+  {
+    title: "Return to the original listing",
+    detail: "Keep source context and original links when supplied by the source.",
+    outcome: "You can check the employer’s own description before taking action."
+  }
+];
+
+const limitRows = [
+  {
+    title: "It cannot find every job online",
+    detail: "Worker can only return opportunities from sources it can access. Some employers and job boards may not be covered."
+  },
+  {
+    title: "It cannot guarantee a perfect finding rate",
+    detail: "A 100% discovery or accuracy claim would need independent evidence. Worker does not present an unverified figure as fact."
+  },
+  {
+    title: "It cannot promise an interview or offer",
+    detail: "A relevance score describes the information match. Hiring decisions depend on the employer, applicants and factors Worker cannot know."
+  },
+  {
+    title: "It cannot verify every listing automatically",
+    detail: "A source may contain an expired, changed or incomplete listing. Check the employer’s application page before applying."
+  },
+  {
+    title: "It cannot assume every remote role is worldwide",
+    detail: "Remote opportunities can still have country, time-zone, work-authorisation or residency restrictions."
+  },
+  {
+    title: "It cannot replace your judgement",
+    detail: "Read the job description, check the employer and decide whether the opportunity is right for you."
+  }
+];
+
+const matchRows = [
+  {
+    title: "Role relevance",
+    detail: "How closely the title and description align with the type of work you want."
+  },
+  {
+    title: "Skills overlap",
+    detail: "How much the listed skills and requirements overlap with the skills you have shared."
+  },
+  {
+    title: "Location and work mode",
+    detail: "Whether the available location and remote, hybrid or on-site details fit your preferences."
+  },
+  {
+    title: "Compensation details",
+    detail: "Where salary information is published, whether it overlaps with the range you provided."
+  }
+];
+
+const coverageRows = [
+  {
+    title: "City or country search",
+    detail: "A narrower search can focus on opportunities associated with a specific place."
+  },
+  {
+    title: "Remote or worldwide search",
+    detail: "A broader search can involve more regions, sources and eligibility details, so it may take longer."
+  },
+  {
+    title: "Source response time",
+    detail: "Sources can respond at different speeds. A slow or unavailable source can affect when the overall search is complete."
+  }
+];
+
+const qualityRows = [
+  {
+    title: "Source coverage",
+    detail: "How many sources were available and how many responded to a search."
+  },
+  {
+    title: "Useful discoveries",
+    detail: "How many returned listings passed relevance checks for the role and location."
+  },
+  {
+    title: "Duplicate reduction",
+    detail: "How many repeated listings were identified and grouped or removed."
+  },
+  {
+    title: "Listing freshness",
+    detail: "How many opportunities were independently checked and confirmed as still open."
+  }
+];
+
+function DetailRows({ rows, showOutcome = false }: {
+  rows: { title: string; detail: string; outcome?: string }[];
+  showOutcome?: boolean;
+}) {
+  return (
+    <div className="model-docs-rows">
+      {rows.map((row) => (
+        <article className="model-docs-row" key={row.title}>
+          <h3>{row.title}</h3>
+          <div className="model-docs-row-copy">
+            <p>{row.detail}</p>
+            {showOutcome && row.outcome ? (
+              <div className="model-docs-outcome"><span>What this means for you</span><p>{row.outcome}</p></div>
+            ) : null}
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
 
 export default function ModelsPage() {
   return (
-    <main className="catalog-page model-product-page">
-      <section className="model-product-hero">
-        <div className="model-product-hero-copy">
-          <span className="model-product-eyebrow"><Sparkles size={14} /> WORKER INTELLIGENCE</span>
-          <h1>Your next opportunity should be easier to find.</h1>
-          <p>Worker helps you search beyond a single job board, understand which opportunities are closer to your goals, and spend more time on roles worth reviewing.</p>
-          <div className="model-product-release">
-            <span><CalendarDays size={15} /> Released 2 October 2026</span>
-            <span><CheckCircle2 size={15} /> Current model experience</span>
+    <main className="catalog-page model-docs-page">
+      <div className="model-docs-layout">
+        <aside className="model-docs-sidebar">
+          <div className="model-docs-sidebar-heading">
+            <span>WORKER DOCUMENTATION</span>
+            <strong>Model guide</strong>
           </div>
-          <Link href="/" className="model-product-primary-link">Explore jobs <ArrowUpRight size={16} /></Link>
-        </div>
-        <aside className="model-current-card" aria-label="Current Worker model">
-          <div className="model-current-card-top">
-            <span className="model-current-icon"><BrainCircuit size={25} /></span>
-            <span className="model-current-live"><span /> CURRENT</span>
-          </div>
-          <span className="model-current-label">WORKER'S CURRENT MODEL</span>
-          <h2>Alpha <span>- k1</span></h2>
-          <p>Your AI-powered job discovery and matching experience—designed to help make job searching more focused, understandable and useful.</p>
-          <div className="model-current-divider" />
-          <div className="model-current-foot">
-            <span>Release date</span>
-            <strong>02 OCT 2026</strong>
+          <nav aria-label="Model guide sections" className="model-docs-nav">
+            <a href="#overview"><span>01</span>Overview</a>
+            <a href="#why-worker"><span>02</span>Why choose Worker</a>
+            <a href="#how-it-works"><span>03</span>How it works</a>
+            <a href="#capabilities"><span>04</span>What it can do</a>
+            <a href="#limitations"><span>05</span>What it cannot do</a>
+            <a href="#matching"><span>06</span>Understanding matches</a>
+            <a href="#coverage"><span>07</span>Search coverage and speed</a>
+            <a href="#quality"><span>08</span>Finding quality</a>
+          </nav>
+          <div className="model-docs-sidebar-model">
+            <span>THE CURRENT MODEL</span>
+            <strong>Alpha - k1</strong>
+            <p>Released 2 October 2026</p>
           </div>
         </aside>
-      </section>
 
-      <section className="model-product-value-grid" aria-label="What Worker helps with">
-        <article><span><Globe2 size={18} /></span><strong>Wider discovery</strong><p>Search across available job sources in one place.</p></article>
-        <article><span><Target size={18} /></span><strong>More relevant results</strong><p>Focus on role, skills and location signals.</p></article>
-        <article><span><ShieldCheck size={18} /></span><strong>Clearer decisions</strong><p>Review match reasons and original job sources.</p></article>
-      </section>
-
-      <section className="model-product-section">
-        <div className="model-product-section-heading">
-          <span className="model-product-eyebrow">WHY IT MATTERS</span>
-          <h2>Why every job seeker can benefit from a smarter search.</h2>
-          <p>Finding a job is not just about typing a title into a search box. Relevant opportunities can be scattered, described differently and restricted to specific locations. Worker brings discovery and relevance checks into one guided experience.</p>
-        </div>
-        <div className="model-product-reasons">
-          {reasons.map((item) => {
-            const Icon = item.icon;
-            return <article key={item.title}><span className="model-product-card-icon"><Icon size={20} /></span><h3>{item.title}</h3><p>{item.text}</p></article>;
-          })}
-        </div>
-      </section>
-
-      <section className="model-product-audience">
-        <div className="model-product-section-heading">
-          <span className="model-product-eyebrow">MADE FOR DIFFERENT CAREER STAGES</span>
-          <h2>Wherever you are in your career.</h2>
-          <p>Worker is designed to make opportunity discovery more useful for different kinds of job searches.</p>
-        </div>
-        <div className="model-product-audience-grid">
-          {audiences.map((item) => {
-            const Icon = item.icon;
-            return <article key={item.title}><span><Icon size={18} /></span><div><h3>{item.title}</h3><p>{item.text}</p></div></article>;
-          })}
-        </div>
-      </section>
-
-      <section className="model-product-how">
-        <div className="model-product-section-heading">
-          <span className="model-product-eyebrow">HOW ALPHA - K1 WORKS WITH WORKER</span>
-          <h2>From your search to a shortlist worth reviewing.</h2>
-          <p>The model assists the process; real job information comes from the sources Worker can access.</p>
-        </div>
-        <div className="model-product-stage-list">
-          {stages.map((item) => {
-            const Icon = item.icon;
-            return <article key={item.number}><span className="model-product-stage-number">{item.number}</span><span className="model-product-stage-icon"><Icon size={19} /></span><div><h3>{item.title}</h3><p>{item.text}</p></div></article>;
-          })}
-        </div>
-      </section>
-
-      <section className="model-product-capability-grid">
-        <article className="model-product-can">
-          <div className="model-product-list-heading"><span><CheckCircle2 size={18} /></span><div><span className="model-product-eyebrow">WHAT IT CAN DO</span><h2>Useful assistance, grounded in job information.</h2></div></div>
-          <ul>{capabilities.map((item) => <li key={item}><CheckCircle2 size={15} />{item}</li>)}</ul>
-        </article>
-        <article className="model-product-cannot">
-          <div className="model-product-list-heading"><span><XCircle size={18} /></span><div><span className="model-product-eyebrow">WHAT IT CANNOT PROMISE</span><h2>Clear limits matter as much as capabilities.</h2></div></div>
-          <ul>{boundaries.map((item) => <li key={item}><XCircle size={15} />{item}</li>)}</ul>
-        </article>
-      </section>
-
-      <section className="model-product-match">
-        <div className="model-product-section-heading">
-          <span className="model-product-eyebrow">UNDERSTANDING YOUR MATCH</span>
-          <h2>A match score helps you prioritise. It does not decide your future.</h2>
-          <p>Worker may show a score from 0 to 100 to help sort opportunities by how closely the available listing information aligns with your search and profile. A higher score means stronger alignment in the information Worker could evaluate—not a guaranteed interview or offer.</p>
-        </div>
-        <div className="model-product-match-points">
-          <article><strong>Role relevance</strong><p>Does the job title and description resemble the kind of work you are seeking?</p></article>
-          <article><strong>Skills overlap</strong><p>Do the listed skills and requirements overlap with the skills you provided?</p></article>
-          <article><strong>Location and work mode</strong><p>Does the listing provide location or remote-work information that fits your preference?</p></article>
-          <article><strong>Available compensation details</strong><p>Where salary information is published, does it overlap with your stated range?</p></article>
-        </div>
-        <p className="model-product-match-note">Missing information is not proof of a mismatch, and a high score is not proof that you meet every employer requirement. Read the job description before applying.</p>
-      </section>
-
-      <section className="model-product-latency">
-        <div className="model-product-latency-heading">
-          <span className="model-product-card-icon"><Clock3 size={20} /></span>
-          <div><span className="model-product-eyebrow">SEARCH SPEED AND COVERAGE</span><h2>Why a worldwide search can take longer.</h2></div>
-        </div>
-        <div className="model-product-latency-grid">
-          <article><strong>Focused location search</strong><p>A city or country search has a narrower scope. Worker can focus on listings that appear relevant to that place.</p></article>
-          <article><strong>Worldwide discovery</strong><p>A global search can involve more regions, sources and location-eligibility clues. More coverage can mean more work before results are ready.</p></article>
-          <article><strong>Different source speeds</strong><p>Worker can search sources in parallel, but one slow or unavailable source can affect the overall completion time. No fixed response time is promised.</p></article>
-        </div>
-      </section>
-
-      <section className="model-product-trust">
-        <span className="model-product-trust-icon"><ShieldCheck size={23} /></span>
-        <div>
-          <span className="model-product-eyebrow">HONEST FINDINGS. CLEAR EXPECTATIONS.</span>
-          <h2>We aim for the most relevant findings—not a made-up 100% claim.</h2>
-          <p>No search engine can truthfully promise that it finds every job on the internet or that every external listing is perfectly current and complete. There is no independently verified benchmark here that supports a 100% finding or accuracy rate, so Worker does not present one as fact.</p>
-          <p>A meaningful quality measure needs to distinguish how many sources responded, how many listings were found, how many passed relevance checks, how many were duplicates, and how many were independently confirmed as still open. These are different measurements; they should never be compressed into one misleading “100% accurate” badge.</p>
-          <div className="model-product-trust-points">
-            <span><CheckCircle2 size={15} /> Original source links where available</span>
-            <span><CheckCircle2 size={15} /> Relevance reasons to help you review</span>
-            <span><CheckCircle2 size={15} /> Clear distinction between discovery and confirmation</span>
+        <div className="model-docs-reading">
+          <div className="model-docs-breadcrumb">
+            <span>Worker</span><ChevronRight size={14} /><span>Models</span><ChevronRight size={14} /><strong>Alpha - k1</strong>
           </div>
-        </div>
-      </section>
 
-      <section className="model-product-final">
-        <div><span className="model-product-eyebrow">YOUR NEXT STEP</span><h2>Let your next search be more focused.</h2><p>Tell Worker what kind of opportunity you want to find. Review the results, check the original listing and choose what is right for you.</p></div>
-        <Link href="/">Start searching <ArrowRight size={16} /></Link>
-      </section>
+          <header className="model-docs-header">
+            <span className="model-docs-eyebrow"><BrainCircuit size={15} /> WORKER MODEL GUIDE</span>
+            <h1>Worker Alpha - k1</h1>
+            <p>A job discovery model built to help you search beyond a single job board, understand why opportunities may fit and make more informed decisions about where to apply.</p>
+            <div className="model-docs-meta">
+              <span><CalendarDays size={15} /> Released 2 October 2026</span>
+              <span><ShieldCheck size={15} /> Current model</span>
+            </div>
+          </header>
+
+          <section className="model-docs-section" id="overview">
+            <div className="model-docs-section-heading">
+              <span>01</span>
+              <div><p>OVERVIEW</p><h2>What is the current Worker model?</h2></div>
+            </div>
+            <p className="model-docs-intro">Alpha - k1 powers Worker’s current job discovery and matching experience. It is designed to make the search process more organised and relevant, while keeping the original job information available for your review.</p>
+            <DetailRows rows={overviewRows} />
+          </section>
+
+          <section className="model-docs-section" id="why-worker">
+            <div className="model-docs-section-heading">
+              <span>02</span>
+              <div><p>WHY CHOOSE WORKER</p><h2>Spend less time searching. More time choosing.</h2></div>
+            </div>
+            <p className="model-docs-intro">A job search can become a long cycle of repeating keywords, switching websites and sorting through similar listings. Worker brings discovery, relevance checks and source review into one workflow.</p>
+            <div className="model-docs-comparison-labels"><span>Common job search friction</span><span>Worker’s approach</span></div>
+            <DetailRows rows={choiceRows} />
+            <p className="model-docs-footnote">The sources and features available can vary by search. This describes Worker’s intended workflow, not a claim that every other job platform works in the same way.</p>
+          </section>
+
+          <section className="model-docs-section" id="how-it-works">
+            <div className="model-docs-section-heading">
+              <span>03</span>
+              <div><p>HOW IT WORKS</p><h2>From your search to a shortlist worth reviewing.</h2></div>
+            </div>
+            <p className="model-docs-intro">You stay in control at every step. Worker organises the search and helps prioritise the information it can access.</p>
+            <DetailRows rows={workflowRows} showOutcome />
+          </section>
+
+          <section className="model-docs-section" id="capabilities">
+            <div className="model-docs-section-heading">
+              <span>04</span>
+              <div><p>CAPABILITIES</p><h2>What Alpha - k1 can help you do.</h2></div>
+            </div>
+            <DetailRows rows={capabilityRows} showOutcome />
+          </section>
+
+          <section className="model-docs-section" id="limitations">
+            <div className="model-docs-section-heading">
+              <span>05</span>
+              <div><p>LIMITATIONS</p><h2>What it cannot promise.</h2></div>
+            </div>
+            <p className="model-docs-intro">Clear limits help you use search results responsibly. Worker is an assistant for discovery and comparison, not a guarantee about the job market or hiring decisions.</p>
+            <DetailRows rows={limitRows} />
+          </section>
+
+          <section className="model-docs-section" id="matching">
+            <div className="model-docs-section-heading">
+              <span>06</span>
+              <div><p>UNDERSTANDING MATCHES</p><h2>A match score helps you prioritise. It does not predict hiring.</h2></div>
+            </div>
+            <p className="model-docs-intro">When Worker displays a score from 0 to 100, it represents how closely the available listing information aligns with your search and profile signals. It is not a probability of getting an interview or offer.</p>
+            <DetailRows rows={matchRows} />
+            <div className="model-docs-note"><strong>How to read the score</strong><p>A higher score indicates stronger alignment in the information Worker could evaluate. Missing information is not proof of a mismatch, and a high score does not prove that you meet every employer requirement. Read the full job description before applying.</p></div>
+          </section>
+
+          <section className="model-docs-section" id="coverage">
+            <div className="model-docs-section-heading">
+              <span>07</span>
+              <div><p>SEARCH COVERAGE AND SPEED</p><h2>Why a worldwide search can take longer.</h2></div>
+            </div>
+            <DetailRows rows={coverageRows} />
+          </section>
+
+          <section className="model-docs-section" id="quality">
+            <div className="model-docs-section-heading">
+              <span>08</span>
+              <div><p>FINDING QUALITY</p><h2>Useful findings matter more than an unsupported 100% claim.</h2></div>
+            </div>
+            <p className="model-docs-intro">No search service can truthfully promise that it finds every job on the internet or that every external listing is perfectly current. There is no independently verified benchmark for Worker that supports a 100% finding or accuracy rate, so we do not present one as fact.</p>
+            <DetailRows rows={qualityRows} />
+            <p className="model-docs-footnote">These measurements answer different questions. A source responding does not mean every job was found, and a relevant result does not mean the vacancy is still open.</p>
+          </section>
+
+          <footer className="model-docs-footer">
+            <div>
+              <span>READY TO SEARCH</span>
+              <h2>Put a more focused search to work.</h2>
+              <p>Set your target role and preferences, review the results and choose the opportunities that make sense for you.</p>
+            </div>
+            <Link href="/" className="model-docs-cta">Explore jobs <ArrowUpRight size={16} /></Link>
+          </footer>
+        </div>
+      </div>
     </main>
   );
 }
