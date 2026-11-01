@@ -1,10 +1,55 @@
+"use client";
+
+import Link from "next/link";
 import {
-  Asterisk, ArrowRight, BrainCircuit, BriefcaseBusiness, Globe2, LockKeyhole, Search, ShieldCheck
+  Asterisk, ArrowRight, ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, ClipboardList,
+  Globe2, LockKeyhole, MessageSquare, Search, ShieldCheck, Sparkles, UserRound
 } from "lucide-react";
+import { useAuth } from "../lib/context/AuthContext";
 
 export default function WorkerHomepage() {
+  const { user, isAuthenticated } = useAuth();
+  const firstName = user?.name.split(/\\s+/).filter(Boolean)[0] || "there";
+  const quickLinks = user?.role === "recruiter"
+    ? [
+        { href: "/workspace", label: "Workspace overview", detail: "Your account and activity", icon: BrainCircuit },
+        { href: "/workspace/profile", label: "Profile", detail: "Manage your professional identity", icon: UserRound },
+        { href: "/workspace/messages", label: "Messages", detail: "Open your conversations", icon: MessageSquare },
+        { href: "/workspace/notifications", label: "Notifications", detail: "Review account updates", icon: Bell }
+      ]
+    : [
+        { href: "/workspace/find-jobs", label: "Find jobs", detail: "Search connected job sources", icon: Search },
+        { href: "/workspace/recommendations", label: "Recommended jobs", detail: "Review matched opportunities", icon: Sparkles },
+        { href: "/workspace/saved", label: "Saved jobs", detail: "Return to your shortlist", icon: BriefcaseBusiness },
+        { href: "/workspace/profile", label: "Profile", detail: "Keep your profile up to date", icon: UserRound }
+      ];
+
   return (
     <div className="worker-homepage worker-homepage-v2">
+      {isAuthenticated && user && (
+        <section className="worker-member-home" aria-label="Your signed-in workspace">
+          <div className="worker-member-heading">
+            <div>
+              <span className="worker-member-eyebrow"><span /> YOUR WORKSPACE IS READY</span>
+              <h2>Welcome back, {firstName}.</h2>
+              <p>Signed in as {user.role === "recruiter" ? "a recruiter" : "a job seeker"}. Continue with your private workspace below.</p>
+            </div>
+            <Link href="/workspace" className="worker-member-overview">Open workspace <ArrowUpRight size={15} /></Link>
+          </div>
+          <div className="worker-member-links">
+            {quickLinks.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link href={item.href} key={item.href} className="worker-member-link">
+                  <span className="worker-member-link-icon"><Icon size={18} /></span>
+                  <span><strong>{item.label}</strong><small>{item.detail}</small></span>
+                  <ArrowRight size={15} />
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
       <section className="worker-home-brand-intro" aria-label="Worker">
         <span className="worker-home-hero-symbol" aria-hidden="true"><Asterisk size={42} strokeWidth={2.1} /></span>
         <div className="worker-home-intro-copy">
@@ -40,7 +85,6 @@ export default function WorkerHomepage() {
           </span>
         </div>
       </section>
-
     </div>
   );
 }
