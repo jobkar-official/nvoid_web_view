@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: ModelPageProps): Promise<Meta
   if (!modelInfo) notFound();
 
   return {
-    title: `Worker ${modelInfo.name} — AI Job Discovery Model`,
+    title: `${modelInfo.name} AI Job Discovery Model`,
     description: `${modelInfo.description} Explore model capabilities, matching, search coverage and Worker’s free employer hiring workspace.`
   };
 }
