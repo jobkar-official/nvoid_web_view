@@ -36,14 +36,14 @@ export interface UpdateQualificationPayload {
 
 export const qualificationApi = {
     saveQualification: (data: SaveQualificationPayload) =>
-        request<any>('/backend/qualifications/save', {
+        request<any>('/backend/profile/qualifications/save', {
             method: 'POST',
             body: data,
         }),
 
     getQualificationsByUserId: async (userId: number | string): Promise<Qualification[]> => {
         try {
-            const response = await request<Qualification[]>(`/backend/qualifications/byUserId/${userId}`, { method: 'GET' })
+            const response = await request<Qualification[]>(`/backend/profile/qualifications/byUserId/${userId}`, { method: 'GET' })
             if (Array.isArray(response)) return response
             if (Array.isArray((response as any)?.data)) return (response as any).data
             if (Array.isArray((response as any)?.result)) return (response as any).result
@@ -55,13 +55,13 @@ export const qualificationApi = {
     },
 
     updateQualification: (id: number | string, data: UpdateQualificationPayload) =>
-        request<any>(`/backend/qualifications/update/${id}`, {
+        request<any>(`/backend/profile/qualifications/update/${id}`, {
             method: 'PUT',
             body: data,
         }),
 
     deleteQualification: (id: number | string) =>
-        request<any>(`/backend/qualifications/delete/${id}`, {
+        request<any>(`/backend/profile/qualifications/delete/${id}`, {
             method: 'DELETE',
         }),
 };

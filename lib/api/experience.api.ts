@@ -43,7 +43,7 @@ export const experienceApi = {
 
     getExperienceList: async (userId: number | string): Promise<Experience[]> => {
         try {
-            const response = await request<Experience[]>(`/backend/experience/list/${userId}`, { method: 'GET' })
+            const response = await request<Experience[]>(`/backend/profile/experience/list/${userId}`, { method: 'GET' })
             if (Array.isArray(response)) return response
             if (Array.isArray((response as any)?.data)) return (response as any).data
             if (Array.isArray((response as any)?.result)) return (response as any).result
@@ -55,13 +55,13 @@ export const experienceApi = {
     },
 
     updateExperience: (id: number | string, data: UpdateExperiencePayload) =>
-        request<any>(`/backend/experience/update/${id}`, {
+        request<any>(`/backend/profile/experience/update/${id}`, {
             method: 'PUT',
             body: data,
         }),
 
     deleteExperience: (id: number | string) =>
-        request<any>(`/backend/experience/delete/${id}`, {
+        request<any>(`/backend/profile/experience/delete/${id}`, {
             method: 'DELETE',
         }),
 };

@@ -72,10 +72,10 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
             <p>{isRegister ? "Start with a free candidate or employer account." : "Continue to your Nvoid workspace."}</p>
           </div>
           <form className="auth-form" onSubmit={submit}>
-{isRegister && (
+            {isRegister && (
               <div className="auth-role-picker" aria-label="Choose account type">
-              <button type="button" className={role === "4" ? "selected" : ""} onClick={() => setRole("4")}><UserRound size={16} /><strong>Job seeker</strong><small>{isRegister ? "Find opportunities" : "Job seeker account"}</small></button>
-              <button type="button" className={role === "3" ? "selected" : ""} onClick={() => setRole("3")}><Building2 size={16} /><strong>Recruiter</strong><small>{isRegister ? "Hire talent" : "Recruiter account"}</small></button>
+                <button type="button" className={role === "4" ? "selected" : ""} onClick={() => setRole("4")}><UserRound size={16} /><strong>Job seeker</strong><small>{isRegister ? "Find opportunities" : "Job seeker account"}</small></button>
+                <button type="button" className={role === "3" ? "selected" : ""} onClick={() => setRole("3")}><Building2 size={16} /><strong>Recruiter</strong><small>{isRegister ? "Hire talent" : "Recruiter account"}</small></button>
               </div>
             )}
             {isRegister && <label>Full name<input required value={name} onChange={(event) => setName(event.target.value)} placeholder="Your full name" autoComplete="name" /></label>}

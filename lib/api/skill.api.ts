@@ -23,7 +23,7 @@ export interface SaveSkillPayload {
 
 export const skillsApi = {
     saveSkill: (data: SaveSkillPayload) =>
-        request<any>('/backend/skills/save', {
+        request<any>('/backend/profile/skills/save', {
             method: 'POST',
             body: data,
         }),
@@ -44,13 +44,13 @@ export const skillsApi = {
 
 
     updateSkill: (id: number | string, data: Partial<SaveSkillPayload> & { userId: number }) =>
-        request<any>(`/backend/skills/update/${id}`, {
+        request<any>(`/backend/profile/skills/update/${id}`, {
             method: 'PUT',
             body: data,
         }),
 
     deleteSkill: (id: number | string) =>
-        request<any>(`/backend/skills/delete/${id}`, {
+        request<any>(`/backend/profile/skills/delete/${id}`, {
             method: 'DELETE',
         }),
 };

@@ -41,7 +41,7 @@ export type UpdateProfilePayload = Partial<User> & { id: number };
 export const usersApi = {
 
     getUserDetailBySlug: (slug: string) =>
-        request<User>(`/backend/users/detailBySlug?slug=${encodeURIComponent(slug)}`, {
+        request<User>(`/backend/profile/users/detailBySlug?slug=${encodeURIComponent(slug)}`, {
             method: 'GET',
         }),
 

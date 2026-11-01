@@ -26,13 +26,13 @@ export const resumeApi = {
     },
 
     uploadResume: (formData: FormData) =>
-        request<any>('/backend/resumes/uploadFile', {
+        request<any>('/backend/profile/resumes/uploadFile', {
             method: 'POST',
             body: formData,
         }),
 
     deleteResume: (id: number | string) =>
-        request<any>(`/backend/resumes/deleteResume/${id}`, {
+        request<any>(`/backend/profile/resumes/deleteResume/${id}`, {
             method: 'DELETE',
         }),
 };
