@@ -19,20 +19,19 @@ type Session = { roleId: 3 | 4 | 7; user: { id?: string; name?: string; fullName
 type RecordData = Record<string, any>;
 type Page = { title: string; description: string; icon: typeof Search };
 const nav = [
-  { id: "overview", label: "Overview", icon: LayoutDashboard, group: "Workspace" },
-  { id: "recommendations", label: "Recommended jobs", icon: Sparkles, group: "Discover" },
-  { id: "activity", label: "Saved & applications", icon: BriefcaseBusiness, group: "Discover" },
-  { id: "profile", label: "Profile", icon: UserRound, group: "Profile" },
-  { id: "highlights", label: "Open to work", icon: Target, group: "Activity" },
-  { id: "messages", label: "Messages", icon: MessageSquare, group: "Activity" },
-  { id: "notifications", label: "Notifications", icon: Bell, group: "Activity" },
-  { id: "support", label: "Support", icon: CircleHelp, group: "Help" }
+  { id: "overview", label: "Overview", icon: LayoutDashboard, group: "Discover" },
+  { id: "find-jobs", label: "Find jobs", icon: Search, group: "Discover" },
+  { id: "activity", label: "Application", icon: BriefcaseBusiness, group: "Discover" },
+  { id: "profile", label: "Profile", icon: UserRound, group: "Discover" },
+  { id: "highlights", label: "Open to work", icon: Target, group: "Discover" },
+  { id: "messages", label: "Messages", icon: MessageSquare, group: "Discover" },
+  { id: "notifications", label: "Notifications", icon: Bell, group: "Discover" },
+  { id: "support", label: "Support", icon: CircleHelp, group: "Discover" }
 ];
 const pages: Record<string, Page> = {
   overview: { title: "Overview", description: "Your account, activity and connected services in one place.", icon: LayoutDashboard },
   "find-jobs": { title: "Find jobs", description: "Search live job sources connected to your Nvoid agent.", icon: Search },
-  recommendations: { title: "Recommended jobs", description: "Opportunities returned by your authenticated Jobkar profile.", icon: Sparkles },
-  activity: { title: "Saved & applications", description: "Keep your saved opportunities and application activity together.", icon: BriefcaseBusiness },
+  activity: { title: "Application", description: "Manage your saved opportunities and application activity.", icon: BriefcaseBusiness },
   profile: { title: "Profile", description: "Manage your professional identity and contact details.", icon: UserRound },
   skills: { title: "Skills", description: "Maintain the skills used to represent and match your profile.", icon: Target },
   education: { title: "Education", description: "Manage your qualifications and academic history.", icon: GraduationCap },
@@ -88,7 +87,7 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [stats, setStats] = useState({ jobs: 0, saved: 0, unread: 0, skills: 0, education: 0, experience: 0, resumes: 0 });
+  const [stats, setStats] = useState({ saved: 0, unread: 0, skills: 0, education: 0, experience: 0, resumes: 0 });
   const [profile, setProfile] = useState({ name, email: initialSession.user.email || "", phone: initialSession.user.phone || "", bio: "", city: "", state: "", country: "India" });
   const [skills, setSkills] = useState<RecordData[]>([]);
   const [education, setEducation] = useState<RecordData[]>([]);
@@ -96,7 +95,6 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
   const [resumes, setResumes] = useState<RecordData[]>([]);
   const [languages, setLanguages] = useState<RecordData[]>([]);
   const [saved, setSaved] = useState<RecordData[]>([]);
-  const [recommended, setRecommended] = useState<RecordData[]>([]);
   const [alerts, setAlerts] = useState<RecordData[]>([]);
   const [tickets, setTickets] = useState<RecordData[]>([]);
   const [threads, setThreads] = useState<RecordData[]>([]);
@@ -136,7 +134,6 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
     try {
       if (section === "overview") {
         const results = await Promise.allSettled([
-          openToWorkApi.getRecommendedJobByUserId(id),
           favouriteApi.getFavouriteJobsByUserId(id),
           notificationApi.getNotificationsByUserId(id),
           skillsApi.getSkillsByUserId(id),
@@ -146,14 +143,12 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
           openToWorkApi.getByUserId(id)
         ]);
         const value = (index: number) => results[index].status === "fulfilled" ? (results[index] as PromiseFulfilledResult<any>).value : null;
-        const recs = rows(value(0));
-        const savedRows = rows(value(1));
-        const notes = rows(value(2));
-        setRecommended(recs);
+        const savedRows = rows(value(0));
+        const notes = rows(value(1));
         setSaved(savedRows);
         setAlerts(notes);
-        setOpenStatus(value(7));
-        setStats({ jobs: recs.length, saved: savedRows.length, unread: notes.filter((item: any) => !item.isRead).length, skills: rows(value(3)).length, education: rows(value(4)).length, experience: rows(value(5)).length, resumes: rows(value(6)).length });
+        setOpenStatus(value(6));
+        setStats({ saved: savedRows.length, unread: notes.filter((item: any) => !item.isRead).length, skills: rows(value(2)).length, education: rows(value(3)).length, experience: rows(value(4)).length, resumes: rows(value(5)).length });
         return;
       }
       if (section === "profile") {
@@ -173,7 +168,6 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
         return;
       }
       if (section === "activity" && activityTab === "saved") setSaved(await favouriteApi.getFavouriteJobsByUserId(id));
-      if (section === "recommendations") setRecommended(await openToWorkApi.getRecommendedJobByUserId(id));
       if (section === "notifications") setAlerts(await notificationApi.getNotificationsByUserId(id));
       if (section === "messages") setThreads(await messageApi.getThreadsByUserId(id));
       if (section === "highlights") setOpenStatus(await openToWorkApi.getByUserId(id));
@@ -341,14 +335,13 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
 
   const page = pages[section];
   const Icon = page.icon;
-  const groups = ["Workspace", "Discover", "Profile", "Activity", "Help"];
+  const groups = ["Discover"];
 
   return <div className={"nv-workspace" + (expanded ? " nv-expanded" : "")}>
     {expanded && <button className="nv-scrim" aria-label="Close navigation" onClick={() => setExpanded(false)} />}
     <aside className="nv-sidebar">
       <div className="nv-brand-row"><span className="nv-brand-mark"><Sparkles size={19} /></span>{expanded && <span className="nv-brand-name"><strong>NVOID</strong><small>Intelligent workspace</small></span>}<button className="nv-collapse" onClick={() => setExpanded(value => !value)} aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"}>{expanded ? <PanelLeftClose size={17} /> : <PanelLeftOpen size={17} />}</button></div>
-      <button className={"nv-find-jobs-button" + (section === "find-jobs" ? " active" : "")} onClick={() => go("find-jobs")} title={expanded ? undefined : "Find jobs"}><Search size={18} />{expanded && <span>Find jobs</span>}</button>
-      <div className="nv-workspace-label">{expanded ? "YOUR WORKSPACE" : "WORKSPACE"}</div>
+      <div className="nv-workspace-label">DISCOVER</div>
       <nav className="nv-nav">{groups.map(group => {
         const items = visibleNav.filter(item => item.group === group);
         if (!items.length) return null;
@@ -376,7 +369,7 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
 
         {section === "overview" && <div className="nv-overview">
           <section className="nv-welcome"><div className="nv-welcome-copy"><span className="nv-welcome-kicker">YOUR PROFESSIONAL WORKSPACE</span><h2>Welcome back, {name.split(" ")[0]}.</h2><p>Your profile, activity and job discovery tools are ready in one workspace.</p><div className="nv-welcome-actions"><button className="nv-primary" onClick={() => go("find-jobs")}><Search size={16} /> Find jobs <ArrowRight size={15} /></button></div></div><div className="nv-welcome-visual"><div className="nv-ring nv-ring-one" /><div className="nv-ring nv-ring-two" /><span><Sparkles size={30} /></span></div></section>
-          <div className="nv-stat-grid">{[["Recommended jobs", stats.jobs, Sparkles, "recommendations"], ["Saved jobs", stats.saved, BriefcaseBusiness, "saved"], ["Unread alerts", stats.unread, Bell, "notifications"], ["Profile skills", stats.skills, Target, "skills"]].map(([label, value, Symbol, target]) => { const StatIcon = Symbol as typeof Search; return <button key={String(label)} className="nv-stat-card" onClick={() => go(String(target))}><span className="nv-stat-icon"><StatIcon size={18} /></span><span className="nv-stat-label">{String(label)}</span><strong>{Number(value)}</strong><small>Live account data</small></button>; })}</div>
+          <div className="nv-stat-grid">{[["Saved jobs", stats.saved, BriefcaseBusiness, "saved"], ["Unread alerts", stats.unread, Bell, "notifications"], ["Profile skills", stats.skills, Target, "skills"], ["Work experience", stats.experience, Activity, "experience"]].map(([label, value, Symbol, target]) => { const StatIcon = Symbol as typeof Search; return <button key={String(label)} className="nv-stat-card" onClick={() => go(String(target))}><span className="nv-stat-icon"><StatIcon size={18} /></span><span className="nv-stat-label">{String(label)}</span><strong>{Number(value)}</strong><small>Live account data</small></button>; })}</div>
           <div className="nv-footer-note"><ShieldCheck size={15} /> Your access token stays in an HttpOnly cookie. Browser JavaScript does not read or store the token.</div>
         </div>}
 
@@ -392,16 +385,14 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
 
         {section === "profile" && profileTab === "resume" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>{replacingResumeId !== null ? "Replace resume" : "Upload a resume"}</h2><p>{replacingResumeId !== null ? "The new file is uploaded before the previous resume is removed." : "Upload a resume to your Jobkar profile."}</p></div><FileText size={18} /></div><form className="nv-upload-form" onSubmit={uploadResume}><label className="nv-file-drop"><FileText size={24} /><strong>{file?.name || "Choose your resume"}</strong><small>PDF or DOC/DOCX · Select a file from this device</small><input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={event => setFile(event.target.files?.[0] || null)} /></label><div className="nv-form-footer"><span>{replacingResumeId !== null ? "Replacing the selected resume." : "Sent privately through the authenticated API proxy."}</span><div className="nv-form-actions"><button type="button" className="nv-secondary" hidden={replacingResumeId === null} onClick={() => { setReplacingResumeId(null); setFile(null); }}>Cancel</button><button className="nv-primary" disabled={busy || !file}><Plus size={15} /> {replacingResumeId !== null ? "Replace resume" : "Upload resume"}</button></div></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your resumes</h2><p>{resumes.length} records returned by the resume API.</p></div><FileText size={18} /></div><div className="nv-record-list">{resumes.map(item => <div className="nv-record" key={item.id}><span className="nv-record-icon"><FileText size={17} /></span><div><strong>{item.fileName || item.name || (item.resume || "").split("/").pop() || "Resume " + item.id}</strong><small>{dateText(item.createdAt)}</small></div>{item.resume && <a className="nv-icon-action" href={String(item.resume)} target="_blank" rel="noreferrer" aria-label="Open resume"><ArrowUpRight size={16} /></a>}<button className="nv-icon-action" onClick={() => { setReplacingResumeId(item.id); setFile(null); }} aria-label="Replace resume"><Pencil size={16} /></button><button className="nv-icon-action danger" onClick={() => void perform(() => resumeApi.deleteResume(item.id), "Resume deleted.")} aria-label="Delete resume"><Trash2 size={16} /></button></div>)}</div>{!resumes.length && !loading && <EmptyState title="No resume on file" text="Upload a current resume so it is attached to your account." />}</section></div>}
 
-        {section === "recommendations" && <section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Recommended for your profile</h2><p>{recommended.length} opportunities returned by the live recommendation API.</p></div><Sparkles size={18} /></div><div className="nv-job-grid">{recommended.map(job => <JobCard key={job.jobId} job={job} onSave={() => { if (!job.jobId || !job.companyId) return setError("This recommendation is missing IDs needed by the saved-jobs API."); void perform(() => favouriteApi.saveFavourite({ userId, jobId: job.jobId, companyId: job.companyId }), "Job added to your saved list."); }} disabled={busy || job.isFavorite} />)}</div>{!recommended.length && !loading && <EmptyState title="No recommendations returned" text="Add skills and an open-to-work preference to help Jobkar match opportunities." action={() => go("highlights")} actionLabel="Set job preferences" />}</section>}
-
         {section === "activity" && <section className="nv-panel nv-panel-spaced">
-          <div className="nv-panel-heading"><div><h2>Saved & applications</h2><p>Switch between your saved opportunities and application activity.</p></div><BriefcaseBusiness size={18} /></div>
+          <div className="nv-panel-heading"><div><h2>Application</h2><p>Manage your saved opportunities and track your applications.</p></div><BriefcaseBusiness size={18} /></div>
           <nav className="nv-profile-tabs nv-activity-tabs" aria-label="Saved jobs and applications">
             <button type="button" className={"nv-profile-tab" + (activityTab === "saved" ? " active" : "")} aria-current={activityTab === "saved" ? "page" : undefined} onClick={() => go("saved")}><BriefcaseBusiness size={15} /><span>Saved jobs</span></button>
             <button type="button" className={"nv-profile-tab" + (activityTab === "applications" ? " active" : "")} aria-current={activityTab === "applications" ? "page" : undefined} onClick={() => go("applications")}><ClipboardList size={15} /><span>Applications</span></button>
           </nav>
-          {activityTab === "saved" && <><div className="nv-job-grid">{saved.map(item => <article className="nv-job-card" key={item.id}><div className="nv-job-top"><span className="nv-job-company">{initials(item.companyName || "Company")}</span><span className="nv-status-neutral">Saved {dateText(item.createdAt)}</span></div><h3>{item.title}</h3><p>{item.companyName || "Company not listed"}</p><div className="nv-job-meta"><span>{[item.city, item.state].filter(Boolean).join(", ") || "Location not listed"}</span><span>{item.experience || "Experience not listed"}</span><span>{item.workMode || "Work mode not listed"}</span></div><div className="nv-job-bottom"><strong>{item.salaryRange || "Salary not disclosed"}</strong><button className="nv-secondary nv-small" onClick={() => void perform(() => favouriteApi.deleteFavouriteApplication(item.id), "Removed from saved jobs.")}><Trash2 size={14} /> Remove</button></div></article>)}</div>{!saved.length && !loading && <EmptyState title="No saved jobs yet" text="Save an opportunity from your recommendations to build your shortlist." action={() => go("recommendations")} actionLabel="Explore recommendations" />}</>}
-          {activityTab === "applications" && <EmptyState title="Application history is not available yet" text="Your application activity will appear here when a verified application-history service is connected." action={() => go("recommendations")} actionLabel="Explore recommendations" />}
+          {activityTab === "saved" && <><div className="nv-job-grid">{saved.map(item => <article className="nv-job-card" key={item.id}><div className="nv-job-top"><span className="nv-job-company">{initials(item.companyName || "Company")}</span><span className="nv-status-neutral">Saved {dateText(item.createdAt)}</span></div><h3>{item.title}</h3><p>{item.companyName || "Company not listed"}</p><div className="nv-job-meta"><span>{[item.city, item.state].filter(Boolean).join(", ") || "Location not listed"}</span><span>{item.experience || "Experience not listed"}</span><span>{item.workMode || "Work mode not listed"}</span></div><div className="nv-job-bottom"><strong>{item.salaryRange || "Salary not disclosed"}</strong><button className="nv-secondary nv-small" onClick={() => void perform(() => favouriteApi.deleteFavouriteApplication(item.id), "Removed from saved jobs.")}><Trash2 size={14} /> Remove</button></div></article>)}</div>{!saved.length && !loading && <EmptyState title="No saved jobs yet" text="Save an opportunity from Find jobs to build your shortlist." action={() => go("find-jobs")} actionLabel="Find jobs" />}</>}
+          {activityTab === "applications" && <EmptyState title="Application history is not available yet" text="Your application activity will appear here when a verified application-history service is connected." action={() => go("find-jobs")} actionLabel="Find jobs" />}
         </section>}
 
       </div>
@@ -411,9 +402,6 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
 
 function Record({ title, meta, onEdit, onDelete }: { title: string; meta: string; onEdit?: () => void; onDelete?: () => void }) {
   return <article className="nv-record"><span className="nv-record-icon"><FileText size={17} /></span><div><strong>{title}</strong><small>{meta || "Details not provided"}</small></div>{onEdit && <button className="nv-icon-action" onClick={onEdit} aria-label={"Edit " + title}><Pencil size={16} /></button>}{onDelete && <button className="nv-icon-action danger" onClick={onDelete} aria-label={"Remove " + title}><Trash2 size={16} /></button>}</article>;
-}
-function JobCard({ job, onSave, disabled }: { job: RecordData; onSave: () => void; disabled: boolean }) {
-  return <article className="nv-job-card"><div className="nv-job-top"><span className="nv-job-company">{initials(job.companyName || "Company")}</span>{job.isVerified && <span className="nv-status-good"><ShieldCheck size={13} /> Verified</span>}</div><h3>{job.title}</h3><p>{job.companyName}</p><div className="nv-job-meta"><span>{[job.city, job.state].filter(Boolean).join(", ") || "Location not listed"}</span><span>{job.experience || "Experience not listed"}</span><span>{job.workMode || "Work mode not listed"}</span></div><div className="nv-job-bottom"><strong>{job.salaryRange || "Salary not disclosed"}</strong><button className="nv-secondary nv-small" disabled={disabled} onClick={onSave}>{job.isFavorite ? "Saved" : "Save job"}</button></div></article>;
 }
 function EmptyState({ title, text, action, actionLabel }: { title: string; text: string; action?: () => void; actionLabel?: string }) {
   return <div className="nv-empty"><span><Sparkles size={21} /></span><h3>{title}</h3><p>{text}</p>{action && <button className="nv-text-action" onClick={action}>{actionLabel || "Continue"} <ArrowRight size={14} /></button>}</div>;
