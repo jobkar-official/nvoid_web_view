@@ -119,7 +119,7 @@ function formatTime(value: string) {
 
 export function GuestShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isLoading, logout } = useAuth();
   const signedIn = isAuthenticated && Boolean(user);
   const [history, setHistory] = useState<GuestSearchRecord[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -230,7 +230,9 @@ export function GuestShell({ children }: { children: ReactNode }) {
                   );
                 })}
               </div>
-            )) : (
+            )) : isLoading ? (
+              <div className="history-placeholder">Restoring your workspace…</div>
+            ) : (
               <>
                 <span className="sidebar-section-label">Explore</span>
                 {links.map((item) => {
@@ -296,6 +298,11 @@ export function GuestShell({ children }: { children: ReactNode }) {
                 </div>
                 <div className="sidebar-trust"><ShieldCheck size={12} /> Your private workspace is active</div>
               </>
+            ) : isLoading ? (
+              <div className="guest-identity">
+                <span className="guest-avatar">…</span>
+                <span><strong>Restoring session</strong><small>Checking secure cookies</small></span>
+              </div>
             ) : (
               <>
                 <div className="guest-identity">
@@ -386,6 +393,8 @@ export function GuestShell({ children }: { children: ReactNode }) {
                   <Link href="/workspace" className="topbar-login">Workspace</Link>
                   <button type="button" className="topbar-create" onClick={() => void logout()}>Sign out</button>
                 </>
+              ) : isLoading ? (
+                <span className="topbar-login">Checking session…</span>
               ) : (
                 <>
                   <Link href="/auth/signin" className="topbar-login">Sign in</Link>
