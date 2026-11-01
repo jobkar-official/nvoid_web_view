@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   AlertTriangle,
-  ArrowRight,
   ArrowUpRight,
   BrainCircuit,
   Building2,
@@ -327,6 +326,23 @@ export default function ModelsPage() {
                   <div className="model-io-group"><strong>OUTPUTS</strong><ul>{item.outputs.map((value) => <li key={value}>{value}</li>)}</ul></div>
                 </section>
               </div>
+
+              {item.id === "02" && (
+                <section className="model-score-structure">
+                  <div>
+                    <span className="model-detail-heading">DETERMINISTIC SCORE SIGNALS</span>
+                    <h3>What contributes to the initial match score?</h3>
+                    <p>The scoring layer starts at 25 and adds the available evidence below. The total is capped at 100; unavailable fields do not become verified facts.</p>
+                  </div>
+                  <div className="model-score-parts">
+                    <span><strong>Up to +35</strong><small>Matching skills and keywords · 7 points per matching term, capped</small></span>
+                    <span><strong>Up to +25</strong><small>Overlap between the requested job title and the listing title</small></span>
+                    <span><strong>+10</strong><small>Location match, or remote preference when remote work is evidenced</small></span>
+                    <span><strong>Up to +10</strong><small>Published salary range overlaps the candidate's stated range</small></span>
+                  </div>
+                  <p className="model-score-blend">When AI reranking is enabled, Worker blends 45% of the deterministic score with 55% of the AI score for the leading candidates. If an AI batch fails, the deterministic score is retained.</p>
+                </section>
+              )}
 
               <div className="model-pros-cons">
                 <section className="model-pros">
