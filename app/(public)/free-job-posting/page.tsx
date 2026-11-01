@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "100% Free Job Posting for Employers | Worker",
+  title: "100% Free Job Posting for Employers",
   description: "Create your company profile and post jobs for free with Worker. Reduce weeks of manual hiring work with organised applicant review and AI-assisted matching.",
   keywords: ["free job posting", "post jobs for free", "free hiring platform", "AI applicant matching", "employer hiring workspace"]
 };
