@@ -221,7 +221,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
                 <span className="sidebar-section-label">{group.label}</span>
                 {group.items.map((item) => {
                   const Icon = item.icon;
-                  const active = item.href === "/workspace" ? pathname === "/workspace" : pathname === item.href;
+                  const active = item.href === "/workspace" ? pathname === "/workspace" || pathname === "/" : pathname === item.href;
                   return (
                     <Link key={item.href} href={item.href} onClick={() => closeSidebarOnMobile()} className={"public-nav-link" + (active ? " active" : "")}>
                       <Icon size={16} />
