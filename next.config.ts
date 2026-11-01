@@ -64,6 +64,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: "/authController/:path*",
+        destination: "https://edge.jobkar.in/authentication/authController/:path*",
+      },
+      {
         source: "/backend/:path*",
         destination: "https://api.jobkar.in/:path*",
       },
