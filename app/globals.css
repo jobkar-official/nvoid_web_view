@@ -5013,3 +5013,68 @@ body::-webkit-scrollbar {
     height: 36px;
   }
 }
+
+
+/* Password recovery link and confirmation state */
+.auth-forgot-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -1px;
+}
+
+.auth-forgot-row a {
+  color: #9bc5f3;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+
+.auth-forgot-row a:hover {
+  color: #d6e9ff;
+  text-decoration: underline;
+}
+
+.auth-forgot-success {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 25px;
+  padding: 15px;
+  border: 1px solid rgba(113,190,151,.22);
+  border-radius: 10px;
+  color: #d8e9df;
+  background: rgba(39,104,72,.16);
+}
+
+.auth-forgot-success > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgba(113,190,151,.22);
+  border-radius: 9px;
+  color: #9dd7b5;
+  background: rgba(39,104,72,.22);
+}
+
+.auth-forgot-success > div {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.auth-forgot-success strong {
+  color: #e8f3ec;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.auth-forgot-success p {
+  margin: 0;
+  color: #b8c9be;
+  font-size: 10px;
+  line-height: 1.65;
+}
