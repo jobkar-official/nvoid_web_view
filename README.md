@@ -158,11 +158,8 @@ The web app provides same-origin authentication routes:
 - `POST /api/auth/logout`
 - `GET /api/auth/session`
 
-The sign-in form sends the credential request directly from the browser to the URL configured in `NEXT_PUBLIC_AUTH_LOGIN_URL`. This setting is intentionally required and has no production fallback, so local development cannot silently send credentials to the production API. Set it in the local `.env` to the local or staging login URL you intend to test. The browser then posts the successful response to the same-origin `POST /api/auth/session` route, which stores access and refresh tokens in HttpOnly cookies. Registration and forgot-password continue to use their existing separately configurable paths:
+The browser calls same-origin `/authController/login` and `/authController/sendCodeForgotPassword` paths. Next.js rewrites these requests server-side to the authentication service under `https://edge.jobkar.in/authentication/authController/*`; the production host is not called directly by browser JavaScript. After successful login, the browser posts the returned auth DTO to same-origin `POST /api/auth/session`, which stores the access and refresh tokens in HttpOnly cookies.
 
-- `NEXT_PUBLIC_AUTH_LOGIN_URL=` (required; use your local/staging auth login endpoint; no production default)
-- `NVOID_AUTH_REGISTER_PATH=/backend/auth/register`
-- `NVOID_AUTH_FORGOT_PASSWORD_PATH=/backend/auth/OAuthGenPassword`
 - `NVOID_API_BASE_URL=https://edge.jobkar.in`
 - `NEXT_PUBLIC_API_URL=https://edge.jobkar.in`
 - `NEXT_PUBLIC_SOCKET_URL=https://chat.jobkar.in`
@@ -173,7 +170,7 @@ After direct browser sign-in, the browser posts the returned auth DTO to the sam
 
 All browser API calls use same-origin `/api/jobkar/*` routes. The proxy attaches the bearer token server-side and forwards requests to the configured Edge Gateway or Jobkar Chat service. This avoids browser CORS dependencies and keeps access/refresh tokens out of client code. Keep the API and auth base URLs server-controlled; do not place private service credentials in `NEXT_PUBLIC_*` variables.
 
-Forgot-password uses the existing `OAuthGenPassword` endpoint and returns a generic confirmation so the page does not reveal whether an email address has an account. This web view does not create a separate identity database.
+Forgot-password calls the authentication service's `POST /authController/sendCodeForgotPassword?email=...` endpoint through the same-origin Next.js rewrite. This web view does not create a separate identity database.
 
 ### Private workspace and Jobkar API integration
 
