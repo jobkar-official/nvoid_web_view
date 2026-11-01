@@ -8,12 +8,17 @@ import {
   parseAuthenticatedResponse
 } from "../../../../lib/auth-session";
 
-const cookieOptions = {
+const accessCookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "lax" as const,
   path: "/",
   maxAge: 60 * 60 * 24 * 7
+};
+
+const refreshCookieOptions = {
+  ...accessCookieOptions,
+  maxAge: 60 * 60 * 24 * 14
 };
 
 export async function GET() {
@@ -31,16 +36,16 @@ export async function POST(request: NextRequest) {
   }
 
   const cookieStore = await cookies();
-  cookieStore.set(nvoidSessionCookie, authenticated.token, cookieOptions);
+  cookieStore.set(nvoidSessionCookie, authenticated.token, accessCookieOptions);
   if (authenticated.refreshToken) {
-    cookieStore.set(nvoidRefreshCookie, authenticated.refreshToken, cookieOptions);
+    cookieStore.set(nvoidRefreshCookie, authenticated.refreshToken, refreshCookieOptions);
   } else {
-    cookieStore.set(nvoidRefreshCookie, "", { ...cookieOptions, maxAge: 0 });
+    cookieStore.set(nvoidRefreshCookie, "", { ...refreshCookieOptions, maxAge: 0 });
   }
   cookieStore.set(
     nvoidUserCookie,
     JSON.stringify({ roleId: authenticated.session.roleId, user: authenticated.session.user }),
-    cookieOptions
+    accessCookieOptions
   );
 
   return NextResponse.json({
