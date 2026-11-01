@@ -158,8 +158,9 @@ The web app provides same-origin authentication routes:
 - `POST /api/auth/logout`
 - `GET /api/auth/session`
 
-The sign-in route sends requests to the exact Jobkar authentication endpoint `https://edge.jobkar.in/authentication/authController/login`. Configure `NVOID_AUTH_BASE_URL=https://edge.jobkar.in` server-side. Registration and forgot-password continue to use their existing separately configurable paths:
+The sign-in form sends the credential request directly from the browser to the URL configured in `NEXT_PUBLIC_AUTH_LOGIN_URL`. This setting is intentionally required and has no production fallback, so local development cannot silently send credentials to the production API. Set it in the local `.env` to the local or staging login URL you intend to test. The browser then posts the successful response to the same-origin `POST /api/auth/session` route, which stores access and refresh tokens in HttpOnly cookies. Registration and forgot-password continue to use their existing separately configurable paths:
 
+- `NEXT_PUBLIC_AUTH_LOGIN_URL=` (required; use your local/staging auth login endpoint; no production default)
 - `NVOID_AUTH_REGISTER_PATH=/backend/auth/register`
 - `NVOID_AUTH_FORGOT_PASSWORD_PATH=/backend/auth/OAuthGenPassword`
 - `NVOID_API_BASE_URL=https://edge.jobkar.in`
@@ -168,7 +169,7 @@ The sign-in route sends requests to the exact Jobkar authentication endpoint `ht
 
 Sign-in and registration send the selected WEB platform and role ID. The upstream auth response must include an access token and a supported role ID (3, 4 or 7); it should also return an account ID and email for account-specific API calls and refresh-token rotation.
 
-The web server stores the access token, refresh token and minimal account context in HttpOnly, SameSite=Lax cookies. The token is not read by browser JavaScript and is not written to local storage. The private route group checks the cookie session before rendering. If an API returns 401, the server proxy calls `/backend/auth/refreshToken`, rotates the access/refresh cookies when the refresh succeeds and retries the original request. An unsuccessful refresh clears the session cookies.
+After direct browser sign-in, the browser posts the returned auth DTO to the same-origin session route, which stores the access token, refresh token and minimal account context in HttpOnly, SameSite=Lax cookies. The token is not written to local storage. The private route group checks the cookie session before rendering. If an API returns 401, the server proxy calls `/backend/auth/refreshToken`, rotates the access/refresh cookies when the refresh succeeds and retries the original request. An unsuccessful refresh clears the session cookies.
 
 All browser API calls use same-origin `/api/jobkar/*` routes. The proxy attaches the bearer token server-side and forwards requests to the configured Edge Gateway or Jobkar Chat service. This avoids browser CORS dependencies and keeps access/refresh tokens out of client code. Keep the API and auth base URLs server-controlled; do not place private service credentials in `NEXT_PUBLIC_*` variables.
 
