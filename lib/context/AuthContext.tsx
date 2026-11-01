@@ -102,7 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     setAuthError(null);
     try {
-      const session = await signInWithJobkar(email, password);
+      const session = await signInWithJobkar(email, password, role === "recruiter" ? 3 : 4);
       const nextUser = mapUser(session);
       if (!nextUser) throw new Error("The authentication service returned an unsupported account.");
       setUser(nextUser);
