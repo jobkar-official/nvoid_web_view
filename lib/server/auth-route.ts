@@ -31,7 +31,7 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
   let upstream: URL;
   try {
     const path = action === "signin"
-      ? "/authentication/authController/login"
+      ? "/authentication/auth/login"
       : action === "register"
         ? process.env.NVOID_AUTH_REGISTER_PATH || "/backend/auth/register"
         : process.env.NVOID_AUTH_FORGOT_PASSWORD_PATH || "/backend/auth/OAuthGenPassword";
@@ -88,7 +88,7 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
     if (!response.ok) {
       if (response.status === 404 && action === "signin") {
         return NextResponse.json({
-          error: "The local sign-in route reached the configured Jobkar host, but that host returned 404 for /authentication/authController/login. Check the Edge Gateway route mapping.",
+          error: "The local sign-in route reached the configured Jobkar host, but that host returned 404 for /authentication/auth/login. Check the Edge Gateway route mapping.",
           source: "jobkar-auth-upstream",
           upstreamStatus: 404
         }, {
