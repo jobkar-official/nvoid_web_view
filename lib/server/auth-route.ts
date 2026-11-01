@@ -57,9 +57,17 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
     } else {
       body = { email: email.trim() };
     }
+  } else if (action === "signin") {
+    const credentials = body as Record<string, unknown>;
+    const email = typeof credentials.email === "string" ? credentials.email.trim() : "";
+    const password = typeof credentials.password === "string" ? credentials.password : "";
+    if (!email || !password) {
+      return NextResponse.json({ error: "Email and password are required." }, { status: 400 });
+    }
+    body = { email, password };
   } else {
     const requestedRole = Number((body as Record<string, unknown>).roleId);
-    if (action === "register" && requestedRole !== 3 && requestedRole !== 4) {
+    if (requestedRole !== 3 && requestedRole !== 4) {
       return NextResponse.json({ error: "Public registration is available for job seekers and recruiters only." }, { status: 400 });
     }
     body = { ...(body as Record<string, unknown>), platform: "WEB" };
@@ -96,7 +104,13 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
           headers: { "x-nvoid-auth-route": "/api/auth/signin", "x-nvoid-auth-upstream-status": "404" }
         });
       }
-      const error = typeof payload.error === "string" ? payload.error : typeof payload.message === "string" ? payload.message : "Authentication was rejected.";
+      const error = typeof payload.detail === "string"
+        ? payload.detail
+        : typeof payload.error === "string"
+          ? payload.error
+          : typeof payload.message === "string"
+            ? payload.message
+            : "Authentication was rejected.";
       return NextResponse.json({ error, source: "jobkar-auth-upstream", upstreamStatus: response.status }, {
         status: response.status,
         headers: { "x-nvoid-auth-route": `/api/auth/${action}`, "x-nvoid-auth-upstream-status": String(response.status) }
