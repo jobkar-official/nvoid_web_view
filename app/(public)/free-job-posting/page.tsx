@@ -11,6 +11,7 @@ import {
   SearchCheck,
   ShieldCheck,
   Sparkles,
+  Target,
   Users
 } from "lucide-react";
 
@@ -48,7 +49,7 @@ const matchingBenefits = [
     description: "Spend less time jumping between tabs and manually arranging candidate details. Keep role-related information together for a more consistent review."
   },
   {
-    icon: TargetIcon,
+    icon: Target,
     title: "See why a profile may fit",
     description: "Compare the available skills, experience and other role requirements. Understand the strengths and the missing information before moving someone forward."
   },
@@ -59,9 +60,6 @@ const matchingBenefits = [
   }
 ];
 
-function TargetIcon({ size = 20 }: { size?: number }) {
-  return <BadgeCheck size={size} />;
-}
 
 const included = [
   "Create and manage your company presence",
