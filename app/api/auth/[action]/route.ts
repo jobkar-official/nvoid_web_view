@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { nvoidSessionCookie, parseAuthenticatedResponse } from "../../../../lib/auth-session";
 
-const allowedActions = new Set(["signin", "register"]);
+const allowedActions = new Set(["signin", "register", "forgot-password"]);
 
 export async function POST(request: NextRequest, context: { params: Promise<{ action: string }> }) {
   const { action } = await context.params;
@@ -17,15 +17,28 @@ export async function POST(request: NextRequest, context: { params: Promise<{ ac
   try {
     const path = action === "signin"
       ? process.env.NVOID_AUTH_SIGNIN_PATH || "/auth/signin"
-      : process.env.NVOID_AUTH_REGISTER_PATH || "/auth/register";
+      : action === "register"
+        ? process.env.NVOID_AUTH_REGISTER_PATH || "/auth/register"
+        : process.env.NVOID_AUTH_FORGOT_PASSWORD_PATH || "/auth/forgot-password";
     upstream = new URL(path, base);
     if (upstream.origin !== new URL(base).origin) throw new Error("Authentication path must remain on the configured auth host.");
   } catch {
     return NextResponse.json({ error: "Authentication service URL configuration is invalid." }, { status: 500 });
   }
 
-  const body = await request.json().catch(() => null);
-  if (!body || typeof body !== "object") return NextResponse.json({ error: "A valid JSON request body is required." }, { status: 400 });
+  let body = await request.json().catch(() => null);
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "A valid JSON request body is required." }, { status: 400 });
+  }
+
+  if (action === "forgot-password") {
+    const email = (body as Record<string, unknown>).email;
+    if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
+    }
+    body = { email: email.trim() };
+  }
+
   if (action === "register") {
     const requestedRole = Number((body as Record<string, unknown>).roleId);
     if (requestedRole !== 3 && requestedRole !== 4) {
@@ -42,6 +55,17 @@ export async function POST(request: NextRequest, context: { params: Promise<{ ac
       signal: AbortSignal.timeout(15000)
     });
     const payload = await response.json().catch(() => ({}));
+
+    if (action === "forgot-password") {
+      if (!response.ok) {
+        return NextResponse.json({ error: "We couldn't process your request right now. Please try again later." }, { status: 502 });
+      }
+      return NextResponse.json({
+        submitted: true,
+        message: "If an account matches that email, password reset instructions will be sent."
+      });
+    }
+
     if (!response.ok) {
       const error = typeof payload.error === "string" ? payload.error : typeof payload.message === "string" ? payload.message : "Authentication was rejected.";
       return NextResponse.json({ error }, { status: response.status });
