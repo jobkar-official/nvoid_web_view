@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight, BrainCircuit, CalendarDays, CheckCircle2, Search, ShieldCheck, Sparkles, Target } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Worker AI Models | Alpha k1 Model Directory",
+  title: "AI Models & Alpha k1 Model Directory",
   description: "Explore the Worker AI model directory, including Alpha - k1, its job-discovery role, release date, matching signals and limitations."
 };
 
