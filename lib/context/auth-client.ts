@@ -30,7 +30,26 @@ type SessionResponse = {
   };
 };
 
-const JOBKAR_LOGIN_URL = "https://edge.jobkar.in/authentication/authController/login";
+const JOBKAR_LOGIN_URL = process.env.NEXT_PUBLIC_AUTH_LOGIN_URL?.trim();
+
+function getLoginUrl() {
+  if (!JOBKAR_LOGIN_URL) {
+    throw new Error("Login API is not configured. Set NEXT_PUBLIC_AUTH_LOGIN_URL in your local .env to your development or staging login endpoint.");
+  }
+
+  let url: URL;
+  try {
+    url = new URL(JOBKAR_LOGIN_URL);
+  } catch {
+    throw new Error("NEXT_PUBLIC_AUTH_LOGIN_URL must be a complete http:// or https:// URL.");
+  }
+
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    throw new Error("NEXT_PUBLIC_AUTH_LOGIN_URL must use HTTP or HTTPS.");
+  }
+
+  return url.toString();
+}
 
 function getErrorMessage(data: AuthApiResponse, fallback: string) {
   return data.detail || data.message || data.error || fallback;
@@ -39,8 +58,15 @@ function getErrorMessage(data: AuthApiResponse, fallback: string) {
 export async function signInWithJobkar(email: string, password: string): Promise<SessionResponse> {
   let response: Response;
 
+  let loginUrl: string;
   try {
-    response = await fetch(JOBKAR_LOGIN_URL, {
+    loginUrl = getLoginUrl();
+  } catch (error) {
+    throw error;
+  }
+
+  try {
+    response = await fetch(loginUrl, {
       method: "POST",
       mode: "cors",
       credentials: "omit",
