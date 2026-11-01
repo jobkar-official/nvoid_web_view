@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { Activity, ArrowRight, ArrowUpRight, Bell, BriefcaseBusiness, Check, CheckCircle2, ChevronRight, CircleHelp, ClipboardList, Code2, FileText, GraduationCap, LayoutDashboard, LoaderCircle, LogOut, MessageCircle, MessageSquare, PanelLeftClose, PanelLeftOpen, Plus, RefreshCw, Search, Send, ShieldCheck, Sparkles, Target, Trash2, UserRound, X } from "lucide-react";
+import { Activity, ArrowRight, ArrowUpRight, Bell, BriefcaseBusiness, Check, CheckCircle2, ChevronRight, CircleHelp, ClipboardList, Code2, FileText, GraduationCap, Languages, LayoutDashboard, LoaderCircle, LogOut, MessageCircle, MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, Plus, RefreshCw, Search, Send, ShieldCheck, Sparkles, Target, Trash2, UserRound, X } from "lucide-react";
 import { qualificationApi } from "../lib/api/education.api";
 import { experienceApi } from "../lib/api/experience.api";
+import { languageApi } from "../lib/api/language.api";
 import { generalApi as favouriteApi } from "../lib/api/favourite.api";
 import { openToWorkApi } from "../lib/api/highlights.api";
 import { messageApi } from "../lib/api/message.api";
@@ -25,10 +26,6 @@ const nav = [
   { id: "saved", label: "Saved jobs", icon: BriefcaseBusiness, group: "Discover" },
   { id: "applications", label: "Applications", icon: ClipboardList, group: "Discover" },
   { id: "profile", label: "Profile", icon: UserRound, group: "Profile" },
-  { id: "skills", label: "Skills", icon: Target, group: "Profile" },
-  { id: "education", label: "Education", icon: GraduationCap, group: "Profile" },
-  { id: "experience", label: "Experience", icon: Activity, group: "Profile" },
-  { id: "resume", label: "Resume", icon: FileText, group: "Profile" },
   { id: "highlights", label: "Open to work", icon: Target, group: "Activity" },
   { id: "messages", label: "Messages", icon: MessageSquare, group: "Activity" },
   { id: "notifications", label: "Notifications", icon: Bell, group: "Activity" },
@@ -46,11 +43,22 @@ const pages: Record<string, Page> = {
   education: { title: "Education", description: "Manage your qualifications and academic history.", icon: GraduationCap },
   experience: { title: "Experience", description: "Keep your work history up to date.", icon: Activity },
   resume: { title: "Resume", description: "Upload and manage the resume attached to your account.", icon: FileText },
+  languages: { title: "Languages", description: "Manage the languages you use professionally.", icon: Languages },
   highlights: { title: "Open to work", description: "Manage your availability and matching preferences.", icon: Target },
   messages: { title: "Messages", description: "View conversations from the Jobkar chat service.", icon: MessageSquare },
   notifications: { title: "Notifications", description: "Review account alerts and mark them as read.", icon: Bell },
   support: { title: "Support", description: "Create support requests and track existing tickets.", icon: CircleHelp }
 };
+type ProfileTab = "profile" | "education" | "skills" | "experience" | "languages" | "resume";
+const profileTabIds: ProfileTab[] = ["profile", "education", "skills", "experience", "languages", "resume"];
+const profileTabNavigation = [
+  { id: "profile" as ProfileTab, label: "Profile", icon: UserRound },
+  { id: "education" as ProfileTab, label: "Education", icon: GraduationCap },
+  { id: "skills" as ProfileTab, label: "Skills", icon: Target },
+  { id: "experience" as ProfileTab, label: "Experience", icon: Activity },
+  { id: "languages" as ProfileTab, label: "Languages", icon: Languages },
+  { id: "resume" as ProfileTab, label: "Resume", icon: FileText }
+];
 function rows<T = RecordData>(value: unknown): T[] {
   if (Array.isArray(value)) return value as T[];
   if (!value || typeof value !== "object") return [];
@@ -74,7 +82,9 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
   const userId = Number(id);
   const role = initialSession.roleId === 3 ? "Recruiter" : initialSession.roleId === 7 ? "Support" : "Job seeker";
   const name = initialSession.user.fullName || initialSession.user.name || role;
-  const section = pages[initialSection] ? initialSection : "overview";
+  const requestedProfileTab = profileTabIds.includes(initialSection as ProfileTab) ? initialSection as ProfileTab : "profile";
+  const section = profileTabIds.includes(initialSection as ProfileTab) ? "profile" : pages[initialSection] ? initialSection : "overview";
+  const [profileTab, setProfileTab] = useState<ProfileTab>(requestedProfileTab);
   const [expanded, setExpanded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -86,6 +96,7 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
   const [education, setEducation] = useState<RecordData[]>([]);
   const [experience, setExperience] = useState<RecordData[]>([]);
   const [resumes, setResumes] = useState<RecordData[]>([]);
+  const [languages, setLanguages] = useState<RecordData[]>([]);
   const [saved, setSaved] = useState<RecordData[]>([]);
   const [recommended, setRecommended] = useState<RecordData[]>([]);
   const [alerts, setAlerts] = useState<RecordData[]>([]);
@@ -102,8 +113,13 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
   const [skillLevel, setSkillLevel] = useState("Intermediate");
   const [skillYears, setSkillYears] = useState("1");
   const [skillMonths, setSkillMonths] = useState("0");
+  const [editingSkillId, setEditingSkillId] = useState<number | string | null>(null);
   const [qualification, setQualification] = useState({ qualification: "", boardOrUniversity: "", startYear: "", completeYear: "", from: "", grade: "" });
+  const [editingEducationId, setEditingEducationId] = useState<number | string | null>(null);
   const [work, setWork] = useState({ companyName: "", designation: "", companyLocation: "", startDate: "", endDate: "", current: false });
+  const [editingExperienceId, setEditingExperienceId] = useState<number | string | null>(null);
+  const [languageName, setLanguageName] = useState("");
+  const [languageProficiency, setLanguageProficiency] = useState("Professional");
   const [availability, setAvailability] = useState({ jobTitle: "", jobType: "Full-time", noticePeriod: "Immediate", experienceYears: "0", experienceMonths: "0", expectedSalaryMin: "0", expectedSalaryMax: "0", highestEducation: "Graduate" });
   const [support, setSupport] = useState({ subject: "", description: "" });
   const [file, setFile] = useState<File | null>(null);
@@ -157,15 +173,22 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
         setChecks(result.map((item, index) => ({ name: tests[index][0], ok: item.status === "fulfilled", detail: item.status === "fulfilled" ? rows(item.value).length + " live records returned" : errorText(item.reason) })));
         return;
       }
-      if (section === "profile" && initialSession.user.slug) {
-        const item = await usersApi.getUserDetailBySlug(initialSession.user.slug);
-        setProfile({ name: item.name || name, email: item.email || initialSession.user.email || "", phone: item.phone || initialSession.user.phone || "", bio: item.bio || item.description || "", city: item.city || "", state: item.state || "", country: item.country || "India" });
+      if (section === "profile") {
+        if (profileTab === "profile") {
+          if (initialSession.user.slug) {
+            const item = await usersApi.getUserDetailBySlug(initialSession.user.slug);
+            setProfile({ name: item.name || name, email: item.email || initialSession.user.email || "", phone: item.phone || initialSession.user.phone || "", bio: item.bio || item.description || "", city: item.city || "", state: item.state || "", country: item.country || "India" });
+          } else {
+            setProfile(current => ({ ...current, name, email: initialSession.user.email || current.email, phone: initialSession.user.phone || current.phone }));
+          }
+        }
+        if (profileTab === "skills") setSkills(await skillsApi.getSkillsByUserId(id));
+        if (profileTab === "education") setEducation(await qualificationApi.getQualificationsByUserId(id));
+        if (profileTab === "experience") setExperience(await experienceApi.getExperienceList(id));
+        if (profileTab === "languages") setLanguages(await languageApi.getLanguagesByUserId(id));
+        if (profileTab === "resume") setResumes(await resumeApi.getResumesByUserId(id));
         return;
       }
-      if (section === "skills") setSkills(await skillsApi.getSkillsByUserId(id));
-      if (section === "education") setEducation(await qualificationApi.getQualificationsByUserId(id));
-      if (section === "experience") setExperience(await experienceApi.getExperienceList(id));
-      if (section === "resume") setResumes(await resumeApi.getResumesByUserId(id));
       if (section === "saved") setSaved(await favouriteApi.getFavouriteJobsByUserId(id));
       if (section === "recommendations") setRecommended(await openToWorkApi.getRecommendedJobByUserId(id));
       if (section === "notifications") setAlerts(await notificationApi.getNotificationsByUserId(id));
@@ -177,7 +200,7 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
     } finally {
       setLoading(false);
     }
-  }, [section, id, userId, initialSession.user.slug, initialSession.user.email, initialSession.user.phone, name]);
+  }, [section, profileTab, id, userId, initialSession.user.slug, initialSession.user.email, initialSession.user.phone, name]);
 
   useEffect(() => { void loadPage(); }, [loadPage]);
 
@@ -185,6 +208,11 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
     setNotice("");
     setError("");
     setExpanded(false);
+    if (profileTabIds.includes(target as ProfileTab)) {
+      setProfileTab(target as ProfileTab);
+      router.push("/workspace/profile");
+      return;
+    }
     router.push(target === "overview" ? "/workspace" : "/workspace/" + target);
   };
 
@@ -210,15 +238,44 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
   };
   const addSkill = (event: FormEvent) => {
     event.preventDefault();
-    void perform(() => skillsApi.saveSkill({ userId, skillName: skillName.trim(), proficiencyLevel: skillLevel, year: Number(skillYears), month: Number(skillMonths) }), "Skill saved to your profile.");
+    const payload = { userId, skillName: skillName.trim(), proficiencyLevel: skillLevel, year: Number(skillYears), month: Number(skillMonths) };
+    void perform(async () => {
+      if (editingSkillId !== null) await skillsApi.updateSkill(editingSkillId, payload);
+      else await skillsApi.saveSkill(payload);
+      setEditingSkillId(null);
+      setSkillName("");
+      setSkillLevel("Intermediate");
+      setSkillYears("1");
+      setSkillMonths("0");
+    }, editingSkillId !== null ? "Skill updated." : "Skill saved to your profile.");
   };
   const addEducation = (event: FormEvent) => {
     event.preventDefault();
-    void perform(() => qualificationApi.saveQualification({ userId, qualification: qualification.qualification, boardOrUniversity: qualification.boardOrUniversity, startYear: Number(qualification.startYear), completeYear: Number(qualification.completeYear), from: qualification.from, grade: qualification.grade }), "Education record submitted to Jobkar.");
+    const payload = { userId, qualification: qualification.qualification, boardOrUniversity: qualification.boardOrUniversity, startYear: Number(qualification.startYear), completeYear: Number(qualification.completeYear), from: qualification.from, grade: qualification.grade };
+    void perform(async () => {
+      if (editingEducationId !== null) await qualificationApi.updateQualification(Number(editingEducationId), { id: Number(editingEducationId), ...payload });
+      else await qualificationApi.saveQualification(payload);
+      setEditingEducationId(null);
+      setQualification({ qualification: "", boardOrUniversity: "", startYear: "", completeYear: "", from: "", grade: "" });
+    }, editingEducationId !== null ? "Education record updated." : "Education record submitted to Jobkar.");
   };
   const addExperience = (event: FormEvent) => {
     event.preventDefault();
-    void perform(() => experienceApi.createExperience({ userId, companyName: work.companyName, designation: work.designation, companyLocation: work.companyLocation, startDate: work.startDate, endDate: work.current ? null : work.endDate || null, isCurrent: work.current ? 1 : 0 }), "Experience record submitted to Jobkar.");
+    const payload = { userId, companyName: work.companyName, designation: work.designation, companyLocation: work.companyLocation, startDate: work.startDate, endDate: work.current ? null : work.endDate || null, isCurrent: work.current ? 1 : 0 };
+    void perform(async () => {
+      if (editingExperienceId !== null) await experienceApi.updateExperience(Number(editingExperienceId), { id: Number(editingExperienceId), ...payload });
+      else await experienceApi.createExperience(payload);
+      setEditingExperienceId(null);
+      setWork({ companyName: "", designation: "", companyLocation: "", startDate: "", endDate: "", current: false });
+    }, editingExperienceId !== null ? "Experience record updated." : "Experience record submitted to Jobkar.");
+  };
+  const addLanguage = (event: FormEvent) => {
+    event.preventDefault();
+    void perform(async () => {
+      await languageApi.saveLanguage({ userId, language: languageName.trim(), proficiency: languageProficiency });
+      setLanguageName("");
+      setLanguageProficiency("Professional");
+    }, "Language added to your profile.");
   };
   const uploadResume = (event: FormEvent) => {
     event.preventDefault();
@@ -293,6 +350,13 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
         {notice && <div className="nv-alert nv-alert-success" role="status"><CheckCircle2 size={16} /><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss"><X size={14} /></button></div>}
         {loading && <div className="nv-loading-line"><span /> Syncing account data from Jobkar services</div>}
 
+        {section === "profile" && <nav className="nv-profile-tabs" aria-label="Profile sections">
+          {profileTabNavigation.map(item => {
+            const TabIcon = item.icon;
+            return <button type="button" key={item.id} className={"nv-profile-tab" + (profileTab === item.id ? " active" : "")} aria-current={profileTab === item.id ? "page" : undefined} onClick={() => go(item.id)}><TabIcon size={15} /><span>{item.label}</span></button>;
+          })}
+        </nav>}
+
         {section === "overview" && <div className="nv-overview">
           <section className="nv-welcome"><div className="nv-welcome-copy"><span className="nv-welcome-kicker">YOUR PROFESSIONAL WORKSPACE</span><h2>Welcome back, {name.split(" ")[0]}.</h2><p>Your profile, activity and connected Jobkar services are ready in one workspace.</p><div className="nv-welcome-actions"><button className="nv-primary" onClick={() => go("find-jobs")}><Search size={16} /> Discover jobs <ArrowRight size={15} /></button><button className="nv-secondary" onClick={() => go("connections")}><Code2 size={16} /> View API status</button></div></div><div className="nv-welcome-visual"><div className="nv-ring nv-ring-one" /><div className="nv-ring nv-ring-two" /><span><Sparkles size={30} /></span></div></section>
           <div className="nv-stat-grid">{[["Recommended jobs", stats.jobs, Sparkles, "recommendations"], ["Saved jobs", stats.saved, BriefcaseBusiness, "saved"], ["Unread alerts", stats.unread, Bell, "notifications"], ["Profile skills", stats.skills, Target, "skills"]].map(([label, value, Symbol, target]) => { const StatIcon = Symbol as typeof Search; return <button key={String(label)} className="nv-stat-card" onClick={() => go(String(target))}><span className="nv-stat-icon"><StatIcon size={18} /></span><span className="nv-stat-label">{String(label)}</span><strong>{Number(value)}</strong><small>Live account data</small></button>; })}</div>
@@ -302,15 +366,17 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
 
         {section === "connections" && <section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Connected API services</h2><p>Each row runs a real request using a method in the API modules.</p></div><button className="nv-secondary nv-small" onClick={() => void loadPage()}><RefreshCw size={14} /> Run checks</button></div><div className="nv-connection-list">{checks.map(item => <div className="nv-connection-row" key={item.name}><span className={"nv-connection-mark " + (item.ok ? "good" : "attention")}>{item.ok ? <Check size={15} /> : <X size={15} />}</span><div><strong>{item.name}</strong><small>{item.detail}</small></div><span className={item.ok ? "nv-status-good" : "nv-status-warning"}>{item.ok ? "Responding" : "Needs attention"}</span></div>)}</div>{!checks.length && !loading && <EmptyState title="Run your first connection check" text="This tests recommendations, saved jobs, skills, education, experience, resumes, notifications, messages and support." />}<div className="nv-info-strip"><ShieldCheck size={16} /><span>An empty list is a successful API response. Failed requests are shown separately.</span></div></section>}
 
-        {section === "profile" && <section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Professional identity</h2><p>Updates are sent through the authenticated profile endpoint.</p></div><UserRound size={18} /></div><form className="nv-form-grid" onSubmit={saveProfile}><label>Full name<input required value={profile.name} onChange={event => setProfile({ ...profile, name: event.target.value })} /></label><label>Email address<input type="email" value={profile.email} onChange={event => setProfile({ ...profile, email: event.target.value })} /></label><label>Phone number<input value={profile.phone} onChange={event => setProfile({ ...profile, phone: event.target.value })} /></label><label>Country<input value={profile.country} onChange={event => setProfile({ ...profile, country: event.target.value })} /></label><label>State<input value={profile.state} onChange={event => setProfile({ ...profile, state: event.target.value })} /></label><label>City<input value={profile.city} onChange={event => setProfile({ ...profile, city: event.target.value })} /></label><label className="nv-full">Professional summary<textarea rows={5} value={profile.bio} onChange={event => setProfile({ ...profile, bio: event.target.value })} /></label><div className="nv-form-footer nv-full"><span>Account ID: {id || "Not returned by authentication"}</span><button className="nv-primary" disabled={busy}><Check size={15} /> Save profile</button></div></form></section>}
+        {section === "profile" && profileTab === "profile" && <section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Professional identity</h2><p>Updates are sent through the authenticated profile endpoint.</p></div><UserRound size={18} /></div><form className="nv-form-grid" onSubmit={saveProfile}><label>Full name<input required value={profile.name} onChange={event => setProfile({ ...profile, name: event.target.value })} /></label><label>Email address<input type="email" value={profile.email} onChange={event => setProfile({ ...profile, email: event.target.value })} /></label><label>Phone number<input value={profile.phone} onChange={event => setProfile({ ...profile, phone: event.target.value })} /></label><label>Country<input value={profile.country} onChange={event => setProfile({ ...profile, country: event.target.value })} /></label><label>State<input value={profile.state} onChange={event => setProfile({ ...profile, state: event.target.value })} /></label><label>City<input value={profile.city} onChange={event => setProfile({ ...profile, city: event.target.value })} /></label><label className="nv-full">Professional summary<textarea rows={5} value={profile.bio} onChange={event => setProfile({ ...profile, bio: event.target.value })} /></label><div className="nv-form-footer nv-full"><span>Account ID: {id || "Not returned by authentication"}</span><button className="nv-primary" disabled={busy}><Check size={15} /> Save profile</button></div></form></section>}
 
-        {section === "skills" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add a skill</h2><p>Save a skill to your Jobkar professional profile.</p></div><Plus size={18} /></div><form className="nv-form-grid nv-skill-form" onSubmit={addSkill}><label>Skill name<input required value={skillName} onChange={event => setSkillName(event.target.value)} placeholder="Java, React, Product Design" /></label><label>Proficiency<select value={skillLevel} onChange={event => setSkillLevel(event.target.value)}><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></label><label>Years<input type="number" min="0" max="60" value={skillYears} onChange={event => setSkillYears(event.target.value)} /></label><label>Months<input type="number" min="0" max="11" value={skillMonths} onChange={event => setSkillMonths(event.target.value)} /></label><div className="nv-form-footer nv-full"><span>/backend/skills/save</span><button className="nv-primary" disabled={busy}><Plus size={15} /> Add skill</button></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your skills</h2><p>{skills.length} records returned by your account.</p></div><Target size={18} /></div><div className="nv-record-grid">{skills.map(item => <Record key={item.id} title={item.skillName || "Skill"} meta={[item.proficiencyLevel, item.year ? item.year + "y " + (item.month || 0) + "m" : ""].filter(Boolean).join(" · ")} onDelete={() => void perform(() => skillsApi.deleteSkill(item.id), "Skill removed.")} />)}</div>{!skills.length && !loading && <EmptyState title="No skills added yet" text="Add your strongest skills to complete your profile." />}</section></div>}
+        {section === "profile" && profileTab === "skills" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add a skill</h2><p>Save a skill to your Jobkar professional profile.</p></div><Plus size={18} /></div><form className="nv-form-grid nv-skill-form" onSubmit={addSkill}><label>Skill name<input required value={skillName} onChange={event => setSkillName(event.target.value)} placeholder="Java, React, Product Design" /></label><label>Proficiency<select value={skillLevel} onChange={event => setSkillLevel(event.target.value)}><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></label><label>Years<input type="number" min="0" max="60" value={skillYears} onChange={event => setSkillYears(event.target.value)} /></label><label>Months<input type="number" min="0" max="11" value={skillMonths} onChange={event => setSkillMonths(event.target.value)} /></label><div className="nv-form-footer nv-full"><span>/backend/skills/save · /backend/skills/update/:id</span><div className="nv-form-actions"><button type="button" className="nv-secondary" hidden={editingSkillId === null} onClick={() => { setEditingSkillId(null); setSkillName(""); setSkillLevel("Intermediate"); setSkillYears("1"); setSkillMonths("0"); }}>Cancel</button><button className="nv-primary" disabled={busy}><Plus size={15} /> {editingSkillId !== null ? "Save changes" : "Add skill"}</button></div></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your skills</h2><p>{skills.length} records returned by your account.</p></div><Target size={18} /></div><div className="nv-record-grid">{skills.map(item => <Record key={item.id} title={item.skillName || "Skill"} meta={[item.proficiencyLevel, item.year ? item.year + "y " + (item.month || 0) + "m" : ""].filter(Boolean).join(" · ")} onEdit={() => { setEditingSkillId(item.id); setSkillName(item.skillName || ""); setSkillLevel(item.proficiencyLevel || "Intermediate"); setSkillYears(String(item.year ?? 0)); setSkillMonths(String(item.month ?? 0)); }} onDelete={() => void perform(() => skillsApi.deleteSkill(item.id), "Skill removed.")} />)}</div>{!skills.length && !loading && <EmptyState title="No skills added yet" text="Add your strongest skills to complete your profile." />}</section></div>}
 
-        {section === "education" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add qualification</h2><p>Create an education record on your account.</p></div><GraduationCap size={18} /></div><form className="nv-form-grid" onSubmit={addEducation}><label>Qualification<input required value={qualification.qualification} onChange={event => setQualification({ ...qualification, qualification: event.target.value })} /></label><label>University / board<input required value={qualification.boardOrUniversity} onChange={event => setQualification({ ...qualification, boardOrUniversity: event.target.value })} /></label><label>Start year<input required type="number" value={qualification.startYear} onChange={event => setQualification({ ...qualification, startYear: event.target.value })} /></label><label>Completion year<input required type="number" value={qualification.completeYear} onChange={event => setQualification({ ...qualification, completeYear: event.target.value })} /></label><label>Study mode<input value={qualification.from} onChange={event => setQualification({ ...qualification, from: event.target.value })} /></label><label>Grade / score<input value={qualification.grade} onChange={event => setQualification({ ...qualification, grade: event.target.value })} /></label><div className="nv-form-footer nv-full"><span>/backend/qualifications/save</span><button className="nv-primary" disabled={busy}><Plus size={15} /> Save education</button></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Education history</h2><p>{education.length} records from Jobkar.</p></div><GraduationCap size={18} /></div><div className="nv-record-list">{education.map(item => <Record key={item.id} title={item.qualification || "Qualification"} meta={[item.boardOrUniversity, item.startYear && item.completeYear ? item.startYear + "–" + item.completeYear : "", item.grade].filter(Boolean).join(" · ")} onDelete={() => void perform(() => qualificationApi.deleteQualification(item.id), "Education record deleted.")} />)}</div>{!education.length && !loading && <EmptyState title="No education records" text="Add your qualifications to complete your professional profile." />}</section></div>}
+        {section === "profile" && profileTab === "education" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add qualification</h2><p>Create an education record on your account.</p></div><GraduationCap size={18} /></div><form className="nv-form-grid" onSubmit={addEducation}><label>Qualification<input required value={qualification.qualification} onChange={event => setQualification({ ...qualification, qualification: event.target.value })} /></label><label>University / board<input required value={qualification.boardOrUniversity} onChange={event => setQualification({ ...qualification, boardOrUniversity: event.target.value })} /></label><label>Start year<input required type="number" value={qualification.startYear} onChange={event => setQualification({ ...qualification, startYear: event.target.value })} /></label><label>Completion year<input required type="number" value={qualification.completeYear} onChange={event => setQualification({ ...qualification, completeYear: event.target.value })} /></label><label>Study mode<input value={qualification.from} onChange={event => setQualification({ ...qualification, from: event.target.value })} /></label><label>Grade / score<input value={qualification.grade} onChange={event => setQualification({ ...qualification, grade: event.target.value })} /></label><div className="nv-form-footer nv-full"><span>/backend/qualifications/save · /backend/qualifications/update/:id</span><div className="nv-form-actions"><button type="button" className="nv-secondary" hidden={editingEducationId === null} onClick={() => { setEditingEducationId(null); setQualification({ qualification: "", boardOrUniversity: "", startYear: "", completeYear: "", from: "", grade: "" }); }}>Cancel</button><button className="nv-primary" disabled={busy}><Plus size={15} /> {editingEducationId !== null ? "Save changes" : "Save education"}</button></div></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Education history</h2><p>{education.length} records from Jobkar.</p></div><GraduationCap size={18} /></div><div className="nv-record-list">{education.map(item => <Record key={item.id} title={item.qualification || "Qualification"} meta={[item.boardOrUniversity, item.startYear && item.completeYear ? item.startYear + "–" + item.completeYear : "", item.grade].filter(Boolean).join(" · ")} onEdit={() => { setEditingEducationId(item.id); setQualification({ qualification: item.qualification || "", boardOrUniversity: item.boardOrUniversity || "", startYear: String(item.startYear ?? ""), completeYear: String(item.completeYear ?? ""), from: item.from || "", grade: item.grade || "" }); }} onDelete={() => void perform(() => qualificationApi.deleteQualification(item.id), "Education record deleted.")} />)}</div>{!education.length && !loading && <EmptyState title="No education records" text="Add your qualifications to complete your professional profile." />}</section></div>}
 
-        {section === "experience" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add experience</h2><p>Save a current or previous role to your professional history.</p></div><Activity size={18} /></div><form className="nv-form-grid" onSubmit={addExperience}><label>Company<input required value={work.companyName} onChange={event => setWork({ ...work, companyName: event.target.value })} /></label><label>Designation<input required value={work.designation} onChange={event => setWork({ ...work, designation: event.target.value })} /></label><label>Location<input value={work.companyLocation} onChange={event => setWork({ ...work, companyLocation: event.target.value })} /></label><label>Start date<input required type="date" value={work.startDate} onChange={event => setWork({ ...work, startDate: event.target.value })} /></label><label>End date<input type="date" disabled={work.current} value={work.endDate} onChange={event => setWork({ ...work, endDate: event.target.value })} /></label><label className="nv-check-label"><input type="checkbox" checked={work.current} onChange={event => setWork({ ...work, current: event.target.checked })} /> I currently work here</label><div className="nv-form-footer nv-full"><span>/backend/experience/create</span><button className="nv-primary" disabled={busy}><Plus size={15} /> Add experience</button></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Work history</h2><p>{experience.length} records from Jobkar.</p></div><Activity size={18} /></div><div className="nv-record-list">{experience.map(item => <Record key={item.id} title={item.designation || "Role"} meta={[item.companyName, item.companyLocation, dateText(item.startDate) + " – " + (item.isCurrent ? "Present" : dateText(item.endDate))].filter(Boolean).join(" · ")} onDelete={() => void perform(() => experienceApi.deleteExperience(item.id), "Experience record deleted.")} />)}</div>{!experience.length && !loading && <EmptyState title="No experience added" text="Add your work history to complete your profile." />}</section></div>}
+        {section === "profile" && profileTab === "experience" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add experience</h2><p>Save a current or previous role to your professional history.</p></div><Activity size={18} /></div><form className="nv-form-grid" onSubmit={addExperience}><label>Company<input required value={work.companyName} onChange={event => setWork({ ...work, companyName: event.target.value })} /></label><label>Designation<input required value={work.designation} onChange={event => setWork({ ...work, designation: event.target.value })} /></label><label>Location<input value={work.companyLocation} onChange={event => setWork({ ...work, companyLocation: event.target.value })} /></label><label>Start date<input required type="date" value={work.startDate} onChange={event => setWork({ ...work, startDate: event.target.value })} /></label><label>End date<input type="date" disabled={work.current} value={work.endDate} onChange={event => setWork({ ...work, endDate: event.target.value })} /></label><label className="nv-check-label"><input type="checkbox" checked={work.current} onChange={event => setWork({ ...work, current: event.target.checked })} /> I currently work here</label><div className="nv-form-footer nv-full"><span>/backend/experience/create · /backend/experience/update/:id</span><div className="nv-form-actions"><button type="button" className="nv-secondary" hidden={editingExperienceId === null} onClick={() => { setEditingExperienceId(null); setWork({ companyName: "", designation: "", companyLocation: "", startDate: "", endDate: "", current: false }); }}>Cancel</button><button className="nv-primary" disabled={busy}><Plus size={15} /> {editingExperienceId !== null ? "Save changes" : "Add experience"}</button></div></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Work history</h2><p>{experience.length} records from Jobkar.</p></div><Activity size={18} /></div><div className="nv-record-list">{experience.map(item => <Record key={item.id} title={item.designation || "Role"} meta={[item.companyName, item.companyLocation, dateText(item.startDate) + " – " + (item.isCurrent ? "Present" : dateText(item.endDate))].filter(Boolean).join(" · ")} onEdit={() => { setEditingExperienceId(item.id); setWork({ companyName: item.companyName || "", designation: item.designation || "", companyLocation: item.companyLocation || "", startDate: item.startDate || "", endDate: item.endDate || "", current: Boolean(item.isCurrent) }); }} onDelete={() => void perform(() => experienceApi.deleteExperience(item.id), "Experience record deleted.")} />)}</div>{!experience.length && !loading && <EmptyState title="No experience added" text="Add your work history to complete your profile." />}</section></div>}
 
-        {section === "resume" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Upload a resume</h2><p>Send a file to the Jobkar resume upload endpoint.</p></div><FileText size={18} /></div><form className="nv-upload-form" onSubmit={uploadResume}><label className="nv-file-drop"><FileText size={24} /><strong>{file?.name || "Choose your resume"}</strong><small>PDF or DOC/DOCX · Select a file from this device</small><input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={event => setFile(event.target.files?.[0] || null)} /></label><div className="nv-form-footer"><span>Sent privately through the authenticated API proxy.</span><button className="nv-primary" disabled={busy || !file}><Plus size={15} /> Upload resume</button></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your resumes</h2><p>{resumes.length} records returned by the resume API.</p></div><FileText size={18} /></div><div className="nv-record-list">{resumes.map(item => <div className="nv-record" key={item.id}><span className="nv-record-icon"><FileText size={17} /></span><div><strong>{item.fileName || item.name || (item.resume || "").split("/").pop() || "Resume " + item.id}</strong><small>{dateText(item.createdAt)}</small></div>{item.resume && <a className="nv-icon-action" href={String(item.resume)} target="_blank" rel="noreferrer" aria-label="Open resume"><ArrowUpRight size={16} /></a>}<button className="nv-icon-action danger" onClick={() => void perform(() => resumeApi.deleteResume(item.id), "Resume deleted.")} aria-label="Delete resume"><Trash2 size={16} /></button></div>)}</div>{!resumes.length && !loading && <EmptyState title="No resume on file" text="Upload a current resume so it is attached to your account." />}</section></div>}
+        {section === "profile" && profileTab === "languages" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add a language</h2><p>Record the languages you can use at work.</p></div><Languages size={18} /></div><form className="nv-form-grid" onSubmit={addLanguage}><label>Language<input required value={languageName} onChange={event => setLanguageName(event.target.value)} placeholder="e.g. English, Hindi, Gujarati" /></label><label>Proficiency<select value={languageProficiency} onChange={event => setLanguageProficiency(event.target.value)}><option>Native</option><option>Fluent</option><option>Professional</option><option>Conversational</option><option>Basic</option></select></label><div className="nv-form-footer nv-full"><span>/backend/language/save</span><button className="nv-primary" disabled={busy || !languageName.trim()}><Plus size={15} /> Add language</button></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your languages</h2><p>{languages.length} language records from Jobkar.</p></div><Languages size={18} /></div><div className="nv-record-grid">{languages.map(item => <Record key={item.id} title={item.language || "Language"} meta={item.proficiency || "Proficiency not provided"} onDelete={() => void perform(() => languageApi.deleteLanguage(item.id, { userId, language: item.language }), "Language removed from your profile.")} />)}</div>{!languages.length && !loading && <EmptyState title="No languages added" text="Add the languages you use to communicate professionally." />}</section><div className="nv-info-strip"><ShieldCheck size={16} /><span>Language records support add, view and delete through the connected API. No dedicated language update operation is exposed by the API module.</span></div></div>}
+
+        {section === "profile" && profileTab === "resume" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Upload a resume</h2><p>Send a file to the Jobkar resume upload endpoint.</p></div><FileText size={18} /></div><form className="nv-upload-form" onSubmit={uploadResume}><label className="nv-file-drop"><FileText size={24} /><strong>{file?.name || "Choose your resume"}</strong><small>PDF or DOC/DOCX · Select a file from this device</small><input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={event => setFile(event.target.files?.[0] || null)} /></label><div className="nv-form-footer"><span>Sent privately through the authenticated API proxy.</span><button className="nv-primary" disabled={busy || !file}><Plus size={15} /> Upload resume</button></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your resumes</h2><p>{resumes.length} records returned by the resume API.</p></div><FileText size={18} /></div><div className="nv-record-list">{resumes.map(item => <div className="nv-record" key={item.id}><span className="nv-record-icon"><FileText size={17} /></span><div><strong>{item.fileName || item.name || (item.resume || "").split("/").pop() || "Resume " + item.id}</strong><small>{dateText(item.createdAt)}</small></div>{item.resume && <a className="nv-icon-action" href={String(item.resume)} target="_blank" rel="noreferrer" aria-label="Open resume"><ArrowUpRight size={16} /></a>}<button className="nv-icon-action danger" onClick={() => void perform(() => resumeApi.deleteResume(item.id), "Resume deleted.")} aria-label="Delete resume"><Trash2 size={16} /></button></div>)}</div>{!resumes.length && !loading && <EmptyState title="No resume on file" text="Upload a current resume so it is attached to your account." />}</section></div>}
 
         {section === "recommendations" && <section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Recommended for your profile</h2><p>{recommended.length} opportunities returned by the live recommendation API.</p></div><Sparkles size={18} /></div><div className="nv-job-grid">{recommended.map(job => <JobCard key={job.jobId} job={job} onSave={() => { if (!job.jobId || !job.companyId) return setError("This recommendation is missing IDs needed by the saved-jobs API."); void perform(() => favouriteApi.saveFavourite({ userId, jobId: job.jobId, companyId: job.companyId }), "Job added to your saved list."); }} disabled={busy || job.isFavorite} />)}</div>{!recommended.length && !loading && <EmptyState title="No recommendations returned" text="Add skills and an open-to-work preference to help Jobkar match opportunities." action={() => go("highlights")} actionLabel="Set job preferences" />}</section>}
 
@@ -332,8 +398,8 @@ export default function PrivateWorkspace({ initialSession, initialSection }: { i
   </div>;
 }
 
-function Record({ title, meta, onDelete }: { title: string; meta: string; onDelete?: () => void }) {
-  return <article className="nv-record"><span className="nv-record-icon"><FileText size={17} /></span><div><strong>{title}</strong><small>{meta || "Details not provided"}</small></div>{onDelete && <button className="nv-icon-action danger" onClick={onDelete} aria-label={"Remove " + title}><Trash2 size={16} /></button>}</article>;
+function Record({ title, meta, onEdit, onDelete }: { title: string; meta: string; onEdit?: () => void; onDelete?: () => void }) {
+  return <article className="nv-record"><span className="nv-record-icon"><FileText size={17} /></span><div><strong>{title}</strong><small>{meta || "Details not provided"}</small></div>{onEdit && <button className="nv-icon-action" onClick={onEdit} aria-label={"Edit " + title}><Pencil size={16} /></button>}{onDelete && <button className="nv-icon-action danger" onClick={onDelete} aria-label={"Remove " + title}><Trash2 size={16} /></button>}</article>;
 }
 function JobCard({ job, onSave, disabled }: { job: RecordData; onSave: () => void; disabled: boolean }) {
   return <article className="nv-job-card"><div className="nv-job-top"><span className="nv-job-company">{initials(job.companyName || "Company")}</span>{job.isVerified && <span className="nv-status-good"><ShieldCheck size={13} /> Verified</span>}</div><h3>{job.title}</h3><p>{job.companyName}</p><div className="nv-job-meta"><span>{[job.city, job.state].filter(Boolean).join(", ") || "Location not listed"}</span><span>{job.experience || "Experience not listed"}</span><span>{job.workMode || "Work mode not listed"}</span></div><div className="nv-job-bottom"><strong>{job.salaryRange || "Salary not disclosed"}</strong><button className="nv-secondary nv-small" disabled={disabled} onClick={onSave}>{job.isFavorite ? "Saved" : "Save job"}</button></div></article>;
