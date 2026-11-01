@@ -5959,3 +5959,48 @@ body::-webkit-scrollbar {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+
+/* Improve long-form model guide reading comfort */
+.model-process-grid p,
+.model-scope-card p,
+.model-latency-panel > p,
+.model-explainer-block ol li p,
+.model-explainer-block ul li,
+.model-pros-cons ul li,
+.model-latency-guide-grid p {
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.model-explainer-overview > div > p {
+  font-size: 13px;
+  line-height: 1.85;
+}
+
+.model-io-group > strong,
+.model-detail-heading {
+  font-size: 9px;
+}
+
+.model-score-structure > div:first-child > p,
+.model-score-blend,
+.model-accuracy-note > div > p {
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.model-score-parts small,
+.model-accuracy-points span {
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.model-pros-cons h3,
+.model-explainer-block > h3 {
+  font-size: 12px;
+}
+
+.model-accuracy-points span {
+  font-size: 11px;
+}
