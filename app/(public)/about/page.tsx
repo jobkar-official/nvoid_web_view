@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import InfoPage from "../../../components/info-page";
 
 export const metadata: Metadata = {
-  title: "About Worker | AI Job Discovery & Free Hiring",
+  title: "About the Worker Platform",
   description: "Learn how Worker connects multi-source job discovery for candidates with a free job-posting and hiring workspace for employers."
 };
 
