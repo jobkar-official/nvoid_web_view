@@ -9,7 +9,7 @@ const modelCatalog = {
     name: "Alpha - k1",
     releaseDate: "2 October 2026",
     status: "Current discovery model",
-    description: "{modelInfo.name} is Worker’s current AI-assisted job discovery and matching model. It helps candidates search across available job sources, understand role relevance and organise opportunities for review."
+    description: "Alpha - k1 is Worker’s current AI-assisted job discovery and matching model. It helps candidates search across available job sources, understand role relevance and organise opportunities for review."
   }
 } as const;
 
