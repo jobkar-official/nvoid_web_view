@@ -1167,3 +1167,6 @@
   }
 }
 
+
+.public-content:has(.nv-private-page){max-width:none;padding:0}
+.nv-private-page{min-height:calc(100vh - 68px)}
