@@ -10,6 +10,6 @@ export const metadata: Metadata = {
 
 export default async function PrivateLayout({ children }: { children: ReactNode }) {
   const session = await getNvoidSession();
-  if (!session) redirect("/auth/signin?next=/workspace");
+  if (!session) redirect("/auth/signin");
   return children;
 }
