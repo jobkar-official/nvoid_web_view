@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import InfoPage from "../../../components/info-page";
 
 export const metadata: Metadata = {
-  title: "Cookies & Browser Storage — Worker",
+  title: "Cookies & Browser Storage",
   description: "Understand how Worker uses local browser storage and how you can manage locally saved search history."
 };
 
