@@ -9,7 +9,7 @@ import { useAuth } from "../lib/context/AuthContext";
 
 export default function WorkerHomepage() {
   const { user, isAuthenticated } = useAuth();
-  const firstName = user?.name.split(/\\s+/).filter(Boolean)[0] || "there";
+  const firstName = user?.name.split(/\s+/).filter(Boolean)[0] || "there";
   const quickLinks = user?.role === "recruiter"
     ? [
         { href: "/workspace", label: "Workspace overview", detail: "Your account and activity", icon: BrainCircuit },
