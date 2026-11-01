@@ -73,15 +73,8 @@ export async function getNvoidSession(): Promise<NvoidSession | null> {
   const token = cookieStore.get(nvoidSessionCookie)?.value;
   const userCookie = cookieStore.get(nvoidUserCookie)?.value;
   if (!token || !userCookie) return null;
-
   try {
-    const savedUser = JSON.parse(userCookie) as JsonObject;
-    const session = extractSession(savedUser, token);
-    if (!session) return null;
-    const claims = decodeToken(token);
-    const expiresAt = Number(claims.exp);
-    if (Number.isFinite(expiresAt) && expiresAt > 0 && expiresAt * 1000 <= Date.now()) return null;
-    return session;
+    return extractSession(JSON.parse(userCookie), token);
   } catch {
     return null;
   }
