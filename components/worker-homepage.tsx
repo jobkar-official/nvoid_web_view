@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import {
-  Asterisk, ArrowRight, ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, ClipboardList,
+  Asterisk, ArrowRight, ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness,
   Globe2, LockKeyhole, MessageSquare, Search, ShieldCheck, Sparkles, UserRound
 } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
@@ -77,7 +77,7 @@ export default function WorkerHomepage() {
           <button type="submit" className="worker-home-search-button"><Search size={17} /> Search jobs <ArrowRight size={16} /></button>
         </form>
         <div className="worker-home-search-meta">
-          <div className="worker-home-search-footnote"><ShieldCheck size={14} /> No account required to start. You stay in control of every application.</div>
+          <div className="worker-home-search-footnote"><ShieldCheck size={14} /> {isAuthenticated ? "Your signed-in workspace is ready. You stay in control of every application." : "No account required to start. You stay in control of every application."}</div>
           <span className="worker-home-model-status" role="status" aria-label="Default AI model: Alpha - k1. This model is fixed and cannot be changed here.">
             <BrainCircuit size={15} />
             <span><small>DEFAULT MODEL</small><strong>Alpha - k1</strong></span>
