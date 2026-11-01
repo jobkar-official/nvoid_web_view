@@ -1042,3 +1042,128 @@
   }
 }
 
+/* Fixed ChatGPT-style workspace sidebar and persistent Find jobs action */
+.nv-workspace {
+  min-height: 100vh;
+}
+.nv-workspace .nv-sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 78px;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  flex: 0 0 78px;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+.nv-workspace.nv-expanded .nv-sidebar {
+  width: 258px;
+  flex-basis: 258px;
+}
+.nv-workspace .nv-nav {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.nv-workspace .nv-nav::-webkit-scrollbar {
+  display: none;
+}
+.nv-workspace .nv-sidebar-bottom {
+  flex: 0 0 auto;
+  margin-top: auto;
+}
+.nv-workspace .nv-main {
+  width: calc(100% - 78px);
+  min-width: 0;
+  margin-left: 78px;
+  transition: margin-left .2s ease, width .2s ease;
+}
+.nv-workspace.nv-expanded .nv-main {
+  width: calc(100% - 258px);
+  margin-left: 258px;
+}
+.nv-find-jobs-button {
+  display: flex;
+  width: 100%;
+  min-height: 42px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  margin: 0 0 18px;
+  padding: 0 11px;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  color: #171717;
+  background: #ececec;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.nv-find-jobs-button:hover {
+  border-color: #ffffff;
+  color: #000000;
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+.nv-find-jobs-button.active {
+  border-color: #ffffff;
+  color: #ffffff;
+  background: #3a3a3a;
+}
+.nv-find-jobs-button span {
+  display: none;
+  flex: 1;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+}
+.nv-expanded .nv-find-jobs-button {
+  justify-content: flex-start;
+}
+.nv-expanded .nv-find-jobs-button span {
+  display: block;
+}
+.nv-overview-profile {
+  width: min(100%, 720px);
+}
+@media(max-width:760px) {
+  .nv-workspace .nv-sidebar {
+    inset: 0 auto 0 0;
+    width: 66px;
+    height: 100dvh;
+    min-height: 0;
+    flex-basis: 66px;
+    padding: 13px 8px;
+  }
+  .nv-workspace.nv-expanded .nv-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(280px,84vw);
+    height: 100dvh;
+    min-height: 0;
+    flex-basis: min(280px,84vw);
+    padding: 13px 12px;
+    box-shadow: 18px 0 45px rgba(0,0,0,.35);
+  }
+  .nv-workspace .nv-main {
+    width: calc(100% - 66px);
+    margin-left: 66px;
+  }
+  .nv-workspace.nv-expanded .nv-main {
+    width: 100%;
+    margin-left: 0;
+  }
+  .nv-workspace .nv-find-jobs-button {
+    min-height: 40px;
+    margin-bottom: 14px;
+    padding: 0 9px;
+  }
+  .nv-workspace.nv-expanded .nv-find-jobs-button {
+    padding: 0 11px;
+  }
+}
+
