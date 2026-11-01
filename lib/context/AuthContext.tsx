@@ -127,13 +127,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     setAuthError(null);
     try {
-      const response = await fetch("/api/auth/forgot-password", {
+      const response = await fetch(`/authController/sendCodeForgotPassword?email=${encodeURIComponent(email.trim())}`, {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ email })
+        credentials: "same-origin"
       });
       const data = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(data.error || "Password recovery could not be requested.");
+      if (!response.ok) throw new Error(data.detail || data.error || data.message || "Password recovery could not be requested.");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Password recovery failed.";
       setAuthError(message);
