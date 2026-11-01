@@ -35,7 +35,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
         if (!response.ok) throw new Error(data.error || "Registration could not be completed.");
         if (!data.authenticated) throw new Error("The authentication service did not confirm this session.");
       } else {
-        const session = await signInWithJobkar(email, password);
+        const session = await signInWithJobkar(email, password, Number(role) as 3 | 4);
         if (!session.authenticated) throw new Error("Jobkar authentication did not confirm this session.");
       }
       const next = new URLSearchParams(window.location.search).get("next");
