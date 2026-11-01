@@ -58,12 +58,7 @@ function getErrorMessage(data: AuthApiResponse, fallback: string) {
 export async function signInWithJobkar(email: string, password: string): Promise<SessionResponse> {
   let response: Response;
 
-  let loginUrl: string;
-  try {
-    loginUrl = getLoginUrl();
-  } catch (error) {
-    throw error;
-  }
+  const loginUrl = getLoginUrl();
 
   try {
     response = await fetch(loginUrl, {
