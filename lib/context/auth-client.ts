@@ -30,26 +30,7 @@ type SessionResponse = {
   };
 };
 
-const JOBKAR_LOGIN_URL = process.env.NEXT_PUBLIC_AUTH_LOGIN_URL?.trim();
-
-function getLoginUrl() {
-  if (!JOBKAR_LOGIN_URL) {
-    throw new Error("Login API is not configured. Set NEXT_PUBLIC_AUTH_LOGIN_URL in your local .env to your development or staging login endpoint.");
-  }
-
-  let url: URL;
-  try {
-    url = new URL(JOBKAR_LOGIN_URL);
-  } catch {
-    throw new Error("NEXT_PUBLIC_AUTH_LOGIN_URL must be a complete http:// or https:// URL.");
-  }
-
-  if (url.protocol !== "http:" && url.protocol !== "https:") {
-    throw new Error("NEXT_PUBLIC_AUTH_LOGIN_URL must use HTTP or HTTPS.");
-  }
-
-  return url.toString();
-}
+const JOBKAR_LOGIN_URL = "/authController/login";
 
 function getErrorMessage(data: AuthApiResponse, fallback: string) {
   return data.detail || data.message || data.error || fallback;
@@ -58,13 +39,10 @@ function getErrorMessage(data: AuthApiResponse, fallback: string) {
 export async function signInWithJobkar(email: string, password: string): Promise<SessionResponse> {
   let response: Response;
 
-  const loginUrl = getLoginUrl();
-
   try {
-    response = await fetch(loginUrl, {
+    response = await fetch(JOBKAR_LOGIN_URL, {
       method: "POST",
-      mode: "cors",
-      credentials: "omit",
+      credentials: "same-origin",
       headers: {
         accept: "application/json",
         "content-type": "application/json"
@@ -76,7 +54,7 @@ export async function signInWithJobkar(email: string, password: string): Promise
       cache: "no-store"
     });
   } catch {
-    throw new Error("Could not reach Jobkar authentication. Check that Edge allows browser requests from this site (CORS).");
+    throw new Error("Could not reach the local authentication route. Check the Next.js server and authController rewrite.");
   }
 
   const payload = await response.json().catch(() => ({})) as AuthApiResponse;
