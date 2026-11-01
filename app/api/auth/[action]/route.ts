@@ -1,25 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { nvoidSessionCookie, parseAuthenticatedResponse } from "../../../../lib/auth-session";
+import {
+  nvoidRefreshCookie,
+  nvoidSessionCookie,
+  nvoidUserCookie,
+  parseAuthenticatedResponse
+} from "../../../../lib/auth-session";
 
 const allowedActions = new Set(["signin", "register", "forgot-password"]);
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax" as const,
+  path: "/",
+  maxAge: 60 * 60 * 24 * 7
+};
 
 export async function POST(request: NextRequest, context: { params: Promise<{ action: string }> }) {
   const { action } = await context.params;
   if (!allowedActions.has(action)) return NextResponse.json({ error: "Unsupported authentication action." }, { status: 404 });
 
-  const base = process.env.NVOID_AUTH_BASE_URL?.trim();
-  if (!base) {
-    return NextResponse.json({ error: "Authentication is not connected. Set NVOID_AUTH_BASE_URL and the matching authentication paths on the web server." }, { status: 503 });
-  }
+  const base = (
+    process.env.NVOID_AUTH_BASE_URL ||
+    process.env.NVOID_API_BASE_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://edge.jobkar.in"
+  ).trim();
 
   let upstream: URL;
   try {
     const path = action === "signin"
-      ? process.env.NVOID_AUTH_SIGNIN_PATH || "/auth/signin"
+      ? process.env.NVOID_AUTH_SIGNIN_PATH || "/backend/auth/login"
       : action === "register"
-        ? process.env.NVOID_AUTH_REGISTER_PATH || "/auth/register"
-        : process.env.NVOID_AUTH_FORGOT_PASSWORD_PATH || "/auth/forgot-password";
+        ? process.env.NVOID_AUTH_REGISTER_PATH || "/backend/auth/register"
+        : process.env.NVOID_AUTH_FORGOT_PASSWORD_PATH || "/backend/auth/OAuthGenPassword";
     upstream = new URL(path, base);
     if (upstream.origin !== new URL(base).origin) throw new Error("Authentication path must remain on the configured auth host.");
   } catch {
@@ -36,14 +50,18 @@ export async function POST(request: NextRequest, context: { params: Promise<{ ac
     if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
     }
-    body = { email: email.trim() };
-  }
-
-  if (action === "register") {
+    if ((upstream.pathname || "").includes("OAuthGenPassword")) {
+      upstream.searchParams.set("email", email.trim());
+      body = {};
+    } else {
+      body = { email: email.trim() };
+    }
+  } else {
     const requestedRole = Number((body as Record<string, unknown>).roleId);
-    if (requestedRole !== 3 && requestedRole !== 4) {
+    if (action === "register" && requestedRole !== 3 && requestedRole !== 4) {
       return NextResponse.json({ error: "Public registration is available for job seekers and recruiters only." }, { status: 400 });
     }
+    body = { ...(body as Record<string, unknown>), platform: "WEB" };
   }
 
   try {
@@ -52,7 +70,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ ac
       headers: { accept: "application/json", "content-type": "application/json" },
       body: JSON.stringify(body),
       cache: "no-store",
-      signal: AbortSignal.timeout(15000)
+      signal: AbortSignal.timeout(20000)
     });
     const payload = await response.json().catch(() => ({}));
 
@@ -75,15 +93,16 @@ export async function POST(request: NextRequest, context: { params: Promise<{ ac
     if (!authenticated) return NextResponse.json({ error: "Authentication response must include an access token and a supported role ID (3, 4 or 7)." }, { status: 502 });
 
     const cookieStore = await cookies();
-    cookieStore.set(nvoidSessionCookie, authenticated.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7
-    });
+    cookieStore.set(nvoidSessionCookie, authenticated.token, cookieOptions);
+    if (authenticated.refreshToken) cookieStore.set(nvoidRefreshCookie, authenticated.refreshToken, cookieOptions);
+    else cookieStore.set(nvoidRefreshCookie, "", { ...cookieOptions, maxAge: 0 });
+    cookieStore.set(nvoidUserCookie, JSON.stringify({ roleId: authenticated.session.roleId, user: authenticated.session.user }), cookieOptions);
 
-    return NextResponse.json({ authenticated: true, roleId: authenticated.session.roleId, user: authenticated.session.user });
+    return NextResponse.json({
+      authenticated: true,
+      roleId: authenticated.session.roleId,
+      user: authenticated.session.user
+    });
   } catch {
     return NextResponse.json({ error: "Could not reach the configured authentication service." }, { status: 502 });
   }
