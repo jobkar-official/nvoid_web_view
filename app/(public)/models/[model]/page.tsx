@@ -302,8 +302,8 @@ export default async function ModelDetailsPage({ params }: ModelPageProps) {
 
           <header className="model-docs-header">
             <span className="model-docs-eyebrow"><BrainCircuit size={15} /> WORKER / EMPLOYMENT PLATFORM</span>
-            <h1>Discover opportunities. Hire talent. Manage hiring.</h1>
-            <p>Worker brings AI-assisted job discovery and a free hiring workspace together. Job seekers can explore opportunities with {modelInfo.name}. Employers can build a company presence, publish jobs, review applications, organise shortlists and manage hiring activity with zero Worker platform fees for core hiring and job management.</p>
+            <h1>Worker {modelInfo.name}</h1>
+            <p>{modelInfo.description} Worker also gives employers a free workspace to publish vacancies, review applications, organise shortlists and manage hiring with zero Worker platform fees for core hiring and job management.</p>
             <div className="model-docs-meta">
               <span><BrainCircuit size={15} /> Current discovery model: {modelInfo.name}</span>
               <span><CalendarDays size={15} /> Released {modelInfo.releaseDate}</span>
