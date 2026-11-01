@@ -98,11 +98,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => window.removeEventListener(JOBKAR_AUTH_EXPIRED_EVENT, handleExpired);
   }, [router]);
 
-  const login = useCallback(async (email: string, password: string, role: UserRole) => {
+  const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     setAuthError(null);
     try {
-      const session = await signInWithJobkar(email, password, role === "recruiter" ? 3 : 4);
+      const session = await signInWithJobkar(email, password);
       const nextUser = mapUser(session);
       if (!nextUser) throw new Error("The authentication service returned an unsupported account.");
       setUser(nextUser);
