@@ -38,9 +38,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
         const session = await signInWithJobkar(email, password, Number(role) as 3 | 4);
         if (!session.authenticated) throw new Error("Jobkar authentication did not confirm this session.");
       }
-      const next = new URLSearchParams(window.location.search).get("next");
-      const destination = next && next.startsWith("/") && !next.startsWith("//") ? next : "/workspace";
-      window.location.assign(destination);
+      window.location.assign("/");
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Authentication service is unavailable.");
     } finally {
