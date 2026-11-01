@@ -106,7 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const nextUser = mapUser(session);
       if (!nextUser) throw new Error("The authentication service returned an unsupported account.");
       setUser(nextUser);
-      router.replace("/workspace");
+      router.replace("/");
       router.refresh();
     } catch (error) {
       const message = error instanceof Error ? error.message : "Sign in failed.";
