@@ -290,6 +290,44 @@
 }
 
 /* Monochrome workspace theme */
+.nv-topbar {
+  border-bottom-color: #303030;
+  color: #ffffff;
+  background: #111111;
+}
+.nv-breadcrumb {
+  color: #bdbdbd;
+}
+.nv-breadcrumb strong {
+  color: #ffffff;
+}
+.nv-topbar .nv-live-pill {
+  border-color: #555555;
+  color: #eeeeee;
+  background: #292929;
+}
+.nv-topbar .nv-live-pill i {
+  background: #ffffff;
+  box-shadow: none;
+}
+.nv-topbar .nv-icon-button {
+  border-color: #484848;
+  color: #eeeeee;
+  background: #222222;
+}
+.nv-topbar .nv-icon-button:hover {
+  border-color: #888888;
+  color: #ffffff;
+  background: #383838;
+}
+.nv-workspace button:focus-visible,
+.nv-workspace a:focus-visible,
+.nv-workspace input:focus-visible,
+.nv-workspace textarea:focus-visible,
+.nv-workspace select:focus-visible {
+  outline-color: rgba(0,0,0,.28);
+}
+
 .nv-workspace {
   --nv-ink: #111111;
   --nv-line: #e5e5e5;
