@@ -1,2 +1,5 @@
-import { redirect } from "next/navigation";
-export default function MessagePage() { redirect("/workspace/messages"); }
+import PrivateSectionPage from "../../../components/private-section-page";
+
+export default function MessagePage() {
+  return <PrivateSectionPage section="message" />;
+}
