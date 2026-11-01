@@ -68,15 +68,11 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
             <p>{isRegister ? "Start with a free candidate or employer account." : "Continue to your Nvoid workspace."}</p>
           </div>
           <form className="auth-form" onSubmit={submit}>
-            {isRegister && (
-              <>
-                <div className="auth-role-picker">
-                  <button type="button" className={role === "4" ? "selected" : ""} onClick={() => setRole("4")}><UserRound size={16} /><strong>Job seeker</strong><small>Find opportunities</small></button>
-                  <button type="button" className={role === "3" ? "selected" : ""} onClick={() => setRole("3")}><Building2 size={16} /><strong>Recruiter</strong><small>Hire talent</small></button>
-                </div>
-                <label>Full name<input required value={name} onChange={(event) => setName(event.target.value)} placeholder="Your full name" autoComplete="name" /></label>
-              </>
-            )}
+            <div className="auth-role-picker" aria-label={isRegister ? "Choose account type" : "Sign in as"}>
+              <button type="button" className={role === "4" ? "selected" : ""} onClick={() => setRole("4")}><UserRound size={16} /><strong>Job seeker</strong><small>{isRegister ? "Find opportunities" : "Job seeker account"}</small></button>
+              <button type="button" className={role === "3" ? "selected" : ""} onClick={() => setRole("3")}><Building2 size={16} /><strong>Recruiter</strong><small>{isRegister ? "Hire talent" : "Recruiter account"}</small></button>
+            </div>
+            {isRegister && <label>Full name<input required value={name} onChange={(event) => setName(event.target.value)} placeholder="Your full name" autoComplete="name" /></label>}
             <label>Email address<span className="auth-input"><Mail size={16} /><input required type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" autoComplete="email" /></span></label>
             <label>Password<span className="auth-input"><LockKeyhole size={16} /><input required minLength={8} type={visible ? "text" : "password"} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="At least 8 characters" autoComplete={isRegister ? "new-password" : "current-password"} /><button type="button" aria-label={visible ? "Hide password" : "Show password"} onClick={() => setVisible((value) => !value)}>{visible ? <EyeOff size={16} /> : <Eye size={16} />}</button></span>{!isRegister && <span className="auth-forgot-row"><Link href="/auth/forgot-password">Forgot password?</Link></span>}</label>
             {notice && <div className="auth-error" role="alert">{notice}</div>}
