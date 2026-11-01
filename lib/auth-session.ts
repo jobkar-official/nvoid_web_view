@@ -44,7 +44,19 @@ function extractSession(value: unknown, token = ""): NvoidSession | null {
   const data = objectValue(root.data);
   const result = objectValue(root.result);
   const nested = objectValue(data.data || data.result || result.data || result.result);
-  const user = objectValue(firstValue(root.user, data.user, result.user, nested.user, root.account, data.account, result.account, data, result));
+  const userSource = firstValue(
+    root.user,
+    data.user,
+    result.user,
+    nested.user,
+    root.account,
+    data.account,
+    result.account,
+    Object.keys(data).length ? data : undefined,
+    Object.keys(result).length ? result : undefined,
+    root
+  );
+  const user = objectValue(userSource);
   const claims = decodeToken(token);
   const roleId = Number(firstValue(
     user.roleId, user.role_id, root.roleId, root.role_id, data.roleId, data.role_id,
