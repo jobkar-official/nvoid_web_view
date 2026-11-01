@@ -51,7 +51,7 @@ const pages: Record<string, Page> = {
   notifications: { title: "Notifications", description: "Review account alerts and mark them as read.", icon: Bell },
   support: { title: "Support", description: "Create support requests and track existing tickets.", icon: CircleHelp }
 };
-function rows<T>(value: unknown): T[] {
+function rows<T = RecordData>(value: unknown): T[] {
   if (Array.isArray(value)) return value as T[];
   if (!value || typeof value !== "object") return [];
   const object = value as Record<string, unknown>;
