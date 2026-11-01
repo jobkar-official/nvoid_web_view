@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Worker Releases, Product Updates & Alpha k1",
+  title: "Product Updates & Alpha k1 Release Notes",
   description: "See what is available in Worker today, explore the Alpha - k1 discovery model released on 2 October 2026, and follow product integration updates."
 };
 
