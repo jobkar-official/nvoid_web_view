@@ -36,7 +36,7 @@ function getErrorMessage(data: AuthApiResponse, fallback: string) {
   return data.detail || data.message || data.error || fallback;
 }
 
-export async function signInWithJobkar(email: string, password: string, expectedRoleId?: 3 | 4): Promise<SessionResponse> {
+export async function signInWithJobkar(email: string, password: string): Promise<SessionResponse> {
   let response: Response;
 
   try {
@@ -65,10 +65,6 @@ export async function signInWithJobkar(email: string, password: string, expected
 
   if (!payload.accessToken || !payload.refreshToken || !payload.roleId) {
     throw new Error("Jobkar authentication returned an incomplete session.");
-  }
-
-  if (expectedRoleId && payload.roleId !== expectedRoleId) {
-    throw new Error("This account does not match the selected account type.");
   }
 
   const sessionResponse = await fetch("/api/auth/session", {
