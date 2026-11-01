@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import InfoPage from "../../../components/info-page";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Worker",
+  title: "Privacy Policy",
   description: "Read how Worker handles account, professional profile, search, application and employer information."
 };
 
