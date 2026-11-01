@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { BriefcaseBusiness, Check, Clock3, History, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Trash2, UserRound } from "lucide-react";
+import { BriefcaseBusiness, Check, Clock3, FlaskConical, History, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Trash2, UserRound } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
 
 export type GuestSearchJob = {
@@ -33,6 +33,8 @@ export type GuestSearchRecord = {
   resultCount?: number;
   jobs?: GuestSearchJob[];
   error?: string;
+  sources?: Array<Record<string, unknown>>;
+  orchestration?: Record<string, unknown>;
 };
 
 type GuestHistoryContextValue = {
@@ -81,7 +83,9 @@ function readHistory(): GuestSearchRecord[] {
         searchedAt: item.searchedAt,
         resultCount: typeof item.resultCount === "number" ? item.resultCount : undefined,
         jobs,
-        error: typeof item.error === "string" ? item.error : undefined
+        error: typeof item.error === "string" ? item.error : undefined,
+        sources: Array.isArray(item.sources) ? item.sources.filter((source): source is Record<string, unknown> => Boolean(source && typeof source === "object")) : undefined,
+        orchestration: item.orchestration && typeof item.orchestration === "object" ? item.orchestration as Record<string, unknown> : undefined
       }];
     }).slice(0, MAX_HISTORY_RECORDS);
   } catch {
@@ -94,6 +98,11 @@ function formatTime(value: string) {
   if (!Number.isFinite(date.getTime())) return "Previously searched";
   return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(date);
 }
+
+const agentLinks = [
+  { href: "/connections", label: "Connections", icon: PlugZap },
+  { href: "/research", label: "Research anything", icon: FlaskConical }
+];
 
 const workspaceLinks = [
   { href: "/application", label: "Applications", icon: BriefcaseBusiness },
@@ -170,7 +179,9 @@ export function GuestShell({ children }: { children: ReactNode }) {
     ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search"
     : pathname === "/" ? "New search"
       : pathname === "/job-search" ? "Find opportunities"
-        : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid";
+        : pathname === "/connections" ? "Connections"
+          : pathname === "/research" ? "Research anything"
+            : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid";
 
   return (
     <GuestHistoryContext.Provider value={context}>
@@ -189,6 +200,15 @@ export function GuestShell({ children }: { children: ReactNode }) {
             <Plus size={17} strokeWidth={2.2} />
             <span>New search</span>
           </Link>
+
+          <nav className="public-nav nvoid-agent-nav" aria-label="Agent">
+            <span className="sidebar-section-label">Agent</span>
+            {agentLinks.map((item) => {
+              const Icon = item.icon;
+              const active = pathname === item.href;
+              return <Link key={item.href} href={item.href} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={16} /><span>{item.label}</span></Link>;
+            })}
+          </nav>
 
           {signedIn && (
             <nav className="public-nav nvoid-workspace-nav" aria-label="Workspace">
