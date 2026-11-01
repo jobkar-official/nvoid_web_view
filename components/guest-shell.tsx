@@ -7,7 +7,7 @@ import WorkerMark from "./worker-mark";
 import { useAuth } from "../lib/context/AuthContext";
 import {
   ArrowUpRight, Bell, BrainCircuit, BriefcaseBusiness, Check, ChevronDown,
-  CircleHelp, Clock3, FileText, History, LayoutDashboard,
+  CircleHelp, Clock3, FileText, History,
   MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, Plus, Search, ShieldCheck, Target,
   Trash2, UserRound, X
 } from "lucide-react";
@@ -74,14 +74,12 @@ const privateNavigation = [
   {
     label: "Discover",
     items: [
-      { href: "/workspace", label: "Overview", icon: LayoutDashboard },
-      { href: "/workspace/find-jobs", label: "Find jobs", icon: Search },
-      { href: "/workspace/activity", label: "Application", icon: BriefcaseBusiness },
-      { href: "/workspace/profile", label: "Profile", icon: UserRound },
-      { href: "/workspace/highlights", label: "Open to work", icon: Target },
-      { href: "/workspace/messages", label: "Messages", icon: MessageSquare },
-      { href: "/workspace/notifications", label: "Notifications", icon: Bell },
-      { href: "/workspace/support", label: "Support", icon: CircleHelp }
+      { href: "/application", label: "Application", icon: BriefcaseBusiness },
+      { href: "/profile", label: "Profile", icon: UserRound },
+      { href: "/highlights", label: "Open to work", icon: Target },
+      { href: "/message", label: "Messages", icon: MessageSquare },
+      { href: "/notification", label: "Notifications", icon: Bell },
+      { href: "/support", label: "Support", icon: CircleHelp }
     ]
   }
 ];
@@ -218,10 +216,10 @@ export function GuestShell({ children }: { children: ReactNode }) {
             <button className="sidebar-collapse-button" type="button" aria-label="Close sidebar" title="Close sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
           </div>
 
-          {!signedIn && <Link href="/job-search" className="sidebar-find-button" onClick={() => closeSidebarOnMobile()}>
+          <Link href="/" className="sidebar-find-button" onClick={() => closeSidebarOnMobile()}>
             <Plus size={17} strokeWidth={2.4} />
             <span>Find jobs</span>
-          </Link>}
+          </Link>
 
           <nav className="public-nav" aria-label="Main navigation">
             {signedIn ? privateNavigation.map((group) => (
@@ -229,7 +227,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
                 <span className="sidebar-section-label">{group.label}</span>
                 {group.items.map((item) => {
                   const Icon = item.icon;
-                  const active = item.href === "/workspace" ? pathname === "/workspace" || pathname === "/" : item.href === "/workspace/activity" ? ["/workspace/activity", "/workspace/saved", "/workspace/applications"].includes(pathname) : pathname === item.href;
+                  const active = pathname === item.href;
                   return (
                     <Link key={item.href} href={item.href} onClick={() => closeSidebarOnMobile()} className={"public-nav-link" + (active ? " active" : "")}>
                       <Icon size={16} />
@@ -239,7 +237,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
                 })}
               </div>
             )) : isLoading ? (
-              <div className="history-placeholder">Restoring your workspace…</div>
+              <div className="history-placeholder">Restoring your account…</div>
             ) : (
               <>
                 <span className="sidebar-section-label">Explore</span>
@@ -298,13 +296,13 @@ export function GuestShell({ children }: { children: ReactNode }) {
               <>
                 <div className="guest-identity">
                   <span className="guest-avatar">{user.name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]?.toUpperCase()).join("") || "W"}</span>
-                  <span><strong>{user.name}</strong><small>{user.role === "recruiter" ? "Recruiter" : "Job seeker"}</small></span>
+                  <span><strong>{user.name}</strong><small>Signed in</small></span>
                 </div>
                 <div className="guest-auth-actions">
-                  <Link href="/workspace" className="sidebar-signin" onClick={() => closeSidebarOnMobile()}>Workspace</Link>
+                  <Link href="/profile" className="sidebar-signin" onClick={() => closeSidebarOnMobile()}>Profile</Link>
                   <button type="button" className="sidebar-register" onClick={() => void logout()}>Sign out</button>
                 </div>
-                <div className="sidebar-trust"><ShieldCheck size={12} /> Your private workspace is active</div>
+                <div className="sidebar-trust"><ShieldCheck size={12} /> Your account is active</div>
               </>
             ) : isLoading ? (
               <div className="guest-identity">
@@ -331,7 +329,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
         <div className="public-main">
           <header className="public-topbar">
             <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}>{sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}</button>
-            <div className="topbar-breadcrumb"><span>{signedIn ? "Workspace" : "Explore"}</span><span className="breadcrumb-dot">/</span><strong>{pathname.startsWith("/search/") ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search" : pathname === "/" ? "Home" : pathname === "/job-search" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Worker"}</strong></div>
+            <div className="topbar-breadcrumb"><span>{signedIn ? "Discover" : "Explore"}</span><span className="breadcrumb-dot">/</span><strong>{pathname.startsWith("/search/") ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search" : pathname === "/" ? "Find jobs" : pathname === "/job-search" ? "Find jobs" : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Worker"}</strong></div>
             <div className="topbar-actions">
               <div
                 className="topbar-browse-wrap"
@@ -398,7 +396,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
               </div>
               {signedIn ? (
                 <>
-                  <Link href="/workspace" className="topbar-login">Workspace</Link>
+                  <Link href="/profile" className="topbar-login">Profile</Link>
                   <button type="button" className="topbar-create" onClick={() => void logout()}>Sign out</button>
                 </>
               ) : isLoading ? (
