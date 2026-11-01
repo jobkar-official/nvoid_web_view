@@ -1,15 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  BrainCircuit,
-  CalendarDays,
-  Check,
-  ChevronRight,
-  Search,
-  ShieldCheck
-} from "lucide-react";
+import { ArrowUpRight, BrainCircuit, CalendarDays, ChevronRight, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Worker AI Model — Alpha - k1 | Smarter Job Discovery",
