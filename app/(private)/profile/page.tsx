@@ -1,2 +1,5 @@
-import { redirect } from "next/navigation";
-export default function ProfilePage() { redirect("/workspace/profile"); }
+import PrivateSectionPage from "../../../components/private-section-page";
+
+export default function ProfilePage() {
+  return <PrivateSectionPage section="profile" />;
+}
