@@ -39,14 +39,15 @@ function formatDuration(milliseconds?: number) {
   return milliseconds >= 1000 ? (milliseconds / 1000).toFixed(1) + "s" : milliseconds + "ms";
 }
 
-function clean(value?: string) {
-  return typeof value === "string" ? value.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim() : "";
+function clean(value?: string | number) {
+  const text = typeof value === "string" || typeof value === "number" ? String(value) : "";
+  return text.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim();
 }
 
-function postedTimestamp(value?: string) {
-  if (!value) return 0;
-  const raw = value.trim();
-  if (/^\\d{9,13}$/.test(raw)) {
+function postedTimestamp(value?: string | number) {
+  if (value === undefined || value === null) return 0;
+  const raw = String(value).trim();
+  if (/^\d{9,13}$/.test(raw)) {
     const numeric = Number(raw);
     const date = new Date(numeric < 1_000_000_000_000 ? numeric * 1000 : numeric);
     return Number.isFinite(date.getTime()) ? date.getTime() : 0;
@@ -55,10 +56,10 @@ function postedTimestamp(value?: string) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-function postedDate(value?: string) {
-  if (!value) return "Date not provided";
+function postedDate(value?: string | number) {
+  if (value === undefined || value === null || value === "") return "Date not provided";
   const timestamp = postedTimestamp(value);
-  if (!timestamp) return value;
+  if (!timestamp) return String(value);
   return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "long",
