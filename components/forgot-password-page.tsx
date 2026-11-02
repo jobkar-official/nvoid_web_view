@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, type FormEvent } from "react";
-import { ArrowLeft, ArrowRight, CheckCircle2, LockKeyhole, Mail, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -35,18 +36,18 @@ export default function ForgotPasswordPage() {
       <Link href="/auth/signin" className="auth-back"><ArrowLeft size={15} /> Back to sign in</Link>
       <div className="auth-layout">
         <section className="auth-brand-panel">
-          <Link href="/" className="auth-brand"><span className="brand-symbol"><Sparkles size={20} /></span><strong>NVOID</strong></Link>
+          <Link href="/" className="auth-brand"><span className="brand-symbol" aria-hidden="true"><Image src="/favicon.svg" alt="" width={26} height={26} priority /></span><strong>NVOIDAI</strong></Link>
           <div className="auth-brand-copy">
             <span className="auth-overline">YOUR ACCOUNT, SECURED</span>
             <h1>Get back to what’s next.</h1>
-            <p>One quick step to regain access to your account and continue discovering opportunities with Nvoid.</p>
+            <p>One quick step to regain access to your account and continue discovering opportunities with NVOIDAI.</p>
           </div>
           <div className="auth-brand-points">
             <div><Mail size={17} /><span>Receive a secure password recovery link by email</span></div>
             <div><ShieldCheck size={17} /><span>Your account stays protected throughout recovery</span></div>
             <div><LockKeyhole size={17} /><span>Choose a new password before signing in again</span></div>
           </div>
-          <div className="auth-brand-footer">Nvoid · AI-powered employment platform</div>
+          <div className="auth-brand-footer">NVOIDAI · AI-powered employment platform</div>
         </section>
 
         <section className="auth-form-panel">
