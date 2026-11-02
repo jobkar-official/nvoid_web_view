@@ -8,9 +8,9 @@ export default function WorkerHomepage() {
       <section className="worker-home-brand-intro" aria-label="Nvoid">
         <span className="worker-home-hero-symbol" aria-hidden="true"><Asterisk size={42} strokeWidth={1.8} /></span>
         <div className="worker-home-intro-copy">
-          <span className="worker-home-intro-kicker"><span /> NVOID CAREER SEARCH</span>
-          <h1>Find your next <span>opportunity</span><br /><strong>with Nvoid</strong></h1>
-          <p>Search across global job sources and company career pages, all from one focused place.</p>
+          <span className="worker-home-intro-kicker"><span /> YOUR AI JOB AGENT</span>
+          <h1>Find jobs with <span className="worker-home-wordmark-text">NvoidAI.com</span></h1>
+          <p>One AI agent searching global job sources and company career pages for you.</p>
         </div>
       </section>
 
