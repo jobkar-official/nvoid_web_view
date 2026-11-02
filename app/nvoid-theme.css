@@ -871,31 +871,6 @@ body,
   border-color: #626262;
   background: #242424;
 }
-.nvoid-profile-subnav {
-  display: grid;
-  gap: 2px;
-  margin: 4px 0 7px 14px;
-  padding: 4px 0 4px 8px;
-  border-left: 1px solid #363636;
-}
-.nvoid-profile-subnav .public-nav-link {
-  min-height: 32px;
-  padding-left: 9px;
-  gap: 9px;
-  color: #aaaaaa !important;
-  font-size: 11px;
-}
-.nvoid-profile-subnav .public-nav-link svg {
-  color: #888888 !important;
-}
-.nvoid-profile-subnav .public-nav-link.active,
-.nvoid-profile-subnav .public-nav-link:hover {
-  color: #f0f0f0 !important;
-  background: #242424 !important;
-}
-.nvoid-profile-subnav .public-nav-link.active svg {
-  color: #eeeeee !important;
-}
 .nvoid-workspace-nav {
   max-height: min(44vh, 390px);
   min-height: 0;
@@ -916,10 +891,6 @@ body,
     padding: 0 8px;
     font-size: 9px;
   }
-}
-.nvoid-workspace-link-group {
-  display: grid;
-  gap: 2px;
 }
 
 /* Clear, filled Apply Now action on job result cards. */
