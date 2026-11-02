@@ -18,7 +18,7 @@ export type GuestSearchJob = {
   applicationUrl?: string;
   employmentType?: string;
   workMode?: string;
-  postedAt?: string;
+  postedAt?: string | number;
   experience?: string;
   salary?: string;
   matchScore?: number;
