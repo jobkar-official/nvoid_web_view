@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { BriefcaseBusiness, Check, Clock3, FlaskConical, History, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Trash2, UserRound } from "lucide-react";
+import { Activity, Bell, BriefcaseBusiness, Check, Clock3, FileText, FlaskConical, GraduationCap, History, Languages, LifeBuoy, MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
 
 export type GuestSearchJob = {
@@ -115,7 +115,20 @@ const agentLinks = [
 
 const workspaceLinks = [
   { href: "/application", label: "Applications", icon: BriefcaseBusiness },
-  { href: "/profile", label: "Profile", icon: UserRound }
+  { href: "/highlights", label: "Open to work", icon: Target },
+  { href: "/message", label: "Messages", icon: MessageSquare },
+  { href: "/notification", label: "Notifications", icon: Bell },
+  { href: "/profile", label: "Profile", icon: UserRound },
+  { href: "/support", label: "Support", icon: LifeBuoy }
+];
+
+const profileSectionLinks = [
+  { id: "profile", label: "Edit profile", icon: UserRound },
+  { id: "education", label: "Education", icon: GraduationCap },
+  { id: "skills", label: "Skills", icon: Target },
+  { id: "experience", label: "Experience", icon: Activity },
+  { id: "languages", label: "Languages", icon: Languages },
+  { id: "resume", label: "Resume", icon: FileText }
 ];
 
 export function GuestShell({ children }: { children: ReactNode }) {
@@ -126,6 +139,17 @@ export function GuestShell({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [ready, setReady] = useState(false);
   const [editing, setEditing] = useState<{ id: string; jobTitle: string; location: string } | null>(null);
+  const [profileSubsection, setProfileSubsection] = useState("profile");
+
+  useEffect(() => {
+    const syncProfileSubsection = () => {
+      const tab = window.location.hash.slice(1);
+      setProfileSubsection(profileSectionLinks.some(item => item.id === tab) ? tab : "profile");
+    };
+    syncProfileSubsection();
+    window.addEventListener("hashchange", syncProfileSubsection);
+    return () => window.removeEventListener("hashchange", syncProfileSubsection);
+  }, [pathname]);
 
   useEffect(() => {
     setHistory(readHistory());
@@ -237,6 +261,15 @@ export function GuestShell({ children }: { children: ReactNode }) {
                 const active = pathname === item.href || (item.href === "/application" && pathname.startsWith("/application"));
                 return <Link key={item.href} href={item.href} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={16} /><span>{item.label}</span></Link>;
               })}
+              {pathname === "/profile" && (
+                <nav className="nvoid-profile-subnav" aria-label="Profile sections">
+                  {profileSectionLinks.map((item) => {
+                    const Icon = item.icon;
+                    const active = profileSubsection === item.id;
+                    return <Link key={item.id} href={item.id === "profile" ? "/profile" : "/profile#" + item.id} onClick={closeSidebarOnMobile} aria-current={active ? "page" : undefined} className={"public-nav-link" + (active ? " active" : "")}><Icon size={14} /><span>{item.label}</span></Link>;
+                  })}
+                </nav>
+              )}
             </nav>
           )}
 
@@ -306,9 +339,15 @@ export function GuestShell({ children }: { children: ReactNode }) {
             </button>
             <div className="topbar-breadcrumb"><strong>{pageTitle}</strong></div>
             <nav className="nvoid-header-actions" aria-label="Account and hiring links">
-              <Link href="/auth/signin" className="nvoid-header-login" onClick={closeSidebarOnMobile}>Login</Link>
-              <span className="nvoid-header-dash" aria-hidden="true">-</span>
-              <Link href="/auth/register" className="nvoid-header-signup" onClick={closeSidebarOnMobile}>Sign Up</Link>
+              {signedIn ? (
+                <button type="button" className="nvoid-header-logout" onClick={() => void logout()}>Logout</button>
+              ) : (
+                <>
+                  <Link href="/auth/signin" className="nvoid-header-login" onClick={closeSidebarOnMobile}>Login</Link>
+                  <span className="nvoid-header-dash" aria-hidden="true">-</span>
+                  <Link href="/auth/register" className="nvoid-header-signup" onClick={closeSidebarOnMobile}>Sign Up</Link>
+                </>
+              )}
               <span className="nvoid-header-divider" aria-hidden="true">|</span>
               <Link href="/free-job-posting" className="nvoid-header-free-posting" onClick={closeSidebarOnMobile}>Free Job Posting</Link>
             </nav>
