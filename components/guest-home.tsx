@@ -294,44 +294,6 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching connected job sources for {jobTitle} in {location}…</div>}
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
 
-      {searched && (
-        <section className="nvoid-search-diagnostics" aria-label="Agent source activity">
-          <div className="nvoid-search-diagnostics-heading">
-            <div>
-              <strong>Agent source activity</strong>
-              <span>{orchestration?.connectedMcpServers ?? 0} connected MCP servers · {orchestration?.executedSearchTools ?? 0} search tools executed</span>
-              {searchTimings?.total !== undefined && <span>Completed in {formatDuration(searchTimings.total)} · providers {formatDuration(searchTimings.sourceSearch)} · details {formatDuration(searchTimings.detailEnrichment)} · AI ranking {formatDuration(searchTimings.aiReranking)}</span>}
-            </div>
-            {orchestration?.queryPlanner && <span className="nvoid-search-planner">{orchestration.queryPlanner === "llm-assisted" ? "AI-assisted planning" : "Structured planning"}</span>}
-          </div>
-          {sources.length > 0 ? (
-            <div className="nvoid-search-source-grid">
-              {sources.map((source) => (
-                <article className="nvoid-search-source-row" key={source.serverId + (source.tool || "")}>
-                  <div className="nvoid-search-source-main">
-                    <span className={"nvoid-search-source-dot " + source.connectionStatus} />
-                    <div><strong>{source.serverId}</strong><small>{source.tool || "No compatible search tool"}</small></div>
-                    <span className={"nvoid-search-source-status " + source.connectionStatus}>{source.connectionStatus.replace(/-/g, " ")}</span>
-                  </div>
-                  <div className="nvoid-search-source-counts">
-                    <span>{source.fetchedCount ?? 0} fetched</span>
-                    <span>{source.found ?? 0} matched</span>
-                    <span>{source.locationMatchedCount ?? 0} location fit</span>
-                  </div>
-                  {(source.error || source.skipReason) && <p>{source.error || source.skipReason}</p>}
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="nvoid-search-source-empty">
-              <strong>{orchestration ? "No MCP job-search sources were executed" : "Source activity unavailable"}</strong>
-              <span>{sourceActivityIssue || "The search response did not include per-source execution details. Open Connections to inspect the worker and configured MCP providers."}</span>
-            </div>
-          )}
-          <Link href="/connections" className="nvoid-search-diagnostics-link">Inspect all agent connections <ArrowRight size={13} /></Link>
-        </section>
-      )}
-
       {!searched && !busy && !searchId && (
         <section className="worker-search-guide" aria-label="How Nvoid search works">
           <div><span>01</span><strong>Search by role and location</strong><p>Describe the opportunity you want to find.</p></div>
