@@ -134,6 +134,16 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
     }
   }, [section, profileTab, activityTab, id, userId, initialSession.user.slug, initialSession.user.email, initialSession.user.phone, name]);
 
+  useEffect(() => {
+    const syncProfileTabFromUrl = () => {
+      const requestedTab = window.location.hash.slice(1);
+      setProfileTab(profileTabIds.includes(requestedTab as ProfileTab) ? requestedTab as ProfileTab : "profile");
+    };
+    syncProfileTabFromUrl();
+    window.addEventListener("hashchange", syncProfileTabFromUrl);
+    return () => window.removeEventListener("hashchange", syncProfileTabFromUrl);
+  }, [section]);
+
   useEffect(() => { void loadPage(); }, [loadPage]);
 
   const go = (target: string) => {
@@ -141,6 +151,7 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
     setError("");
     if (profileTabIds.includes(target as ProfileTab)) {
       setProfileTab(target as ProfileTab);
+      window.history.replaceState(null, "", target === "profile" ? "/profile" : "/profile#" + target);
       return;
     }
     if (target === "saved" || target === "applications") {
