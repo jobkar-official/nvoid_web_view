@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowLeft, ArrowRight, Building2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, Sparkles, UserRound } from "lucide-react";
+import { ArrowLeft, ArrowRight, Building2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, UserRound } from "lucide-react";
 import { signInWithJobkar } from "../lib/context/auth-client";
 
 export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
@@ -51,7 +52,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
       <Link href="/" className="auth-back"><ArrowLeft size={15} /> Back to Nvoid</Link>
       <div className="auth-layout">
         <section className="auth-brand-panel">
-          <Link href="/" className="auth-brand"><span className="brand-symbol"><Sparkles size={20} /></span><strong>NVOID</strong></Link>
+          <Link href="/" className="auth-brand"><span className="brand-symbol" aria-hidden="true"><Image src="/favicon.svg" alt="" width={26} height={26} priority /></span><strong>NVOIDAI</strong></Link>
           <div className="auth-brand-copy">
             <span className="auth-overline">EMPLOYMENT, WITH INTELLIGENCE</span>
             <h1>{isRegister ? "Your next opportunity starts here." : "Welcome back to your next opportunity."}</h1>
@@ -62,7 +63,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
             <div><ShieldCheck size={17} /><span>One professional profile for smarter matching</span></div>
             <div><Building2 size={17} /><span>Free job posting and hiring workspace</span></div>
           </div>
-          <div className="auth-brand-footer">Nvoid · AI-powered employment platform</div>
+          <div className="auth-brand-footer">NVOIDAI · AI-powered employment platform</div>
         </section>
         <section className="auth-form-panel">
           <div className="auth-form-heading">
