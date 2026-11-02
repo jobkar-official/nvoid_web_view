@@ -196,8 +196,12 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     }
 
     if (isAuthenticated) {
-      const opened = window.open(destination, "_blank", "noopener,noreferrer");
-      if (!opened) setNotice("Allow pop-ups for NVOIDAI to open the job application in a new tab.");
+      const opened = window.open(destination, "_blank");
+      if (!opened) {
+        setNotice("Allow pop-ups for NVOIDAI to open the job application in a new tab.");
+        return;
+      }
+      opened.opener = null;
       return;
     }
 
