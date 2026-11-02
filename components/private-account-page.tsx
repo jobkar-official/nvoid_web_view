@@ -28,7 +28,7 @@ const pages: Record<string, Page> = {
 type ProfileTab = "profile" | "education" | "skills" | "experience" | "languages" | "resume";
 const profileTabIds: ProfileTab[] = ["profile", "education", "skills", "experience", "languages", "resume"];
 const profileTabNavigation = [
-  { id: "profile" as ProfileTab, label: "Edit profile", icon: UserRound },
+  { id: "profile" as ProfileTab, label: "Profile", icon: UserRound },
   { id: "education" as ProfileTab, label: "Education", icon: GraduationCap },
   { id: "skills" as ProfileTab, label: "Skills", icon: Target },
   { id: "experience" as ProfileTab, label: "Experience", icon: Activity },
