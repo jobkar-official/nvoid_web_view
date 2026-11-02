@@ -921,3 +921,84 @@ body,
   display: grid;
   gap: 2px;
 }
+
+/* Clear, filled Apply Now action on job result cards. */
+.worker-results-page .public-job-apply-button {
+  display: inline-flex;
+  min-width: 112px;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 16px;
+  border: 1px solid #f0f0f0;
+  border-radius: 999px;
+  color: #111111 !important;
+  background: #f0f0f0 !important;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.worker-results-page .public-job-apply-button:hover {
+  border-color: #ffffff;
+  background: #ffffff !important;
+  transform: translateY(-1px);
+}
+.worker-results-page .public-job-apply-button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+.nvoid-apply-redirect {
+  display: grid;
+  place-items: center;
+}
+.nvoid-apply-redirect-card {
+  display: grid;
+  width: min(100%, 460px);
+  justify-items: center;
+  gap: 13px;
+  padding: 34px 28px;
+  border: 1px solid #303030;
+  border-radius: 18px;
+  color: #ededed;
+  background: #111111;
+  text-align: center;
+}
+.nvoid-apply-redirect-card > svg {
+  color: #e8e8e8;
+}
+.nvoid-apply-redirect-card h1 {
+  margin: 0;
+  color: #f3f3f3;
+  font-size: 21px;
+  font-weight: 650;
+  letter-spacing: -.035em;
+}
+.nvoid-apply-redirect-card p {
+  margin: 0;
+  color: #a7a7a7;
+  font-size: 12px;
+  line-height: 1.75;
+}
+.nvoid-apply-redirect-home {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 7px;
+  padding: 0 15px;
+  border: 1px solid #454545;
+  border-radius: 999px;
+  color: #ededed !important;
+  background: #202020;
+  font-size: 11px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.nvoid-apply-redirect-home:hover {
+  background: #2a2a2a;
+}
