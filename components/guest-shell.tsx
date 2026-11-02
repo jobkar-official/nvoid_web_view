@@ -304,6 +304,17 @@ export function GuestShell({ children }: { children: ReactNode }) {
               {sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}
             </button>
             <div className="topbar-breadcrumb"><strong>{pageTitle}</strong></div>
+            <nav className="nvoid-header-actions" aria-label="Account and hiring links">
+              {!signedIn && (
+                <>
+                  <Link href="/auth/signin" className="nvoid-header-login" onClick={closeSidebarOnMobile}>Login</Link>
+                  <span className="nvoid-header-dash" aria-hidden="true">-</span>
+                  <Link href="/auth/register" className="nvoid-header-signup" onClick={closeSidebarOnMobile}>Sign Up</Link>
+                  <span className="nvoid-header-divider" aria-hidden="true">|</span>
+                </>
+              )}
+              <Link href="/free-job-posting" className="nvoid-header-free-posting" onClick={closeSidebarOnMobile}>Free Job Posting</Link>
+            </nav>
           </header>
           <main className="public-content">{children}</main>
         </div>
