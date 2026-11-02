@@ -129,7 +129,6 @@ body { font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
 .sidebar-toggle-button { margin-right: 12px; }
 .topbar-breadcrumb { color: #a5a5a5 !important; font-size: 12px; text-transform: none !important; }
 .topbar-breadcrumb strong { color: #ededed !important; font-size: 13px; font-weight: 550; }
-.topbar-actions { display: none !important; }
 .public-content { width: min(100%, 1500px) !important; max-width: 1500px !important; min-height: calc(100vh - 58px); margin: 0 auto !important; padding: 28px clamp(18px, 3vw, 48px) 52px !important; background: var(--nvoid-bg) !important; }
 .public-footer { color: #929292 !important; border-color: var(--nvoid-border) !important; }
 .sidebar-scrim { display: none; }
@@ -684,4 +683,89 @@ body,
   font-size: 10px;
   line-height: 1.65;
   overflow-wrap: anywhere;
+}
+
+
+/* Keep public account and hiring actions visible in the header at every viewport. */
+.public-topbar {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+}
+.topbar-breadcrumb {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.nvoid-header-actions {
+  display: flex !important;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: max-content;
+  margin-left: auto;
+  white-space: nowrap;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.nvoid-header-actions a {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  text-decoration: none !important;
+  font-size: 12px;
+  font-weight: 550;
+  line-height: 1;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.nvoid-header-login {
+  padding: 0 2px;
+  color: #d7d7d7 !important;
+}
+.nvoid-header-login:hover { color: #ffffff !important; }
+.nvoid-header-dash,
+.nvoid-header-divider {
+  color: #777777;
+  font-size: 12px;
+  user-select: none;
+}
+.nvoid-header-signup {
+  padding: 0 12px;
+  border: 1px solid #414141;
+  border-radius: 8px;
+  color: #ededed !important;
+  background: #171717;
+}
+.nvoid-header-signup:hover {
+  border-color: #626262;
+  background: #242424;
+}
+.nvoid-header-free-posting {
+  padding: 0 13px;
+  border: 1px solid #ededed;
+  border-radius: 8px;
+  color: #111111 !important;
+  background: #ededed;
+  font-weight: 650 !important;
+}
+.nvoid-header-free-posting:hover {
+  border-color: #ffffff;
+  background: #ffffff;
+}
+@media (max-width: 680px) {
+  .topbar-breadcrumb { display: none !important; }
+  .public-topbar { gap: 8px; padding-right: 10px; }
+  .nvoid-header-actions { gap: 7px; }
+  .nvoid-header-actions a { min-height: 32px; font-size: 10px; }
+  .nvoid-header-signup { padding: 0 9px; }
+  .nvoid-header-free-posting { padding: 0 10px; }
+}
+@media (max-width: 380px) {
+  .public-topbar { padding-left: 8px; padding-right: 8px; }
+  .nvoid-header-actions { gap: 5px; }
+  .nvoid-header-actions a { font-size: 9px; }
+  .nvoid-header-signup { padding: 0 7px; }
+  .nvoid-header-free-posting { padding: 0 8px; }
 }
