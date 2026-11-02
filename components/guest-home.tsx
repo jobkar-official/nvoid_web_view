@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Asterisk, BriefcaseBusiness, Clock3, ExternalLink, LoaderCircle, MapPin, Search, ShieldCheck, Target, X } from "lucide-react";
 import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
+import { useAuth } from "../lib/context/AuthContext";
+import { buildTrackedApplicationUrl } from "../lib/application-url";
 
 type Job = GuestSearchJob;
 type SourceDiagnostic = {
@@ -41,10 +43,27 @@ function clean(value?: string) {
   return typeof value === "string" ? value.replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/\s+/g, " ").trim() : "";
 }
 
+function postedTimestamp(value?: string) {
+  if (!value) return 0;
+  const raw = value.trim();
+  if (/^\\d{9,13}$/.test(raw)) {
+    const numeric = Number(raw);
+    const date = new Date(numeric < 1_000_000_000_000 ? numeric * 1000 : numeric);
+    return Number.isFinite(date.getTime()) ? date.getTime() : 0;
+  }
+  const parsed = Date.parse(raw);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 function postedDate(value?: string) {
   if (!value) return "Date not provided";
-  const date = new Date(value);
-  return Number.isFinite(date.getTime()) ? new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(date) : value;
+  const timestamp = postedTimestamp(value);
+  if (!timestamp) return value;
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  }).format(new Date(timestamp));
 }
 
 function sourceName(value?: string) {
@@ -93,6 +112,7 @@ function cachedJobs(jobs: Job[]): Job[] {
 
 export default function GuestHome({ searchId, initialJobTitle = "", initialLocation = "Worldwide", autoSearch = false }: { searchId?: string; initialJobTitle?: string; initialLocation?: string; autoSearch?: boolean }) {
   const { saveSearch, updateSearch, getSearch } = useGuestHistory();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const autoSearchKey = useRef("");
   const [jobTitle, setJobTitle] = useState(initialJobTitle);
   const [location, setLocation] = useState(initialLocation || "Worldwide");
@@ -108,8 +128,8 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
   const [sortMode, setSortMode] = useState<"relevance" | "newest" | "title">("relevance");
   const displayedJobs = useMemo(() => jobs.map((job, index) => ({ job, index })).sort((left, right) => {
     if (sortMode === "newest") {
-      const leftDate = Date.parse(left.job.postedAt || "") || 0;
-      const rightDate = Date.parse(right.job.postedAt || "") || 0;
+      const leftDate = postedTimestamp(left.job.postedAt);
+      const rightDate = postedTimestamp(right.job.postedAt);
       return rightDate - leftDate || left.index - right.index;
     }
     if (sortMode === "title") return left.job.title.localeCompare(right.job.title) || left.index - right.index;
@@ -162,6 +182,36 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         : "This search is saved, but no matching job records were returned."
       : "Search details restored. Run it again to retrieve current job records."));
   }, [searchId, getSearch, initialJobTitle, initialLocation]);
+
+  const openApplication = useCallback((value: string, source?: string) => {
+    if (authLoading) {
+      setNotice("Checking your account. Please try Apply Now again in a moment.");
+      return;
+    }
+
+    const destination = buildTrackedApplicationUrl(value, source);
+    if (!destination) {
+      setNotice("This job source did not provide a valid application URL.");
+      return;
+    }
+
+    if (isAuthenticated) {
+      const opened = window.open(destination, "_blank", "noopener,noreferrer");
+      if (!opened) setNotice("Allow pop-ups for NVOIDAI to open the job application in a new tab.");
+      return;
+    }
+
+    const waitingTab = window.open(
+      "/auth/apply-redirect?destination=" + encodeURIComponent(destination),
+      "_blank"
+    );
+    if (!waitingTab) {
+      setNotice("Allow pop-ups for NVOIDAI, then select Apply Now again to continue to the job after signing in.");
+      return;
+    }
+
+    window.location.assign("/auth/signin?applyUrl=" + encodeURIComponent(destination));
+  }, [authLoading, isAuthenticated]);
 
   const runSearch = useCallback(async (
     event?: FormEvent,
@@ -337,7 +387,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                   </div>
                   <div className="public-job-footer">
                     {typeof job.matchScore === "number" ? <span className="match-label"><Target size={12} /> {Math.round(job.matchScore)}% profile fit</span> : <span className="external-label">External opportunity</span>}
-                    {apply ? <a href={apply} target="_blank" rel="noreferrer">View opportunity <ExternalLink size={13} /></a> : listing ? <a href={listing} target="_blank" rel="noreferrer">Original listing <ExternalLink size={13} /></a> : <span className="external-label">Source link unavailable</span>}
+                    {apply ? <button type="button" className="public-job-apply-button" onClick={() => openApplication(apply, job.source)}>Apply Now <ExternalLink size={14} /></button> : listing ? <span className="external-label">Original listing available</span> : <span className="external-label">Source link unavailable</span>}
                   </div>
                 </article>
               );
