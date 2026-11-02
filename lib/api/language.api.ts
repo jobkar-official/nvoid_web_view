@@ -1,4 +1,4 @@
-import request, { isNotFoundError } from "../context/client";
+import request from "../context/client";
 
 export interface UserLanguage {
   id: number;
@@ -15,34 +15,18 @@ export interface SaveLanguagePayload {
   proficiency: string;
 }
 
-export interface DeleteLanguagePayload {
-  userId: number;
-  language: string;
-}
-
 export const languageApi = {
   saveLanguage: (data: SaveLanguagePayload) =>
-    request<any>("/backend/profile/language/save", {
-      method: "POST",
-      body: data
-    }),
+    request<any>("/backend/language/save", { method: "POST", body: data }),
 
   getLanguagesByUserId: async (userId: number | string): Promise<UserLanguage[]> => {
-    try {
-      const response = await request<UserLanguage[]>(`/backend/profile/language/user/${userId}`, { method: "GET" });
-      if (Array.isArray(response)) return response;
-      if (Array.isArray((response as any)?.data)) return (response as any).data;
-      if (Array.isArray((response as any)?.result)) return (response as any).result;
-      return [];
-    } catch (error) {
-      if (isNotFoundError(error)) return [];
-      throw error;
-    }
+    const response = await request<any>("/backend/language/user/" + userId, { method: "GET" });
+    if (Array.isArray(response)) return response;
+    if (Array.isArray(response?.data)) return response.data;
+    if (Array.isArray(response?.result)) return response.result;
+    return [];
   },
 
-  deleteLanguage: (id: number | string, data: DeleteLanguagePayload) =>
-    request<any>(`/backend/profile/language/delete/${id}`, {
-      method: "DELETE",
-      body: data
-    })
+  deleteLanguage: (id: number | string) =>
+    request<any>("/backend/language/delete/" + id, { method: "DELETE" })
 };

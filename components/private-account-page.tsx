@@ -64,6 +64,7 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [profile, setProfile] = useState({ name, email: initialSession.user.email || "", phone: initialSession.user.phone || "", bio: "", city: "", state: "", country: "India" });
+  const [profileEditing, setProfileEditing] = useState(false);
   const [skills, setSkills] = useState<RecordData[]>([]);
   const [education, setEducation] = useState<RecordData[]>([]);
   const [experience, setExperience] = useState<RecordData[]>([]);
@@ -179,14 +180,25 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
   const saveProfile = (event: FormEvent) => {
     event.preventDefault();
     if (!userId) return setError("A valid account ID is required to save this profile.");
-    void perform(() => usersApi.updateProfile(id, { id: userId, name: profile.name, phone: profile.phone, email: profile.email, bio: profile.bio, description: profile.bio, city: profile.city, state: profile.state, country: profile.country }), "Profile update submitted.");
+    void perform(async () => {
+      await usersApi.updateProfile(id, { id: userId, name: profile.name, phone: profile.phone, email: profile.email, bio: profile.bio, description: profile.bio, city: profile.city, state: profile.state, country: profile.country });
+      setProfileEditing(false);
+    }, "Profile updated successfully.");
   };
   const addSkill = (event: FormEvent) => {
     event.preventDefault();
     const payload = { userId, skillName: skillName.trim(), proficiencyLevel: skillLevel, year: Number(skillYears), month: Number(skillMonths) };
     void perform(async () => {
-      if (editingSkillId !== null) await skillsApi.updateSkill(editingSkillId, payload);
-      else await skillsApi.saveSkill(payload);
+      await skillsApi.saveSkill(payload);
+      if (editingSkillId !== null) {
+        try {
+          await skillsApi.deleteSkill(editingSkillId);
+        } catch {
+          const refreshedSkills = await skillsApi.getSkillsByUserId(id).catch(() => []);
+          setSkills(rows(refreshedSkills));
+          throw new Error("The updated skill was saved, but the previous entry could not be removed. Review your skills list for a duplicate.");
+        }
+      }
       setEditingSkillId(null);
       setSkillName("");
       setSkillLevel("Intermediate");
@@ -222,7 +234,7 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
       await languageApi.saveLanguage({ userId, language: languageName.trim(), proficiency: languageProficiency });
       if (editingLanguageId !== null && existing) {
         try {
-          await languageApi.deleteLanguage(existing.id, { userId, language: existing.language });
+          await languageApi.deleteLanguage(existing.id);
         } catch {
           setEditingLanguageId(null);
           const refreshedLanguages = await languageApi.getLanguagesByUserId(id).catch(() => []);
@@ -301,7 +313,51 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
         })}
       </nav>}
 
-      {section === "profile" && profileTab === "profile" && <section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Professional identity</h2><p>Keep your account information up to date.</p></div><UserRound size={18} /></div><form className="nv-form-grid" onSubmit={saveProfile}><label>Full name<input required value={profile.name} onChange={event => setProfile({ ...profile, name: event.target.value })} /></label><label>Email address<input type="email" value={profile.email} onChange={event => setProfile({ ...profile, email: event.target.value })} /></label><label>Phone number<input value={profile.phone} onChange={event => setProfile({ ...profile, phone: event.target.value })} /></label><label>Country<input value={profile.country} onChange={event => setProfile({ ...profile, country: event.target.value })} /></label><label>State<input value={profile.state} onChange={event => setProfile({ ...profile, state: event.target.value })} /></label><label>City<input value={profile.city} onChange={event => setProfile({ ...profile, city: event.target.value })} /></label><label className="nv-full">Professional summary<textarea rows={5} value={profile.bio} onChange={event => setProfile({ ...profile, bio: event.target.value })} /></label><div className="nv-form-footer nv-full"><span>Account ID: {id || "Not returned by authentication"}</span><button className="nv-primary" disabled={busy}><Check size={15} /> Save profile</button></div></form></section>}
+      {section === "profile" && profileTab === "profile" && (
+        <section className="nv-panel nv-panel-spaced">
+          {!profileEditing ? (
+            <>
+              <div className="nv-panel-heading">
+                <div><h2>Professional identity</h2><p>Your saved personal and professional details.</p></div>
+                <button type="button" className="nv-secondary" onClick={() => setProfileEditing(true)}><Pencil size={14} /> Edit profile</button>
+              </div>
+              <div className="nv-profile-details">
+                <div className="nv-profile-detail"><span>Full name</span><strong>{profile.name || "Not provided"}</strong></div>
+                <div className="nv-profile-detail"><span>Email address</span><strong>{profile.email || "Not provided"}</strong></div>
+                <div className="nv-profile-detail"><span>Phone number</span><strong>{profile.phone || "Not provided"}</strong></div>
+                <div className="nv-profile-detail"><span>Country</span><strong>{profile.country || "Not provided"}</strong></div>
+                <div className="nv-profile-detail"><span>State</span><strong>{profile.state || "Not provided"}</strong></div>
+                <div className="nv-profile-detail"><span>City</span><strong>{profile.city || "Not provided"}</strong></div>
+                <div className="nv-profile-detail nv-profile-detail-wide"><span>Professional summary</span><p>{profile.bio || "No professional summary added yet."}</p></div>
+                <div className="nv-profile-detail"><span>Account ID</span><strong>{id}</strong></div>
+                <div className="nv-profile-detail"><span>Profile URL</span><strong>{initialSession.user.slug ? "/" + initialSession.user.slug : "Not set"}</strong></div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="nv-panel-heading">
+                <div><h2>Edit professional identity</h2><p>Update your saved account details.</p></div>
+                <UserRound size={18} />
+              </div>
+              <form className="nv-form-grid" onSubmit={saveProfile}>
+                <label>Full name<input required value={profile.name} onChange={event => setProfile({ ...profile, name: event.target.value })} /></label>
+                <label>Email address<input type="email" value={profile.email} onChange={event => setProfile({ ...profile, email: event.target.value })} /></label>
+                <label>Phone number<input value={profile.phone} onChange={event => setProfile({ ...profile, phone: event.target.value })} /></label>
+                <label>Country<input value={profile.country} onChange={event => setProfile({ ...profile, country: event.target.value })} /></label>
+                <label>State<input value={profile.state} onChange={event => setProfile({ ...profile, state: event.target.value })} /></label>
+                <label>City<input value={profile.city} onChange={event => setProfile({ ...profile, city: event.target.value })} /></label>
+                <label className="nv-full">Professional summary<textarea rows={5} value={profile.bio} onChange={event => setProfile({ ...profile, bio: event.target.value })} /></label>
+                <div className="nv-form-footer nv-full">
+                  <div className="nv-form-actions">
+                    <button type="button" className="nv-secondary" onClick={() => { setProfileEditing(false); void loadPage(); }}>Cancel</button>
+                    <button className="nv-primary" disabled={busy}><Check size={15} /> Save profile</button>
+                  </div>
+                </div>
+              </form>
+            </>
+          )}
+        </section>
+      )}
 
       {section === "profile" && profileTab === "skills" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add a skill</h2><p>Save a skill to your professional profile.</p></div><Plus size={18} /></div><form className="nv-form-grid nv-skill-form" onSubmit={addSkill}><label>Skill name<input required value={skillName} onChange={event => setSkillName(event.target.value)} placeholder="Java, React, Product Design" /></label><label>Proficiency<select value={skillLevel} onChange={event => setSkillLevel(event.target.value)}><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></label><label>Years<input type="number" min="0" max="60" value={skillYears} onChange={event => setSkillYears(event.target.value)} /></label><label>Months<input type="number" min="0" max="11" value={skillMonths} onChange={event => setSkillMonths(event.target.value)} /></label><div className="nv-form-footer nv-full"><div className="nv-form-actions"><button type="button" className="nv-secondary" hidden={editingSkillId === null} onClick={() => { setEditingSkillId(null); setSkillName(""); setSkillLevel("Intermediate"); setSkillYears("1"); setSkillMonths("0"); }}>Cancel</button><button className="nv-primary" disabled={busy}><Plus size={15} /> {editingSkillId !== null ? "Save changes" : "Add skill"}</button></div></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your skills</h2><p>{skills.length} records</p></div><Target size={18} /></div><div className="nv-record-grid">{skills.map(item => <Record key={item.id} title={item.skillName || "Skill"} meta={[item.proficiencyLevel, item.year ? item.year + "y " + (item.month || 0) + "m" : ""].filter(Boolean).join(" · ")} onEdit={() => { setEditingSkillId(item.id); setSkillName(item.skillName || ""); setSkillLevel(item.proficiencyLevel || "Intermediate"); setSkillYears(String(item.year ?? 0)); setSkillMonths(String(item.month ?? 0)); }} onDelete={() => void perform(() => skillsApi.deleteSkill(item.id), "Skill removed.")} />)}</div>{!skills.length && !loading && <EmptyState title="No skills added yet" text="Add your strongest skills to complete your profile." />}</section></div>}
 
@@ -309,7 +365,7 @@ export default function PrivateAccountPage({ initialSession, initialSection }: {
 
       {section === "profile" && profileTab === "experience" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add experience</h2><p>Save a current or previous role to your professional history.</p></div><Activity size={18} /></div><form className="nv-form-grid" onSubmit={addExperience}><label>Company<input required value={work.companyName} onChange={event => setWork({ ...work, companyName: event.target.value })} /></label><label>Designation<input required value={work.designation} onChange={event => setWork({ ...work, designation: event.target.value })} /></label><label>Location<input value={work.companyLocation} onChange={event => setWork({ ...work, companyLocation: event.target.value })} /></label><label>Start date<input required type="date" value={work.startDate} onChange={event => setWork({ ...work, startDate: event.target.value })} /></label><label>End date<input type="date" disabled={work.current} value={work.endDate} onChange={event => setWork({ ...work, endDate: event.target.value })} /></label><label className="nv-check-label"><input type="checkbox" checked={work.current} onChange={event => setWork({ ...work, current: event.target.checked })} /> I currently work here</label><div className="nv-form-footer nv-full"><div className="nv-form-actions"><button type="button" className="nv-secondary" hidden={editingExperienceId === null} onClick={() => { setEditingExperienceId(null); setWork({ companyName: "", designation: "", companyLocation: "", startDate: "", endDate: "", current: false }); }}>Cancel</button><button className="nv-primary" disabled={busy}><Plus size={15} /> {editingExperienceId !== null ? "Save changes" : "Add experience"}</button></div></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Work history</h2><p>{experience.length} records</p></div><Activity size={18} /></div><div className="nv-record-list">{experience.map(item => <Record key={item.id} title={item.designation || "Role"} meta={[item.companyName, item.companyLocation, dateText(item.startDate) + " – " + (item.isCurrent ? "Present" : dateText(item.endDate))].filter(Boolean).join(" · ")} onEdit={() => { setEditingExperienceId(item.id); setWork({ companyName: item.companyName || "", designation: item.designation || "", companyLocation: item.companyLocation || "", startDate: item.startDate || "", endDate: item.endDate || "", current: Boolean(item.isCurrent) }); }} onDelete={() => void perform(() => experienceApi.deleteExperience(item.id), "Experience record deleted.")} />)}</div>{!experience.length && !loading && <EmptyState title="No experience added" text="Add your work history to complete your profile." />}</section></div>}
 
-      {section === "profile" && profileTab === "languages" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add a language</h2><p>Record the languages you can use at work.</p></div><Languages size={18} /></div><form className="nv-form-grid" onSubmit={addLanguage}><label>Language<input required value={languageName} onChange={event => setLanguageName(event.target.value)} placeholder="e.g. English, Hindi, Gujarati" /></label><label>Proficiency<select value={languageProficiency} onChange={event => setLanguageProficiency(event.target.value)}><option>Native</option><option>Fluent</option><option>Professional</option><option>Conversational</option><option>Basic</option></select></label><div className="nv-form-footer nv-full"><div className="nv-form-actions"><button type="button" className="nv-secondary" hidden={editingLanguageId === null} onClick={() => { setEditingLanguageId(null); setLanguageName(""); setLanguageProficiency("Professional"); }}>Cancel</button><button className="nv-primary" disabled={busy || !languageName.trim()}><Plus size={15} /> {editingLanguageId !== null ? "Save changes" : "Add language"}</button></div></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your languages</h2><p>{languages.length} language records</p></div><Languages size={18} /></div><div className="nv-record-grid">{languages.map(item => <Record key={item.id} title={item.language || "Language"} meta={item.proficiency || "Proficiency not provided"} onEdit={() => { setEditingLanguageId(item.id); setLanguageName(item.language || ""); setLanguageProficiency(item.proficiency || "Professional"); }} onDelete={() => void perform(() => languageApi.deleteLanguage(item.id, { userId, language: item.language }), "Language removed from your profile.")} />)}</div>{!languages.length && !loading && <EmptyState title="No languages added" text="Add the languages you use to communicate professionally." />}</section><div className="nv-info-strip"><ShieldCheck size={16} /><span>The API has no dedicated language update endpoint. Editing saves the replacement first, then removes the previous record.</span></div></div>}
+      {section === "profile" && profileTab === "languages" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Add a language</h2><p>Record the languages you can use at work.</p></div><Languages size={18} /></div><form className="nv-form-grid" onSubmit={addLanguage}><label>Language<input required value={languageName} onChange={event => setLanguageName(event.target.value)} placeholder="e.g. English, Hindi, Gujarati" /></label><label>Proficiency<select value={languageProficiency} onChange={event => setLanguageProficiency(event.target.value)}><option>Native</option><option>Fluent</option><option>Professional</option><option>Conversational</option><option>Basic</option></select></label><div className="nv-form-footer nv-full"><div className="nv-form-actions"><button type="button" className="nv-secondary" hidden={editingLanguageId === null} onClick={() => { setEditingLanguageId(null); setLanguageName(""); setLanguageProficiency("Professional"); }}>Cancel</button><button className="nv-primary" disabled={busy || !languageName.trim()}><Plus size={15} /> {editingLanguageId !== null ? "Save changes" : "Add language"}</button></div></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your languages</h2><p>{languages.length} language records</p></div><Languages size={18} /></div><div className="nv-record-grid">{languages.map(item => <Record key={item.id} title={item.language || "Language"} meta={item.proficiency || "Proficiency not provided"} onEdit={() => { setEditingLanguageId(item.id); setLanguageName(item.language || ""); setLanguageProficiency(item.proficiency || "Professional"); }} onDelete={() => void perform(() => languageApi.deleteLanguage(item.id), "Language removed from your profile.")} />)}</div>{!languages.length && !loading && <EmptyState title="No languages added" text="Add the languages you use to communicate professionally." />}</section><div className="nv-info-strip"><ShieldCheck size={16} /><span>The API has no dedicated language update endpoint. Editing saves the replacement first, then removes the previous record.</span></div></div>}
 
       {section === "profile" && profileTab === "resume" && <div className="nv-content-stack"><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>{replacingResumeId !== null ? "Replace resume" : "Upload a resume"}</h2><p>{replacingResumeId !== null ? "The new file is uploaded before the previous resume is removed." : "Upload a resume to your Nvoid profile."}</p></div><FileText size={18} /></div><form className="nv-upload-form" onSubmit={uploadResume}><label className="nv-file-drop"><FileText size={24} /><strong>{file?.name || "Choose your resume"}</strong><small>PDF or DOC/DOCX · Select a file from this device</small><input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onChange={event => setFile(event.target.files?.[0] || null)} /></label><div className="nv-form-footer"><div className="nv-form-actions"><button type="button" className="nv-secondary" hidden={replacingResumeId === null} onClick={() => { setReplacingResumeId(null); setFile(null); }}>Cancel</button><button className="nv-primary" disabled={busy || !file}><Plus size={15} /> {replacingResumeId !== null ? "Replace resume" : "Upload resume"}</button></div></div></form></section><section className="nv-panel nv-panel-spaced"><div className="nv-panel-heading"><div><h2>Your resumes</h2><p>{resumes.length} records</p></div><FileText size={18} /></div><div className="nv-record-list">{resumes.map(item => <div className="nv-record" key={item.id}><span className="nv-record-icon"><FileText size={17} /></span><div><strong>{item.fileName || item.name || (item.resume || "").split("/").pop() || "Resume " + item.id}</strong><small>{dateText(item.createdAt)}</small></div>{item.resume && <a className="nv-icon-action" href={String(item.resume)} target="_blank" rel="noreferrer" aria-label="Open resume"><ArrowUpRight size={16} /></a>}<button className="nv-icon-action" onClick={() => { setReplacingResumeId(item.id); setFile(null); }} aria-label="Replace resume"><Pencil size={16} /></button><button className="nv-icon-action danger" onClick={() => void perform(() => resumeApi.deleteResume(item.id), "Resume deleted.")} aria-label="Delete resume"><Trash2 size={16} /></button></div>)}</div>{!resumes.length && !loading && <EmptyState title="No resume on file" text="Upload a current resume so it is attached to your account." />}</section></div>}
 
