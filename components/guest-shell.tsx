@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Activity, Bell, BriefcaseBusiness, Check, Clock3, FileText, FlaskConical, GraduationCap, History, Languages, LifeBuoy, MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
+import { Bell, BriefcaseBusiness, Check, Clock3, FlaskConical, History, LifeBuoy, MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
 
 export type GuestSearchJob = {
@@ -122,15 +122,6 @@ const workspaceLinks = [
   { href: "/support", label: "Support", icon: LifeBuoy }
 ];
 
-const profileSectionLinks = [
-  { id: "profile", label: "Edit profile", icon: UserRound },
-  { id: "education", label: "Education", icon: GraduationCap },
-  { id: "skills", label: "Skills", icon: Target },
-  { id: "experience", label: "Experience", icon: Activity },
-  { id: "languages", label: "Languages", icon: Languages },
-  { id: "resume", label: "Resume", icon: FileText }
-];
-
 export function GuestShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
@@ -139,18 +130,6 @@ export function GuestShell({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [ready, setReady] = useState(false);
   const [editing, setEditing] = useState<{ id: string; jobTitle: string; location: string } | null>(null);
-  const [profileSubsection, setProfileSubsection] = useState("profile");
-
-  useEffect(() => {
-    const syncProfileSubsection = () => {
-      const tab = window.location.hash.slice(1);
-      setProfileSubsection(profileSectionLinks.some(item => item.id === tab) ? tab : "profile");
-    };
-    syncProfileSubsection();
-    window.addEventListener("hashchange", syncProfileSubsection);
-    return () => window.removeEventListener("hashchange", syncProfileSubsection);
-  }, [pathname]);
-
   useEffect(() => {
     setHistory(readHistory());
     setReady(true);
@@ -259,20 +238,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
               {workspaceLinks.map((item) => {
                 const Icon = item.icon;
                 const active = pathname === item.href || (item.href === "/application" && pathname.startsWith("/application"));
-                return (
-                  <div key={item.href} className="nvoid-workspace-link-group">
-                    <Link href={item.href} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={16} /><span>{item.label}</span></Link>
-                    {item.href === "/profile" && (
-                      <div className="nvoid-profile-subnav" role="group" aria-label="Profile sections">
-                        {profileSectionLinks.map((section) => {
-                          const SectionIcon = section.icon;
-                          const subsectionActive = pathname === "/profile" && profileSubsection === section.id;
-                          return <Link key={section.id} href={section.id === "profile" ? "/profile" : "/profile#" + section.id} onClick={closeSidebarOnMobile} aria-current={subsectionActive ? "page" : undefined} className={"public-nav-link" + (subsectionActive ? " active" : "")}><SectionIcon size={14} /><span>{section.label}</span></Link>;
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
+                return <Link key={item.href} href={item.href} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={16} /><span>{item.label}</span></Link>;
               })}
             </nav>
           )}
