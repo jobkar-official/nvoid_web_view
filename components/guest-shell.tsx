@@ -259,17 +259,21 @@ export function GuestShell({ children }: { children: ReactNode }) {
               {workspaceLinks.map((item) => {
                 const Icon = item.icon;
                 const active = pathname === item.href || (item.href === "/application" && pathname.startsWith("/application"));
-                return <Link key={item.href} href={item.href} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={16} /><span>{item.label}</span></Link>;
+                return (
+                  <div key={item.href} className="nvoid-workspace-link-group">
+                    <Link href={item.href} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={16} /><span>{item.label}</span></Link>
+                    {item.href === "/profile" && (
+                      <div className="nvoid-profile-subnav" role="group" aria-label="Profile sections">
+                        {profileSectionLinks.map((section) => {
+                          const SectionIcon = section.icon;
+                          const subsectionActive = pathname === "/profile" && profileSubsection === section.id;
+                          return <Link key={section.id} href={section.id === "profile" ? "/profile" : "/profile#" + section.id} onClick={closeSidebarOnMobile} aria-current={subsectionActive ? "page" : undefined} className={"public-nav-link" + (subsectionActive ? " active" : "")}><SectionIcon size={14} /><span>{section.label}</span></Link>;
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
               })}
-              {pathname === "/profile" && (
-                <nav className="nvoid-profile-subnav" aria-label="Profile sections">
-                  {profileSectionLinks.map((item) => {
-                    const Icon = item.icon;
-                    const active = profileSubsection === item.id;
-                    return <Link key={item.id} href={item.id === "profile" ? "/profile" : "/profile#" + item.id} onClick={closeSidebarOnMobile} aria-current={active ? "page" : undefined} className={"public-nav-link" + (active ? " active" : "")}><Icon size={14} /><span>{item.label}</span></Link>;
-                  })}
-                </nav>
-              )}
             </nav>
           )}
 
