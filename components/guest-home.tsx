@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, Asterisk, BriefcaseBusiness, Clock3, ExternalLink, LoaderCircle, MapPin, Search, ShieldCheck, Target, X } from "lucide-react";
 import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
