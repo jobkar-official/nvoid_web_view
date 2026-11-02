@@ -23,7 +23,8 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
     if (params.get("role") === "3") setRole("3");
     const destination = params.get("applyUrl");
     if (destination) setApplyUrl(buildTrackedApplicationUrl(destination) || "");
-  }, []);
+    else setApplyUrl("");
+  }, [mode]);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
