@@ -803,3 +803,50 @@ body,
     letter-spacing: -.055em;
   }
 }
+
+/* Use the committed NVOIDAI mark consistently across the sidebar, landing page and auth panels. */
+.brand-symbol {
+  overflow: hidden;
+}
+.brand-symbol img {
+  display: block;
+  width: 23px;
+  height: 23px;
+  object-fit: contain;
+}
+.auth-brand .brand-symbol {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+}
+.auth-brand .brand-symbol img {
+  width: 27px;
+  height: 27px;
+}
+.nvoid-homepage-restored .worker-home-intro-copy h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1.35vw, 14px);
+}
+.worker-home-heading-logo {
+  display: block;
+  width: clamp(30px, 3.8vw, 42px);
+  height: auto;
+  flex: 0 0 auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 10px rgba(255,255,255,.12));
+}
+.worker-home-heading-copy {
+  display: inline-block;
+  color: #f4f4f4 !important;
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .nvoid-homepage-restored .worker-home-intro-copy h1 {
+    gap: 7px;
+  }
+  .worker-home-heading-logo {
+    width: clamp(26px, 7vw, 32px);
+  }
+}
