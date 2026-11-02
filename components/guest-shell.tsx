@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { BriefcaseBusiness, Check, Clock3, FlaskConical, History, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Trash2, UserRound } from "lucide-react";
@@ -208,8 +209,8 @@ export function GuestShell({ children }: { children: ReactNode }) {
         <aside id="nvoid-public-sidebar" aria-label="Nvoid navigation" aria-hidden={!sidebarOpen} className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
           <div className="public-sidebar-header">
             <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
-              <span className="brand-symbol" aria-hidden="true">N</span>
-              <span className="brand-copy"><strong>Nvoid</strong><small>Global career agent</small></span>
+              <span className="brand-symbol" aria-hidden="true"><Image src="/favicon.svg" alt="" width={24} height={24} priority /></span>
+              <span className="brand-copy"><strong>NVOIDAI</strong><small>Global career agent</small></span>
             </Link>
             <button className="sidebar-collapse-button" type="button" aria-label="Collapse sidebar" title="Collapse sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
           </div>
