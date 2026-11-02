@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Building2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, UserRound } from "lucide-react";
 import { signInWithJobkar } from "../lib/context/auth-client";
+import { buildTrackedApplicationUrl } from "../lib/application-url";
 
 export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
   const isRegister = mode === "register";
@@ -15,10 +16,13 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
   const [visible, setVisible] = useState(false);
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
+  const [applyUrl, setApplyUrl] = useState("");
 
   useEffect(() => {
-    const requestedRole = new URLSearchParams(window.location.search).get("role");
-    if (requestedRole === "3") setRole("3");
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("role") === "3") setRole("3");
+    const destination = params.get("applyUrl");
+    if (destination) setApplyUrl(buildTrackedApplicationUrl(destination) || "");
   }, []);
 
   const submit = async (event: FormEvent) => {
@@ -70,7 +74,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
             <span className="auth-form-icon">{isRegister ? <UserRound size={20} /> : <LockKeyhole size={20} />}</span>
             <span className="auth-overline">{isRegister ? "CREATE YOUR ACCOUNT" : "ACCOUNT ACCESS"}</span>
             <h2>{isRegister ? "Join Nvoid" : "Sign in"}</h2>
-            <p>{isRegister ? "Start with a free candidate or employer account." : "Continue to Nvoid."}</p>
+            <p>{applyUrl ? "Your selected job application will open in a new tab after you successfully " + (isRegister ? "create your account." : "sign in.") : isRegister ? "Start with a free candidate or employer account." : "Continue to Nvoid."}</p>
           </div>
           <form className="auth-form" onSubmit={submit}>
             {isRegister && (
@@ -85,7 +89,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
             {notice && <div className="auth-error" role="alert">{notice}</div>}
             <button className="auth-submit" type="submit" disabled={busy}>{busy ? "Connecting…" : isRegister ? "Create free account" : "Sign in"}<ArrowRight size={16} /></button>
           </form>
-          <p className="auth-switch">{isRegister ? "Already have an account?" : "New to Nvoid?"} <Link href={isRegister ? "/auth/signin" : "/auth/register"}>{isRegister ? "Sign in" : "Create an account"}</Link></p>
+          <p className="auth-switch">{isRegister ? "Already have an account?" : "New to Nvoid?"} <Link href={(isRegister ? "/auth/signin" : "/auth/register") + (applyUrl ? "?applyUrl=" + encodeURIComponent(applyUrl) : "")}>{isRegister ? "Sign in" : "Create an account"}</Link></p>
           <p className="auth-terms">By continuing, you agree to the <Link href="/terms">Terms</Link> and acknowledge the <Link href="/privacy">Privacy Policy</Link>.</p>
 
         </section>
