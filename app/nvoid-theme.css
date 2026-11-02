@@ -917,3 +917,7 @@ body,
     font-size: 9px;
   }
 }
+.nvoid-workspace-link-group {
+  display: grid;
+  gap: 2px;
+}
