@@ -1,16 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowRight, BriefcaseBusiness, Globe2, Search } from "lucide-react";
+import { ArrowRight, BriefcaseBusiness, Globe2, Rainbow, Search } from "lucide-react";
 
 export default function WorkerHomepage() {
   return (
     <div className="worker-homepage worker-homepage-v2 nvoid-homepage-restored">
       <section className="worker-home-brand-intro" aria-label="Nvoid">
-                <div className="worker-home-intro-copy">
+        <div className="worker-home-intro-copy">
           <span className="worker-home-intro-kicker"><span /> YOUR AI JOB AGENT</span>
           <h1><Image src="/favicon.svg" alt="" width={42} height={42} priority className="worker-home-heading-logo" /><span className="worker-home-heading-copy">Find jobs with <span className="worker-home-wordmark-text">NvoidAI.com</span></span></h1>
-          <p>One AI agent searching global job sources and company career pages for you.</p>
+          <p>Let them to work our agent for you, You've to just need to create a profile.</p>
         </div>
       </section>
 
@@ -29,6 +29,7 @@ export default function WorkerHomepage() {
         </form>
         <div className="worker-home-search-meta nvoid-home-search-meta">
           <div className="worker-home-search-footnote"><Search size={14} /> Search across connected sources. Review every result before taking action.</div>
+          <div className="worker-home-search-footnote"><Rainbow size={14} /> Model: Alpha - K1.</div>
         </div>
       </section>
     </div>
