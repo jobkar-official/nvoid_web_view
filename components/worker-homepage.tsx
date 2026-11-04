@@ -10,7 +10,7 @@ export default function WorkerHomepage() {
         <div className="worker-home-intro-copy">
           <span className="worker-home-intro-kicker"><span /> YOUR AI JOB AGENT</span>
           <h1><Image src="/favicon.svg" alt="" width={42} height={42} priority className="worker-home-heading-logo" /><span className="worker-home-heading-copy">Find jobs with <span className="worker-home-wordmark-text">NvoidAI.com</span></span></h1>
-          <p>Let them to work our agent for you, You've to just need to create a profile.</p>
+          <p>Create your profile and let your AI agent find opportunities that fit.</p>
         </div>
       </section>
 
@@ -18,12 +18,12 @@ export default function WorkerHomepage() {
         <form className="worker-home-search-card" action="/job-search" method="get">
           <label className="worker-home-field" htmlFor="home-role">
             <span>ROLE, SKILL OR KEYWORD</span>
-            <span className="worker-home-field-control"><BriefcaseBusiness size={18} /><input id="home-role" name="role" placeholder="e.g. Product Designer, Java Developer" autoComplete="off" required /></span>
+            <span className="worker-home-field-control"><BriefcaseBusiness size={20} /><input id="home-role" name="role" placeholder="e.g. Product Designer, Java Developer" autoComplete="off" required /></span>
           </label>
           <span className="worker-home-field-divider" aria-hidden="true" />
           <label className="worker-home-field" htmlFor="home-location">
             <span>LOCATION</span>
-            <span className="worker-home-field-control"><Globe2 size={18} /><input id="home-location" name="location" defaultValue="Worldwide" placeholder="Country, city or remote" autoComplete="off" required /></span>
+            <span className="worker-home-field-control"><Globe2 size={19} /><input id="home-location" name="location" defaultValue="Worldwide" placeholder="Country, city or remote" autoComplete="off" required /></span>
           </label>
           <button type="submit" className="worker-home-search-button"><Search size={17} /> Search jobs <ArrowRight size={16} /></button>
         </form>
