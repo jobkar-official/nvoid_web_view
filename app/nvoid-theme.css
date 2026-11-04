@@ -1229,13 +1229,24 @@ body {
     white-space: normal !important;
   }
 
-  .public-sidebar:not(.is-open) .sidebar-history,
+  .public-sidebar:not(.is-open) .sidebar-history {
+    display: flex !important;
+    flex-direction: column;
+  }
+
   .public-sidebar:not(.is-open) .guest-auth-actions {
-    display: initial !important;
+    display: grid !important;
+    grid-template-columns: .8fr 1.2fr;
   }
 
   .public-sidebar:not(.is-open) .sidebar-collapse-button {
+    position: static !important;
     display: grid !important;
+    width: 34px !important;
+    height: 34px !important;
+    margin-left: auto !important;
+    overflow: visible !important;
+    clip: auto !important;
   }
 
   .public-sidebar:not(.is-open) .sidebar-find-button {
