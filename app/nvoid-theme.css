@@ -3909,3 +3909,65 @@ html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worke
   -webkit-text-fill-color: #ffffff !important;
   caret-color: #ffffff !important;
 }
+
+
+html body .public-shell .public-sidebar .guest-auth-actions a.sidebar-register,
+html body .public-shell .public-sidebar .guest-auth-actions a.sidebar-register *,
+html body .public-shell .public-sidebar a.sidebar-find-button,
+html body .public-shell .public-sidebar a.sidebar-find-button *,
+html body .public-shell .public-sidebar a.sidebar-find-button.active,
+html body .public-shell .public-sidebar a.sidebar-find-button.active * {
+  color: #020204 !important;
+  -webkit-text-fill-color: #020204 !important;
+}
+
+html body .public-shell .public-sidebar .guest-auth-actions a.sidebar-register,
+html body .public-shell .public-sidebar a.sidebar-find-button,
+html body .public-shell .public-sidebar a.sidebar-find-button.active {
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-sidebar .guest-auth-actions a.sidebar-register:hover,
+html body .public-shell .public-sidebar a.sidebar-find-button:hover,
+html body .public-shell .public-sidebar a.sidebar-find-button.active:hover {
+  color: #020204 !important;
+  background: #e8e8e8 !important;
+  border-color: #e8e8e8 !important;
+}
+
+html body .public-shell .public-sidebar a.sidebar-find-button svg,
+html body .public-shell .public-sidebar a.sidebar-find-button.active svg {
+  color: #020204 !important;
+  stroke: #020204 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
+  color: #ffffff !important;
+  background: #020204 !important;
+  background-color: #020204 !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, .14) !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input {
+  color: #ffffff !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:hover,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #020204 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+}
