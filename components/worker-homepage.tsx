@@ -9,7 +9,7 @@ export default function WorkerHomepage() {
       <section className="worker-home-brand-intro" aria-label="Nvoid">
         <div className="worker-home-intro-copy">
           <span className="worker-home-intro-kicker"><span /> YOUR AI JOB AGENT</span>
-          <h1><Image src="/favicon.svg" alt="" width={42} height={42} priority className="worker-home-heading-logo" /><span className="worker-home-heading-copy">Find jobs with <span className="worker-home-wordmark-text">NvoidAI.com</span></span></h1>
+          <h1><Image src="/favicon.svg" alt="" width={42} height={42} priority className="worker-home-heading-logo" /><span className="worker-home-heading-copy">Find Jobs with <span className="worker-home-wordmark-text">NvoidAI.com</span></span></h1>
           <p>Create your profile and let your AI agent find opportunities that fit.</p>
         </div>
       </section>

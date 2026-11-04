@@ -3862,3 +3862,50 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
   border-color: rgba(255, 255, 255, .18) !important;
 }
 
+
+
+html body .public-shell .public-sidebar .sidebar-find-button,
+html body .public-shell .public-sidebar .sidebar-find-button.active {
+  color: #020204 !important;
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-sidebar .sidebar-find-button > svg {
+  color: #020204 !important;
+}
+
+html body .public-shell .public-sidebar .sidebar-find-button:hover {
+  color: #020204 !important;
+  background: #e8e8e8 !important;
+  border-color: #e8e8e8 !important;
+}
+
+html body .public-shell .public-sidebar .sidebar-find-button:hover > svg {
+  color: #020204 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:focus,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:focus-visible {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:hover,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #1b335a inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  caret-color: #ffffff !important;
+}
