@@ -209,7 +209,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
     <GuestHistoryContext.Provider value={context}>
       <div className="public-shell">
         {sidebarOpen && <button className="sidebar-scrim" aria-label="Close navigation" onClick={() => setSidebarOpen(false)} />}
-        <aside id="nvoid-public-sidebar" aria-label="Nvoid navigation" aria-hidden={!sidebarOpen} className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
+        <aside id="nvoid-public-sidebar" aria-label="Nvoid navigation"  className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
           <div className="public-sidebar-header">
             <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
               <span className="brand-symbol" aria-hidden="true"><Image src="/favicon.svg" alt="" width={24} height={24} priority /></span>
