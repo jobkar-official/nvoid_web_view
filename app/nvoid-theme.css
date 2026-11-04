@@ -3655,14 +3655,14 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
   color: rgba(255, 255, 255, .62) !important;
 }
 
-.public-shell :is(button, .worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout) {
+.public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout) {
   color: #ffffff !important;
   background: #050b90 !important;
   border-color: #050b90 !important;
   box-shadow: none !important;
 }
 
-.public-shell :is(button, .worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout):hover:not(:disabled) {
+.public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout):hover:not(:disabled) {
   color: #ffffff !important;
   background: #1b335a !important;
   border-color: #1b335a !important;
