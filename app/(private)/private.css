@@ -2321,3 +2321,118 @@ html body .nv-chat-page svg,
 html body .nv-private-page svg {
   color: #ffffff !important;
 }
+
+
+:root {
+  --nv-bg: #020204;
+  --nv-page-bg: #020204;
+  --nv-panel: #1b335a;
+  --nv-accent: #050b90;
+  --nv-ink: #ffffff;
+  --nv-line: rgba(255, 255, 255, .16);
+}
+
+html body .nv-workspace,
+html body .nv-main,
+html body .nv-private-page,
+html body .nv-chat-page,
+html body .nv-content,
+html body .nv-topbar {
+  color: #ffffff !important;
+  background-color: #020204 !important;
+}
+
+html body .nv-sidebar,
+html body .nv-expanded .nv-sidebar {
+  color: #ffffff !important;
+  background-color: #1b335a !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+}
+
+html body :is(.nv-panel, .nv-stat-card, .nv-welcome, .nv-job-card, .nv-status-card, .nv-messages-layout, .nv-thread-list, .nv-chat-preview, .nv-chat-composer, .nv-profile-tab, .nv-record, .nv-chat-inbox, .nv-chat-conversation, .nv-chat-placeholder, .nv-alert, .nv-info-strip, .nv-footer-note) {
+  color: #ffffff !important;
+  background-color: #1b335a !important;
+  border-color: rgba(255, 255, 255, .18) !important;
+  box-shadow: none !important;
+}
+
+html body .nv-nav-link.active,
+html body .nv-find-jobs-button.active,
+html body .nv-private-page .nv-profile-tab.active {
+  color: #ffffff !important;
+  background-color: #050b90 !important;
+  border-color: rgba(255, 255, 255, .2) !important;
+}
+
+html body :is(.nv-nav-link, .nv-profile-tab, .nv-find-jobs-button):hover {
+  color: #ffffff !important;
+  background-color: #050b90 !important;
+  border-color: rgba(255, 255, 255, .2) !important;
+}
+
+html body .nv-content :is(input, textarea, select),
+html body .nv-chat-composer input,
+html body .nv-private-page .nv-search-form input {
+  color: #ffffff !important;
+  background-color: #020204 !important;
+  border-color: rgba(255, 255, 255, .28) !important;
+}
+
+html body .nv-content :is(input, textarea, select)::placeholder,
+html body .nv-chat-composer input::placeholder {
+  color: rgba(255, 255, 255, .64) !important;
+}
+
+html body :is(.nv-primary, .nv-chat-composer button, .nv-find-jobs-button) {
+  color: #020204 !important;
+  background-color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+html body :is(.nv-primary, .nv-chat-composer button, .nv-find-jobs-button) svg {
+  color: #020204 !important;
+}
+
+html body :is(.nv-primary, .nv-chat-composer button, .nv-find-jobs-button):hover:not(:disabled) {
+  color: #020204 !important;
+  background-color: #e8e8e8 !important;
+  border-color: #e8e8e8 !important;
+}
+
+html body :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back) {
+  color: #ffffff !important;
+  background-color: #1b335a !important;
+  border-color: rgba(255, 255, 255, .2) !important;
+}
+
+html body :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back):hover {
+  color: #ffffff !important;
+  background-color: #050b90 !important;
+  border-color: #050b90 !important;
+}
+
+html body .nv-chat-bubble {
+  color: #ffffff !important;
+  background-color: #1b335a !important;
+  border-color: rgba(255, 255, 255, .18) !important;
+}
+
+html body .nv-chat-bubble.is-own {
+  color: #ffffff !important;
+  background-color: #050b90 !important;
+  border-color: #050b90 !important;
+}
+
+html body :is(.nv-content, .nv-sidebar, .nv-topbar, .nv-chat-page) svg {
+  color: #ffffff !important;
+}
+
+html body .nv-private-page :is(h1, h2, h3, h4, h5, h6, strong, label, span, p, small, a, button) {
+  color: #ffffff !important;
+}
+
+html body ::selection {
+  color: #020204;
+  background: #ffffff;
+}
+

@@ -3732,3 +3732,133 @@ html body :is(.auth-page, .info-page, .catalog-page, .release-hub, .free-hiring-
 html body :is(.auth-page, .info-page, .catalog-page, .release-hub, .free-hiring-page) svg {
   color: #ffffff !important;
 }
+
+
+:root {
+  color-scheme: dark;
+  --nvoid-bg: #020204;
+  --nvoid-page-bg: #020204;
+  --nvoid-sidebar: #020204;
+  --nvoid-surface: #1b335a;
+  --nvoid-surface-raised: #1b335a;
+  --nvoid-accent: #050b90;
+  --nvoid-accent-surface: #1b335a;
+  --navy: #020204;
+  --navy-2: #050b90;
+  --navy-3: #1b335a;
+  --nvoid-text: #ffffff;
+}
+
+html,
+body,
+body > div,
+.public-shell,
+.public-main,
+.public-content,
+.public-topbar,
+.auth-page,
+.info-page,
+.catalog-page,
+.release-hub,
+.free-hiring-page,
+.worker-homepage,
+.worker-results-page,
+.worker-results-header,
+.nvoid-agent-page,
+.nvoid-research-page,
+.nvoid-agent-page-heading,
+main {
+  color: #ffffff !important;
+  background-color: #020204 !important;
+}
+
+body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summary, th, td, strong, em, small, caption, figcaption),
+.public-shell :is(a, button, input, textarea, select),
+.public-shell svg,
+.auth-page svg,
+.info-page svg,
+.catalog-page svg,
+.release-hub svg,
+.free-hiring-page svg {
+  color: #ffffff !important;
+}
+
+.public-sidebar,
+.public-sidebar.is-open,
+.public-sidebar:not(.is-open) {
+  color: #ffffff !important;
+  background-color: #020204 !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+}
+
+.public-topbar,
+.workspace-topbar {
+  color: #ffffff !important;
+  background-color: #020204 !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+  box-shadow: none !important;
+}
+
+.public-shell :is(.nvoid-agent-panel, .nvoid-search-diagnostics, .nvoid-connection-card, .nvoid-search-source-row, .nvoid-research-records > article, .worker-results-page .public-job-card, .worker-home-search-card, .worker-search-guide > div, .worker-member-home, .worker-member-link, .no-results, .model-card, .model-detail, .release-card, .release-panel, .free-hiring-card, .info-toc, .info-toc-note, .info-cta, .auth-form-panel, .auth-brand-panel, .auth-preview, .info-document-layout, .model-index-current, .model-index-capabilities-section) {
+  color: #ffffff !important;
+  background-color: #1b335a !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, .18) !important;
+  box-shadow: none !important;
+}
+
+.public-shell :is(input, textarea, select, option),
+.auth-page :is(input, textarea, select, option) {
+  color: #ffffff !important;
+  background-color: #020204 !important;
+  border-color: rgba(255, 255, 255, .28) !important;
+}
+
+.public-shell :is(input, textarea, select)::placeholder,
+.auth-page :is(input, textarea, select)::placeholder {
+  color: rgba(255, 255, 255, .64) !important;
+}
+
+.public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout, .nvoid-header-signup, .nvoid-header-free-posting, .sidebar-register, .sidebar-find-button) {
+  color: #020204 !important;
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout, .nvoid-header-signup, .nvoid-header-free-posting, .sidebar-register, .sidebar-find-button) svg {
+  color: #020204 !important;
+}
+
+.public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout, .nvoid-header-signup, .nvoid-header-free-posting, .sidebar-register, .sidebar-find-button):hover:not(:disabled) {
+  color: #020204 !important;
+  background: #e8e8e8 !important;
+  border-color: #e8e8e8 !important;
+}
+
+.public-shell :is(.sidebar-signin, .sidebar-toggle-button, .history-clear, .history-edit, .history-delete, .nvoid-header-login) {
+  color: #ffffff !important;
+}
+
+.public-shell .public-sidebar .public-nav-link.active {
+  color: #ffffff !important;
+  background: #050b90 !important;
+  border-color: rgba(255, 255, 255, .18) !important;
+}
+
+.public-shell .public-sidebar .public-nav-link.active svg,
+.public-shell .public-sidebar .public-nav-link svg,
+.public-shell .public-sidebar .public-brand,
+.public-shell .public-sidebar .public-brand *,
+.public-shell .public-sidebar .guest-identity *,
+.public-shell .public-sidebar .history-copy *,
+.public-shell .public-sidebar .sidebar-section-label {
+  color: #ffffff !important;
+}
+
+.public-content :is(pre, code, table, th, td) {
+  color: #ffffff !important;
+  background-color: #1b335a !important;
+  border-color: rgba(255, 255, 255, .18) !important;
+}
+
