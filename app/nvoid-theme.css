@@ -3519,3 +3519,186 @@ body,
     font-size: 10.5px !important;
   }
 }
+
+
+:root {
+  color-scheme: dark;
+  --nvoid-bg: #020204;
+  --nvoid-sidebar: #020204;
+  --nvoid-surface: #1b335a;
+  --nvoid-surface-raised: #1b335a;
+  --nvoid-hover: #050b90;
+  --nvoid-border: rgba(255, 255, 255, .14);
+  --nvoid-text: #ffffff;
+  --nvoid-muted: rgba(255, 255, 255, .76);
+  --nvoid-soft: rgba(255, 255, 255, .58);
+  --nvoid-accent: #050b90;
+  --nvoid-accent-surface: #1b335a;
+}
+
+html,
+body,
+.public-shell,
+.public-main,
+.public-content,
+.auth-page,
+.info-page,
+.catalog-page,
+.release-hub,
+.free-hiring-page,
+.worker-homepage,
+.worker-results-page,
+.nvoid-agent-page,
+.nvoid-research-page {
+  color: #ffffff !important;
+  background-color: #020204 !important;
+}
+
+body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summary, th, td, strong, em, small, caption, figcaption),
+.public-shell :is(a, button, input, textarea, select),
+.public-shell svg,
+.auth-page svg,
+.info-page svg,
+.catalog-page svg,
+.release-hub svg,
+.free-hiring-page svg {
+  color: #ffffff !important;
+}
+
+.public-topbar,
+.workspace-topbar {
+  color: #ffffff !important;
+  background: #020204 !important;
+  border-color: rgba(255, 255, 255, .13) !important;
+  box-shadow: none !important;
+}
+
+.public-sidebar {
+  color: #ffffff !important;
+  background: #020204 !important;
+  border-right-color: rgba(255, 255, 255, .13) !important;
+  box-shadow: 8px 0 28px rgba(0, 0, 0, .24) !important;
+}
+
+.public-sidebar .brand-symbol,
+.public-sidebar .guest-avatar {
+  color: #ffffff !important;
+  background: #1b335a !important;
+  border-color: rgba(255, 255, 255, .18) !important;
+}
+
+.public-sidebar .sidebar-find-button,
+.public-sidebar .public-nav-link.active,
+.public-sidebar .history-item.active {
+  color: #ffffff !important;
+  background: #050b90 !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+  box-shadow: none !important;
+}
+
+.public-sidebar .sidebar-find-button:hover,
+.public-sidebar .public-nav-link:hover,
+.public-sidebar .history-item:hover {
+  color: #ffffff !important;
+  background: #1b335a !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+}
+
+.public-sidebar .sidebar-section-label,
+.public-sidebar .history-copy small,
+.public-sidebar .guest-identity small,
+.public-sidebar .history-empty,
+.public-sidebar .history-placeholder {
+  color: rgba(255, 255, 255, .72) !important;
+}
+
+.public-sidebar .public-sidebar-header,
+.public-sidebar .nvoid-workspace-nav,
+.public-sidebar .sidebar-history,
+.public-sidebar .public-sidebar-bottom {
+  border-color: rgba(255, 255, 255, .15) !important;
+}
+
+.public-sidebar .sidebar-register,
+.public-sidebar .nvoid-header-signup,
+.public-sidebar .nvoid-header-free-posting {
+  color: #ffffff !important;
+  background: #050b90 !important;
+  border-color: #050b90 !important;
+}
+
+.public-sidebar .sidebar-register:hover,
+.public-sidebar .nvoid-header-signup:hover,
+.public-sidebar .nvoid-header-free-posting:hover {
+  color: #ffffff !important;
+  background: #1b335a !important;
+  border-color: #1b335a !important;
+}
+
+.public-shell :is(.nvoid-agent-panel, .nvoid-search-diagnostics, .nvoid-connection-card, .nvoid-search-source-row, .nvoid-research-records > article, .worker-results-page .public-job-card, .worker-home-search-card, .worker-search-guide > div, .worker-member-home, .worker-member-link, .no-results, .model-card, .model-detail, .release-card, .release-panel, .free-hiring-card, .info-toc, .info-toc-note, .info-cta, .auth-form-panel, .auth-brand-panel, .auth-preview, .info-document-layout, .model-index-current, .model-index-capabilities-section) {
+  color: #ffffff !important;
+  background-color: #1b335a !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+  box-shadow: none !important;
+}
+
+.public-shell :is(input, textarea, select, option),
+.auth-page :is(input, textarea, select, option) {
+  color: #ffffff !important;
+  background-color: #020204 !important;
+  border-color: rgba(255, 255, 255, .24) !important;
+}
+
+.public-shell :is(input, textarea, select)::placeholder,
+.auth-page :is(input, textarea, select)::placeholder {
+  color: rgba(255, 255, 255, .62) !important;
+}
+
+.public-shell :is(button, .worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout) {
+  color: #ffffff !important;
+  background: #050b90 !important;
+  border-color: #050b90 !important;
+  box-shadow: none !important;
+}
+
+.public-shell :is(button, .worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout):hover:not(:disabled) {
+  color: #ffffff !important;
+  background: #1b335a !important;
+  border-color: #1b335a !important;
+}
+
+.public-shell :is(.history-clear, .history-edit, .history-delete, .sidebar-toggle-button, .nvoid-header-login) {
+  color: #ffffff !important;
+}
+
+.public-shell :is(.history-clear, .history-edit, .history-delete):hover {
+  color: #ffffff !important;
+  background: #1b335a !important;
+}
+
+.public-shell a,
+.auth-page a,
+.info-page a,
+.catalog-page a {
+  color: #ffffff !important;
+}
+
+.public-shell a:focus-visible,
+.public-shell button:focus-visible,
+.public-shell input:focus-visible,
+.public-shell textarea:focus-visible,
+.public-shell select:focus-visible {
+  outline-color: #ffffff !important;
+}
+
+.public-content :is(pre, code, table, th, td) {
+  color: #ffffff !important;
+  background-color: #1b335a !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+}
+
+.sidebar-scrim {
+  background: rgba(2, 2, 4, .78) !important;
+}
+
