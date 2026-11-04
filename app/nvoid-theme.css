@@ -1267,3 +1267,440 @@ body {
   }
 
 }
+
+
+:root {
+  --nvoid-sidebar-width: 260px;
+  --nvoid-sidebar-rail: 68px;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 320px;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  font-size: 14px;
+}
+
+.public-shell {
+  position: relative;
+  display: flex !important;
+  width: 100%;
+  min-height: 100dvh;
+  overflow-x: clip;
+}
+
+.public-sidebar {
+  width: var(--nvoid-sidebar-width) !important;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0 !important;
+  padding: 12px !important;
+  overflow: hidden !important;
+  box-sizing: border-box;
+}
+
+.public-sidebar.is-open {
+  width: var(--nvoid-sidebar-width) !important;
+}
+
+.public-sidebar:not(.is-open) {
+  width: var(--nvoid-sidebar-rail) !important;
+  padding: 12px 8px !important;
+}
+
+.public-sidebar-header,
+.sidebar-find-button,
+.nvoid-agent-nav,
+.nvoid-workspace-nav,
+.public-sidebar-bottom {
+  flex: 0 0 auto;
+}
+
+.sidebar-history {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+.history-list {
+  min-height: 0;
+  overflow: auto;
+}
+
+.public-sidebar-bottom {
+  margin-top: auto;
+}
+
+.public-main {
+  width: calc(100% - var(--nvoid-sidebar-rail)) !important;
+  min-width: 0;
+  max-width: 100%;
+  flex: 0 0 auto;
+  margin-left: var(--nvoid-sidebar-rail) !important;
+  transition: width .2s ease, margin-left .2s ease;
+}
+
+.public-sidebar.is-open + .public-main {
+  width: calc(100% - var(--nvoid-sidebar-width)) !important;
+  margin-left: var(--nvoid-sidebar-width) !important;
+}
+
+.public-topbar {
+  width: 100%;
+  min-width: 0;
+  height: 60px !important;
+  gap: 10px;
+  padding: 0 clamp(12px, 2vw, 24px) !important;
+}
+
+.topbar-breadcrumb {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+
+.topbar-breadcrumb strong {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 13px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nvoid-header-actions {
+  min-width: 0;
+  max-width: 100%;
+  flex: 0 1 auto;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.nvoid-header-actions a {
+  min-height: 34px;
+  font-size: 11px !important;
+  line-height: 1.2;
+}
+
+.public-content {
+  width: 100% !important;
+  max-width: 1500px !important;
+  min-width: 0;
+  margin: 0 auto !important;
+  padding: clamp(18px, 2.4vw, 32px) clamp(16px, 2.8vw, 40px) 48px !important;
+}
+
+.public-content > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.public-content :is(img, video, canvas) {
+  max-width: 100%;
+}
+
+.public-content pre,
+.public-content table {
+  max-width: 100%;
+  overflow: auto;
+}
+
+.public-content:has(.nv-private-page),
+.public-content:has(.nv-chat-page) {
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+.nvoid-agent-page {
+  width: min(100%, 1120px);
+  min-width: 0;
+}
+
+.nvoid-agent-page-heading h1 {
+  font-size: clamp(25px, 2.7vw, 33px);
+  line-height: 1.18;
+}
+
+.nvoid-agent-page-heading p {
+  max-width: 760px;
+  font-size: 13px;
+}
+
+.nvoid-agent-panel,
+.nvoid-agent-metrics,
+.nvoid-connection-card,
+.nvoid-research-records > article {
+  min-width: 0;
+}
+
+.nvoid-agent-metrics {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.nvoid-connection-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.nvoid-research-records > article,
+.nvoid-research-records pre {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.worker-results-page,
+.public-results-section,
+.public-job-grid,
+.public-job-card {
+  min-width: 0;
+}
+
+.public-job-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.public-job-card {
+  overflow-wrap: anywhere;
+}
+
+.public-content:has(.worker-homepage-v2) {
+  display: flex !important;
+  min-height: calc(100dvh - 60px);
+  align-items: center !important;
+  justify-content: center !important;
+  padding: clamp(22px, 5vh, 58px) clamp(14px, 3vw, 42px) !important;
+}
+
+.nvoid-homepage-restored {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  max-width: 1040px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+.nvoid-homepage-restored .worker-home-brand-intro,
+.nvoid-homepage-restored .worker-home-search-section {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.nvoid-homepage-restored .worker-home-intro-copy h1 {
+  max-width: 100%;
+  line-height: 1.16;
+}
+
+.nvoid-homepage-restored .worker-home-heading-copy {
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .nvoid-agent-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 960px) {
+  .public-sidebar,
+  .public-sidebar:not(.is-open) {
+    z-index: 70 !important;
+    width: min(288px, calc(100vw - 32px)) !important;
+    height: 100vh;
+    height: 100dvh;
+    padding: 12px !important;
+    transform: translateX(-105%) !important;
+    visibility: hidden !important;
+    box-shadow: 18px 0 45px rgba(0, 0, 0, .38) !important;
+  }
+
+  .public-sidebar.is-open {
+    width: min(288px, calc(100vw - 32px)) !important;
+    transform: translateX(0) !important;
+    visibility: visible !important;
+  }
+
+  .public-sidebar.is-open + .public-main,
+  .public-main {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .sidebar-scrim {
+    position: fixed;
+    z-index: 65;
+    inset: 0;
+    display: block !important;
+    border: 0;
+    background: rgba(0, 0, 0, .62);
+    backdrop-filter: blur(2px);
+  }
+
+  .public-topbar {
+    padding-right: 16px !important;
+    padding-left: 16px !important;
+  }
+
+  .public-content {
+    padding: 24px 20px 42px !important;
+  }
+
+  .public-content:has(.nv-private-page),
+  .public-content:has(.nv-chat-page) {
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .nvoid-agent-page-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .nvoid-agent-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .nvoid-connection-list,
+  .nvoid-search-source-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .worker-search-guide {
+    grid-template-columns: 1fr;
+  }
+
+  .worker-results-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .public-job-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .public-content:has(.worker-homepage-v2) {
+    min-height: calc(100dvh - 56px);
+    padding: 28px 18px !important;
+  }
+
+  .nvoid-homepage-restored {
+    gap: 24px !important;
+  }
+
+  .nvoid-homepage-restored .worker-home-search-card {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .nvoid-homepage-restored .worker-home-field-divider {
+    display: none;
+  }
+
+  .nvoid-homepage-restored .worker-home-search-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .public-topbar {
+    height: 56px !important;
+    gap: 6px;
+    padding-right: 9px !important;
+    padding-left: 9px !important;
+  }
+
+  .sidebar-toggle-button {
+    width: 32px;
+    height: 32px;
+    margin-right: 0;
+  }
+
+  .topbar-breadcrumb strong {
+    font-size: 12px !important;
+  }
+
+  .nvoid-header-actions {
+    gap: 5px;
+  }
+
+  .nvoid-header-actions a {
+    min-height: 31px;
+    padding-right: 7px;
+    padding-left: 7px;
+    font-size: 10px !important;
+  }
+
+  .nvoid-header-dash,
+  .nvoid-header-divider {
+    display: none;
+  }
+
+  .public-content {
+    padding: 20px 14px 34px !important;
+  }
+
+  .public-content:has(.nv-private-page),
+  .public-content:has(.nv-chat-page) {
+    padding: 0 !important;
+  }
+
+  .nvoid-agent-page-heading h1 {
+    font-size: 26px;
+  }
+
+  .nvoid-agent-page-heading p {
+    font-size: 12px;
+  }
+
+  .nvoid-agent-panel {
+    padding: 15px;
+  }
+
+  .nvoid-homepage-restored .worker-home-intro-copy h1 {
+    flex-wrap: wrap;
+    justify-content: center;
+    white-space: normal;
+    font-size: clamp(22px, 6vw, 30px);
+    letter-spacing: -.045em;
+  }
+
+  .nvoid-homepage-restored .worker-home-heading-copy {
+    white-space: normal;
+  }
+
+  .nvoid-homepage-restored .worker-home-intro-copy p {
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .nvoid-homepage-restored .worker-home-search-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 380px) {
+  .nvoid-header-actions {
+    gap: 3px;
+  }
+
+  .nvoid-header-actions a {
+    padding-right: 5px;
+    padding-left: 5px;
+    font-size: 9px !important;
+  }
+}

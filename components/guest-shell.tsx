@@ -133,7 +133,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     setHistory(readHistory());
     setReady(true);
-    if (window.matchMedia("(max-width: 850px)").matches) setSidebarOpen(false);
+    if (window.matchMedia("(max-width: 960px)").matches) setSidebarOpen(false);
   }, []);
 
   const persist = useCallback((next: GuestSearchRecord[]) => {
@@ -195,7 +195,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
 
   const context = useMemo(() => ({ history, saveSearch, updateSearch, getSearch, removeSearch, clearHistory }), [history, saveSearch, updateSearch, getSearch, removeSearch, clearHistory]);
   const closeSidebarOnMobile = () => {
-    if (window.matchMedia("(max-width: 850px)").matches) setSidebarOpen(false);
+    if (window.matchMedia("(max-width: 960px)").matches) setSidebarOpen(false);
   };
   const pageTitle = pathname.startsWith("/search/")
     ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search"

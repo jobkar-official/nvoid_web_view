@@ -1795,3 +1795,167 @@
   .nv-chat-heading-meta { flex-direction: column; align-items: flex-end; }
   .nv-chat-resume > div { min-width: 70px; }
 }
+
+
+.nv-private-page {
+  width: 100%;
+  min-width: 0;
+}
+
+.nv-content {
+  width: min(100%, 1440px);
+  min-width: 0;
+  padding: 28px clamp(18px, 2.6vw, 36px) 48px;
+}
+
+.nv-page-heading {
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.nv-page-heading h1 {
+  font-size: clamp(25px, 2.6vw, 32px);
+  line-height: 1.2;
+}
+
+.nv-page-heading p {
+  max-width: 720px;
+  font-size: 13px;
+}
+
+.nv-panel,
+.nv-content-stack,
+.nv-form-grid,
+.nv-record-grid,
+.nv-job-grid,
+.nv-record {
+  min-width: 0;
+}
+
+.nv-form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.nv-form-grid label {
+  min-width: 0;
+}
+
+.nv-form-grid input,
+.nv-form-grid textarea,
+.nv-form-grid select {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.nv-profile-tabs {
+  display: flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.nv-profile-tab {
+  flex: 0 0 auto;
+}
+
+.nv-panel-heading {
+  align-items: flex-start;
+}
+
+.nv-chat-page {
+  width: min(100%, 1480px);
+  min-width: 0;
+  margin: 0 auto;
+}
+
+.nv-chat-layout {
+  width: 100%;
+  min-width: 0;
+}
+
+.nv-chat-inbox,
+.nv-chat-conversation,
+.nv-chat-placeholder {
+  min-width: 0;
+}
+
+.nv-record > span:nth-child(2) {
+  min-width: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 760px) {
+  .nv-content {
+    padding: 24px 18px 40px;
+  }
+
+  .nv-profile-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+  }
+
+  .nv-job-grid,
+  .nv-record-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .nv-content {
+    padding: 20px 14px 34px;
+  }
+
+  .nv-page-heading {
+    margin-bottom: 18px;
+  }
+
+  .nv-page-heading h1 {
+    font-size: 25px;
+  }
+
+  .nv-page-heading p {
+    font-size: 12px;
+  }
+
+  .nv-form-grid,
+  .nv-skill-form,
+  .nv-stat-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .nv-full {
+    grid-column: 1;
+  }
+
+  .nv-panel-spaced {
+    padding: 16px;
+  }
+
+  .nv-form-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nv-form-actions {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .nv-chat-page {
+    gap: 12px;
+    padding: 18px 12px 22px;
+  }
+
+  .nv-chat-heading {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .nv-chat-layout {
+    max-width: 100%;
+  }
+}
