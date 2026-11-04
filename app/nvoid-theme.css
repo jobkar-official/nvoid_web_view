@@ -973,3 +973,370 @@ body,
 .nvoid-apply-redirect-home:hover {
   background: #2a2a2a;
 }
+
+:root {
+  --nvoid-sidebar-width: 260px;
+  --nvoid-sidebar-rail: 68px;
+  --nvoid-font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html,
+body {
+  font-family: var(--nvoid-font) !important;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.public-sidebar {
+  width: var(--nvoid-sidebar-width) !important;
+  padding: 12px !important;
+  transform: translateX(0) !important;
+  visibility: visible !important;
+  background: #171717 !important;
+  border-right: 1px solid rgba(255,255,255,.08) !important;
+  transition: width .2s ease, transform .2s ease, visibility .2s ease !important;
+}
+
+.public-sidebar.is-open {
+  width: var(--nvoid-sidebar-width) !important;
+}
+
+.public-sidebar:not(.is-open) {
+  width: var(--nvoid-sidebar-rail) !important;
+  padding: 12px 8px !important;
+}
+
+.public-sidebar:not(.is-open) .public-sidebar-header {
+  justify-content: center;
+  padding: 0;
+}
+
+.public-sidebar:not(.is-open) .brand-copy,
+.public-sidebar:not(.is-open) .sidebar-collapse-button,
+.public-sidebar:not(.is-open) .sidebar-section-label,
+.public-sidebar:not(.is-open) .sidebar-history {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.public-sidebar:not(.is-open) .public-brand {
+  justify-content: center;
+  padding: 0;
+}
+
+.public-sidebar:not(.is-open) .sidebar-find-button {
+  justify-content: center;
+  min-height: 42px;
+  margin: 18px 0;
+  padding: 0;
+}
+
+.public-sidebar:not(.is-open) .sidebar-find-button span,
+.public-sidebar:not(.is-open) .public-nav-link span,
+.public-sidebar:not(.is-open) .guest-identity > span:not(.guest-avatar),
+.public-sidebar:not(.is-open) .guest-auth-actions {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.public-sidebar:not(.is-open) .public-nav-link {
+  justify-content: center;
+  min-height: 42px;
+  gap: 0;
+  padding: 0;
+}
+
+.public-sidebar:not(.is-open) .public-sidebar-bottom {
+  display: grid;
+  justify-items: center;
+}
+
+.public-sidebar:not(.is-open) .guest-identity {
+  justify-content: center;
+  padding: 4px 0;
+}
+
+.public-main {
+  width: calc(100% - var(--nvoid-sidebar-rail)) !important;
+  margin-left: var(--nvoid-sidebar-rail) !important;
+  min-width: 0;
+  transition: width .2s ease, margin-left .2s ease !important;
+}
+
+.public-sidebar.is-open + .public-main {
+  width: calc(100% - var(--nvoid-sidebar-width)) !important;
+  margin-left: var(--nvoid-sidebar-width) !important;
+}
+
+.public-topbar {
+  height: 60px !important;
+  padding: 0 22px !important;
+  background: rgba(33,33,33,.96) !important;
+}
+
+.sidebar-toggle-button {
+  width: 36px;
+  height: 36px;
+  margin-right: 12px;
+}
+
+.topbar-breadcrumb,
+.topbar-breadcrumb strong {
+  font-size: 14px !important;
+}
+
+.public-content {
+  width: 100% !important;
+  max-width: 1500px !important;
+  padding: 30px clamp(22px, 4vw, 52px) 56px !important;
+}
+
+.public-nav {
+  gap: 4px !important;
+}
+
+.public-nav-link {
+  min-height: 40px !important;
+  padding: 0 11px !important;
+  gap: 12px !important;
+  border-radius: 9px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.public-nav-link svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+}
+
+.sidebar-section-label {
+  font-size: 11px !important;
+  padding: 10px 10px 7px !important;
+}
+
+.history-copy strong {
+  font-size: 12px !important;
+}
+
+.history-copy small,
+.history-placeholder,
+.history-empty {
+  font-size: 11px !important;
+}
+
+.guest-identity strong {
+  font-size: 12px !important;
+}
+
+.guest-identity small {
+  font-size: 11px !important;
+}
+
+.sidebar-signin,
+.sidebar-register {
+  min-height: 36px;
+  font-size: 12px !important;
+}
+
+.nv-workspace .nv-sidebar {
+  width: 68px !important;
+  flex-basis: 68px !important;
+  padding: 14px 8px !important;
+}
+
+.nv-workspace.nv-expanded .nv-sidebar {
+  width: 260px !important;
+  flex-basis: 260px !important;
+  padding: 14px 14px !important;
+}
+
+.nv-workspace .nv-nav-link {
+  min-height: 42px;
+  font-size: 13px;
+}
+
+.nv-workspace .nv-nav-link svg {
+  width: 18px;
+  height: 18px;
+}
+
+.nv-workspace .nv-main {
+  width: calc(100% - 68px);
+  margin-left: 68px;
+  min-width: 0;
+}
+
+.nv-workspace.nv-expanded .nv-main {
+  width: calc(100% - 260px);
+  margin-left: 260px;
+}
+
+.nv-workspace .nv-topbar {
+  min-height: 60px;
+  height: 60px;
+}
+
+.nv-workspace .nv-content {
+  padding: 30px clamp(20px, 4vw, 48px) 54px;
+}
+
+@media (max-width: 850px) {
+  .public-sidebar,
+  .public-sidebar:not(.is-open) {
+    z-index: 70 !important;
+    width: min(286px, calc(100vw - 48px)) !important;
+    padding: 12px !important;
+    transform: translateX(-105%) !important;
+    visibility: hidden !important;
+    box-shadow: 18px 0 45px rgba(0,0,0,.38) !important;
+  }
+
+  .public-sidebar.is-open {
+    width: min(286px, calc(100vw - 48px)) !important;
+    transform: translateX(0) !important;
+    visibility: visible !important;
+  }
+
+  .public-sidebar:not(.is-open) .brand-copy,
+  .public-sidebar:not(.is-open) .sidebar-section-label,
+  .public-sidebar:not(.is-open) .sidebar-history,
+  .public-sidebar:not(.is-open) .sidebar-find-button span,
+  .public-sidebar:not(.is-open) .public-nav-link span,
+  .public-sidebar:not(.is-open) .guest-identity > span:not(.guest-avatar),
+  .public-sidebar:not(.is-open) .guest-auth-actions {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: initial !important;
+    margin: initial !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+  }
+
+  .public-sidebar:not(.is-open) .sidebar-history,
+  .public-sidebar:not(.is-open) .guest-auth-actions {
+    display: initial !important;
+  }
+
+  .public-sidebar:not(.is-open) .sidebar-collapse-button {
+    display: grid !important;
+  }
+
+  .public-sidebar:not(.is-open) .sidebar-find-button {
+    justify-content: flex-start;
+    min-height: 42px;
+    padding: 0 11px;
+  }
+
+  .public-sidebar:not(.is-open) .public-nav-link {
+    justify-content: flex-start;
+    min-height: 40px;
+    padding: 0 11px !important;
+    gap: 12px !important;
+  }
+
+  .public-sidebar:not(.is-open) .public-sidebar-bottom {
+    display: block;
+  }
+
+  .public-sidebar:not(.is-open) .guest-identity {
+    justify-content: flex-start;
+    padding: 4px 5px 11px;
+  }
+
+  .public-sidebar.is-open + .public-main,
+  .public-main {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .sidebar-scrim {
+    display: block !important;
+    position: fixed;
+    z-index: 65;
+    inset: 0;
+    background: rgba(0,0,0,.58);
+    backdrop-filter: blur(2px);
+  }
+
+  .public-topbar {
+    padding: 0 16px !important;
+  }
+
+  .public-content {
+    padding: 26px 20px 44px !important;
+  }
+
+  .nv-workspace .nv-sidebar,
+  .nv-workspace:not(.nv-expanded) .nv-sidebar {
+    position: fixed !important;
+    z-index: 70;
+    inset: 0 auto 0 0;
+    width: min(286px, calc(100vw - 48px)) !important;
+    height: 100dvh;
+    min-height: 0;
+    flex-basis: auto !important;
+    transform: translateX(-105%);
+    visibility: hidden;
+    transition: transform .2s ease, visibility .2s ease;
+    box-shadow: 18px 0 45px rgba(0,0,0,.38);
+  }
+
+  .nv-workspace.nv-expanded .nv-sidebar {
+    width: min(286px, calc(100vw - 48px)) !important;
+    flex-basis: auto !important;
+    transform: translateX(0);
+    visibility: visible;
+    padding: 14px 12px !important;
+  }
+
+  .nv-workspace .nv-main,
+  .nv-workspace.nv-expanded .nv-main {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  .nv-workspace .nv-topbar {
+    padding: 0 15px;
+  }
+
+  .nv-workspace .nv-content {
+    padding: 24px 18px 42px;
+  }
+}
+
+@media (max-width: 600px) {
+  .public-topbar {
+    height: 56px !important;
+    padding: 0 12px !important;
+  }
+
+  .public-content {
+    padding: 22px 15px 38px !important;
+  }
+
+  .public-sidebar,
+  .public-sidebar.is-open {
+    width: min(286px, calc(100vw - 38px)) !important;
+  }
+
+  .nv-workspace .nv-content {
+    padding: 22px 14px 38px;
+  }
+}
