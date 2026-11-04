@@ -215,7 +215,6 @@ export function GuestShell({ children }: { children: ReactNode }) {
               <span className="brand-symbol" aria-hidden="true"><Image src="/favicon.svg" alt="" width={24} height={24} priority /></span>
               <span className="brand-copy"><strong>NVOIDAI</strong><small>Global career agent</small></span>
             </Link>
-            <button className="sidebar-collapse-button" type="button" aria-label="Collapse sidebar" title="Collapse sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
           </div>
 
           <Link href="/" className={"sidebar-find-button" + (pathname === "/" ? " active" : "")} aria-current={pathname === "/" ? "page" : undefined} onClick={closeSidebarOnMobile}>

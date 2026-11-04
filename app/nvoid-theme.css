@@ -2551,6 +2551,10 @@ body,
   box-shadow: none !important;
 }
 
+.worker-home-search-card {
+  border-radius: 18px !important;
+}
+
 .nvoid-agent-panel-heading h2,
 .nvoid-agent-panel-heading strong,
 .public-job-card h3,
@@ -2592,8 +2596,16 @@ body,
 }
 
 .worker-home-field-control input,
-.worker-results-search input,
 .worker-home-search-card input {
+  color: #f4f4f4 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+.worker-results-search input {
   color: #f4f4f4 !important;
   background: #080808 !important;
   border-color: #303030 !important;
