@@ -1704,3 +1704,23 @@ body {
     font-size: 9px !important;
   }
 }
+
+
+/* Balanced type scale across navigation, results and supporting UI. */
+.public-nav-link { font-size: 12px !important; }
+.sidebar-section-label { font-size: 10px !important; }
+.history-copy strong { font-size: 11px !important; }
+.history-copy small,
+.history-placeholder,
+.history-empty,
+.guest-identity small { font-size: 10px !important; }
+.guest-identity strong { font-size: 11.5px !important; }
+.sidebar-signin,
+.sidebar-register { font-size: 11px !important; }
+.section-heading h2 { font-size: 20px; }
+.worker-results-heading h1 { font-size: clamp(26px, 3vw, 33px); }
+.worker-results-page .public-job-card h3 { font-size: 14px; }
+.nvoid-agent-panel-heading h2 { font-size: 14px; }
+.nvoid-homepage-restored .worker-home-intro-copy h1 {
+  font-size: clamp(28px, 3.7vw, 44px);
+}
