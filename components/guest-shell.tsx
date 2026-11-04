@@ -217,7 +217,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
             </Link>
           </div>
 
-          <Link href="/" className={"sidebar-find-button" + (pathname === "/" ? " active" : "")} aria-current={pathname === "/" ? "page" : undefined} onClick={closeSidebarOnMobile}>
+          <Link href="/" className={"sidebar-find-button" + (pathname === "/" ? " active" : "")} aria-current={pathname === "/" ? "page" : undefined} aria-label="New search" title="New search" onClick={closeSidebarOnMobile}>
             <Plus size={17} strokeWidth={2.2} />
             <span>New search</span>
           </Link>
@@ -227,7 +227,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
             {agentLinks.map((item) => {
               const Icon = item.icon;
               const active = pathname === item.href;
-              return <Link key={item.href} href={item.href} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={16} /><span>{item.label}</span></Link>;
+              return <Link key={item.href} href={item.href} title={item.label} aria-label={item.label} aria-current={active ? "page" : undefined} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={18} strokeWidth={1.8} /><span>{item.label}</span></Link>;
             })}
           </nav>
 
