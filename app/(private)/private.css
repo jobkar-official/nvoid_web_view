@@ -1959,3 +1959,221 @@
     max-width: 100%;
   }
 }
+
+
+/* Match every authenticated workspace page to the monochrome NVOIDAI theme. */
+.nv-workspace,
+.nv-main,
+.nv-private-page,
+.nv-chat-page {
+  color: #f4f4f4 !important;
+  background: #000000 !important;
+}
+
+.nv-sidebar {
+  color: #f4f4f4 !important;
+  background: #070707 !important;
+  border-right: 1px solid #242424 !important;
+}
+
+.nv-expanded .nv-sidebar {
+  box-shadow: 18px 0 48px rgba(0, 0, 0, .42);
+}
+
+.nv-brand-mark,
+.nv-avatar,
+.nv-top-avatar,
+.nv-profile-avatar,
+.nv-record-icon,
+.nv-job-company,
+.nv-notification-mark,
+.nv-thread-avatar {
+  color: #f5f5f5 !important;
+  background: #191919 !important;
+  border-color: #303030 !important;
+  box-shadow: none !important;
+}
+
+.nv-nav-link {
+  color: #bdbdbd !important;
+  border-color: transparent !important;
+  background: transparent !important;
+}
+
+.nv-nav-link:hover,
+.nv-nav-link.active {
+  color: #ffffff !important;
+  border-color: #303030 !important;
+  background: #1b1b1b !important;
+}
+
+.nv-nav-link svg,
+.nv-nav-heading,
+.nv-workspace-label,
+.nv-user-info small {
+  color: #929292 !important;
+}
+
+.nv-user-info strong,
+.nv-breadcrumb strong,
+.nv-page-heading h1,
+.nv-panel-heading h2,
+.nv-job-card h3,
+.nv-record strong,
+.nv-notification strong,
+.nv-chat-title strong {
+  color: #f5f5f5 !important;
+}
+
+.nv-topbar {
+  color: #f5f5f5 !important;
+  background: #000000 !important;
+  border-bottom: 1px solid #252525 !important;
+}
+
+.nv-content,
+.nv-chat-page {
+  color: #f2f2f2 !important;
+}
+
+.nv-panel,
+.nv-stat-card,
+.nv-welcome,
+.nv-job-card,
+.nv-status-card,
+.nv-messages-layout,
+.nv-thread-list,
+.nv-chat-preview,
+.nv-chat-bubble,
+.nv-chat-composer,
+.nv-profile-tab,
+.nv-record {
+  color: #eeeeee !important;
+  background: #0d0d0d !important;
+  border-color: #292929 !important;
+  box-shadow: none !important;
+}
+
+.nv-welcome {
+  background: #101010 !important;
+}
+
+.nv-stat-card:hover,
+.nv-profile-tab:hover,
+.nv-thread:hover,
+.nv-thread.active {
+  background: #1b1b1b !important;
+  border-color: #454545 !important;
+}
+
+.nv-panel-heading p,
+.nv-page-heading p,
+.nv-panel-heading p,
+.nv-stat-label,
+.nv-stat-card small,
+.nv-profile-summary small,
+.nv-record small,
+.nv-job-card > p,
+.nv-job-meta span,
+.nv-notification p,
+.nv-notification small,
+.nv-chat-title small,
+.nv-chat-bubble small,
+.nv-thread small,
+.nv-form-footer > span,
+.nv-status-card p,
+.nv-status-card small {
+  color: #b2b2b2 !important;
+}
+
+.nv-form-grid label,
+.nv-search-form label {
+  color: #ededed !important;
+}
+
+.nv-form-grid input,
+.nv-form-grid textarea,
+.nv-form-grid select,
+.nv-search-form input,
+.nv-chat-composer input {
+  color: #f5f5f5 !important;
+  background: #080808 !important;
+  border-color: #333333 !important;
+}
+
+.nv-form-grid input::placeholder,
+.nv-form-grid textarea::placeholder,
+.nv-search-form input::placeholder,
+.nv-chat-composer input::placeholder {
+  color: #777777 !important;
+}
+
+.nv-primary,
+.nv-secondary,
+.nv-icon-action,
+.nv-icon-button,
+.nv-icon-action.danger,
+.nv-chat-composer button,
+.nv-chat-back {
+  color: #f5f5f5 !important;
+  background: #191919 !important;
+  border-color: #3a3a3a !important;
+}
+
+.nv-primary:hover,
+.nv-secondary:hover,
+.nv-icon-action:hover,
+.nv-icon-button:hover,
+.nv-chat-composer button:hover,
+.nv-chat-back:hover {
+  color: #ffffff !important;
+  background: #292929 !important;
+  border-color: #5a5a5a !important;
+}
+
+.nv-chat-bubble.is-own {
+  color: #f4f4f4 !important;
+  background: #202020 !important;
+  border-color: #3b3b3b !important;
+}
+
+.nv-chat-bubble.is-own p,
+.nv-chat-bubble.is-own small {
+  color: #f0f0f0 !important;
+}
+
+.nv-alert,
+.nv-info-strip,
+.nv-footer-note {
+  color: #e5e5e5 !important;
+  background: #111111 !important;
+  border-color: #333333 !important;
+}
+
+.nv-alert span,
+.nv-info-strip span {
+  color: #e5e5e5 !important;
+}
+
+.nv-status-good,
+.nv-status-warning,
+.nv-status-neutral {
+  color: #dedede !important;
+  background: #171717 !important;
+  border-color: #363636 !important;
+}
+
+.nv-sidebar-bottom,
+.nv-sidebar-bottom *,
+.nv-sidebar .nv-nav-link span {
+  color: inherit;
+}
+
+.nv-private-page :is(h1, h2, h3, h4, strong, label, span, p, small) {
+  text-shadow: none;
+}
+
+::selection {
+  color: #000000;
+  background: #f2f2f2;
+}
