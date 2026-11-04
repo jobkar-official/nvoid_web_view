@@ -3534,6 +3534,9 @@ body,
   --nvoid-soft: rgba(255, 255, 255, .58);
   --nvoid-accent: #050b90;
   --nvoid-accent-surface: #1b335a;
+  --navy: #020204;
+  --navy-2: #050b90;
+  --navy-3: #1b335a;
 }
 
 html,
@@ -3635,7 +3638,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
   border-color: #1b335a !important;
 }
 
-.public-shell :is(.nvoid-agent-panel, .nvoid-search-diagnostics, .nvoid-connection-card, .nvoid-search-source-row, .nvoid-research-records > article, .worker-results-page .public-job-card, .worker-home-search-card, .worker-search-guide > div, .worker-member-home, .worker-member-link, .no-results, .model-card, .model-detail, .release-card, .release-panel, .free-hiring-card, .info-toc, .info-toc-note, .info-cta, .auth-form-panel, .auth-brand-panel, .auth-preview, .info-document-layout, .model-index-current, .model-index-capabilities-section) {
+:is(.nvoid-agent-panel, .nvoid-search-diagnostics, .nvoid-connection-card, .nvoid-search-source-row, .nvoid-research-records > article, .worker-results-page .public-job-card, .worker-home-search-card, .worker-search-guide > div, .worker-member-home, .worker-member-link, .no-results, .model-card, .model-detail, .release-card, .release-panel, .free-hiring-card, .info-toc, .info-toc-note, .info-cta, .auth-form-panel, .auth-brand-panel, .auth-preview, .info-document-layout, .model-index-current, .model-index-capabilities-section) {
   color: #ffffff !important;
   background-color: #1b335a !important;
   background-image: none !important;
@@ -3702,3 +3705,30 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
   background: rgba(2, 2, 4, .78) !important;
 }
 
+
+
+html body .public-shell :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summary, th, td, strong, em, small, caption, figcaption, span, a, button, input, textarea, select) {
+  color: #ffffff !important;
+}
+
+html body .public-shell :is(svg, button svg, a svg) {
+  color: #ffffff !important;
+}
+
+html body .public-shell .public-sidebar :is(.brand-copy strong, .brand-copy small, .sidebar-section-label, .public-nav-link, .public-nav-link > svg, .history-copy strong, .history-copy small, .history-search-icon, .history-clear, .history-edit, .history-delete, .history-empty, .history-placeholder, .guest-identity strong, .guest-identity small, .sidebar-find-button, .sidebar-find-button > svg, .sidebar-signin, .sidebar-register) {
+  color: #ffffff !important;
+}
+
+html body .public-shell .public-sidebar .public-nav-link.active,
+html body .public-shell .public-sidebar .sidebar-find-button.active {
+  background: #050b90 !important;
+  color: #ffffff !important;
+}
+
+html body :is(.auth-page, .info-page, .catalog-page, .release-hub, .free-hiring-page) :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summary, th, td, strong, em, small, caption, figcaption, span, a, button, input, textarea, select) {
+  color: #ffffff !important;
+}
+
+html body :is(.auth-page, .info-page, .catalog-page, .release-hub, .free-hiring-page) svg {
+  color: #ffffff !important;
+}

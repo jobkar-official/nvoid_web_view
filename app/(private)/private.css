@@ -2304,3 +2304,20 @@ html body ::selection {
   background: #050b90;
 }
 
+
+
+:root {
+  --nv-bg: #020204;
+  --nv-panel: #1b335a;
+  --nv-accent: #050b90;
+}
+
+html body .nv-private-page :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, strong, em, small, span, a, button, input, textarea, select),
+html body .nv-chat-page :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, strong, em, small, span, a, button, input, textarea, select) {
+  color: #ffffff !important;
+}
+
+html body .nv-chat-page svg,
+html body .nv-private-page svg {
+  color: #ffffff !important;
+}
