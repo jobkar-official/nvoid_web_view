@@ -218,7 +218,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
             <button className="sidebar-collapse-button" type="button" aria-label="Collapse sidebar" title="Collapse sidebar" onClick={() => setSidebarOpen(false)}><PanelLeftClose size={18} /></button>
           </div>
 
-          <Link href="/" className="sidebar-find-button" onClick={closeSidebarOnMobile}>
+          <Link href="/" className={"sidebar-find-button" + (pathname === "/" ? " active" : "")} aria-current={pathname === "/" ? "page" : undefined} onClick={closeSidebarOnMobile}>
             <Plus size={17} strokeWidth={2.2} />
             <span>New search</span>
           </Link>
