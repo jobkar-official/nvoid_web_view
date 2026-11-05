@@ -3525,18 +3525,18 @@ body,
   color-scheme: dark;
   --nvoid-bg: #020204;
   --nvoid-sidebar: #020204;
-  --nvoid-surface: #1b335a;
-  --nvoid-surface-raised: #1b335a;
-  --nvoid-hover: #050b90;
+  --nvoid-surface: #242424;
+  --nvoid-surface-raised: #242424;
+  --nvoid-hover: #303030;
   --nvoid-border: rgba(255, 255, 255, .14);
   --nvoid-text: #ffffff;
   --nvoid-muted: rgba(255, 255, 255, .76);
   --nvoid-soft: rgba(255, 255, 255, .58);
-  --nvoid-accent: #050b90;
-  --nvoid-accent-surface: #1b335a;
+  --nvoid-accent: #303030;
+  --nvoid-accent-surface: #242424;
   --navy: #020204;
-  --navy-2: #050b90;
-  --navy-3: #1b335a;
+  --navy-2: #303030;
+  --navy-3: #242424;
 }
 
 html,
@@ -3586,7 +3586,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 .public-sidebar .brand-symbol,
 .public-sidebar .guest-avatar {
   color: #ffffff !important;
-  background: #1b335a !important;
+  background: #242424 !important;
   border-color: rgba(255, 255, 255, .18) !important;
 }
 
@@ -3594,7 +3594,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 .public-sidebar .public-nav-link.active,
 .public-sidebar .history-item.active {
   color: #ffffff !important;
-  background: #050b90 !important;
+  background: #303030 !important;
   border-color: rgba(255, 255, 255, .16) !important;
   box-shadow: none !important;
 }
@@ -3603,7 +3603,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 .public-sidebar .public-nav-link:hover,
 .public-sidebar .history-item:hover {
   color: #ffffff !important;
-  background: #1b335a !important;
+  background: #242424 !important;
   border-color: rgba(255, 255, 255, .16) !important;
 }
 
@@ -3626,21 +3626,21 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 .public-sidebar .nvoid-header-signup,
 .public-sidebar .nvoid-header-free-posting {
   color: #ffffff !important;
-  background: #050b90 !important;
-  border-color: #050b90 !important;
+  background: #303030 !important;
+  border-color: #303030 !important;
 }
 
 .public-sidebar .sidebar-register:hover,
 .public-sidebar .nvoid-header-signup:hover,
 .public-sidebar .nvoid-header-free-posting:hover {
   color: #ffffff !important;
-  background: #1b335a !important;
-  border-color: #1b335a !important;
+  background: #242424 !important;
+  border-color: #242424 !important;
 }
 
 :is(.nvoid-agent-panel, .nvoid-search-diagnostics, .nvoid-connection-card, .nvoid-search-source-row, .nvoid-research-records > article, .worker-results-page .public-job-card, .worker-home-search-card, .worker-search-guide > div, .worker-member-home, .worker-member-link, .no-results, .model-card, .model-detail, .release-card, .release-panel, .free-hiring-card, .info-toc, .info-toc-note, .info-cta, .auth-form-panel, .auth-brand-panel, .auth-preview, .info-document-layout, .model-index-current, .model-index-capabilities-section) {
   color: #ffffff !important;
-  background-color: #1b335a !important;
+  background-color: #242424 !important;
   background-image: none !important;
   border-color: rgba(255, 255, 255, .16) !important;
   box-shadow: none !important;
@@ -3660,15 +3660,15 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 
 .public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout) {
   color: #ffffff !important;
-  background: #050b90 !important;
-  border-color: #050b90 !important;
+  background: #303030 !important;
+  border-color: #303030 !important;
   box-shadow: none !important;
 }
 
 .public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout):hover:not(:disabled) {
   color: #ffffff !important;
-  background: #1b335a !important;
-  border-color: #1b335a !important;
+  background: #242424 !important;
+  border-color: #242424 !important;
 }
 
 .public-shell :is(.history-clear, .history-edit, .history-delete, .sidebar-toggle-button, .nvoid-header-login) {
@@ -3677,7 +3677,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 
 .public-shell :is(.history-clear, .history-edit, .history-delete):hover {
   color: #ffffff !important;
-  background: #1b335a !important;
+  background: #242424 !important;
 }
 
 .public-shell a,
@@ -3697,7 +3697,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 
 .public-content :is(pre, code, table, th, td) {
   color: #ffffff !important;
-  background-color: #1b335a !important;
+  background-color: #242424 !important;
   border-color: rgba(255, 255, 255, .16) !important;
 }
 
@@ -3721,7 +3721,7 @@ html body .public-shell .public-sidebar :is(.brand-copy strong, .brand-copy smal
 
 html body .public-shell .public-sidebar .public-nav-link.active,
 html body .public-shell .public-sidebar .sidebar-find-button.active {
-  background: #050b90 !important;
+  background: #303030 !important;
   color: #ffffff !important;
 }
 
@@ -3739,13 +3739,13 @@ html body :is(.auth-page, .info-page, .catalog-page, .release-hub, .free-hiring-
   --nvoid-bg: #020204;
   --nvoid-page-bg: #020204;
   --nvoid-sidebar: #020204;
-  --nvoid-surface: #1b335a;
-  --nvoid-surface-raised: #1b335a;
-  --nvoid-accent: #050b90;
-  --nvoid-accent-surface: #1b335a;
+  --nvoid-surface: #242424;
+  --nvoid-surface-raised: #242424;
+  --nvoid-accent: #303030;
+  --nvoid-accent-surface: #242424;
   --navy: #020204;
-  --navy-2: #050b90;
-  --navy-3: #1b335a;
+  --navy-2: #303030;
+  --navy-3: #242424;
   --nvoid-text: #ffffff;
 }
 
@@ -3801,7 +3801,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 
 .public-shell :is(.nvoid-agent-panel, .nvoid-search-diagnostics, .nvoid-connection-card, .nvoid-search-source-row, .nvoid-research-records > article, .worker-results-page .public-job-card, .worker-home-search-card, .worker-search-guide > div, .worker-member-home, .worker-member-link, .no-results, .model-card, .model-detail, .release-card, .release-panel, .free-hiring-card, .info-toc, .info-toc-note, .info-cta, .auth-form-panel, .auth-brand-panel, .auth-preview, .info-document-layout, .model-index-current, .model-index-capabilities-section) {
   color: #ffffff !important;
-  background-color: #1b335a !important;
+  background-color: #242424 !important;
   background-image: none !important;
   border-color: rgba(255, 255, 255, .18) !important;
   box-shadow: none !important;
@@ -3842,7 +3842,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 
 .public-shell .public-sidebar .public-nav-link.active {
   color: #ffffff !important;
-  background: #050b90 !important;
+  background: #303030 !important;
   border-color: rgba(255, 255, 255, .18) !important;
 }
 
@@ -3858,7 +3858,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 
 .public-content :is(pre, code, table, th, td) {
   color: #ffffff !important;
-  background-color: #1b335a !important;
+  background-color: #242424 !important;
   border-color: rgba(255, 255, 255, .18) !important;
 }
 
@@ -3905,7 +3905,7 @@ html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worke
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill,
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:hover,
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #1b335a inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #242424 inset !important;
   -webkit-text-fill-color: #ffffff !important;
   caret-color: #ffffff !important;
 }
@@ -3970,4 +3970,602 @@ html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worke
   -webkit-box-shadow: 0 0 0 1000px #020204 inset !important;
   -webkit-text-fill-color: #ffffff !important;
   caret-color: #ffffff !important;
+}
+
+
+:root {
+  color-scheme: dark;
+  --nvoid-bg: #0b0b0b;
+  --nvoid-page-bg: #0b0b0b;
+  --nvoid-sidebar: #080808;
+  --nvoid-surface: #171717;
+  --nvoid-surface-raised: #202020;
+  --nvoid-hover: #292929;
+  --nvoid-border: rgba(255, 255, 255, .12);
+  --nvoid-text: #f1f1f1;
+  --nvoid-muted: #a0a0a0;
+  --nvoid-soft: #858585;
+  --nvoid-accent: #ffffff;
+  --nvoid-accent-surface: #262626;
+  --navy: #090909;
+  --navy-2: #242424;
+  --navy-3: #303030;
+  --blue: #a0a0a0;
+  --blue-dark: #c4c4c4;
+  --blue-soft: #222222;
+}
+
+html,
+body {
+  color-scheme: dark !important;
+  background: #0b0b0b !important;
+}
+
+html body .public-shell,
+html body .public-main,
+html body .public-content {
+  color: #e9e9e9 !important;
+  background: #0b0b0b !important;
+}
+
+html body .public-sidebar {
+  color: #ededed !important;
+  background: #080808 !important;
+  border-right: 1px solid #252525 !important;
+  box-shadow: 8px 0 28px rgba(0, 0, 0, .22) !important;
+}
+
+html body .public-topbar {
+  color: #ededed !important;
+  background: rgba(10, 10, 10, .96) !important;
+  border-bottom: 1px solid #292929 !important;
+  box-shadow: none !important;
+}
+
+html body .public-content {
+  width: min(100%, 1540px) !important;
+  max-width: 1540px !important;
+  padding: 34px clamp(18px, 3.5vw, 52px) 54px !important;
+}
+
+html body .public-shell :is(h1, h2, h3, h4, h5, h6, strong) {
+  color: #f4f4f4 !important;
+}
+
+html body .public-shell :is(
+  .worker-home-intro-copy p,
+  .worker-home-search-footnote,
+  .worker-results-heading p,
+  .worker-results-trust,
+  .worker-results-field > span:first-child,
+  .nvoid-agent-page-heading p,
+  .nvoid-agent-panel-heading p,
+  .nvoid-agent-empty,
+  .nvoid-agent-empty span,
+  .nvoid-connection-card small,
+  .nvoid-connection-facts,
+  .nvoid-agent-updated,
+  .history-copy small,
+  .history-placeholder,
+  .history-empty,
+  .public-job-company,
+  .public-job-meta,
+  .public-job-description,
+  .section-heading p,
+  .worker-directory-card > p
+) {
+  color: #a2a2a2 !important;
+}
+
+html body .public-shell :is(.worker-home-field > span:first-child, .worker-results-field > span:first-child, .sidebar-section-label) {
+  color: #969696 !important;
+}
+
+html body .public-sidebar .brand-symbol,
+html body .public-sidebar .guest-avatar {
+  color: #f3f3f3 !important;
+  background: #222222 !important;
+  border-color: #393939 !important;
+}
+
+html body .public-sidebar .public-nav-link {
+  color: #c6c6c6 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+html body .public-sidebar .public-nav-link > svg {
+  color: #a6a6a6 !important;
+}
+
+html body .public-sidebar .public-nav-link:hover,
+html body .public-sidebar .public-nav-link.active {
+  color: #ffffff !important;
+  background: #222222 !important;
+  border-color: #303030 !important;
+  box-shadow: inset 2px 0 #f0f0f0 !important;
+}
+
+html body .public-sidebar .public-nav-link.active > svg {
+  color: #f4f4f4 !important;
+}
+
+html body .public-sidebar .history-item {
+  border: 1px solid transparent !important;
+  border-radius: 10px !important;
+  background: transparent !important;
+  transition: background .16s ease, border-color .16s ease;
+}
+
+html body .public-sidebar .history-item:hover,
+html body .public-sidebar .history-item.active {
+  background: #1d1d1d !important;
+  border-color: #303030 !important;
+}
+
+html body .public-sidebar .history-select {
+  min-width: 0;
+  padding: 10px 8px !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  color: #ededed !important;
+  background: transparent !important;
+  text-decoration: none !important;
+}
+
+html body .public-sidebar .history-search-icon {
+  color: #a8a8a8 !important;
+}
+
+html body .public-sidebar .history-copy strong {
+  color: #ededed !important;
+  font-size: 12px !important;
+  font-weight: 550 !important;
+  line-height: 1.4;
+}
+
+html body .public-sidebar .history-copy small {
+  color: #969696 !important;
+  font-size: 10px !important;
+  line-height: 1.45;
+}
+
+html body .public-sidebar :is(.history-clear, .history-edit, .history-delete) {
+  color: #b2b2b2 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 8px !important;
+}
+
+html body .public-sidebar :is(.history-clear, .history-edit, .history-delete):hover {
+  color: #ffffff !important;
+  background: #303030 !important;
+}
+
+html body .public-sidebar .history-clear {
+  padding: 5px 8px !important;
+  font-size: 11px !important;
+}
+
+html body .public-sidebar :is(.history-edit, .history-delete) {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+html body .public-sidebar .history-editor input {
+  min-height: 36px !important;
+  border: 1px solid #3a3a3a !important;
+  border-radius: 9px !important;
+  color: #f1f1f1 !important;
+  background: #151515 !important;
+}
+
+html body .public-sidebar .history-editor > div button {
+  min-height: 32px !important;
+  padding: 0 10px !important;
+  border: 1px solid #3b3b3b !important;
+  border-radius: 8px !important;
+  color: #ededed !important;
+  background: #222222 !important;
+}
+
+html body .public-sidebar .history-editor > div button:first-child {
+  color: #101010 !important;
+  background: #f1f1f1 !important;
+  border-color: #f1f1f1 !important;
+}
+
+html body .public-sidebar .sidebar-find-button,
+html body .public-sidebar .sidebar-register,
+html body .public-shell :is(
+  .worker-home-search-button,
+  .worker-results-submit,
+  .nvoid-agent-refresh,
+  .nvoid-search-source-button,
+  .worker-results-page .public-job-apply-button,
+  .auth-submit,
+  .auth-primary-button,
+  .info-cta-link,
+  .nvoid-header-logout,
+  .nvoid-header-signup,
+  .nvoid-header-free-posting
+) {
+  color: #101010 !important;
+  -webkit-text-fill-color: #101010 !important;
+  background: #f2f2f2 !important;
+  background-image: none !important;
+  border: 1px solid #f2f2f2 !important;
+  border-radius: 11px !important;
+  box-shadow: none !important;
+  font-weight: 650 !important;
+  transition: background .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+html body .public-sidebar .sidebar-find-button,
+html body .public-sidebar .sidebar-register {
+  min-height: 40px !important;
+}
+
+html body .public-sidebar .sidebar-find-button > svg,
+html body .public-shell :is(
+  .worker-home-search-button,
+  .worker-results-submit,
+  .nvoid-agent-refresh,
+  .nvoid-search-source-button,
+  .worker-results-page .public-job-apply-button,
+  .auth-submit,
+  .auth-primary-button,
+  .info-cta-link,
+  .nvoid-header-logout,
+  .nvoid-header-signup,
+  .nvoid-header-free-posting
+) svg {
+  color: #101010 !important;
+  stroke: #101010 !important;
+}
+
+html body .public-shell :is(
+  .worker-home-search-button,
+  .worker-results-submit,
+  .nvoid-agent-refresh,
+  .nvoid-search-source-button,
+  .worker-results-page .public-job-apply-button,
+  .auth-submit,
+  .auth-primary-button,
+  .info-cta-link,
+  .nvoid-header-logout,
+  .nvoid-header-signup,
+  .nvoid-header-free-posting
+):hover:not(:disabled),
+html body .public-sidebar :is(.sidebar-find-button, .sidebar-register):hover {
+  color: #080808 !important;
+  -webkit-text-fill-color: #080808 !important;
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+html body .public-sidebar .sidebar-signin,
+html body .public-shell .nvoid-header-login {
+  color: #ededed !important;
+  background: transparent !important;
+  border-color: #414141 !important;
+}
+
+html body .public-sidebar .sidebar-signin:hover {
+  color: #ffffff !important;
+  background: #222222 !important;
+}
+
+html body .public-shell :is(
+  .nvoid-agent-panel,
+  .nvoid-search-diagnostics,
+  .nvoid-connection-card,
+  .nvoid-search-source-row,
+  .nvoid-research-records > article,
+  .worker-results-page .public-job-card,
+  .worker-home-search-card,
+  .worker-search-guide > div,
+  .worker-member-home,
+  .worker-member-link,
+  .no-results,
+  .model-card,
+  .model-detail,
+  .release-card,
+  .release-panel,
+  .free-hiring-card,
+  .info-toc,
+  .info-toc-note,
+  .info-cta,
+  .auth-form-panel,
+  .auth-brand-panel,
+  .auth-preview,
+  .info-document-layout,
+  .model-index-current,
+  .model-index-capabilities-section,
+  .worker-directory-card,
+  .worker-directory-empty
+) {
+  color: #eeeeee !important;
+  background: #171717 !important;
+  background-image: none !important;
+  border: 1px solid #303030 !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .16) !important;
+}
+
+html body .public-shell :is(.worker-results-page .public-job-card:hover, .worker-directory-card:hover, .worker-search-guide > div:hover) {
+  background: #1e1e1e !important;
+  border-color: #454545 !important;
+}
+
+html body .public-shell :is(
+  .public-job-card h3,
+  .worker-directory-card h2,
+  .nvoid-agent-panel-heading h2,
+  .nvoid-agent-panel-heading strong,
+  .worker-member-link strong
+) {
+  color: #f1f1f1 !important;
+}
+
+html body .public-shell :is(.public-job-details span, .source-chip, .result-count, .worker-results-sort select) {
+  color: #d1d1d1 !important;
+  background: #242424 !important;
+  border-color: #373737 !important;
+}
+
+html body .public-shell :is(.search-notice, .no-results) {
+  color: #dedede !important;
+  background: #171717 !important;
+  border-color: #343434 !important;
+}
+
+html body .public-shell :is(.worker-home-search-card, .worker-results-search, .public-search-panel) {
+  color: #efefef !important;
+  background: #151515 !important;
+  background-image: none !important;
+  border: 1px solid #343434 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, .24) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
+  grid-template-columns: minmax(0, 1.12fr) 1px minmax(0, .82fr) auto !important;
+  min-height: 94px !important;
+  padding: 17px 18px 17px 22px !important;
+  border-radius: 22px !important;
+}
+
+html body .public-shell .worker-home-field-control,
+html body .public-shell .worker-results-field > span:last-child,
+html body .public-shell .public-search-panel .search-input-line {
+  min-width: 0;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell :is(
+  .worker-home-field-control input,
+  .worker-results-field input,
+  .public-search-panel .search-input-line input,
+  .search-input-line input,
+  .worker-directory-search input
+) {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 34px;
+  margin: 0;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  color: #f2f2f2 !important;
+  -webkit-text-fill-color: #f2f2f2 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  appearance: none;
+  font-size: 14px !important;
+}
+
+html body .public-shell :is(
+  .worker-home-field-control input,
+  .worker-results-field input,
+  .public-search-panel .search-input-line input,
+  .search-input-line input,
+  .worker-directory-search input
+)::placeholder {
+  color: #858585 !important;
+  -webkit-text-fill-color: #858585 !important;
+  opacity: 1;
+}
+
+html body .public-shell :is(
+  .worker-home-field-control input:focus,
+  .worker-home-field-control input:focus-visible,
+  .worker-results-field input:focus,
+  .worker-results-field input:focus-visible,
+  .public-search-panel .search-input-line input:focus-visible,
+  .worker-directory-search input:focus-visible
+) {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill:hover,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #151515 inset !important;
+  -webkit-text-fill-color: #f2f2f2 !important;
+  caret-color: #ffffff !important;
+}
+
+html body .public-shell :is(.worker-home-field-divider, .worker-results-divider) {
+  background: #383838 !important;
+}
+
+html body .public-shell .nvoid-agent-page :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select),
+html body .public-shell .auth-page :is(input, textarea, select),
+html body .public-shell .history-editor input {
+  color: #f0f0f0 !important;
+  background: #101010 !important;
+  border: 1px solid #3a3a3a !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-agent-page :is(textarea, input:not([type="checkbox"]):not([type="radio"]), select):focus,
+html body .public-shell .auth-page :is(input, textarea, select):focus {
+  border-color: #777777 !important;
+  outline: 2px solid rgba(255, 255, 255, .12) !important;
+  outline-offset: 1px;
+}
+
+html body .public-shell .nvoid-research-composer textarea {
+  min-height: 126px;
+  padding: 15px !important;
+  border-radius: 15px !important;
+  background: #111111 !important;
+  line-height: 1.65;
+}
+
+html body .public-shell :is(input, textarea, select)::placeholder {
+  color: #858585 !important;
+  opacity: 1;
+}
+
+html body .public-shell :is(a, button, input, textarea, select):focus-visible {
+  outline-color: #a6a6a6 !important;
+  outline-offset: 3px;
+}
+
+@media (max-width: 960px) {
+  html body .public-content {
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+  }
+
+  html body .public-sidebar :is(.history-edit, .history-delete) {
+    opacity: 1 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html body .public-content {
+    padding: 24px 16px 40px !important;
+  }
+
+  html body .nvoid-homepage-restored {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: calc(100svh - 58px) !important;
+    padding: 20px 0 30px !important;
+    overflow: visible !important;
+    gap: 24px !important;
+  }
+
+  html body .nvoid-homepage-restored .worker-home-brand-intro,
+  html body .nvoid-homepage-restored .worker-home-search-section {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  html body .nvoid-homepage-restored .worker-home-search-card,
+  html body .public-shell .worker-results-search {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+    padding: 17px !important;
+    border-radius: 18px !important;
+  }
+
+  html body .nvoid-homepage-restored .worker-home-field-divider,
+  html body .public-shell .worker-results-divider {
+    display: none !important;
+  }
+
+  html body .nvoid-homepage-restored .worker-home-search-button,
+  html body .public-shell .worker-results-submit {
+    width: 100% !important;
+    min-height: 46px !important;
+    justify-content: center !important;
+  }
+
+  html body .nvoid-homepage-restored .worker-home-search-meta {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    justify-items: start !important;
+    gap: 8px !important;
+  }
+
+  html body .public-shell :is(.public-job-grid, .home-bottom-grid) {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body .public-shell .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  html body .public-shell .section-heading,
+  html body .public-shell .nvoid-agent-page-heading {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  html body .public-shell .nvoid-agent-panel {
+    padding: 17px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html body .public-content {
+    padding-right: 14px !important;
+    padding-left: 14px !important;
+  }
+
+  html body .public-topbar {
+    padding-right: 12px !important;
+    padding-left: 12px !important;
+  }
+
+  html body .nvoid-header-actions {
+    gap: 7px !important;
+  }
+
+  html body .nvoid-header-dash,
+  html body .nvoid-header-divider {
+    display: none !important;
+  }
+
+  html body .public-shell .category-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body .public-shell .nvoid-agent-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  html body .public-sidebar :is(.history-edit, .history-delete) {
+    opacity: 1 !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy h1 {
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: clamp(25px, 8vw, 34px) !important;
+  }
+}
+
+@media (hover: none) {
+  html body .public-sidebar :is(.history-edit, .history-delete) {
+    opacity: 1 !important;
+  }
 }
