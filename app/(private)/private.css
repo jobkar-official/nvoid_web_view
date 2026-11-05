@@ -2189,7 +2189,7 @@ html body .nv-main,
 html body .nv-private-page,
 html body .nv-chat-page {
   color: #ffffff !important;
-  background: #020204 !important;
+  background: #050505 !important;
 }
 
 html body .nv-sidebar,
@@ -2201,7 +2201,7 @@ html body .nv-expanded .nv-sidebar {
 
 html body .nv-topbar {
   color: #ffffff !important;
-  background: #020204 !important;
+  background: #050505 !important;
   border-color: rgba(255, 255, 255, .16) !important;
 }
 
@@ -2230,7 +2230,7 @@ html body .nv-content :is(input, textarea, select),
 html body .nv-chat-composer input,
 html body .nv-private-page .nv-search-form input {
   color: #ffffff !important;
-  background: #020204 !important;
+  background: #050505 !important;
   border-color: rgba(255, 255, 255, .24) !important;
 }
 
@@ -2307,7 +2307,7 @@ html body ::selection {
 
 
 :root {
-  --nv-bg: #020204;
+  --nv-bg: #050505;
   --nv-panel: #242424;
   --nv-accent: #303030;
 }
@@ -2324,8 +2324,8 @@ html body .nv-private-page svg {
 
 
 :root {
-  --nv-bg: #020204;
-  --nv-page-bg: #020204;
+  --nv-bg: #050505;
+  --nv-page-bg: #050505;
   --nv-panel: #242424;
   --nv-accent: #303030;
   --nv-ink: #ffffff;
@@ -2339,7 +2339,7 @@ html body .nv-chat-page,
 html body .nv-content,
 html body .nv-topbar {
   color: #ffffff !important;
-  background-color: #020204 !important;
+  background-color: #050505 !important;
 }
 
 html body .nv-sidebar,
@@ -2374,7 +2374,7 @@ html body .nv-content :is(input, textarea, select),
 html body .nv-chat-composer input,
 html body .nv-private-page .nv-search-form input {
   color: #ffffff !important;
-  background-color: #020204 !important;
+  background-color: #050505 !important;
   border-color: rgba(255, 255, 255, .28) !important;
 }
 
@@ -2384,17 +2384,17 @@ html body .nv-chat-composer input::placeholder {
 }
 
 html body :is(.nv-primary, .nv-chat-composer button, .nv-find-jobs-button) {
-  color: #020204 !important;
+  color: #050505 !important;
   background-color: #ffffff !important;
   border-color: #ffffff !important;
 }
 
 html body :is(.nv-primary, .nv-chat-composer button, .nv-find-jobs-button) svg {
-  color: #020204 !important;
+  color: #050505 !important;
 }
 
 html body :is(.nv-primary, .nv-chat-composer button, .nv-find-jobs-button):hover:not(:disabled) {
-  color: #020204 !important;
+  color: #050505 !important;
   background-color: #e8e8e8 !important;
   border-color: #e8e8e8 !important;
 }
@@ -2432,7 +2432,7 @@ html body .nv-private-page :is(h1, h2, h3, h4, h5, h6, strong, label, span, p, s
 }
 
 html body ::selection {
-  color: #020204;
+  color: #050505;
   background: #ffffff;
 }
 
