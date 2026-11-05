@@ -4627,3 +4627,50 @@ html body .public-shell .public-main .public-content > .worker-homepage.worker-h
   outline: 0 !important;
   box-shadow: none !important;
 }
+
+
+/* Visible outlines belong to the two homepage search fields, not the outer form. */
+html body .public-shell .nvoid-homepage-restored .worker-home-search-section .worker-home-search-card .worker-home-field-control {
+  display: flex !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 50px !important;
+  align-items: center !important;
+  gap: 11px !important;
+  box-sizing: border-box !important;
+  padding: 0 14px !important;
+  color: #c4c4c4 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 1px solid #414141 !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  transition: border-color .16s ease, background-color .16s ease !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-section .worker-home-search-card .worker-home-field-control:hover {
+  border-color: #626262 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-section .worker-home-search-card .worker-home-field-control:focus-within {
+  border-color: #a0a0a0 !important;
+  background-color: rgba(255, 255, 255, .025) !important;
+  outline: 2px solid rgba(255, 255, 255, .08) !important;
+  outline-offset: 1px !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-section .worker-home-search-card .worker-home-field-control > input {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 34px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #f2f2f2 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
