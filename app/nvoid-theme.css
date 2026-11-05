@@ -4320,7 +4320,7 @@ html body .public-shell :is(.search-notice, .no-results) {
   border-color: #343434 !important;
 }
 
-html body .public-shell :is(.worker-home-search-card, .worker-results-search, .public-search-panel) {
+html body .public-shell :is(.worker-results-search, .public-search-panel) {
   color: #efefef !important;
   background: #151515 !important;
   background-image: none !important;
@@ -4331,9 +4331,57 @@ html body .public-shell :is(.worker-home-search-card, .worker-results-search, .p
 
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
   grid-template-columns: minmax(0, 1.12fr) 1px minmax(0, .82fr) auto !important;
-  min-height: 94px !important;
-  padding: 17px 18px 17px 22px !important;
+  align-items: center !important;
+  min-height: 98px !important;
+  padding: 18px 19px 18px 23px !important;
+  color: #f5f5f5 !important;
+  background: #202020 !important;
+  background-color: #202020 !important;
+  background-image: none !important;
+  border: 1px solid #3b3b3b !important;
   border-radius: 22px !important;
+  box-shadow: 0 20px 54px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .055) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field > span:first-child {
+  color: #bcbcbc !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-control {
+  color: #c4c4c4 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-control > svg {
+  color: #bcbcbc !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input::placeholder {
+  color: #898989 !important;
+  -webkit-text-fill-color: #898989 !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-divider {
+  background: #414141 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-button {
+  color: #080808 !important;
+  background: #ffffff !important;
+  border: 1px solid #ffffff !important;
+  box-shadow: 0 5px 16px rgba(255, 255, 255, .09) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-button:hover {
+  color: #080808 !important;
+  background: #eeeeee !important;
+  border-color: #eeeeee !important;
+  box-shadow: 0 7px 20px rgba(255, 255, 255, .12) !important;
 }
 
 html body .public-shell .worker-home-field-control,
@@ -4402,8 +4450,8 @@ html body .public-shell :is(
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill,
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill:hover,
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #151515 inset !important;
-  -webkit-text-fill-color: #f2f2f2 !important;
+  -webkit-box-shadow: 0 0 0 1000px #202020 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
   caret-color: #ffffff !important;
 }
 
