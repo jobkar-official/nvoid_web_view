@@ -25,10 +25,11 @@ jobs:
       REDIS_PORT: "6379"
       AUTO_SUBMIT_ENABLED: "false"
       MCP_SERVERS_CONFIG: ./config/mcp-servers.test.json
+      NVOID_AGENT_READ_TOKEN: ${{ secrets.NVOID_AGENT_READ_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Checkout private Nvoid agent worker
-        if: ${{ secrets.NVOID_AGENT_READ_TOKEN != '' }}
+        if: ${{ env.NVOID_AGENT_READ_TOKEN != '' }}
         uses: actions/checkout@v4
         with:
           repository: jobkar-official/nvoid_ai_agent
@@ -45,11 +46,11 @@ jobs:
           npm run typecheck
           npm run build
       - name: Explain skipped cross-repository integration checks
-        if: ${{ secrets.NVOID_AGENT_READ_TOKEN == '' }}
+        if: ${{ env.NVOID_AGENT_READ_TOKEN == '' }}
         run: echo "Set the NVOID_AGENT_READ_TOKEN repository secret with read-only contents access to nvoid_ai_agent to enable the cross-repository build and integration smoke tests."
 
       - name: Build the real agent worker
-        if: ${{ secrets.NVOID_AGENT_READ_TOKEN != '' }}
+        if: ${{ env.NVOID_AGENT_READ_TOKEN != '' }}
         working-directory: agent-worker
         run: |
           npm ci
@@ -59,7 +60,7 @@ jobs:
           node -e 'const { buildDorkQueries } = require("./scripts/search-engine-research-mcp-server.cjs"); const queries = buildDorkQueries("Java backend developer jobs in India"); if (!queries.some(q => q.startsWith("site:linkedin.com/jobs")) || !queries.some(q => q.startsWith("intitle:"))) process.exit(1); console.log("Google dork expansion passed: " + queries.length + " query variants")'
           npm run build
       - name: Start agent and verify its demo source
-        if: ${{ secrets.NVOID_AGENT_READ_TOKEN != '' }}
+        if: ${{ env.NVOID_AGENT_READ_TOKEN != '' }}
         shell: bash
         run: |
           set -euo pipefail
