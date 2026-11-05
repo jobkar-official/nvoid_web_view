@@ -13,10 +13,7 @@ export default function robots(): MetadataRoute.Robots {
         "/message",
         "/notification",
         "/profile",
-        "/support",
-        "/search/",
-        "/connections",
-        "/research"
+        "/support"
       ]
     },
     sitemap: "https://nvoidai.com/sitemap.xml"
