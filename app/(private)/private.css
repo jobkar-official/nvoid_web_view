@@ -2195,7 +2195,7 @@ html body .nv-chat-page {
 html body .nv-sidebar,
 html body .nv-expanded .nv-sidebar {
   color: #ffffff !important;
-  background: #1b335a !important;
+  background: #242424 !important;
   border-color: rgba(255, 255, 255, .16) !important;
 }
 
@@ -2207,7 +2207,7 @@ html body .nv-topbar {
 
 html body :is(.nv-panel, .nv-stat-card, .nv-welcome, .nv-job-card, .nv-status-card, .nv-messages-layout, .nv-thread-list, .nv-chat-preview, .nv-chat-composer, .nv-profile-tab, .nv-record, .nv-chat-inbox, .nv-chat-conversation, .nv-chat-placeholder, .nv-alert, .nv-info-strip, .nv-footer-note) {
   color: #ffffff !important;
-  background: #1b335a !important;
+  background: #242424 !important;
   border-color: rgba(255, 255, 255, .16) !important;
   box-shadow: none !important;
 }
@@ -2216,13 +2216,13 @@ html body .nv-nav-link.active,
 html body .nv-find-jobs-button.active,
 html body .nv-private-page .nv-profile-tab.active {
   color: #ffffff !important;
-  background: #050b90 !important;
+  background: #303030 !important;
   border-color: rgba(255, 255, 255, .2) !important;
 }
 
 html body :is(.nv-nav-link, .nv-profile-tab, .nv-find-jobs-button):hover {
   color: #ffffff !important;
-  background: #050b90 !important;
+  background: #303030 !important;
   border-color: rgba(255, 255, 255, .2) !important;
 }
 
@@ -2241,45 +2241,45 @@ html body .nv-chat-composer input::placeholder {
 
 html body :is(.nv-primary, .nv-chat-composer button) {
   color: #ffffff !important;
-  background: #050b90 !important;
-  border-color: #050b90 !important;
+  background: #303030 !important;
+  border-color: #303030 !important;
 }
 
 html body :is(.nv-primary, .nv-chat-composer button):hover:not(:disabled) {
   color: #ffffff !important;
-  background: #1b335a !important;
-  border-color: #1b335a !important;
+  background: #242424 !important;
+  border-color: #242424 !important;
 }
 
 html body :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back) {
   color: #ffffff !important;
-  background: #1b335a !important;
+  background: #242424 !important;
   border-color: rgba(255, 255, 255, .2) !important;
 }
 
 html body :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back):hover {
   color: #ffffff !important;
-  background: #050b90 !important;
-  border-color: #050b90 !important;
+  background: #303030 !important;
+  border-color: #303030 !important;
 }
 
 html body .nv-chat-bubble {
   color: #ffffff !important;
-  background: #1b335a !important;
+  background: #242424 !important;
   border-color: rgba(255, 255, 255, .16) !important;
 }
 
 html body .nv-chat-bubble.is-own {
   color: #ffffff !important;
-  background: #050b90 !important;
-  border-color: #050b90 !important;
+  background: #303030 !important;
+  border-color: #303030 !important;
 }
 
 html body .nv-status-good,
 html body .nv-status-warning,
 html body .nv-status-neutral {
   color: #ffffff !important;
-  background: #1b335a !important;
+  background: #242424 !important;
   border-color: rgba(255, 255, 255, .18) !important;
 }
 
@@ -2301,15 +2301,15 @@ html body .nv-private-page button:hover {
 
 html body ::selection {
   color: #ffffff;
-  background: #050b90;
+  background: #303030;
 }
 
 
 
 :root {
   --nv-bg: #020204;
-  --nv-panel: #1b335a;
-  --nv-accent: #050b90;
+  --nv-panel: #242424;
+  --nv-accent: #303030;
 }
 
 html body .nv-private-page :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, strong, em, small, span, a, button, input, textarea, select),
@@ -2326,8 +2326,8 @@ html body .nv-private-page svg {
 :root {
   --nv-bg: #020204;
   --nv-page-bg: #020204;
-  --nv-panel: #1b335a;
-  --nv-accent: #050b90;
+  --nv-panel: #242424;
+  --nv-accent: #303030;
   --nv-ink: #ffffff;
   --nv-line: rgba(255, 255, 255, .16);
 }
@@ -2345,13 +2345,13 @@ html body .nv-topbar {
 html body .nv-sidebar,
 html body .nv-expanded .nv-sidebar {
   color: #ffffff !important;
-  background-color: #1b335a !important;
+  background-color: #242424 !important;
   border-color: rgba(255, 255, 255, .16) !important;
 }
 
 html body :is(.nv-panel, .nv-stat-card, .nv-welcome, .nv-job-card, .nv-status-card, .nv-messages-layout, .nv-thread-list, .nv-chat-preview, .nv-chat-composer, .nv-profile-tab, .nv-record, .nv-chat-inbox, .nv-chat-conversation, .nv-chat-placeholder, .nv-alert, .nv-info-strip, .nv-footer-note) {
   color: #ffffff !important;
-  background-color: #1b335a !important;
+  background-color: #242424 !important;
   border-color: rgba(255, 255, 255, .18) !important;
   box-shadow: none !important;
 }
@@ -2360,13 +2360,13 @@ html body .nv-nav-link.active,
 html body .nv-find-jobs-button.active,
 html body .nv-private-page .nv-profile-tab.active {
   color: #ffffff !important;
-  background-color: #050b90 !important;
+  background-color: #303030 !important;
   border-color: rgba(255, 255, 255, .2) !important;
 }
 
 html body :is(.nv-nav-link, .nv-profile-tab, .nv-find-jobs-button):hover {
   color: #ffffff !important;
-  background-color: #050b90 !important;
+  background-color: #303030 !important;
   border-color: rgba(255, 255, 255, .2) !important;
 }
 
@@ -2401,26 +2401,26 @@ html body :is(.nv-primary, .nv-chat-composer button, .nv-find-jobs-button):hover
 
 html body :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back) {
   color: #ffffff !important;
-  background-color: #1b335a !important;
+  background-color: #242424 !important;
   border-color: rgba(255, 255, 255, .2) !important;
 }
 
 html body :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back):hover {
   color: #ffffff !important;
-  background-color: #050b90 !important;
-  border-color: #050b90 !important;
+  background-color: #303030 !important;
+  border-color: #303030 !important;
 }
 
 html body .nv-chat-bubble {
   color: #ffffff !important;
-  background-color: #1b335a !important;
+  background-color: #242424 !important;
   border-color: rgba(255, 255, 255, .18) !important;
 }
 
 html body .nv-chat-bubble.is-own {
   color: #ffffff !important;
-  background-color: #050b90 !important;
-  border-color: #050b90 !important;
+  background-color: #303030 !important;
+  border-color: #303030 !important;
 }
 
 html body :is(.nv-content, .nv-sidebar, .nv-topbar, .nv-chat-page) svg {
@@ -2436,3 +2436,132 @@ html body ::selection {
   background: #ffffff;
 }
 
+
+
+:root {
+  --nv-ink: #f0f0f0;
+  --nv-line: rgba(255, 255, 255, .12);
+  --nv-bg: #0b0b0b;
+  --nv-page-bg: #0b0b0b;
+  --nv-panel: #171717;
+  --nv-accent: #ffffff;
+}
+
+html body .nv-workspace,
+html body .nv-main,
+html body .nv-private-page,
+html body .nv-chat-page {
+  color: #ededed !important;
+  background: #0b0b0b !important;
+}
+
+html body .nv-sidebar,
+html body .nv-expanded .nv-sidebar {
+  color: #eeeeee !important;
+  background: #080808 !important;
+  border-color: #2b2b2b !important;
+}
+
+html body .nv-topbar {
+  color: #eeeeee !important;
+  background: #0b0b0b !important;
+  border-color: #2b2b2b !important;
+}
+
+html body :is(.nv-panel, .nv-stat-card, .nv-welcome, .nv-job-card, .nv-status-card, .nv-messages-layout, .nv-thread-list, .nv-chat-preview, .nv-chat-composer, .nv-profile-tab, .nv-record, .nv-chat-inbox, .nv-chat-conversation, .nv-chat-placeholder, .nv-alert, .nv-info-strip, .nv-footer-note) {
+  color: #ededed !important;
+  background: #171717 !important;
+  border-color: #303030 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .16) !important;
+}
+
+html body .nv-private-page :is(.nv-nav-link.active, .nv-profile-tab.active),
+html body .nv-nav-link.active,
+html body .nv-find-jobs-button.active {
+  color: #ffffff !important;
+  background: #262626 !important;
+  border-color: #3b3b3b !important;
+}
+
+html body .nv-private-page :is(.nv-nav-link, .nv-profile-tab, .nv-find-jobs-button):hover {
+  color: #ffffff !important;
+  background: #222222 !important;
+  border-color: #3b3b3b !important;
+}
+
+html body .nv-private-page .nv-content :is(input, textarea, select),
+html body .nv-private-page .nv-chat-composer input,
+html body .nv-private-page .nv-search-form input {
+  color: #f1f1f1 !important;
+  background: #101010 !important;
+  border: 1px solid #3a3a3a !important;
+  border-radius: 11px !important;
+  box-shadow: none !important;
+}
+
+html body .nv-private-page .nv-content :is(input, textarea, select):focus,
+html body .nv-private-page .nv-chat-composer input:focus,
+html body .nv-private-page .nv-search-form input:focus {
+  border-color: #777777 !important;
+  outline: 2px solid rgba(255, 255, 255, .12) !important;
+  outline-offset: 1px;
+}
+
+html body .nv-private-page :is(.nv-primary, .nv-chat-composer button) {
+  color: #101010 !important;
+  background: #f2f2f2 !important;
+  border: 1px solid #f2f2f2 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+html body .nv-private-page :is(.nv-primary, .nv-chat-composer button):hover:not(:disabled) {
+  color: #080808 !important;
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+html body .nv-private-page .nv-secondary,
+html body .nv-private-page .nv-icon-action {
+  color: #dedede !important;
+  background: #222222 !important;
+  border: 1px solid #3a3a3a !important;
+  border-radius: 10px !important;
+}
+
+html body .nv-private-page :is(.nv-secondary, .nv-icon-action):hover {
+  color: #ffffff !important;
+  background: #303030 !important;
+  border-color: #505050 !important;
+}
+
+html body .nv-private-page .nv-status-neutral {
+  color: #d6d6d6 !important;
+  background: #242424 !important;
+  border-color: #3b3b3b !important;
+}
+
+@media (max-width: 760px) {
+  html body .nv-private-page .nv-content {
+    padding: 20px 14px 36px !important;
+  }
+
+  html body .nv-private-page .nv-profile-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+}
+
+@media (max-width: 540px) {
+  html body .nv-private-page .nv-form-grid,
+  html body .nv-private-page .nv-skill-form,
+  html body .nv-private-page .nv-search-form {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body .nv-private-page .nv-form-grid > *,
+  html body .nv-private-page .nv-profile-detail {
+    min-width: 0;
+  }
+}
