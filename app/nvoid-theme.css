@@ -4616,3 +4616,14 @@ html body .public-shell .nvoid-homepage-restored .worker-home-search-section .wo
   border-color: transparent !important;
   box-shadow: none !important;
 }
+
+
+/* Remove the large background panel behind the complete homepage content. */
+html body .public-shell .public-main .public-content > .worker-homepage.worker-homepage-v2.nvoid-homepage-restored {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
