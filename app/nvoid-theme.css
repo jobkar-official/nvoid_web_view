@@ -3523,8 +3523,8 @@ body,
 
 :root {
   color-scheme: dark;
-  --nvoid-bg: #020204;
-  --nvoid-sidebar: #020204;
+  --nvoid-bg: #050505;
+  --nvoid-sidebar: #050505;
   --nvoid-surface: #242424;
   --nvoid-surface-raised: #242424;
   --nvoid-hover: #303030;
@@ -3534,7 +3534,7 @@ body,
   --nvoid-soft: rgba(255, 255, 255, .58);
   --nvoid-accent: #303030;
   --nvoid-accent-surface: #242424;
-  --navy: #020204;
+  --navy: #050505;
   --navy-2: #303030;
   --navy-3: #242424;
 }
@@ -3554,7 +3554,7 @@ body,
 .nvoid-agent-page,
 .nvoid-research-page {
   color: #ffffff !important;
-  background-color: #020204 !important;
+  background-color: #050505 !important;
 }
 
 body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summary, th, td, strong, em, small, caption, figcaption),
@@ -3571,14 +3571,14 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 .public-topbar,
 .workspace-topbar {
   color: #ffffff !important;
-  background: #020204 !important;
+  background: #050505 !important;
   border-color: rgba(255, 255, 255, .13) !important;
   box-shadow: none !important;
 }
 
 .public-sidebar {
   color: #ffffff !important;
-  background: #020204 !important;
+  background: #050505 !important;
   border-right-color: rgba(255, 255, 255, .13) !important;
   box-shadow: 8px 0 28px rgba(0, 0, 0, .24) !important;
 }
@@ -3649,7 +3649,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 .public-shell :is(input, textarea, select, option),
 .auth-page :is(input, textarea, select, option) {
   color: #ffffff !important;
-  background-color: #020204 !important;
+  background-color: #050505 !important;
   border-color: rgba(255, 255, 255, .24) !important;
 }
 
@@ -3736,14 +3736,14 @@ html body :is(.auth-page, .info-page, .catalog-page, .release-hub, .free-hiring-
 
 :root {
   color-scheme: dark;
-  --nvoid-bg: #020204;
-  --nvoid-page-bg: #020204;
-  --nvoid-sidebar: #020204;
+  --nvoid-bg: #050505;
+  --nvoid-page-bg: #050505;
+  --nvoid-sidebar: #050505;
   --nvoid-surface: #242424;
   --nvoid-surface-raised: #242424;
   --nvoid-accent: #303030;
   --nvoid-accent-surface: #242424;
-  --navy: #020204;
+  --navy: #050505;
   --navy-2: #303030;
   --navy-3: #242424;
   --nvoid-text: #ffffff;
@@ -3769,7 +3769,7 @@ body > div,
 .nvoid-agent-page-heading,
 main {
   color: #ffffff !important;
-  background-color: #020204 !important;
+  background-color: #050505 !important;
 }
 
 body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summary, th, td, strong, em, small, caption, figcaption),
@@ -3787,14 +3787,14 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 .public-sidebar.is-open,
 .public-sidebar:not(.is-open) {
   color: #ffffff !important;
-  background-color: #020204 !important;
+  background-color: #050505 !important;
   border-color: rgba(255, 255, 255, .16) !important;
 }
 
 .public-topbar,
 .workspace-topbar {
   color: #ffffff !important;
-  background-color: #020204 !important;
+  background-color: #050505 !important;
   border-color: rgba(255, 255, 255, .16) !important;
   box-shadow: none !important;
 }
@@ -3810,7 +3810,7 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 .public-shell :is(input, textarea, select, option),
 .auth-page :is(input, textarea, select, option) {
   color: #ffffff !important;
-  background-color: #020204 !important;
+  background-color: #050505 !important;
   border-color: rgba(255, 255, 255, .28) !important;
 }
 
@@ -3820,18 +3820,18 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 }
 
 .public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout, .nvoid-header-signup, .nvoid-header-free-posting, .sidebar-register, .sidebar-find-button) {
-  color: #020204 !important;
+  color: #050505 !important;
   background: #ffffff !important;
   border-color: #ffffff !important;
   box-shadow: none !important;
 }
 
 .public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout, .nvoid-header-signup, .nvoid-header-free-posting, .sidebar-register, .sidebar-find-button) svg {
-  color: #020204 !important;
+  color: #050505 !important;
 }
 
 .public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout, .nvoid-header-signup, .nvoid-header-free-posting, .sidebar-register, .sidebar-find-button):hover:not(:disabled) {
-  color: #020204 !important;
+  color: #050505 !important;
   background: #e8e8e8 !important;
   border-color: #e8e8e8 !important;
 }
@@ -3866,24 +3866,24 @@ body :is(h1, h2, h3, h4, h5, h6, p, label, legend, li, dt, dd, blockquote, summa
 
 html body .public-shell .public-sidebar .sidebar-find-button,
 html body .public-shell .public-sidebar .sidebar-find-button.active {
-  color: #020204 !important;
+  color: #050505 !important;
   background: #ffffff !important;
   border-color: #ffffff !important;
   box-shadow: none !important;
 }
 
 html body .public-shell .public-sidebar .sidebar-find-button > svg {
-  color: #020204 !important;
+  color: #050505 !important;
 }
 
 html body .public-shell .public-sidebar .sidebar-find-button:hover {
-  color: #020204 !important;
+  color: #050505 !important;
   background: #e8e8e8 !important;
   border-color: #e8e8e8 !important;
 }
 
 html body .public-shell .public-sidebar .sidebar-find-button:hover > svg {
-  color: #020204 !important;
+  color: #050505 !important;
 }
 
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control,
@@ -3917,8 +3917,8 @@ html body .public-shell .public-sidebar a.sidebar-find-button,
 html body .public-shell .public-sidebar a.sidebar-find-button *,
 html body .public-shell .public-sidebar a.sidebar-find-button.active,
 html body .public-shell .public-sidebar a.sidebar-find-button.active * {
-  color: #020204 !important;
-  -webkit-text-fill-color: #020204 !important;
+  color: #050505 !important;
+  -webkit-text-fill-color: #050505 !important;
 }
 
 html body .public-shell .public-sidebar .guest-auth-actions a.sidebar-register,
@@ -3933,21 +3933,21 @@ html body .public-shell .public-sidebar a.sidebar-find-button.active {
 html body .public-shell .public-sidebar .guest-auth-actions a.sidebar-register:hover,
 html body .public-shell .public-sidebar a.sidebar-find-button:hover,
 html body .public-shell .public-sidebar a.sidebar-find-button.active:hover {
-  color: #020204 !important;
+  color: #050505 !important;
   background: #e8e8e8 !important;
   border-color: #e8e8e8 !important;
 }
 
 html body .public-shell .public-sidebar a.sidebar-find-button svg,
 html body .public-shell .public-sidebar a.sidebar-find-button.active svg {
-  color: #020204 !important;
-  stroke: #020204 !important;
+  color: #050505 !important;
+  stroke: #050505 !important;
 }
 
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
   color: #ffffff !important;
-  background: #020204 !important;
-  background-color: #020204 !important;
+  background: #050505 !important;
+  background-color: #050505 !important;
   background-image: none !important;
   border-color: rgba(255, 255, 255, .14) !important;
   box-shadow: none !important;
@@ -3967,7 +3967,7 @@ html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worke
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill,
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:hover,
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #020204 inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #050505 inset !important;
   -webkit-text-fill-color: #ffffff !important;
   caret-color: #ffffff !important;
 }
