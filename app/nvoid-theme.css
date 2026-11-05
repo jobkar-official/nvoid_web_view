@@ -4606,3 +4606,13 @@ html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy > .work
   background: #ffffff !important;
   box-shadow: 0 0 10px rgba(255, 255, 255, .4) !important;
 }
+
+
+/* Homepage search form: blend the full Job Title / Location card into the page. */
+html body .public-shell .nvoid-homepage-restored .worker-home-search-section .worker-home-search-card {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
