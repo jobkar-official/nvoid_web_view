@@ -3967,7 +3967,7 @@ html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worke
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill,
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:hover,
 html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control input:-webkit-autofill:focus {
-  -webkit-box-shadow: 0 0 0 1000px #050505 inset !important;
+  -webkit-box-shadow: 0 0 0 1000px #202020 inset !important;
   -webkit-text-fill-color: #ffffff !important;
   caret-color: #ffffff !important;
 }
