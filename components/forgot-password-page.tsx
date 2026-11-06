@@ -36,7 +36,7 @@ export default function ForgotPasswordPage() {
       <Link href="/auth/signin" className="auth-back"><ArrowLeft size={15} /> Back to sign in</Link>
       <div className="auth-layout">
         <section className="auth-brand-panel">
-          <Link href="/" className="auth-brand"><span className="brand-symbol" aria-hidden="true"><Image src="/favicon.svg" alt="" width={26} height={26} priority /></span><strong>NVOIDAI</strong></Link>
+          <Link href="/" className="auth-brand"><span className="brand-symbol" aria-hidden="true"><Image src="/logo.svg" alt="" width={26} height={26} priority /></span><strong>NVOIDAI</strong></Link>
           <div className="auth-brand-copy">
             <span className="auth-overline">YOUR ACCOUNT, SECURED</span>
             <h1>Get back to what’s next.</h1>
