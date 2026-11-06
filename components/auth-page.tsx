@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowLeft, ArrowRight, Building2, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck, UserRound } from "lucide-react";
-import { signInWithJobkar } from "../lib/context/auth-client";
+import { signInWithNvoid } from "../lib/context/auth-client";
 import { buildTrackedApplicationUrl } from "../lib/application-url";
 
 export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
@@ -41,8 +41,8 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
         if (!response.ok) throw new Error(data.error || "Registration could not be completed.");
         if (!data.authenticated) throw new Error("The authentication service did not confirm this session.");
       } else {
-        const session = await signInWithJobkar(email, password);
-        if (!session.authenticated) throw new Error("Jobkar authentication did not confirm this session.");
+        const session = await signInWithNvoid(email, password);
+        if (!session.authenticated) throw new Error("NvoidAI authentication did not confirm this session.");
       }
       window.location.assign("/");
     } catch (error) {
