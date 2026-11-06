@@ -230,8 +230,8 @@ html body .public-shell .worker-home-agent-dot {
   box-shadow: 0 0 0 4px rgba(109, 40, 217, .1) !important;
 }
 
-/* Standard secondary controls first. */
-html body .public-shell button:not(.history-clear):not(.history-edit):not(.history-delete):not(.sidebar-toggle-button),
+/* Standard secondary controls first; primary actions are explicitly overridden below. */
+html body .public-shell button,
 html body .nv-private-page button,
 html body .nv-chat-page button,
 html body .auth-page button,
@@ -243,15 +243,36 @@ html body .catalog-page button {
   box-shadow: none !important;
 }
 
-html body .public-shell button:not(:disabled):not(.history-clear):not(.history-edit):not(.history-delete):hover,
-html body .nv-private-page button:not(:disabled):hover,
-html body .nv-chat-page button:not(:disabled):hover,
-html body .auth-page button:not(:disabled):hover,
-html body .catalog-page button:not(:disabled):hover {
+html body .public-shell button:hover,
+html body .nv-private-page button:hover,
+html body .nv-chat-page button:hover,
+html body .auth-page button:hover,
+html body .catalog-page button:hover {
   color: #4b1b83 !important;
   -webkit-text-fill-color: #4b1b83 !important;
   background: #f5f0ff !important;
   border-color: #cbb8e8 !important;
+}
+
+html body .public-shell .public-sidebar :is(.history-clear, .history-edit, .history-delete) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+html body .public-shell .public-sidebar :is(.history-clear, .history-edit, .history-delete):hover {
+  color: #35105f !important;
+  -webkit-text-fill-color: #35105f !important;
+  background: #ffffff !important;
+  border: 0 !important;
+}
+
+html body .nv-private-page .nv-text-action {
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+  background: transparent !important;
+  border: 0 !important;
 }
 
 /* All primary actions use the Nvoid brand colour, never black. */
