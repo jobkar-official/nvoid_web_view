@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
   }
 
   const serverIds = Array.isArray(body.serverIds)
-    ? body.serverIds.filter((value): value is string => typeof value === "string" && value.trim()).slice(0, 50)
+    ? body.serverIds.filter((value): value is string => typeof value === "string" && value.trim().length > 0).slice(0, 50)
     : undefined;
   const crawlBody = {
     profile,
