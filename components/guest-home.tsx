@@ -19,11 +19,18 @@ type SourceDiagnostic = {
   error?: string;
   skipReason?: string;
 };
-type SearchOrchestration = {
-  connectedMcpServers?: number;
-  connectedSearchTools?: number;
-  executedSearchTools?: number;
-  queryPlanner?: string;
+type CrawlReport = {
+  role?: string;
+  location?: string;
+  depth?: "standard" | "deep";
+  countryBoardsUsed?: string[];
+  totalFound?: number;
+  page?: number;
+  pageSize?: number;
+  totalPages?: number;
+  hasMore?: boolean;
+  sourceSummary?: Array<{ source: string; count: number }>;
+  note?: string;
 };
 type SearchTimings = {
   titlePlanning?: number;
@@ -72,7 +79,8 @@ function sourceName(value?: string) {
     himalayas: "Himalayas", naukri: "Naukri", linkedin: "LinkedIn Jobs", indeed: "Indeed",
     glassdoor: "Glassdoor", apna: "Apna", adzuna: "Adzuna", jooble: "Jooble",
     greenhouse: "Greenhouse", lever: "Lever", ashby: "Ashby", "serper-search": "Public web search",
-    jobspy: "JobSpy", "openings-mcp": "Openings MCP"
+    jobspy: "JobSpy", "mcp-jobspy-speedyapply": "JobSpy", "openings-mcp": "Openings MCP",
+    jobdatalake: "JobDataLake", aidevboard: "AI Dev Jobs", weworkremotely: "We Work Remotely"
   };
   return names[value || ""] || value || "Connected source";
 }
@@ -118,8 +126,9 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
   const [location, setLocation] = useState(initialLocation || "Worldwide");
   const [jobs, setJobs] = useState<Job[]>([]);
   const [sources, setSources] = useState<SourceDiagnostic[]>([]);
-  const [orchestration, setOrchestration] = useState<SearchOrchestration | null>(null);
+  const [searchReport, setSearchReport] = useState<CrawlReport | null>(null);
   const [searchTimings, setSearchTimings] = useState<SearchTimings | null>(null);
+  const [visibleJobCount, setVisibleJobCount] = useState(100);
   const [sourceActivityIssue, setSourceActivityIssue] = useState("");
   const [searched, setSearched] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -134,7 +143,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     }
     if (sortMode === "title") return left.job.title.localeCompare(right.job.title) || left.index - right.index;
     return (right.job.matchScore ?? -1) - (left.job.matchScore ?? -1) || left.index - right.index;
-  }).map((item) => item.job), [jobs, sortMode]);
+  }).map((item) => item.job).slice(0, visibleJobCount), [jobs, sortMode, visibleJobCount]);
 
   useEffect(() => {
     if (!searchId) {
@@ -142,9 +151,10 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setLocation(initialLocation || "Worldwide");
       setJobs([]);
       setSources([]);
-      setOrchestration(null);
+      setSearchReport(null);
       setSearchTimings(null);
       setSourceActivityIssue("");
+      setVisibleJobCount(100);
       setSearched(false);
       setActiveSearch("");
       setNotice("");
@@ -157,7 +167,10 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setLocation("Worldwide");
       setJobs([]);
       setSources([]);
-      setOrchestration(null);
+      setSearchReport(null);
+      setSearchTimings(null);
+      setSourceActivityIssue("");
+      setVisibleJobCount(100);
       setSearched(false);
       setActiveSearch("");
       setNotice("This saved search is not available in this browser. Start a new search to continue.");
@@ -169,9 +182,10 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setLocation(saved.location);
     setJobs(savedJobs);
     setSources(Array.isArray(saved.sources) ? saved.sources as SourceDiagnostic[] : []);
-    setOrchestration(saved.orchestration ? saved.orchestration as SearchOrchestration : null);
+    setSearchReport(saved.report ? saved.report as CrawlReport : saved.orchestration ? saved.orchestration as CrawlReport : null);
     setSearchTimings(saved.timingsMs ? saved.timingsMs as SearchTimings : null);
-    setSourceActivityIssue(!saved.sources?.length && !saved.orchestration && Array.isArray(saved.jobs)
+    setVisibleJobCount(100);
+    setSourceActivityIssue(!saved.sources?.length && !saved.report && !saved.orchestration && Array.isArray(saved.jobs)
       ? "This saved search does not contain source-level execution details. Run it again to inspect which providers were queried."
       : "");
     setSearched(Array.isArray(saved.jobs));
@@ -233,9 +247,10 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setNotice("");
     setJobs([]);
     setSources([]);
-    setOrchestration(null);
+    setSearchReport(null);
     setSearchTimings(null);
     setSourceActivityIssue("");
+    setVisibleJobCount(100);
     setSearched(false);
     const recordId = values?.forceNewRecord
       ? saveSearch({ jobTitle: role, location: place, resultCount: 0 })
@@ -266,35 +281,38 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         portfolioUrl: "",
         resumePath: ""
       };
-      const result = await responseData(await fetch("/api/agent/search", {
+      const result = await responseData(await fetch("/api/agent/crawl", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ profile, limit: 1000, syncToBackend: false })
+        body: JSON.stringify({ profile, limit: 1000, page: 1, pageSize: 100, depth: "deep", syncToBackend: false })
       }));
       const found = Array.isArray(result.jobs) ? result.jobs as Job[] : [];
       const savedJobs = cachedJobs(found);
       const sourceRows = Array.isArray(result.sources) ? result.sources as SourceDiagnostic[] : [];
-      const searchSummary = result.orchestration && typeof result.orchestration === "object" ? result.orchestration as SearchOrchestration : null;
+      const searchSummary = result.report && typeof result.report === "object" ? result.report as CrawlReport : null;
       setJobs(savedJobs);
       setSources(sourceRows);
-      setOrchestration(searchSummary);
+      setSearchReport(searchSummary);
       const timings = result.timingsMs && typeof result.timingsMs === "object" ? result.timingsMs as SearchTimings : null;
       setSearchTimings(timings);
       setSourceActivityIssue(sourceRows.length === 0 && !searchSummary
-        ? "The agent returned no source activity data. Check that the deployed Nvoid worker is running the current search API."
+        ? "The agent returned no crawl report or source activity. Check that the deployed Nvoid worker is running the current crawl API."
         : sourceRows.length === 0
-          ? "The worker completed the request but reported no eligible MCP job-search sources for this query."
+          ? "The crawl completed without reporting configured job-search sources for this query."
           : "");
       setSearched(true);
-      updateSearch(recordId, { resultCount: savedJobs.length, jobs: savedJobs, sources: sourceRows, orchestration: searchSummary || undefined, timingsMs: timings || undefined, error: undefined });
-      setNotice(savedJobs.length ? savedJobs.length.toLocaleString() + " opportunities found across connected sources." : "No matching opportunities returned. Try a broader job title or location.");
+      const totalFound = searchSummary?.totalFound ?? savedJobs.length;
+      updateSearch(recordId, { resultCount: totalFound, jobs: savedJobs, sources: sourceRows, report: searchSummary || undefined, orchestration: undefined, timingsMs: timings || undefined, error: undefined });
+      setNotice(savedJobs.length ? totalFound.toLocaleString() + " opportunities found across the crawl. " + savedJobs.length.toLocaleString() + " listings are ready to review." : "No matching opportunities returned. Try a broader job title or location.");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Nvoid could not complete this search. Please try again.";
       setSearched(true);
       setSourceActivityIssue(message);
       setSearchTimings(null);
+      setSearchReport(null);
+      setVisibleJobCount(100);
       setNotice(message);
-      updateSearch(recordId, { resultCount: 0, jobs: [], sources: [], orchestration: undefined, error: message });
+      updateSearch(recordId, { resultCount: 0, jobs: [], sources: [], report: undefined, orchestration: undefined, error: message });
     } finally {
       setBusy(false);
     }
@@ -348,6 +366,61 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching connected job sources for {jobTitle} in {location}…</div>}
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
 
+      {searched && (searchReport || sources.length > 0 || searchTimings || sourceActivityIssue) && (
+        <section className="worker-crawl-diagnostics" aria-label="Agent crawl diagnostics">
+          <div className="worker-crawl-diagnostics-heading">
+            <div>
+              <span>AGENT CRAWL REPORT</span>
+              <h2>Discovery details</h2>
+            </div>
+            <span className="worker-crawl-depth">{searchReport?.depth === "deep" ? "Deep crawl" : "Standard crawl"}</span>
+          </div>
+          <div className="worker-crawl-stats">
+            <div><strong>{(searchReport?.totalFound ?? jobs.length).toLocaleString()}</strong><span>Jobs collected</span></div>
+            <div><strong>{sources.length.toLocaleString()}</strong><span>Sources reported</span></div>
+            <div><strong>{sources.filter((source) => source.connectionStatus === "searched").length.toLocaleString()}</strong><span>Sources searched</span></div>
+            <div><strong>{formatDuration(searchTimings?.total) || "—"}</strong><span>Total time</span></div>
+          </div>
+          {searchReport?.note && <p className="worker-crawl-report-note">{searchReport.note}</p>}
+          {searchReport?.countryBoardsUsed && searchReport.countryBoardsUsed.length > 0 && (
+            <div className="worker-crawl-country-boards">
+              <span>Country boards:</span>
+              {searchReport.countryBoardsUsed.map((board) => <span key={board}>{board}</span>)}
+            </div>
+          )}
+          {searchTimings && (
+            <div className="worker-crawl-timings">
+              <span>Title planning <strong>{formatDuration(searchTimings.titlePlanning) || "—"}</strong></span>
+              <span>Source search <strong>{formatDuration(searchTimings.sourceSearch) || "—"}</strong></span>
+              <span>Detail enrichment <strong>{formatDuration(searchTimings.detailEnrichment) || "—"}</strong></span>
+              <span>AI reranking <strong>{formatDuration(searchTimings.aiReranking) || "—"}</strong></span>
+            </div>
+          )}
+          {sources.length > 0 && (
+            <details className="worker-crawl-source-details">
+              <summary>Inspect source execution ({sources.length})</summary>
+              <div className="worker-crawl-source-list">
+                {sources.map((source) => (
+                  <article className="worker-crawl-source-row" key={source.serverId + ":" + (source.tool || "")}>
+                    <div>
+                      <strong>{sourceName(source.serverId)}</strong>
+                      <span>{source.tool || "No search tool reported"}</span>
+                    </div>
+                    <span className={"worker-crawl-source-status " + source.connectionStatus}>{source.connectionStatus.replace(/-/g, " ")}</span>
+                    <div className="worker-crawl-source-counts">
+                      <span>Fetched <strong>{(source.fetchedCount ?? 0).toLocaleString()}</strong></span>
+                      <span>Matched <strong>{(source.locationMatchedCount ?? 0).toLocaleString()}</strong></span>
+                    </div>
+                    {(source.error || source.skipReason) && <p>{clean(source.error || source.skipReason)}</p>}
+                  </article>
+                ))}
+              </div>
+            </details>
+          )}
+          {sourceActivityIssue && <p className="worker-crawl-report-warning">{sourceActivityIssue}</p>}
+        </section>
+      )}
+
       {!searched && !busy && !searchId && (
         <section className="worker-search-guide" aria-label="How Nvoid search works">
           <div><span>01</span><strong>Search by role and location</strong><p>Describe the opportunity you want to find.</p></div>
@@ -359,11 +432,11 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {jobs.length > 0 && (
         <section className="public-results-section">
           <div className="section-heading">
-            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE SEARCH RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Results are returned by the sources currently connected to Nvoid."}</p></div>
-            <span className="result-count">{jobs.length.toLocaleString()} found</span>
+            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE CRAWL RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Results are collected from the connected sources and public pages available to this crawl."}</p></div>
+            <span className="result-count">{(searchReport?.totalFound ?? jobs.length).toLocaleString()} found</span>
           </div>
           <div className="worker-results-toolbar">
-            <div className="worker-results-result-context"><strong>{jobs.length.toLocaleString()} opportunities</strong><span>Review the source details and choose where to apply.</span></div>
+            <div className="worker-results-result-context"><strong>{(searchReport?.totalFound ?? jobs.length).toLocaleString()} opportunities</strong><span>Showing {displayedJobs.length.toLocaleString()} of {jobs.length.toLocaleString()} returned listings.</span></div>
             <label className="worker-results-sort"><span>Sort results</span><select value={sortMode} onChange={(event) => setSortMode(event.target.value as "relevance" | "newest" | "title")}><option value="relevance">Nvoid relevance</option><option value="newest">Newest first</option><option value="title">Job title</option></select></label>
           </div>
           <div className="public-job-grid">
@@ -397,6 +470,14 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
               );
             })}
           </div>
+          {jobs.length > displayedJobs.length && (
+            <div className="worker-crawl-pagination">
+              <span>Showing {displayedJobs.length.toLocaleString()} of {jobs.length.toLocaleString()} returned opportunities</span>
+              <button type="button" onClick={() => setVisibleJobCount((current) => Math.min(current + 100, jobs.length))}>
+                Load more opportunities <ArrowRight size={15} />
+              </button>
+            </div>
+          )}
         </section>
       )}
 

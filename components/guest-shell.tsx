@@ -35,6 +35,7 @@ export type GuestSearchRecord = {
   jobs?: GuestSearchJob[];
   error?: string;
   sources?: Array<Record<string, unknown>>;
+  report?: Record<string, unknown>;
   orchestration?: Record<string, unknown>;
   timingsMs?: {
     titlePlanning?: number;
@@ -93,6 +94,7 @@ function readHistory(): GuestSearchRecord[] {
         jobs,
         error: typeof item.error === "string" ? item.error : undefined,
         sources: Array.isArray(item.sources) ? item.sources.filter((source): source is Record<string, unknown> => Boolean(source && typeof source === "object")) : undefined,
+        report: item.report && typeof item.report === "object" ? item.report as Record<string, unknown> : undefined,
         orchestration: item.orchestration && typeof item.orchestration === "object" ? item.orchestration as Record<string, unknown> : undefined,
         timingsMs: item.timingsMs && typeof item.timingsMs === "object" ? item.timingsMs as GuestSearchRecord["timingsMs"] : undefined
       }];
