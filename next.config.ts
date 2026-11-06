@@ -65,11 +65,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/authController/:path*",
-        destination: "https://edge.jobkar.in/authentication/authController/:path*",
+        destination: "https://api.nvoidai.com/authentication/authController/:path*",
       },
       {
         source: "/backend/:path*",
-        destination: "https://api.jobkar.in/:path*",
+        destination: "https://api.nvoidai.com/:path*",
       },
     ];
   },
