@@ -559,3 +559,124 @@ html body .public-shell .nvoid-research-composer-footer > span {
     background: #ffffff !important;
   }
 }
+
+
+/* Finish the route audit: no dark card exceptions on secondary page families. */
+html body .auth-page :is(.auth-brand-panel, .auth-form-panel, .auth-preview),
+html body .info-page :is(.info-hero, .info-section, .info-aside, .info-cta, .info-toc, .info-toc-note, .info-document-layout),
+html body .release-hub :is(.release-hub-hero, .release-hub-hero-side, .release-hub-principles > div, .release-hub-capability, .release-hub-featured-release),
+html body .free-hiring-page :is(.free-hiring-preview, .free-hiring-benefit, .free-hiring-step, .free-hiring-faq-item),
+html body .model-detail-page :is(.model-index-hero, .model-index-current, .model-index-current-model, .model-index-capabilities-section, .model-index-footer) {
+  color: #292433 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e7e3eb !important;
+  box-shadow: 0 5px 20px rgba(38, 30, 51, .04) !important;
+}
+
+html body .auth-page :is(.auth-brand-copy h1, .auth-form-heading h2, .auth-brand strong, .auth-form-heading strong),
+html body .info-page :is(h1, h2, h3, strong),
+html body .release-hub :is(h1, h2, h3, strong),
+html body .free-hiring-page :is(h1, h2, h3, strong),
+html body .model-detail-page :is(h1, h2, h3, strong) {
+  color: #262230 !important;
+  -webkit-text-fill-color: #262230 !important;
+}
+
+html body .auth-page :is(.auth-overline, .auth-brand-points, .auth-brand-footer, .auth-terms, .auth-switch),
+html body .info-page :is(p, li, small),
+html body .release-hub :is(p, small, li),
+html body .free-hiring-page :is(p, small, li),
+html body .model-detail-page :is(p, small, li) {
+  color: #746e7e !important;
+  -webkit-text-fill-color: #746e7e !important;
+}
+
+html body .auth-page :is(.auth-form-panel, .auth-brand-panel) {
+  border: 1px solid #e7e3eb !important;
+  border-radius: 16px !important;
+}
+
+html body .auth-page .auth-role-picker button.selected {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6d28d9 !important;
+  border-color: #6d28d9 !important;
+}
+
+html body .auth-page .auth-role-picker button.selected :is(strong, small, svg) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+html body .auth-page .auth-back,
+html body .auth-page :is(.auth-switch a, .auth-terms a),
+html body .info-page a,
+html body .release-hub a,
+html body .free-hiring-page a,
+html body .model-detail-page a,
+html body .worker-directory-link,
+html body .nv-private-page .nv-text-action {
+  color: #5b21b6 !important;
+}
+
+html body .auth-page :is(.auth-back, .auth-switch a, .auth-terms a):hover,
+html body .info-page a:hover,
+html body .release-hub a:hover,
+html body .free-hiring-page a:hover,
+html body .model-detail-page a:hover,
+html body .worker-directory-link:hover,
+html body .nv-private-page .nv-text-action:hover {
+  color: #6d28d9 !important;
+}
+
+/* Keep neutral icons readable on white cards; primary and sidebar icons retain their contrast. */
+html body .nv-private-page svg,
+html body .nv-chat-page svg,
+html body .auth-page svg,
+html body .info-page svg,
+html body .catalog-page svg {
+  color: #766b87 !important;
+}
+
+html body .nv-private-page .nv-primary svg,
+html body .nv-private-page .nv-find-jobs-button svg,
+html body .nv-chat-page :is(.nv-chat-new button, .nv-chat-composer button) svg,
+html body .auth-page .auth-submit svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html body .nv-private-page .nv-icon-action.danger svg {
+  color: #b42318 !important;
+}
+
+/* Remove the old tinted hero glow so the page stays genuinely white. */
+html body .public-shell .worker-home-brand-intro::before {
+  display: none !important;
+  background: none !important;
+}
+
+html body .public-shell .nvoid-header-login {
+  color: #51495f !important;
+  -webkit-text-fill-color: #51495f !important;
+}
+
+html body .public-shell .nvoid-header-signup,
+html body .public-shell .nvoid-header-free-posting,
+html body .public-shell .nvoid-header-logout {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6d28d9 !important;
+  border-color: #6d28d9 !important;
+}
+
+html body .public-shell .nvoid-header-signup:hover,
+html body .public-shell .nvoid-header-free-posting:hover,
+html body .public-shell .nvoid-header-logout:hover {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #5b21b6 !important;
+  border-color: #5b21b6 !important;
+}
