@@ -680,3 +680,59 @@ html body .public-shell .nvoid-header-logout:hover {
   background: #5b21b6 !important;
   border-color: #5b21b6 !important;
 }
+
+
+/* Icon consistency audit: interface icons use the Nvoid purple, not black or grey. */
+html body .public-shell .public-content svg,
+html body .public-shell .public-topbar svg,
+html body .nv-content svg,
+html body .nv-topbar svg,
+html body .nv-chat-page svg,
+html body .auth-page svg,
+html body .info-page svg,
+html body .catalog-page svg,
+html body .release-hub svg,
+html body .free-hiring-page svg,
+html body .model-detail-page svg {
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+  opacity: 1 !important;
+}
+
+/* Brand navigation keeps white icons against the deep-purple rail. */
+html body .public-sidebar svg,
+html body .nv-sidebar svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Search-field icons use the same brand colour on their soft-grey backgrounds. */
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control > svg {
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+/* Purple action buttons retain white icon contrast. */
+html body .public-shell :is(.worker-home-search-button, .worker-results-submit, .public-job-apply-button, .nvoid-agent-refresh, .nvoid-research-composer-footer button, .nvoid-search-source-button, .nvoid-header-signup, .nvoid-header-free-posting, .nvoid-header-logout, .info-cta-link, .auth-submit, .auth-primary-button) svg,
+html body .nv-private-page :is(.nv-primary, .nv-find-jobs-button) svg,
+html body .nv-chat-page :is(.nv-chat-new button, .nv-chat-composer button) svg,
+html body .auth-page .auth-submit svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Destructive actions are the only intentional red icon treatment. */
+html body .nv-private-page .nv-icon-action.danger svg {
+  color: #b42318 !important;
+  stroke: #b42318 !important;
+}
+
+/* Avoid accidental low-opacity or inherited dark icon rendering. */
+html body .public-shell .public-content button svg,
+html body .public-shell .public-content a svg,
+html body .nv-content button svg,
+html body .nv-content a svg,
+html body .nv-chat-page button svg {
+  opacity: 1 !important;
+}
