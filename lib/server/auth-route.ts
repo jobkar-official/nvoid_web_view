@@ -21,20 +21,15 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
     return NextResponse.json({ error: "Unsupported authentication action." }, { status: 404 });
   }
 
-  const base = (
-    process.env.NVOID_AUTH_BASE_URL ||
-    process.env.NVOID_API_BASE_URL ||
-    process.env.NEXT_PUBLIC_API_URL ||
-    "https://edge.jobkar.in"
-  ).trim();
+  const base = (process.env.NVOID_AUTH_BASE_URL || "https://api.nvoidai.com").trim();
 
   let upstream: URL;
   try {
     const path = action === "signin"
       ? "/authentication/authController/login"
       : action === "register"
-        ? process.env.NVOID_AUTH_REGISTER_PATH || "/backend/auth/register"
-        : process.env.NVOID_AUTH_FORGOT_PASSWORD_PATH || "/backend/auth/OAuthGenPassword";
+        ? process.env.NVOID_AUTH_REGISTER_PATH || "/authentication/authController/register"
+        : process.env.NVOID_AUTH_FORGOT_PASSWORD_PATH || "/authentication/authController/sendCodeForgotPassword";
     upstream = new URL(path, base);
     if (upstream.origin !== new URL(base).origin) throw new Error("Authentication path must remain on the configured auth host.");
   } catch {
@@ -51,12 +46,8 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
     if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
     }
-    if (upstream.pathname.includes("OAuthGenPassword")) {
-      upstream.searchParams.set("email", email.trim());
-      body = {};
-    } else {
-      body = { email: email.trim() };
-    }
+    upstream.searchParams.set("email", email.trim());
+    body = {};
   } else if (action === "signin") {
     const credentials = body as Record<string, unknown>;
     const email = typeof credentials.email === "string" ? credentials.email.trim() : "";
@@ -66,11 +57,15 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
     }
     body = { email, password };
   } else {
-    const requestedRole = Number((body as Record<string, unknown>).roleId);
-    if (requestedRole !== 3 && requestedRole !== 4) {
-      return NextResponse.json({ error: "Public registration is available for job seekers and recruiters only." }, { status: 400 });
+    const registration = body as Record<string, unknown>;
+    const name = typeof registration.name === "string" ? registration.name.trim() : "";
+    const email = typeof registration.email === "string" ? registration.email.trim() : "";
+    const password = typeof registration.password === "string" ? registration.password : "";
+    const roleId = Number(registration.roleId);
+    if (!name || !email || !password || (roleId !== 3 && roleId !== 4)) {
+      return NextResponse.json({ error: "Name, valid email, password and account type are required." }, { status: 400 });
     }
-    body = { ...(body as Record<string, unknown>), platform: "WEB" };
+    body = { ...registration, name, email, roleId, platform: "WEB" };
   }
 
   try {
@@ -83,27 +78,7 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
     });
     const payload = await response.json().catch(() => ({}));
 
-    if (action === "forgot-password") {
-      if (!response.ok) {
-        return NextResponse.json({ error: "We couldn't process your request right now. Please try again later." }, { status: response.status });
-      }
-      return NextResponse.json({
-        submitted: true,
-        message: "If an account matches that email, password reset instructions will be sent."
-      });
-    }
-
     if (!response.ok) {
-      if (response.status === 404 && action === "signin") {
-        return NextResponse.json({
-          error: "The local sign-in route reached the configured Jobkar host, but that host returned 404 for /authentication/authController/login. Check the Edge Gateway route mapping.",
-          source: "jobkar-auth-upstream",
-          upstreamStatus: 404
-        }, {
-          status: 502,
-          headers: { "x-nvoid-auth-route": "/api/auth/signin", "x-nvoid-auth-upstream-status": "404" }
-        });
-      }
       const error = typeof payload.detail === "string"
         ? payload.detail
         : typeof payload.error === "string"
@@ -111,7 +86,7 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
           : typeof payload.message === "string"
             ? payload.message
             : "Authentication was rejected.";
-      return NextResponse.json({ error, source: "jobkar-auth-upstream", upstreamStatus: response.status }, {
+      return NextResponse.json({ error, source: "nvoid-auth-upstream", upstreamStatus: response.status }, {
         status: response.status,
         headers: { "x-nvoid-auth-route": `/api/auth/${action}`, "x-nvoid-auth-upstream-status": String(response.status) }
       });
@@ -136,6 +111,6 @@ export async function handleAuthRequest(request: NextRequest, action: string) {
       headers: { "x-nvoid-auth-route": `/api/auth/${action}` }
     });
   } catch {
-    return NextResponse.json({ error: "Could not reach the configured authentication service." }, { status: 502 });
+    return NextResponse.json({ error: "Could not reach the NvoidAI authentication service." }, { status: 502 });
   }
 }
