@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 import { useRouter } from "next/navigation";
 import { JOBKAR_AUTH_EXPIRED_EVENT } from "./client";
 import type { User, UserRole } from "./types";
-import { signInWithJobkar } from "./auth-client";
+import { signInWithNvoid } from "./auth-client";
 
 type AuthContextType = {
   user: User | null;
@@ -102,7 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     setAuthError(null);
     try {
-      const session = await signInWithJobkar(email, password);
+      const session = await signInWithNvoid(email, password);
       const nextUser = mapUser(session);
       if (!nextUser) throw new Error("The authentication service returned an unsupported account.");
       setUser(nextUser);
