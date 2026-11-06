@@ -736,3 +736,14 @@ html body .nv-content a svg,
 html body .nv-chat-page button svg {
   opacity: 1 !important;
 }
+
+
+html body .public-sidebar .sidebar-find-button svg {
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .auth-page .auth-role-picker button.selected svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
