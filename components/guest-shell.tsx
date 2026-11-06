@@ -212,7 +212,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
         <aside id="nvoid-public-sidebar" aria-label="Nvoid navigation"  className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
           <div className="public-sidebar-header">
             <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
-              <span className="brand-symbol" aria-hidden="true"><Image src="/favicon.svg" alt="" width={24} height={24} priority /></span>
+              <span className="brand-symbol" aria-hidden="true"><Image src="/logo.svg" alt="" width={24} height={24} priority /></span>
               <span className="brand-copy"><strong>NVOIDAI</strong><small>Global career agent</small></span>
             </Link>
           </div>
