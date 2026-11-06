@@ -14,7 +14,7 @@ type SessionResponse = {
   error?: string;
 };
 
-export async function signInWithJobkar(email: string, password: string): Promise<SessionResponse> {
+export async function signInWithNvoid(email: string, password: string): Promise<SessionResponse> {
   let response: Response;
 
   try {
