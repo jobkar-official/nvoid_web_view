@@ -1,0 +1,540 @@
+:root {
+  color-scheme: light !important;
+  --nvoid-brand: #6d28d9;
+  --nvoid-brand-hover: #5b21b6;
+  --nvoid-brand-dark: #2d1253;
+  --nvoid-brand-active: #47206f;
+  --nvoid-ink: #262230;
+  --nvoid-muted: #746e7e;
+  --nvoid-line: #e6e2eb;
+  --nvoid-control: #f2f1f4;
+}
+
+html,
+body,
+html body {
+  color-scheme: light !important;
+  color: #262230 !important;
+  background: #ffffff !important;
+}
+
+html body .public-shell,
+html body .public-main,
+html body .public-content,
+html body .nv-main,
+html body .nv-private-page,
+html body .nv-chat-page,
+html body .nv-content,
+html body .auth-page,
+html body .info-page,
+html body .catalog-page,
+html body .release-hub,
+html body .free-hiring-page,
+html body .model-detail-page,
+html body .nvoid-agent-page,
+html body .worker-results-page {
+  color: #262230 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+html body .public-topbar,
+html body .nv-topbar {
+  color: #262230 !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #ece9f0 !important;
+  box-shadow: none !important;
+}
+
+html body .public-topbar :is(.topbar-breadcrumb, .topbar-breadcrumb strong, .topbar-login, .sidebar-toggle-button),
+html body .nv-topbar :is(.nv-breadcrumb, .nv-breadcrumb strong) {
+  color: #342d3e !important;
+}
+
+/* Deep brand-purple sidebar. */
+html body .public-sidebar,
+html body .public-shell .public-sidebar,
+html body .nv-sidebar,
+html body .nv-expanded .nv-sidebar {
+  color: #ffffff !important;
+  background: #2d1253 !important;
+  background-color: #2d1253 !important;
+  background-image: none !important;
+  border-right: 1px solid #3b1a68 !important;
+  box-shadow: 8px 0 28px rgba(45, 18, 83, .12) !important;
+}
+
+html body .public-sidebar .public-sidebar-header {
+  padding-bottom: 14px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .16) !important;
+}
+
+html body .public-sidebar :is(.public-brand, .public-brand strong, .guest-identity strong),
+html body .nv-sidebar :is(.nv-brand-name, .nv-brand-name strong, .nv-user-info strong) {
+  color: #ffffff !important;
+}
+
+html body .public-sidebar :is(.public-brand small, .guest-identity small, .sidebar-section-label, .history-copy small, .history-placeholder, .history-empty, .sidebar-trust),
+html body .nv-sidebar :is(.nv-brand-name small, .nv-workspace-label, .nv-nav-heading, .nv-user-info small) {
+  color: rgba(255, 255, 255, .72) !important;
+}
+
+html body .public-sidebar .brand-symbol,
+html body .nv-sidebar .nv-brand-mark {
+  color: #6d28d9 !important;
+  background: #ffffff !important;
+  border: 1px solid #ffffff !important;
+  box-shadow: none !important;
+}
+
+html body .public-sidebar .guest-avatar,
+html body .nv-sidebar .nv-avatar {
+  color: #4b1b83 !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, .8) !important;
+}
+
+html body .public-sidebar .sidebar-find-button,
+html body .public-sidebar .sidebar-register {
+  color: #4b1b83 !important;
+  -webkit-text-fill-color: #4b1b83 !important;
+  background: #ffffff !important;
+  border: 1px solid #ffffff !important;
+  box-shadow: none !important;
+}
+
+html body .public-sidebar .sidebar-find-button > svg {
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .public-sidebar .sidebar-find-button:hover,
+html body .public-sidebar .sidebar-register:hover {
+  color: #35105f !important;
+  background: #f1eaff !important;
+  border-color: #f1eaff !important;
+}
+
+html body .public-sidebar .public-nav-link,
+html body .nv-sidebar .nv-nav-link {
+  color: rgba(255, 255, 255, .88) !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+html body .public-sidebar .public-nav-link > svg,
+html body .nv-sidebar .nv-nav-link > svg {
+  color: rgba(255, 255, 255, .84) !important;
+}
+
+html body .public-sidebar .public-nav-link:hover,
+html body .public-sidebar .public-nav-link.active,
+html body .nv-sidebar .nv-nav-link:hover,
+html body .nv-sidebar .nv-nav-link.active {
+  color: #ffffff !important;
+  background: #47206f !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+  box-shadow: inset 3px 0 #c9a8ff !important;
+}
+
+html body .public-sidebar .public-nav-link.active > svg,
+html body .nv-sidebar .nv-nav-link.active > svg {
+  color: #ffffff !important;
+}
+
+html body .public-sidebar .public-sidebar-bottom,
+html body .nv-sidebar .nv-sidebar-bottom {
+  border-top: 1px solid rgba(255, 255, 255, .17) !important;
+}
+
+html body .public-sidebar .sidebar-signin {
+  color: #ffffff !important;
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, .55) !important;
+}
+
+html body .public-sidebar .sidebar-signin:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, .12) !important;
+  border-color: #ffffff !important;
+}
+
+html body .public-sidebar :is(.history-item:hover, .history-item.active) {
+  background: rgba(255, 255, 255, .12) !important;
+  border-color: rgba(255, 255, 255, .17) !important;
+}
+
+html body .public-sidebar :is(.history-select, .history-copy strong, .history-search-icon, .history-clear, .history-edit, .history-delete) {
+  color: #ffffff !important;
+}
+
+html body .public-sidebar :is(.history-edit, .history-delete):hover {
+  color: #35105f !important;
+  background: #ffffff !important;
+}
+
+html body .public-footer {
+  color: #777181 !important;
+  background: #ffffff !important;
+  border-top: 1px solid #ece9f0 !important;
+}
+
+html body .public-footer a,
+html body .public-shell .public-content a:not([class*="button"]):not([class*="submit"]) {
+  color: #5b21b6 !important;
+}
+
+html body .public-footer a:hover,
+html body .public-shell .public-content a:not([class*="button"]):not([class*="submit"]):hover {
+  color: #6d28d9 !important;
+}
+
+/* Readable page headings, helper text and brand wordmark. */
+html body .public-shell :is(h1, h2, h3, h4, h5, h6, strong),
+html body .nv-private-page :is(h1, h2, h3, h4, h5, h6, strong),
+html body .nv-chat-page :is(h1, h2, h3, h4, h5, h6, strong),
+html body .auth-page :is(h1, h2, h3, h4, h5, h6, strong),
+html body .info-page :is(h1, h2, h3, h4, h5, h6, strong),
+html body .catalog-page :is(h1, h2, h3, h4, h5, h6, strong) {
+  color: #262230 !important;
+  -webkit-text-fill-color: #262230 !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell :is(p, small, label, li, .worker-home-agent-label, .worker-home-search-footnote, .worker-home-search-meta, .nvoid-agent-eyebrow, .nvoid-agent-page-heading p, .nvoid-agent-panel-heading p, .nvoid-agent-updated, .nvoid-connection-facts, .nvoid-connection-card small, .worker-results-trust, .worker-results-heading p, .worker-directory-meta, .worker-directory-count, .worker-directory-detail, .worker-directory-status, .section-kicker),
+html body .nv-private-page :is(p, small, label, .nv-eyebrow, .nv-panel-heading p, .nv-record small),
+html body .nv-chat-page :is(p, small, label),
+html body .auth-page :is(p, small, label),
+html body .info-page :is(p, small, label, li) {
+  color: #746e7e !important;
+  -webkit-text-fill-color: #746e7e !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell :is(.worker-home-intro-copy h1, .worker-home-heading-copy) {
+  color: #262230 !important;
+  -webkit-text-fill-color: #262230 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+html body .public-shell .worker-home-intro-copy h1 .worker-home-wordmark-text {
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell .worker-home-agent-dot {
+  background: #6d28d9 !important;
+  box-shadow: 0 0 0 4px rgba(109, 40, 217, .1) !important;
+}
+
+/* Standard secondary controls first. */
+html body .public-shell button:not(.history-clear):not(.history-edit):not(.history-delete):not(.sidebar-toggle-button),
+html body .nv-private-page button,
+html body .nv-chat-page button,
+html body .auth-page button,
+html body .catalog-page button {
+  color: #51495f !important;
+  -webkit-text-fill-color: #51495f !important;
+  background: #ffffff !important;
+  border: 1px solid #dfdbe5 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell button:not(:disabled):not(.history-clear):not(.history-edit):not(.history-delete):hover,
+html body .nv-private-page button:not(:disabled):hover,
+html body .nv-chat-page button:not(:disabled):hover,
+html body .auth-page button:not(:disabled):hover,
+html body .catalog-page button:not(:disabled):hover {
+  color: #4b1b83 !important;
+  -webkit-text-fill-color: #4b1b83 !important;
+  background: #f5f0ff !important;
+  border-color: #cbb8e8 !important;
+}
+
+/* All primary actions use the Nvoid brand colour, never black. */
+html body .public-shell :is(.worker-home-search-button, .worker-results-submit, .public-job-apply-button, .nvoid-agent-refresh, .nvoid-research-composer-footer button, .nvoid-search-source-button, .nvoid-header-signup, .nvoid-header-free-posting, .nvoid-header-logout, .info-cta-link, .auth-submit, .auth-primary-button),
+html body .nv-private-page :is(.nv-primary, .nv-find-jobs-button),
+html body .nv-chat-page :is(.nv-chat-new button, .nv-chat-composer button),
+html body .auth-page .auth-submit {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6d28d9 !important;
+  background-color: #6d28d9 !important;
+  border: 1px solid #6d28d9 !important;
+  box-shadow: 0 4px 12px rgba(109, 40, 217, .14) !important;
+}
+
+html body .public-shell :is(.worker-home-search-button, .worker-results-submit, .public-job-apply-button, .nvoid-agent-refresh, .nvoid-research-composer-footer button, .nvoid-search-source-button, .nvoid-header-signup, .nvoid-header-free-posting, .nvoid-header-logout, .info-cta-link, .auth-submit, .auth-primary-button) svg,
+html body .nv-private-page .nv-primary svg,
+html body .nv-chat-page :is(.nv-chat-new button, .nv-chat-composer button) svg,
+html body .auth-page .auth-submit svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html body .public-shell :is(.worker-home-search-button, .worker-results-submit, .public-job-apply-button, .nvoid-agent-refresh, .nvoid-research-composer-footer button, .nvoid-search-source-button, .nvoid-header-signup, .nvoid-header-free-posting, .nvoid-header-logout, .info-cta-link, .auth-submit, .auth-primary-button):not(:disabled):hover,
+html body .nv-private-page :is(.nv-primary, .nv-find-jobs-button):not(:disabled):hover,
+html body .nv-chat-page :is(.nv-chat-new button, .nv-chat-composer button):not(:disabled):hover,
+html body .auth-page .auth-submit:not(:disabled):hover {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #5b21b6 !important;
+  border-color: #5b21b6 !important;
+}
+
+html body .public-shell :is(.sidebar-toggle-button, .mobile-menu-button) {
+  color: #4b1b83 !important;
+  background: #ffffff !important;
+  border: 1px solid #e2d9ee !important;
+}
+
+html body .public-shell :is(.sidebar-toggle-button, .mobile-menu-button) svg {
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .public-shell :is(.sidebar-signin, .nvoid-header-login, .worker-directory-tab, .history-clear, .history-edit, .history-delete),
+html body .nv-private-page :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-profile-tab),
+html body .nv-chat-page :is(.nv-chat-back, .nv-chat-resume button),
+html body .auth-page .auth-role-picker button {
+  color: #51495f !important;
+  -webkit-text-fill-color: #51495f !important;
+  background: #ffffff !important;
+  border: 1px solid #dfdbe5 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .worker-directory-tab.active,
+html body .nv-private-page .nv-profile-tab.active {
+  color: #5b21b6 !important;
+  -webkit-text-fill-color: #5b21b6 !important;
+  background: #f3edff !important;
+  border-color: #cdb9ec !important;
+}
+
+html body .public-shell :is(.worker-directory-tab, .history-clear, .history-edit, .history-delete):hover,
+html body .nv-private-page :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-profile-tab):hover,
+html body .nv-chat-page :is(.nv-chat-back, .nv-chat-resume button):hover {
+  color: #5b21b6 !important;
+  background: #f5f0ff !important;
+  border-color: #cdb9ec !important;
+}
+
+html body .public-shell :is(.sidebar-toggle-button, .mobile-menu-button) svg,
+html body .public-shell .public-content svg,
+html body .nv-private-page svg,
+html body .nv-chat-page svg,
+html body .auth-page svg,
+html body .info-page svg,
+html body .catalog-page svg {
+  color: #766b87;
+}
+
+html body .public-shell .public-content :is(.nvoid-agent-page-heading svg, .nvoid-agent-panel-heading svg, .worker-results-heading svg, .info-section-number),
+html body .nv-private-page :is(.nv-page-heading svg, .nv-panel-heading svg),
+html body .nv-chat-page .nv-chat-heading svg {
+  color: #6d28d9 !important;
+}
+
+/* Soft-grey Job title and Location controls, with a single quiet border. */
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
+  padding: 13px !important;
+  background: #faf9fb !important;
+  background-color: #faf9fb !important;
+  border: 1px solid #e7e3ec !important;
+  border-radius: 15px !important;
+  box-shadow: 0 5px 18px rgba(38, 30, 51, .045) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control {
+  min-height: 48px !important;
+  padding: 0 13px !important;
+  color: #716b7a !important;
+  background: #f1f0f3 !important;
+  background-color: #f1f0f3 !important;
+  border: 1px solid #dcd9e1 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control:hover {
+  background: #eeeeF1 !important;
+  border-color: #c9c4d0 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control:focus-within {
+  background: #f5f4f7 !important;
+  border-color: #a99bbd !important;
+  outline: 2px solid rgba(109, 40, 217, .07) !important;
+  outline-offset: 1px !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control > svg {
+  color: #81798b !important;
+  stroke: #81798b !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control > input {
+  color: #292433 !important;
+  -webkit-text-fill-color: #292433 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control > input::placeholder {
+  color: #8d8796 !important;
+  -webkit-text-fill-color: #8d8796 !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-divider {
+  background: #e2dfe6 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-button {
+  min-height: 48px !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6d28d9 !important;
+  border: 1px solid #6d28d9 !important;
+  border-radius: 10px !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-button svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-button:hover {
+  background: #5b21b6 !important;
+  border-color: #5b21b6 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored input:-webkit-autofill,
+html body .public-shell .nvoid-homepage-restored input:-webkit-autofill:hover,
+html body .public-shell .nvoid-homepage-restored input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #f1f0f3 inset !important;
+  -webkit-text-fill-color: #292433 !important;
+  caret-color: #292433 !important;
+}
+
+/* White cards and panels across public, private, chat and directory pages. */
+html body .public-shell .public-content :is(.nvoid-agent-panel, .nvoid-search-diagnostics, .nvoid-connection-card, .nvoid-search-source-row, .nvoid-research-records > article, .worker-results-page .public-job-card, .worker-search-guide > div, .worker-member-home, .worker-member-link, .public-job-card, .category-card, .no-results, .model-card, .model-detail, .release-card, .release-panel, .free-hiring-card, .info-toc, .info-toc-note, .info-cta, .info-hero, .info-section, .info-aside, .model-index-current, .model-index-capabilities-section, .worker-directory-card, .worker-directory-empty),
+html body .nv-private-page :is(.nv-panel, .nv-stat-card, .nv-job-card, .nv-status-card, .nv-record, .nv-alert, .nv-info-strip, .nv-footer-note),
+html body .nv-chat-page :is(.nv-chat-layout, .nv-chat-inbox, .nv-chat-conversation, .nv-chat-placeholder, .nv-chat-resume, .nv-chat-thread) {
+  color: #292433 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e7e3eb !important;
+  box-shadow: 0 5px 20px rgba(38, 30, 51, .04) !important;
+}
+
+html body .public-shell .public-content :is(.worker-directory-icon, .company-monogram, .no-results-icon, .bot-promo-icon),
+html body .nv-private-page :is(.nv-record-icon, .nv-stat-icon, .nv-profile-avatar),
+html body .nv-chat-page :is(.nv-chat-avatar, .nv-chat-resume-icon) {
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+  border-color: #e4d8f6 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-content :is(.worker-directory-card h2, .public-job-card h3, .section-heading h2, .nvoid-agent-panel-heading h2, .nvoid-agent-panel-heading strong, .worker-results-heading h1, .worker-directory-hero h1, .info-hero h1, .info-section h2),
+html body .nv-private-page :is(.nv-page-heading h1, .nv-panel-heading h2, .nv-record strong, .nv-job-card h3),
+html body .nv-chat-page :is(.nv-chat-heading h1, .nv-chat-person strong, .nv-chat-thread strong) {
+  color: #262230 !important;
+}
+
+html body .public-shell .public-content :is(.public-job-meta, .public-job-description, .worker-directory-meta, .worker-directory-detail, .worker-directory-status, .source-chip, .result-count, .public-job-details span, .worker-results-sort select),
+html body .nv-private-page :is(.nv-record small, .nv-profile-detail span, .nv-job-meta span),
+html body .nv-chat-page :is(.nv-chat-thread-bottom small, .nv-chat-person small, .nv-chat-inbox-footer, .nv-chat-list-state) {
+  color: #746e7e !important;
+}
+
+/* All text inputs use grey surfaces, dark text and visible focus states. */
+html body .public-shell :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select),
+html body .nv-private-page :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select),
+html body .nv-chat-page input,
+html body .auth-page :is(input, textarea, select) {
+  color: #292433 !important;
+  -webkit-text-fill-color: #292433 !important;
+  background: #f6f5f7 !important;
+  background-color: #f6f5f7 !important;
+  border: 1px solid #dcd8e1 !important;
+  border-radius: 9px !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell :is(input, textarea, select)::placeholder,
+html body .nv-private-page :is(input, textarea, select)::placeholder,
+html body .nv-chat-page input::placeholder,
+html body .auth-page :is(input, textarea, select)::placeholder {
+  color: #918a9b !important;
+  -webkit-text-fill-color: #918a9b !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell :is(input, textarea, select):focus,
+html body .nv-private-page :is(input, textarea, select):focus,
+html body .nv-chat-page input:focus,
+html body .auth-page :is(input, textarea, select):focus {
+  background: #ffffff !important;
+  border-color: #aa9bbd !important;
+  outline: 2px solid rgba(109, 40, 217, .08) !important;
+  outline-offset: 1px !important;
+}
+
+html body .public-shell input[type="checkbox"],
+html body .nv-private-page input[type="checkbox"] {
+  accent-color: #6d28d9 !important;
+}
+
+html body .nv-private-page .nv-icon-action.danger {
+  color: #b42318 !important;
+}
+
+html body .nv-private-page .nv-icon-action.danger:hover {
+  color: #912018 !important;
+  background: #fff1f0 !important;
+  border-color: #f3c6c2 !important;
+}
+
+html body .public-shell .nvoid-agent-page textarea,
+html body .public-shell .nvoid-research-composer textarea {
+  min-height: 116px;
+  background: #f6f5f7 !important;
+  border: 1px solid #dcd8e1 !important;
+  border-radius: 12px !important;
+}
+
+html body .public-shell .nvoid-research-composer {
+  color: #292433 !important;
+  background: #ffffff !important;
+  border: 1px solid #e7e3eb !important;
+  box-shadow: 0 5px 20px rgba(38, 30, 51, .04) !important;
+}
+
+html body .public-shell .nvoid-research-composer-footer > span {
+  color: #746e7e !important;
+}
+
+@media (max-width: 760px) {
+  html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
+    background: #faf9fb !important;
+    padding: 12px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-field-control,
+  html body .public-shell .nvoid-homepage-restored .worker-home-search-button {
+    width: 100% !important;
+  }
+
+  html body .public-content,
+  html body .nv-content {
+    background: #ffffff !important;
+  }
+}
