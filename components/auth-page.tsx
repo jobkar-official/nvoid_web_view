@@ -57,7 +57,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
       <Link href="/" className="auth-back"><ArrowLeft size={15} /> Back to Nvoid</Link>
       <div className="auth-layout">
         <section className="auth-brand-panel">
-          <Link href="/" className="auth-brand"><span className="brand-symbol" aria-hidden="true"><Image src="/favicon.svg" alt="" width={26} height={26} priority /></span><strong>NVOIDAI</strong></Link>
+          <Link href="/" className="auth-brand"><span className="brand-symbol" aria-hidden="true"><Image src="/logo.svg" alt="" width={26} height={26} priority /></span><strong>NVOIDAI</strong></Link>
           <div className="auth-brand-copy">
             <span className="auth-overline">EMPLOYMENT, WITH INTELLIGENCE</span>
             <h1>{isRegister ? "Your next opportunity starts here." : "Welcome back to your next opportunity."}</h1>
