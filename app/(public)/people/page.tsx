@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import AgentConnections from "../../../components/agent-connections";
 
 export const metadata: Metadata = {
   title: "Agent Connections",
@@ -8,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function ConnectionsPage() {
-  return <AgentConnections />;
+  return <div>Connections Page</div>;
 }

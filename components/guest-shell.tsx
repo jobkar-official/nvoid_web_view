@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Bell, BriefcaseBusiness, Check, Clock3, FlaskConical, History, LifeBuoy, MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
+import { Bell, BriefcaseBusiness, Check, Clock3, FlaskConical, GroupIcon, History, LifeBuoy, MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
 
 export type GuestSearchJob = {
@@ -109,8 +109,8 @@ function formatTime(value: string) {
 }
 
 const agentLinks = [
-  { href: "/connections", label: "Connections", icon: PlugZap },
-  { href: "/research", label: "Research anything", icon: FlaskConical }
+  { href: "/jobs", label: "My Jobs", icon: BriefcaseBusiness },
+  { href: "/people", label: "Grow Network", icon: GroupIcon },
 ];
 
 const workspaceLinks = [
@@ -161,7 +161,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
           const historyOnly = limited.slice(0, 20).map(({ jobs, ...item }) => item);
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(historyOnly));
-          } catch {}
+          } catch { }
         }
       }
     }
@@ -209,7 +209,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
     <GuestHistoryContext.Provider value={context}>
       <div className="public-shell">
         {sidebarOpen && <button className="sidebar-scrim" aria-label="Close navigation" onClick={() => setSidebarOpen(false)} />}
-        <aside id="nvoid-public-sidebar" aria-label="Nvoid navigation"  className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
+        <aside id="nvoid-public-sidebar" aria-label="Nvoid navigation" className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
           <div className="public-sidebar-header">
             <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
               <span className="brand-symbol" aria-hidden="true"><Image src="/logo.svg" alt="" width={24} height={24} priority /></span>
@@ -306,7 +306,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
             <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Collapse sidebar" : "Open sidebar"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Collapse sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}>
               {sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}
             </button>
-            <div className="topbar-breadcrumb"><strong>{pageTitle}</strong></div>
+            <div className="topbar-breadcrumb"><strong>NvoidAI / {pageTitle}</strong></div>
             <nav className="nvoid-header-actions" aria-label="Account and hiring links">
               {signedIn ? (
                 <button type="button" className="nvoid-header-logout" onClick={() => void logout()}>Logout</button>
