@@ -5267,3 +5267,143 @@ html body ::selection {
   color: #ffffff !important;
   background: #333333 !important;
 }
+
+
+/* Standalone authentication and information pages follow the same light canvas. */
+html body .auth-page,
+html body .info-page,
+html body .catalog-page,
+html body .release-hub,
+html body .free-hiring-page,
+html body .model-detail-page {
+  color: #252525 !important;
+  background: #ffffff !important;
+}
+
+html body .auth-page :is(.auth-brand-panel, .auth-form-panel, .auth-preview),
+html body .info-page :is(.info-hero, .info-section, .info-aside, .info-cta, .info-toc, .info-toc-note),
+html body .catalog-page [class*="card"],
+html body .catalog-page [class*="panel"],
+html body .release-hub [class*="card"],
+html body .release-hub [class*="panel"],
+html body .free-hiring-page [class*="card"],
+html body .free-hiring-page [class*="panel"],
+html body .model-detail-page [class*="card"],
+html body .model-detail-page [class*="panel"] {
+  color: #292929 !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border-color: #e6e6e6 !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .045) !important;
+}
+
+html body .auth-page :is(h1, h2, h3, strong, .auth-brand),
+html body .info-page :is(h1, h2, h3, h4, strong),
+html body .catalog-page :is(h1, h2, h3, h4, strong),
+html body .release-hub :is(h1, h2, h3, h4, strong),
+html body .free-hiring-page :is(h1, h2, h3, h4, strong),
+html body .model-detail-page :is(h1, h2, h3, h4, strong) {
+  color: #252525 !important;
+}
+
+html body .auth-page :is(p, small, label, .auth-overline, .auth-brand-points, .auth-brand-footer, .auth-terms, .auth-switch),
+html body .info-page :is(p, small, li),
+html body .catalog-page :is(p, small, li),
+html body .release-hub :is(p, small, li),
+html body .free-hiring-page :is(p, small, li),
+html body .model-detail-page :is(p, small, li) {
+  color: #737373 !important;
+}
+
+html body .auth-page .auth-back,
+html body .auth-page .auth-switch a,
+html body .auth-page .auth-terms a,
+html body .info-page a,
+html body .catalog-page a,
+html body .release-hub a,
+html body .free-hiring-page a,
+html body .model-detail-page a {
+  color: #333333 !important;
+}
+
+html body .auth-page .auth-form :is(input, textarea, select),
+html body .auth-page .auth-input {
+  color: #252525 !important;
+  background: #ffffff !important;
+  border: 1px solid #dcdcdc !important;
+  box-shadow: none !important;
+}
+
+html body .auth-page .auth-input input {
+  color: #252525 !important;
+  -webkit-text-fill-color: #252525 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .auth-page .auth-form :is(input, textarea, select)::placeholder,
+html body .auth-page .auth-input input::placeholder {
+  color: #929292 !important;
+  -webkit-text-fill-color: #929292 !important;
+}
+
+html body .auth-page .auth-form :is(input, textarea, select):focus,
+html body .auth-page .auth-input:focus-within {
+  border-color: #777777 !important;
+  outline: 2px solid rgba(23, 23, 23, .08) !important;
+}
+
+html body .auth-page .auth-role-picker button {
+  color: #444444 !important;
+  background: #ffffff !important;
+  border: 1px solid #dedede !important;
+}
+
+html body .auth-page .auth-role-picker button.selected {
+  color: #ffffff !important;
+  background: #242424 !important;
+  border-color: #242424 !important;
+}
+
+html body .auth-page .auth-role-picker button.selected :is(strong, small, svg) {
+  color: #ffffff !important;
+}
+
+html body .auth-page .auth-submit {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #171717 !important;
+  border-color: #171717 !important;
+}
+
+html body .auth-page .auth-submit:hover:not(:disabled) {
+  background: #333333 !important;
+  border-color: #333333 !important;
+}
+
+html body .info-page .info-hero,
+html body .info-page .info-section,
+html body .info-page .info-aside,
+html body .info-page .info-cta,
+html body .release-hub :is(.release-hub-hero, .release-hub-hero-side, .release-hub-principles > div, .release-hub-capability, .release-hub-featured-release),
+html body .free-hiring-page :is(.free-hiring-preview, .free-hiring-benefit, .free-hiring-step, .free-hiring-faq-item),
+html body .model-detail-page :is(.model-index-hero, .model-index-current, .model-index-current-model, .model-index-capabilities-section, .model-index-footer) {
+  color: #292929 !important;
+  background: #ffffff !important;
+  border-color: #e6e6e6 !important;
+}
+
+html body .info-page :is(.info-hero h1, .info-section h2, .info-aside h2, .info-aside strong, .info-cta h2),
+html body .release-hub :is(h1, h2, h3),
+html body .free-hiring-page :is(h1, h2, h3),
+html body .model-detail-page :is(h1, h2, h3) {
+  color: #252525 !important;
+}
+
+html body .info-page :is(.info-hero p, .info-section p, .info-aside p, .info-aside li, .info-cta p),
+html body .release-hub :is(.release-hub-hero p, .release-hub-capability p),
+html body .free-hiring-page :is(.free-hiring-hero p, .free-hiring-preview p),
+html body .model-detail-page :is(p, small) {
+  color: #737373 !important;
+}
