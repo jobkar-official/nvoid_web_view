@@ -4674,3 +4674,596 @@ html body .public-shell .nvoid-homepage-restored .worker-home-search-section .wo
   outline: 0 !important;
   box-shadow: none !important;
 }
+
+
+/* Unified light workspace theme with the sidebar matched to the footer. */
+:root {
+  color-scheme: light !important;
+  --nvoid-bg: #ffffff;
+  --nvoid-page-bg: #ffffff;
+  --nvoid-sidebar: #171717;
+  --nvoid-surface: #ffffff;
+  --nvoid-surface-raised: #ffffff;
+  --nvoid-hover: #f5f5f5;
+  --nvoid-border: #e7e7e7;
+  --nvoid-text: #252525;
+  --nvoid-muted: #707070;
+  --nvoid-soft: #8a8a8a;
+  --nvoid-accent: #171717;
+  --nvoid-accent-surface: #f1f1f1;
+  --navy: #171717;
+  --navy-2: #252525;
+  --navy-3: #353535;
+  --blue: #555555;
+  --blue-dark: #333333;
+  --blue-soft: #f3f3f3;
+  --canvas: #ffffff;
+  --ink: #252525;
+  --line: #e7e7e7;
+}
+
+html,
+body {
+  color-scheme: light !important;
+  color: #252525 !important;
+  background: #ffffff !important;
+}
+
+html body .public-shell,
+html body .public-main,
+html body .public-content {
+  color: #252525 !important;
+  background: #ffffff !important;
+}
+
+html body .public-topbar {
+  color: #252525 !important;
+  background: rgba(255, 255, 255, .96) !important;
+  border-bottom: 1px solid #e9e9e9 !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(14px);
+}
+
+html body .public-topbar :is(.topbar-breadcrumb, .topbar-breadcrumb strong, .topbar-quiet-link, .topbar-login, .sidebar-toggle-button) {
+  color: #333333 !important;
+}
+
+html body .public-content {
+  background: #ffffff !important;
+}
+
+html body .public-shell :is(h1, h2, h3, h4, h5, h6, strong) {
+  color: #252525 !important;
+}
+
+html body .public-shell :is(
+  p,
+  .worker-home-intro-copy p,
+  .worker-home-search-footnote,
+  .worker-results-heading p,
+  .worker-results-trust,
+  .worker-results-field > span:first-child,
+  .nvoid-agent-page-heading p,
+  .nvoid-agent-panel-heading p,
+  .nvoid-agent-empty,
+  .nvoid-agent-empty span,
+  .nvoid-connection-card small,
+  .nvoid-connection-facts,
+  .nvoid-agent-updated,
+  .public-job-company,
+  .public-job-meta,
+  .public-job-description,
+  .section-heading p,
+  .worker-directory-card > p,
+  .info-section p,
+  .model-card p,
+  .release-card p
+) {
+  color: #737373 !important;
+}
+
+html body .public-sidebar {
+  color: #f5f5f5 !important;
+  background: #171717 !important;
+  border-right: 1px solid #303030 !important;
+  box-shadow: 8px 0 28px rgba(0, 0, 0, .08) !important;
+}
+
+html body .public-sidebar .public-brand,
+html body .public-sidebar .public-brand strong,
+html body .public-sidebar .guest-identity strong {
+  color: #ffffff !important;
+}
+
+html body .public-sidebar :is(.public-brand small, .guest-identity small, .sidebar-section-label, .history-copy small, .history-placeholder, .history-empty, .sidebar-trust) {
+  color: #a6a6a6 !important;
+}
+
+html body .public-sidebar .brand-symbol,
+html body .public-sidebar .guest-avatar {
+  color: #ffffff !important;
+  background: #303030 !important;
+  border-color: #454545 !important;
+}
+
+html body .public-sidebar .public-nav-link {
+  color: #d0d0d0 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+html body .public-sidebar .public-nav-link > svg {
+  color: #b8b8b8 !important;
+}
+
+html body .public-sidebar .public-nav-link:hover,
+html body .public-sidebar .public-nav-link.active {
+  color: #ffffff !important;
+  background: #292929 !important;
+  border-color: #3a3a3a !important;
+  box-shadow: inset 2px 0 #ffffff !important;
+}
+
+html body .public-sidebar .public-nav-link.active > svg {
+  color: #ffffff !important;
+}
+
+html body .public-sidebar .sidebar-find-button,
+html body .public-sidebar .sidebar-register {
+  color: #171717 !important;
+  -webkit-text-fill-color: #171717 !important;
+  background: #ffffff !important;
+  border: 1px solid #ffffff !important;
+  box-shadow: none !important;
+}
+
+html body .public-sidebar .sidebar-find-button > svg {
+  color: #171717 !important;
+  stroke: #171717 !important;
+}
+
+html body .public-sidebar .sidebar-find-button:hover,
+html body .public-sidebar .sidebar-register:hover {
+  color: #171717 !important;
+  background: #e9e9e9 !important;
+  border-color: #e9e9e9 !important;
+}
+
+html body .public-sidebar .sidebar-signin {
+  color: #f1f1f1 !important;
+  background: transparent !important;
+  border-color: #555555 !important;
+}
+
+html body .public-sidebar .sidebar-signin:hover {
+  color: #ffffff !important;
+  background: #292929 !important;
+}
+
+html body .public-sidebar .history-item:hover,
+html body .public-sidebar .history-item.active {
+  background: #242424 !important;
+  border-color: #383838 !important;
+}
+
+html body .public-sidebar .history-select,
+html body .public-sidebar .history-copy strong {
+  color: #eeeeee !important;
+}
+
+html body .public-sidebar :is(.history-clear, .history-edit, .history-delete) {
+  color: #bcbcbc !important;
+}
+
+html body .public-sidebar .public-sidebar-bottom {
+  border-top-color: #343434 !important;
+}
+
+html body .public-footer {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  padding: 22px clamp(22px, 4vw, 56px) 25px !important;
+  color: #b4b4b4 !important;
+  background: #171717 !important;
+  border-top: 1px solid #303030 !important;
+}
+
+html body .public-footer a {
+  color: #e0e0e0 !important;
+}
+
+html body .public-footer a:hover {
+  color: #ffffff !important;
+}
+
+html body .public-shell :is(
+  .nvoid-agent-panel,
+  .nvoid-search-diagnostics,
+  .nvoid-connection-card,
+  .nvoid-search-source-row,
+  .nvoid-research-records > article,
+  .worker-results-page .public-job-card,
+  .worker-search-guide > div,
+  .worker-member-home,
+  .worker-member-link,
+  .no-results,
+  .model-card,
+  .model-detail,
+  .release-card,
+  .release-panel,
+  .free-hiring-card,
+  .info-toc,
+  .info-toc-note,
+  .info-cta,
+  .auth-form-panel,
+  .auth-brand-panel,
+  .auth-preview,
+  .info-document-layout,
+  .model-index-current,
+  .model-index-capabilities-section,
+  .worker-directory-card,
+  .worker-directory-empty
+) {
+  color: #292929 !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border: 1px solid #e6e6e6 !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .045) !important;
+}
+
+html body .public-shell :is(
+  .public-job-card,
+  .category-card,
+  .public-search-panel,
+  .worker-results-search,
+  .nvoid-agent-panel,
+  .nvoid-search-diagnostics,
+  .nvoid-connection-card,
+  .nvoid-search-source-row,
+  .worker-results-page .public-job-card,
+  .worker-search-guide > div,
+  .worker-member-link,
+  .model-card,
+  .model-detail,
+  .release-card,
+  .release-panel,
+  .free-hiring-card,
+  .info-toc,
+  .info-cta,
+  .worker-directory-card
+) {
+  color: #292929 !important;
+  background-color: #ffffff !important;
+  border-color: #e6e6e6 !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .045) !important;
+}
+
+html body .public-shell :is(
+  .public-job-card h3,
+  .public-job-company,
+  .worker-directory-card h2,
+  .worker-directory-card strong,
+  .nvoid-agent-panel-heading h2,
+  .nvoid-agent-panel-heading strong,
+  .worker-member-link strong,
+  .section-heading h2
+) {
+  color: #252525 !important;
+}
+
+html body .public-shell :is(
+  .public-job-details span,
+  .source-chip,
+  .result-count,
+  .worker-results-sort select,
+  .worker-member-link-icon
+) {
+  color: #555555 !important;
+  background: #f6f6f6 !important;
+  border-color: #e8e8e8 !important;
+}
+
+html body .public-shell :is(.search-notice, .no-results) {
+  color: #444444 !important;
+  background: #fafafa !important;
+  border-color: #e5e5e5 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored {
+  color: #252525 !important;
+  background: #ffffff !important;
+}
+
+html body .public-shell .nvoid-homepage-restored :is(h1, h2, h3, strong) {
+  color: #252525 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored :is(
+  .worker-home-agent-label,
+  .worker-home-intro-copy p,
+  .worker-home-search-meta,
+  .worker-home-search-footnote,
+  .worker-home-field > span:first-child
+) {
+  color: #707070 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-agent-dot {
+  background: #171717 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
+  color: #252525 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control {
+  color: #333333 !important;
+  background: #ffffff !important;
+  border: 1px solid #d9d9d9 !important;
+  border-radius: 11px !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control:hover {
+  border-color: #a9a9a9 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control:focus-within {
+  border-color: #555555 !important;
+  background: #ffffff !important;
+  outline: 2px solid rgba(23, 23, 23, .08) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control > input {
+  color: #252525 !important;
+  -webkit-text-fill-color: #252525 !important;
+  background: transparent !important;
+  caret-color: #171717 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card .worker-home-field-control > input::placeholder {
+  color: #929292 !important;
+  -webkit-text-fill-color: #929292 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill:hover,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #252525 !important;
+  caret-color: #171717 !important;
+}
+
+html body .public-shell :is(
+  .nvoid-agent-page :is(input:not([type="checkbox"]):not([type="radio"]), textarea, select),
+  .auth-page :is(input, textarea, select),
+  .history-editor input,
+  .worker-directory-search input,
+  .worker-results-sort select
+) {
+  color: #252525 !important;
+  -webkit-text-fill-color: #252525 !important;
+  background: #ffffff !important;
+  border: 1px solid #dcdcdc !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell :is(
+  .nvoid-agent-page input::placeholder,
+  .nvoid-agent-page textarea::placeholder,
+  .auth-page input::placeholder,
+  .auth-page textarea::placeholder,
+  .worker-directory-search input::placeholder
+) {
+  color: #919191 !important;
+  -webkit-text-fill-color: #919191 !important;
+}
+
+html body .public-shell :is(
+  .nvoid-agent-page input:focus,
+  .nvoid-agent-page textarea:focus,
+  .nvoid-agent-page select:focus,
+  .auth-page input:focus,
+  .auth-page textarea:focus,
+  .auth-page select:focus,
+  .history-editor input:focus
+) {
+  border-color: #777777 !important;
+  outline: 2px solid rgba(23, 23, 23, .08) !important;
+  outline-offset: 1px !important;
+}
+
+html body .public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout, .nvoid-header-signup, .nvoid-header-free-posting) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #171717 !important;
+  border: 1px solid #171717 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell :is(.worker-home-search-button, .worker-results-submit, .nvoid-agent-refresh, .nvoid-search-source-button, .worker-results-page .public-job-apply-button, .auth-submit, .auth-primary-button, .info-cta-link, .nvoid-header-logout, .nvoid-header-signup, .nvoid-header-free-posting):hover:not(:disabled) {
+  color: #ffffff !important;
+  background: #333333 !important;
+  border-color: #333333 !important;
+}
+
+html body .public-shell :is(.nvoid-agent-page, .info-page, .auth-page) {
+  color: #292929 !important;
+  background: #ffffff !important;
+}
+
+html body .public-shell :is(.nvoid-agent-page, .info-page, .auth-page) :is(h1, h2, h3, h4, strong) {
+  color: #252525 !important;
+}
+
+html body .public-shell :is(.nvoid-agent-page, .info-page, .auth-page) :is(p, small, label, li) {
+  color: #737373 !important;
+}
+
+/* Signed-in workspace content remains white; its navigation uses the footer charcoal. */
+html body .nv-workspace,
+html body .nv-main,
+html body .nv-private-page,
+html body .nv-chat-page,
+html body .nv-content {
+  color: #252525 !important;
+  background: #ffffff !important;
+}
+
+html body .nv-sidebar,
+html body .nv-expanded .nv-sidebar {
+  color: #f5f5f5 !important;
+  background: #171717 !important;
+  border-color: #303030 !important;
+}
+
+html body .nv-sidebar :is(.nv-brand-name, .nv-brand-name strong, .nv-workspace-label, .nv-nav-heading, .nv-user-info strong) {
+  color: #ffffff !important;
+}
+
+html body .nv-sidebar :is(.nv-brand-name small, .nv-workspace-label, .nv-nav-heading, .nv-user-info small) {
+  color: #aaaaaa !important;
+}
+
+html body .nv-sidebar .nv-nav-link {
+  color: #d0d0d0 !important;
+}
+
+html body .nv-sidebar .nv-nav-link:hover,
+html body .nv-sidebar .nv-nav-link.active {
+  color: #ffffff !important;
+  background: #292929 !important;
+  border-color: #3a3a3a !important;
+}
+
+html body .nv-sidebar .nv-nav-link.active:before {
+  background: #ffffff !important;
+}
+
+html body .nv-topbar {
+  color: #252525 !important;
+  background: #ffffff !important;
+  border-color: #e7e7e7 !important;
+}
+
+html body .nv-breadcrumb,
+html body .nv-breadcrumb strong,
+html body .nv-topbar svg {
+  color: #333333 !important;
+}
+
+html body .nv-page-heading :is(h1, h2, h3),
+html body .nv-panel-heading h2,
+html body .nv-private-page :is(h1, h2, h3, h4, h5, h6, strong, label, span, p, small, a, button) {
+  color: #252525 !important;
+}
+
+html body .nv-page-heading p,
+html body .nv-eyebrow,
+html body .nv-panel-heading p,
+html body .nv-record small,
+html body .nv-profile-summary small,
+html body .nv-stat-label,
+html body .nv-stat-card small,
+html body .nv-welcome-kicker {
+  color: #737373 !important;
+}
+
+html body :is(.nv-panel, .nv-stat-card, .nv-welcome, .nv-job-card, .nv-status-card, .nv-messages-layout, .nv-thread-list, .nv-chat-preview, .nv-chat-composer, .nv-profile-tab, .nv-record, .nv-chat-inbox, .nv-chat-conversation, .nv-chat-placeholder, .nv-alert, .nv-info-strip, .nv-footer-note, .nv-chat-page) {
+  color: #292929 !important;
+  background: #ffffff !important;
+  border-color: #e7e7e7 !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .045) !important;
+}
+
+html body .nv-welcome {
+  background: #fafafa !important;
+  border-color: #e7e7e7 !important;
+}
+
+html body .nv-welcome :is(h2, p) {
+  color: #252525 !important;
+}
+
+html body .nv-welcome-visual > span {
+  color: #252525 !important;
+  background: #f0f0f0 !important;
+  border-color: #dddddd !important;
+  box-shadow: none !important;
+}
+
+html body .nv-ring {
+  border-color: #dddddd !important;
+}
+
+html body .nv-content :is(input, textarea, select),
+html body .nv-chat-composer input,
+html body .nv-private-page .nv-search-form input {
+  color: #252525 !important;
+  -webkit-text-fill-color: #252525 !important;
+  background: #ffffff !important;
+  border: 1px solid #dcdcdc !important;
+}
+
+html body .nv-content :is(input, textarea, select)::placeholder,
+html body .nv-chat-composer input::placeholder {
+  color: #919191 !important;
+  -webkit-text-fill-color: #919191 !important;
+}
+
+html body .nv-content :is(input, textarea, select):focus,
+html body .nv-chat-composer input:focus,
+html body .nv-private-page .nv-search-form input:focus {
+  border-color: #777777 !important;
+  outline: 2px solid rgba(23, 23, 23, .08) !important;
+}
+
+html body :is(.nv-primary, .nv-chat-composer button, .nv-find-jobs-button) {
+  color: #ffffff !important;
+  background: #171717 !important;
+  border-color: #171717 !important;
+  box-shadow: none !important;
+}
+
+html body :is(.nv-primary, .nv-chat-composer button, .nv-find-jobs-button):hover:not(:disabled) {
+  color: #ffffff !important;
+  background: #333333 !important;
+  border-color: #333333 !important;
+}
+
+html body :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back) {
+  color: #333333 !important;
+  background: #ffffff !important;
+  border-color: #dedede !important;
+}
+
+html body :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back):hover {
+  color: #171717 !important;
+  background: #f4f4f4 !important;
+  border-color: #cfcfcf !important;
+}
+
+html body .nv-chat-bubble {
+  color: #292929 !important;
+  background: #f3f3f3 !important;
+  border-color: #e4e4e4 !important;
+}
+
+html body .nv-chat-bubble.is-own {
+  color: #ffffff !important;
+  background: #171717 !important;
+  border-color: #171717 !important;
+}
+
+html body :is(.nv-content, .nv-sidebar, .nv-topbar, .nv-chat-page) svg {
+  color: currentColor !important;
+}
+
+html body ::selection {
+  color: #ffffff !important;
+  background: #333333 !important;
+}
