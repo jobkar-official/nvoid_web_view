@@ -7,6 +7,11 @@ import { ArrowLeft, ArrowRight, Building2, Eye, EyeOff, LockKeyhole, Mail, Shiel
 import { signInWithNvoid } from "../lib/context/auth-client";
 import { buildTrackedApplicationUrl } from "../lib/application-url";
 
+function safeInternalPath(value: string | null) {
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.includes("\\\\")) return "";
+  return value;
+}
+
 export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
   const isRegister = mode === "register";
   const [name, setName] = useState("");
@@ -17,6 +22,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
   const [applyUrl, setApplyUrl] = useState("");
+  const [nextPath, setNextPath] = useState("");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -24,6 +30,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
     const destination = params.get("applyUrl");
     if (destination) setApplyUrl(buildTrackedApplicationUrl(destination) || "");
     else setApplyUrl("");
+    setNextPath(safeInternalPath(params.get("next")));
   }, [mode]);
 
   const submit = async (event: FormEvent) => {
@@ -44,13 +51,18 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
         const session = await signInWithNvoid(email, password);
         if (!session.authenticated) throw new Error("NvoidAI authentication did not confirm this session.");
       }
-      window.location.assign("/");
+      window.location.assign(nextPath || "/");
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Authentication service is unavailable.");
     } finally {
       setBusy(false);
     }
   };
+
+  const alternateParams = [
+    applyUrl ? "applyUrl=" + encodeURIComponent(applyUrl) : "",
+    nextPath ? "next=" + encodeURIComponent(nextPath) : ""
+  ].filter(Boolean).join("&");
 
   return (
     <main className="auth-page">
@@ -90,7 +102,7 @@ export default function AuthPage({ mode }: { mode: "signin" | "register" }) {
             {notice && <div className="auth-error" role="alert">{notice}</div>}
             <button className="auth-submit" type="submit" disabled={busy}>{busy ? "Connecting…" : isRegister ? "Create free account" : "Sign in"}<ArrowRight size={16} /></button>
           </form>
-          <p className="auth-switch">{isRegister ? "Already have an account?" : "New to Nvoid?"} <Link href={(isRegister ? "/auth/signin" : "/auth/register") + (applyUrl ? "?applyUrl=" + encodeURIComponent(applyUrl) : "")}>{isRegister ? "Sign in" : "Create an account"}</Link></p>
+          <p className="auth-switch">{isRegister ? "Already have an account?" : "New to Nvoid?"} <Link href={(isRegister ? "/auth/signin" : "/auth/register") + (alternateParams ? "?" + alternateParams : "")}>{isRegister ? "Sign in" : "Create an account"}</Link></p>
           <p className="auth-terms">By continuing, you agree to the <Link href="/terms">Terms</Link> and acknowledge the <Link href="/privacy">Privacy Policy</Link>.</p>
 
         </section>
