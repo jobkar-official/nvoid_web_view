@@ -15,11 +15,15 @@ export type GuestSearchJob = {
   country?: string;
   description?: string;
   jobUrl?: string;
+  sourceUrl?: string;
   applicationUrl?: string;
   employmentType?: string;
   workMode?: string;
   postedAt?: string | number;
   experience?: string;
+  noticePeriod?: string;
+  availabilityStatus?: string;
+  isOpen?: boolean;
   salary?: string;
   matchScore?: number;
   matchReasons?: string[];
