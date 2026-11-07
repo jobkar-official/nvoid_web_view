@@ -8,7 +8,7 @@ import { signInWithNvoid } from "../lib/context/auth-client";
 import { buildTrackedApplicationUrl } from "../lib/application-url";
 
 function safeInternalPath(value: string | null) {
-  if (!value || !value.startsWith("/") || value.startsWith("//") || value.includes("\\\\")) return "";
+  if (!value || !value.startsWith("/") || value.startsWith("//") || value.includes("\\")) return "";
   return value;
 }
 
