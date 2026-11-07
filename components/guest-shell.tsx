@@ -42,6 +42,8 @@ export type GuestSearchRecord = {
     sourceSearch?: number;
     detailEnrichment?: number;
     aiReranking?: number;
+    discovery?: number;
+    crawl?: number;
     total?: number;
   };
 };
@@ -141,10 +143,20 @@ export function GuestShell({ children }: { children: ReactNode }) {
   const persist = useCallback((next: GuestSearchRecord[]) => {
     const limited = next.slice(0, MAX_HISTORY_RECORDS);
     setHistory(limited);
+    const serializable = limited.map((item) => {
+      const report = item.report && typeof item.report === "object" ? item.report : undefined;
+      const pageReports = report && Array.isArray(report.pageReports) ? report.pageReports : undefined;
+      return {
+        ...item,
+        report: report && pageReports
+          ? { ...report, pageReports: pageReports.slice(0, 80), pageReportsTruncated: pageReports.length > 80 }
+          : report
+      };
+    });
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(limited));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(serializable));
     } catch {
-      const compacted = limited.map((item, index) => index === 0
+      const compacted = serializable.map((item, index) => index === 0
         ? { ...item, jobs: item.jobs?.slice(0, 1000).map((job) => ({ ...job, description: job.description?.slice(0, 180), matchReasons: job.matchReasons?.slice(0, 3) })) }
         : index < 4
           ? { ...item, jobs: item.jobs?.slice(0, 100).map((job) => ({ ...job, description: job.description?.slice(0, 120), matchReasons: job.matchReasons?.slice(0, 2) })) }
@@ -153,14 +165,14 @@ export function GuestShell({ children }: { children: ReactNode }) {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(compacted));
       } catch {
-        const reduced = limited.slice(0, 4).map((item, index) => index === 0
+        const reduced = serializable.slice(0, 4).map((item, index) => index === 0
           ? { ...item, jobs: item.jobs?.slice(0, 400).map((job) => ({ ...job, description: job.description?.slice(0, 100), matchReasons: job.matchReasons?.slice(0, 2) })) }
           : { ...item, jobs: item.jobs?.slice(0, 25).map((job) => ({ ...job, description: job.description?.slice(0, 80), matchReasons: job.matchReasons?.slice(0, 1) })) }
         );
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(reduced));
         } catch {
-          const historyOnly = limited.slice(0, 20).map(({ jobs, ...item }) => item);
+          const historyOnly = serializable.slice(0, 20).map(({ jobs, ...item }) => item);
           try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(historyOnly));
           } catch { }
