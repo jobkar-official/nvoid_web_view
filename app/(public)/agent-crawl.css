@@ -1134,3 +1134,501 @@ html body .public-shell .public-main .public-content .worker-results-page .no-re
   color: #81798d !important;
   -webkit-text-fill-color: #81798d !important;
 }
+
+
+html body .public-shell .public-main .public-content .grow-network-page,
+html body .public-shell .public-main .public-content .my-jobs-page {
+  display: grid;
+  width: min(100%, 1180px);
+  gap: 22px;
+  margin: 0 auto;
+  padding: 2px 0 48px;
+  color: #292433 !important;
+  -webkit-text-fill-color: #292433 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+html body .public-shell .public-main .public-content .grow-network-hero,
+html body .public-shell .public-main .public-content .my-jobs-hero {
+  display: grid;
+  gap: 13px;
+  padding: clamp(24px, 3vw, 38px);
+  color: #292433 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e8e3ed !important;
+  border-radius: 20px;
+  box-shadow: 0 10px 32px rgba(45, 18, 83, .055) !important;
+}
+
+html body .public-shell .public-main .public-content .grow-network-eyebrow,
+html body .public-shell .public-main .public-content .my-jobs-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+html body .public-shell .public-main .public-content .grow-network-hero h1,
+html body .public-shell .public-main .public-content .my-jobs-hero h1 {
+  margin: 0;
+  color: #262230 !important;
+  -webkit-text-fill-color: #262230 !important;
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 760;
+  letter-spacing: -.045em;
+  line-height: 1.15;
+}
+
+html body .public-shell .public-main .public-content .grow-network-hero > p,
+html body .public-shell .public-main .public-content .my-jobs-hero > p {
+  max-width: 720px;
+  margin: 0;
+  color: #746e7e !important;
+  -webkit-text-fill-color: #746e7e !important;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+html body .public-shell .public-main .public-content .grow-network-search {
+  display: flex;
+  width: min(100%, 720px);
+  min-height: 48px;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 0 14px;
+  color: #6d28d9 !important;
+  background: #f6f4f8 !important;
+  border: 1px solid #e2dce8 !important;
+  border-radius: 11px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-search svg {
+  flex: 0 0 auto;
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .public-shell .public-main .public-content .grow-network-search input {
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0;
+  color: #292433 !important;
+  -webkit-text-fill-color: #292433 !important;
+  background: transparent !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  font-size: 13px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-search input::placeholder {
+  color: #92899b !important;
+  -webkit-text-fill-color: #92899b !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell .public-main .public-content .grow-network-actions,
+html body .public-shell .public-main .public-content .my-jobs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 7px;
+}
+
+html body .public-shell .public-main .public-content :is(.grow-network-primary, .my-jobs-primary) {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 16px;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6d28d9 !important;
+  border: 1px solid #6d28d9 !important;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none !important;
+}
+
+html body .public-shell .public-main .public-content :is(.grow-network-primary, .my-jobs-primary):hover {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #5b21b6 !important;
+  border-color: #5b21b6 !important;
+}
+
+html body .public-shell .public-main .public-content :is(.grow-network-secondary, .my-jobs-secondary) {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 15px;
+  color: #5b21b6 !important;
+  -webkit-text-fill-color: #5b21b6 !important;
+  background: #ffffff !important;
+  border: 1px solid #e3d9ef !important;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 650;
+  text-decoration: none !important;
+}
+
+html body .public-shell .public-main .public-content .grow-network-results {
+  display: grid;
+  gap: 16px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-results-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-results-heading > div {
+  display: grid;
+  gap: 5px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-results-heading > div > span {
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .13em;
+}
+
+html body .public-shell .public-main .public-content .grow-network-results-heading h2 {
+  margin: 0;
+  color: #262230 !important;
+  -webkit-text-fill-color: #262230 !important;
+  font-size: 21px;
+  font-weight: 730;
+  letter-spacing: -.025em;
+}
+
+html body .public-shell .public-main .public-content .grow-network-count {
+  color: #81798d !important;
+  -webkit-text-fill-color: #81798d !important;
+  font-size: 11px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-card {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+  padding: 18px;
+  color: #292433 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e8e3ed !important;
+  border-radius: 15px;
+  box-shadow: 0 5px 19px rgba(38, 30, 51, .035) !important;
+}
+
+html body .public-shell .public-main .public-content .grow-network-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-avatar {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  overflow: hidden;
+  place-items: center;
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+  background: #f3edff !important;
+  border: 1px solid #e4d8f6 !important;
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+html body .public-shell .public-main .public-content .grow-network-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+html body .public-shell .public-main .public-content .grow-network-role {
+  padding: 5px 8px;
+  color: #5e526d !important;
+  -webkit-text-fill-color: #5e526d !important;
+  background: #f5f1fa !important;
+  border: 1px solid #e7def1 !important;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 650;
+}
+
+html body .public-shell .public-main .public-content .grow-network-card h3 {
+  overflow: hidden;
+  margin: 3px 0 0;
+  color: #292433 !important;
+  -webkit-text-fill-color: #292433 !important;
+  font-size: 15px;
+  font-weight: 720;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html body .public-shell .public-main .public-content .grow-network-handle {
+  overflow: hidden;
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html body .public-shell .public-main .public-content .grow-network-card > p {
+  display: -webkit-box;
+  overflow: hidden;
+  min-height: 54px;
+  margin: 0;
+  color: #746e7e !important;
+  -webkit-text-fill-color: #746e7e !important;
+  font-size: 11px;
+  line-height: 1.65;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+html body .public-shell .public-main .public-content .grow-network-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 5px;
+  padding-top: 11px;
+  color: #81798d !important;
+  border-top: 1px solid #eeeaf2 !important;
+  font-size: 10px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-card-footer svg {
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .public-shell .public-main .public-content .grow-network-state {
+  display: grid;
+  min-height: 190px;
+  justify-items: center;
+  align-content: center;
+  gap: 9px;
+  padding: 28px 18px;
+  color: #292433 !important;
+  background: #ffffff !important;
+  border: 1px dashed #ddd5e7 !important;
+  border-radius: 15px;
+  text-align: center;
+}
+
+html body .public-shell .public-main .public-content .grow-network-state > span {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+  border-radius: 13px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-state strong {
+  color: #292433 !important;
+  -webkit-text-fill-color: #292433 !important;
+  font-size: 13px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-state p {
+  max-width: 480px;
+  margin: 0;
+  color: #81798d !important;
+  -webkit-text-fill-color: #81798d !important;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+html body .public-shell .public-main .public-content .grow-network-state a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 4px;
+  color: #5b21b6 !important;
+  -webkit-text-fill-color: #5b21b6 !important;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+html body .public-shell .public-main .public-content .grow-network-alert {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  color: #8a3c32 !important;
+  -webkit-text-fill-color: #8a3c32 !important;
+  background: #fff4f2 !important;
+  border: 1px solid #f1d6d1 !important;
+  border-radius: 10px;
+  font-size: 11px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-alert > span {
+  flex: 1;
+}
+
+html body .public-shell .public-main .public-content .grow-network-alert button {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  color: #8a3c32 !important;
+  -webkit-text-fill-color: #8a3c32 !important;
+  background: #ffffff !important;
+  border: 1px solid #efd1ca !important;
+  border-radius: 7px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-guest-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px;
+  color: #5b5267 !important;
+  background: #fbfaff !important;
+  border: 1px solid #e9e2f2 !important;
+  border-radius: 14px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-guest-note > svg {
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .public-shell .public-main .public-content .grow-network-guest-note strong {
+  color: #292433 !important;
+  -webkit-text-fill-color: #292433 !important;
+  font-size: 12px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-guest-note p {
+  margin: 4px 0 0;
+  color: #81798d !important;
+  -webkit-text-fill-color: #81798d !important;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+html body .public-shell .public-main .public-content .grow-network-load-more {
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+html body .public-shell .public-main .public-content .grow-network-load-more button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 15px;
+  color: #5b21b6 !important;
+  -webkit-text-fill-color: #5b21b6 !important;
+  background: #ffffff !important;
+  border: 1px solid #e3d9ef !important;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+html body .public-shell .public-main .public-content .my-jobs-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+html body .public-shell .public-main .public-content .my-jobs-features > article {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px;
+  color: #292433 !important;
+  background: #ffffff !important;
+  border: 1px solid #e8e3ed !important;
+  border-radius: 14px;
+}
+
+html body .public-shell .public-main .public-content .my-jobs-features > article > span {
+  display: grid;
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  place-items: center;
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+  border-radius: 11px;
+}
+
+html body .public-shell .public-main .public-content .my-jobs-features strong {
+  color: #292433 !important;
+  -webkit-text-fill-color: #292433 !important;
+  font-size: 12px;
+}
+
+html body .public-shell .public-main .public-content .my-jobs-features p {
+  margin: 5px 0 0;
+  color: #81798d !important;
+  -webkit-text-fill-color: #81798d !important;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  html body .public-shell .public-main .public-content .grow-network-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  html body .public-shell .public-main .public-content .grow-network-hero,
+  html body .public-shell .public-main .public-content .my-jobs-hero {
+    padding: 21px 17px;
+    border-radius: 16px;
+  }
+
+  html body .public-shell .public-main .public-content .grow-network-grid,
+  html body .public-shell .public-main .public-content .my-jobs-features {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html body .public-shell .public-main .public-content .grow-network-results-heading {
+    align-items: flex-start;
+  }
+
+  html body .public-shell .public-main .public-content .grow-network-card {
+    padding: 15px;
+  }
+}
