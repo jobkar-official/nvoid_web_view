@@ -880,3 +880,133 @@ html body .public-shell .public-content .workspace-tip-icon {
   color: #6d28d9 !important;
   background: #f3edff !important;
 }
+
+
+/* High-specificity states and smaller route components missed by the first pass. */
+html body .public-shell .public-sidebar,
+html body .public-shell .public-sidebar.is-open,
+html body .public-shell .public-sidebar:not(.is-open) {
+  color: #f8f5ff !important;
+  background: #2b1450 !important;
+  background-color: #2b1450 !important;
+  border-color: rgba(255,255,255,.14) !important;
+}
+
+html body .auth-page .auth-error {
+  color: #9f1239 !important;
+  -webkit-text-fill-color: #9f1239 !important;
+  background: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+}
+
+html body .public-shell .public-content :is(
+  .free-hiring-benefit, .free-hiring-faq-item,
+  .model-index-current-icon, .model-index-capability-icon,
+  .free-hiring-preview-icon, .footer-brand-mark,
+  .topbar-browse-card, .default-model-card,
+  .home-feature-card, .category-card, .catalog-callout,
+  .bot-promo, .workspace-welcome-card, .workspace-shortcut-card,
+  .workspace-content-card, .workspace-tip-card
+) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e4e7ec !important;
+  box-shadow: 0 5px 18px rgba(16,24,40,.045) !important;
+}
+
+html body .public-shell .public-content :is(
+  .topbar-browse-card-icon, .footer-brand-mark,
+  .workspace-brand-mark, .account-avatar, .workspace-top-avatar,
+  .feature-icon, .category-icon, .shortcut-icon, .workspace-empty-icon,
+  .release-icon, .model-icon, .auth-form-icon, .bot-promo-icon,
+  .art-center, .no-results-icon, .worker-home-brand-icon
+) {
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-content :is(
+  .topbar-browse-card:hover, .topbar-browse-card:focus-visible,
+  .home-feature-card:hover, .free-hiring-benefit:hover
+) {
+  background: #f8f5fd !important;
+  border-color: #e5dafa !important;
+}
+
+html body .public-shell .public-content :is(
+  .nvoid-agent-alert, .nvoid-agent-metrics article,
+  .nvoid-tool-details article, .nvoid-call-status,
+  .nvoid-agent-page-heading, .nvoid-research-page
+) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e4e7ec !important;
+}
+
+html body .public-shell .public-content :is(
+  .nvoid-connection-status.connected, .nvoid-call-status.success
+) {
+  color: #166534 !important;
+  background: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+}
+
+html body .public-shell .public-content .nvoid-call-status.failed {
+  color: #9f1239 !important;
+  background: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+}
+
+html body .nv-private-page :is(
+  .nv-stat-icon, .nv-welcome-visual > span,
+  .nv-record-icon, .nv-empty > span,
+  .nv-job-company, .nv-notification-mark,
+  .nv-connection-mark.good, .nv-connection-mark.attention
+) {
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+  box-shadow: none !important;
+}
+
+html body .nv-private-page :is(.nv-summary-chips span, .nv-job-meta span) {
+  color: #475467 !important;
+  background: #f8f9fc !important;
+  border-color: #e4e7ec !important;
+}
+
+html body .nv-private-page .nv-chat-connection.is-online,
+html body .nv-private-page .nv-connection-dot.is-online {
+  background: #16a34a !important;
+}
+
+html body .nv-workspace .nv-collapse,
+html body .nv-workspace .nv-topbar .nv-icon-button,
+html body .nv-private-page .nv-collapse,
+html body .nv-private-page .nv-icon-button {
+  color: #344054 !important;
+  background: #ffffff !important;
+  border-color: #d0d5dd !important;
+}
+
+html body .nv-private-page .nv-icon-action.danger {
+  color: #b42318 !important;
+  background: #fff1f0 !important;
+  border-color: #fecdca !important;
+}
+
+html body .nv-private-page .nv-loading-line span {
+  background: #6d28d9 !important;
+  box-shadow: 0 0 0 4px rgba(109,40,217,.12) !important;
+}
+
+html body .nv-workspace .nv-scrim,
+html body .nv-private-page .nv-scrim {
+  background: rgba(43,20,80,.20) !important;
+}
