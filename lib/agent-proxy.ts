@@ -8,7 +8,7 @@ type AgentRequestOptions = {
 };
 
 function upstreamUrl(path: string): URL {
-  const base = (process.env.NVOID_AGENT_URL || "http://127.0.0.1:3000").trim();
+  const base = (process.env.NVOID_AGENT_URL || "http://127.0.0.1:3100").trim();
   let parsed: URL;
   try {
     parsed = new URL(base);
