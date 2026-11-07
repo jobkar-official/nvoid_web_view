@@ -51,6 +51,8 @@ type CrawlReport = {
   crawlPagesMatched?: number;
   crawlStatusCounts?: Record<string, number>;
   pageReports?: CrawlPageReport[];
+  pageReportsTotal?: number;
+  pageReportsTruncated?: boolean;
   note?: string;
 };
 type SearchTimings = {
@@ -98,6 +100,7 @@ function postedDate(value?: string | number) {
 
 function sourceName(value?: string) {
   const names: Record<string, string> = {
+    "public-web-crawler": "Nvoid Web Crawler",
     jobicy: "Jobicy", remoteok: "Remote OK", arbeitnow: "Arbeitnow", workingnomads: "Working Nomads",
     himalayas: "Himalayas", naukri: "Naukri", linkedin: "LinkedIn Jobs", indeed: "Indeed",
     glassdoor: "Glassdoor", apna: "Apna", adzuna: "Adzuna", jooble: "Jooble",
@@ -442,7 +445,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
           )}
           {Boolean(searchReport?.pageReports?.length) && (
             <details className="worker-crawl-source-details">
-              <summary>Inspect every crawled page ({searchReport?.pageReports?.length.toLocaleString()})</summary>
+              <summary>Inspect crawled pages ({searchReport?.pageReports?.length.toLocaleString()}{searchReport?.pageReportsTruncated ? " of " + (searchReport.pageReportsTotal ?? searchReport.pageReports.length).toLocaleString() + " saved" : ""})</summary>
               <div className="worker-crawl-source-list">
                 {searchReport?.pageReports?.map((page, index) => (
                   <article className="worker-crawl-source-row" key={page.url + ":" + index}>
