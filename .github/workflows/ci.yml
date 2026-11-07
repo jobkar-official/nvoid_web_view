@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [development]
+    branches: [development, testing]
   pull_request:
     branches: [development]
 
@@ -33,7 +33,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: jobkar-official/nvoid_ai_agent
-          ref: development
+          ref: ${{ github.event_name == 'pull_request' && github.base_ref == 'testing' && 'testing' || github.ref_name == 'testing' && 'testing' || 'development' }}
           token: ${{ secrets.NVOID_AGENT_READ_TOKEN }}
           path: agent-worker
           persist-credentials: false
@@ -55,6 +55,7 @@ jobs:
         run: |
           npm ci
           npm run lint:types
+          node --check scripts/public-web-crawler-mcp-server.cjs
           node --check scripts/search-engine-research-mcp-server.cjs
           npm test -- --coverage
           node -e 'const { buildDorkQueries } = require("./scripts/search-engine-research-mcp-server.cjs"); const queries = buildDorkQueries("Java backend developer jobs in India"); if (!queries.some(q => q.startsWith("site:linkedin.com/jobs")) || !queries.some(q => q.startsWith("intitle:"))) process.exit(1); console.log("Google dork expansion passed: " + queries.length + " query variants")'
