@@ -445,7 +445,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
           )}
           {Boolean(searchReport?.pageReports?.length) && (
             <details className="worker-crawl-source-details">
-              <summary>Inspect crawled pages ({searchReport?.pageReports?.length.toLocaleString()}{searchReport?.pageReportsTruncated ? " of " + (searchReport.pageReportsTotal ?? searchReport.pageReports.length).toLocaleString() + " saved" : ""})</summary>
+              <summary>Inspect crawled pages ({(searchReport?.pageReports?.length ?? 0).toLocaleString()}{searchReport?.pageReportsTruncated ? " of " + (searchReport.pageReportsTotal ?? searchReport.pageReports?.length ?? 0).toLocaleString() + " saved" : ""})</summary>
               <div className="worker-crawl-source-list">
                 {searchReport?.pageReports?.map((page, index) => (
                   <article className="worker-crawl-source-row" key={page.url + ":" + index}>
