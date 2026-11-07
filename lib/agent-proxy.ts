@@ -8,7 +8,7 @@ type AgentRequestOptions = {
 };
 
 function upstreamUrl(path: string): URL {
-  const base = (process.env.NVOID_AGENT_URL || "http://127.0.0.1:3100").trim();
+  const base = (process.env.NVOID_AGENT_URL || "http://127.0.0.1:3000").trim();
   let parsed: URL;
   try {
     parsed = new URL(base);
@@ -30,11 +30,11 @@ export async function requestAgent(path: string, options: AgentRequestOptions = 
     const key = process.env.NVOID_AGENT_API_KEY;
     if (!key) {
       return NextResponse.json(
-        { error: "Agent connection is not configured. Set NVOID_AGENT_API_KEY on the web server to match AGENT_API_KEY on the agent worker." },
+        { error: "Agent connection is not configured. Set NVOID_AGENT_API_KEY on the web server to match API_KEY on the nvoid-engine worker." },
         { status: 503 },
       );
     }
-    headers.set("x-agent-api-key", key);
+    headers.set("x-api-key", key);
   }
 
   let url: URL;
@@ -68,13 +68,13 @@ export async function requestAgent(path: string, options: AgentRequestOptions = 
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
     const failure = describeAgentConnectionFailure(error);
-    console.error("Nvoid Agent proxy transport failure", { path, method, ...failure });
+    console.error("Nvoid Engine proxy transport failure", { path, method, ...failure });
     return NextResponse.json(
       {
-        error: "Could not reach the Nvoid Agent.",
+        error: "Could not reach the Nvoid Engine.",
         detail: failure.detail,
         code: failure.code,
-        hint: "Verify that the worker is running, that NVOID_AGENT_URL is reachable from the Next.js server/container, and that both services share the required private network."
+        hint: "Verify that the worker is running, NVOID_AGENT_URL matches its PORT, and both services share a reachable private network."
       },
       { status: 502 },
     );
@@ -90,7 +90,7 @@ function describeAgentConnectionFailure(error: unknown): { code?: string; detail
     return { code: code || "ETIMEDOUT", detail: "The worker connection timed out before it returned a response." };
   }
   if (code === "ECONNREFUSED") {
-    return { code, detail: "The connection was refused. Nothing is listening at the configured worker address and port, or the port is not reachable from this web process." };
+    return { code, detail: "The connection was refused. Nothing is listening at the configured worker address and port." };
   }
   if (code === "ENOTFOUND" || code === "EAI_AGAIN") {
     return { code, detail: "The worker hostname could not be resolved from the Next.js server." };
