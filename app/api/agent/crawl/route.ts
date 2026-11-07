@@ -130,11 +130,19 @@ export async function POST(request: NextRequest) {
     pageReports: [],
     note: "The worker returned no crawler report. Check the worker deployment and crawler tool configuration."
   };
+  const crawlTimings = asRecord(crawlerReport?.crawlTimingsMs);
+  const workerTimings = asRecord(result.timingsMs);
+  const timingsMs = {
+    ...(workerTimings || {}),
+    discovery: typeof crawlTimings?.discovery === "number" ? crawlTimings.discovery : undefined,
+    crawl: typeof crawlTimings?.crawl === "number" ? crawlTimings.crawl : undefined
+  };
 
   return NextResponse.json({
     ...result,
     jobs,
     report,
+    timingsMs,
     returnedCount: jobs.length,
     allJobsAvailable: true
   }, { status: upstream.status });
