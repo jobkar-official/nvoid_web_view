@@ -109,7 +109,7 @@ function sourceName(value?: string) {
     jobspy: "JobSpy", "mcp-jobspy-speedyapply": "JobSpy", "openings-mcp": "Openings MCP",
     jobdatalake: "JobDataLake", aidevboard: "AI Dev Jobs", weworkremotely: "We Work Remotely"
   };
-  return names[value || ""] || value || "Connected source";
+  return names[value || ""] || value || "Public job site";
 }
 
 async function responseData(response: Response) {
