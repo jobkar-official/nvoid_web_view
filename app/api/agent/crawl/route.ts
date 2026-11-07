@@ -133,8 +133,14 @@ export async function POST(request: NextRequest) {
     location: profile.location,
     depth: "deep",
     totalFound,
+    sourceSummary: Array.isArray(result.sources) ? result.sources.flatMap((source) => {
+      const entry = asRecord(source);
+      return entry && typeof entry.serverId === "string"
+        ? [{ source: entry.serverId, count: typeof entry.found === "number" ? entry.found : 0 }]
+        : [];
+    }) : [],
     pageReports: [],
-    note: "The worker returned no crawler report. Check the worker deployment and crawler tool configuration."
+    note: "The search response includes configured MCP sources. No separate public-crawler page report was returned for this search."
   };
   const crawlTimings = asRecord(crawlerReport?.crawlTimingsMs);
   const workerTimings = asRecord(result.timingsMs);
