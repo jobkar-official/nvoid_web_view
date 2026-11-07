@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./nvoid-theme.css";
 import "./ui-polish.css";
+import "./(public)/agent-crawl.css";
 import { AuthProvider } from "../lib/context/AuthContext";
 
 export const metadata: Metadata = {
