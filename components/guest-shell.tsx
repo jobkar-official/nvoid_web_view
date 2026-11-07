@@ -117,7 +117,7 @@ function formatTime(value: string) {
 }
 
 const agentLinks = [
-  { href: "/jobs", label: "My Jobs", icon: BriefcaseBusiness },
+  { href: "/jobs", label: "Browse Jobs", icon: BriefcaseBusiness },
   { href: "/people", label: "Grow Network", icon: GroupIcon },
 ];
 
@@ -219,6 +219,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
     ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search"
     : pathname === "/" ? "New search"
       : pathname === "/job-search" ? "Find opportunities"
+        : pathname === "/jobs" ? "Browse Jobs"
         : pathname === "/connections" ? "Connections"
           : pathname === "/research" ? "Research anything"
             : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid";
