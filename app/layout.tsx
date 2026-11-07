@@ -3,6 +3,7 @@ import "./globals.css";
 import "./nvoid-theme.css";
 import "./ui-polish.css";
 import "./(public)/agent-crawl.css";
+import "./light-theme.css";
 import { AuthProvider } from "../lib/context/AuthContext";
 
 export const metadata: Metadata = {
