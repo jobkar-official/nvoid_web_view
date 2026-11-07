@@ -107,7 +107,8 @@ function sourceName(value?: string) {
     glassdoor: "Glassdoor", apna: "Apna", adzuna: "Adzuna", jooble: "Jooble",
     greenhouse: "Greenhouse", lever: "Lever", ashby: "Ashby", "serper-search": "Public web search",
     jobspy: "JobSpy", "mcp-jobspy-speedyapply": "JobSpy", "openings-mcp": "Openings MCP",
-    jobdatalake: "JobDataLake", aidevboard: "AI Dev Jobs", weworkremotely: "We Work Remotely"
+    jobdatalake: "JobDataLake", aidevboard: "AI Dev Jobs", weworkremotely: "We Work Remotely",
+    metaintro: "MetaIntro", jobsbylevel: "JobsByLevel", jobyap: "JobYap", youth4work: "Youth4work", "jobspipe-demo": "JobsPipe"
   };
   return names[value || ""] || value || "Public job site";
 }
@@ -133,11 +134,15 @@ function cachedJobs(jobs: Job[]): Job[] {
     country: clean(job.country).slice(0, 80) || undefined,
     description: clean(job.description).slice(0, 420) || undefined,
     jobUrl: clean(job.jobUrl).slice(0, 1200) || undefined,
+    sourceUrl: clean(job.sourceUrl).slice(0, 1200) || undefined,
     applicationUrl: clean(job.applicationUrl).slice(0, 1200) || undefined,
     employmentType: clean(job.employmentType).slice(0, 80) || undefined,
     workMode: clean(job.workMode).slice(0, 80) || undefined,
     postedAt: clean(job.postedAt).slice(0, 80) || undefined,
     experience: clean(job.experience).slice(0, 100) || undefined,
+    noticePeriod: clean(job.noticePeriod).slice(0, 100) || undefined,
+    availabilityStatus: clean(job.availabilityStatus).slice(0, 100) || undefined,
+    isOpen: typeof job.isOpen === "boolean" ? job.isOpen : undefined,
     salary: clean(job.salary).slice(0, 100) || undefined,
     matchScore: typeof job.matchScore === "number" && Number.isFinite(job.matchScore) ? job.matchScore : undefined,
     matchReasons: Array.isArray(job.matchReasons) ? job.matchReasons.slice(0, 4).map((reason) => clean(reason).slice(0, 160)) : undefined,
@@ -432,7 +437,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
           )}
           {sources.length > 0 && (
             <details className="worker-crawl-source-details">
-              <summary>Inspect crawler execution ({sources.length})</summary>
+              <summary>Inspect job-source execution ({sources.length})</summary>
               <div className="worker-crawl-source-list">
                 {sources.map((source) => (
                   <article className="worker-crawl-source-row" key={source.serverId + ":" + (source.tool || "")}>
@@ -501,7 +506,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
             {displayedJobs.map((job, index) => {
               const company = job.company || "Company not listed";
               const locationText = job.location || job.country || "Location not provided";
-              const listing = job.jobUrl || job.applicationUrl;
+              const listing = job.jobUrl || job.sourceUrl || job.applicationUrl;
               const apply = job.applicationUrl && job.applicationUrl !== job.jobUrl ? job.applicationUrl : listing;
               return (
                 <article className="public-job-card" key={job.id || (job.title + company + index)}>
@@ -516,8 +521,10 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                   {job.matchReasons && job.matchReasons.length > 0 && <div className="worker-match-reasons">{job.matchReasons.slice(0, 3).map((reason) => <span key={reason}>{reason}</span>)}</div>}
                   <div className="public-job-details">
                     {job.experience && <span>{job.experience}</span>}
+                    {job.noticePeriod && <span>Notice: {job.noticePeriod}</span>}
                     {job.workMode && <span>{job.workMode}</span>}
                     {job.salary && <span>{job.salary}</span>}
+                    {job.isOpen === false ? <span>Closed / expired</span> : job.isOpen === true ? <span>Open</span> : job.availabilityStatus && <span>Availability unverified</span>}}
                     {job.postedAt && <span><Clock3 size={11} />{postedDate(job.postedAt)}</span>}
                   </div>
                   <div className="public-job-footer">
