@@ -21,7 +21,7 @@ export default async function JobsPage() {
         <h1>Your jobs, in one place.</h1>
         <p>Sign in to access the jobs you have saved and the application activity available to your account.</p>
         <div className="my-jobs-actions">
-          <Link href="/auth/signin" className="my-jobs-primary">Sign in to My Jobs <ArrowRight size={16} /></Link>
+          <Link href="/auth/signin?next=%2Fapplication" className="my-jobs-primary">Sign in to My Jobs <ArrowRight size={16} /></Link>
           <Link href="/job-search" className="my-jobs-secondary">Find jobs</Link>
         </div>
       </section>
