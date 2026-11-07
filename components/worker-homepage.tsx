@@ -10,7 +10,7 @@ export default function WorkerHomepage() {
         <div className="worker-home-intro-copy">
           <span className="worker-home-agent-label"><span className="worker-home-agent-dot" />YOUR AI JOB AGENT</span>
           <h1><Image src="/favicon.svg" alt="" width={42} height={42} priority className="worker-home-heading-logo" /><span className="worker-home-heading-copy">Find Jobs with <span className="worker-home-wordmark-text">NvoidAI.com</span></span></h1>
-          <p>Create your profile and let your AI agent find opportunities that fit.</p>
+          <p>Search public job boards and company career pages. Nvoid crawls original listings for your role and location.</p>
         </div>
       </section>
 
@@ -28,7 +28,7 @@ export default function WorkerHomepage() {
           <button type="submit" className="worker-home-search-button"><Search size={17} /> Search jobs <ArrowRight size={16} /></button>
         </form>
         <div className="worker-home-search-meta nvoid-home-search-meta">
-          <div className="worker-home-search-footnote"><Search size={14} /> Search across connected sources. Review every result before taking action.</div>
+          <div className="worker-home-search-footnote"><Search size={14} /> Search public job sites and employer career pages without external job-data API integrations.</div>
           <div className="worker-home-search-footnote"><Rainbow size={14} /> Model: Alpha - K1.</div>
         </div>
       </section>
