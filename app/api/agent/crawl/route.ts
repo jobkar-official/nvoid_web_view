@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requestAgent } from "@/lib/agent-proxy";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 360;
 
 type JsonRecord = Record<string, unknown>;
 
@@ -44,7 +45,7 @@ function normalizeJob(value: unknown, index: number): JsonRecord | undefined {
     ? job.matchReasons.filter((reason): reason is string => typeof reason === "string").slice(0, 5).map(reason => reason.slice(0, 240))
     : undefined;
   return {
-    id: stringValue(job.id, 180) || `crawl-job-${index + 1}`,
+    id: stringValue(job.id, 180) || "crawl-job-" + (index + 1),
     title,
     source: stringValue(job.source, 100),
     company: stringValue(job.company, 180),
@@ -77,47 +78,64 @@ export async function POST(request: NextRequest) {
   if (!body || !profile || typeof profile.jobTitle !== "string" || !profile.jobTitle.trim()) {
     return NextResponse.json({ error: "A candidate profile with a job title is required." }, { status: 400 });
   }
+  if (typeof profile.location !== "string" || !profile.location.trim()) {
+    return NextResponse.json({ error: "A target location is required for a public job crawl." }, { status: 400 });
+  }
 
-  const serverIds = Array.isArray(body.serverIds)
-    ? body.serverIds.filter((value): value is string => typeof value === "string" && value.trim().length > 0).slice(0, 50)
-    : undefined;
   const crawlBody = {
     profile,
     limit: boundedInteger(body.limit, 1000, 1, 1000),
-    page: boundedInteger(body.page, 1, 1, 100),
-    pageSize: boundedInteger(body.pageSize, 100, 1, 100),
-    depth: body.depth === "standard" ? "standard" : "deep",
-    syncToBackend: false,
-    ...(serverIds?.length ? { serverIds } : {})
+    syncToBackend: false
   };
-
-  const upstream = await requestAgent("/api/agent/crawl", {
+  const upstream = await requestAgent("/api/jobs/search", {
     method: "POST",
     body: crawlBody,
-    timeoutMs: 330_000
+    timeoutMs: 345_000
   });
   const payload: unknown = await upstream.json().catch(() => ({}));
-  if (!upstream.ok) {
-    return NextResponse.json(payload, { status: upstream.status });
-  }
+  if (!upstream.ok) return NextResponse.json(payload, { status: upstream.status });
 
   const result = asRecord(payload);
   if (!result) {
     return NextResponse.json({ error: "The Nvoid Agent returned an invalid crawl response." }, { status: 502 });
   }
 
-  const fullJobs = Array.isArray(result.jobsFull) ? result.jobsFull : undefined;
-  const sourceJobs = fullJobs?.length ? fullJobs : Array.isArray(result.jobs) ? result.jobs : [];
+  const sourceJobs = Array.isArray(result.jobs) ? result.jobs : [];
   const jobs = sourceJobs.flatMap((job, index) => {
     const normalized = normalizeJob(job, index);
     return normalized ? [normalized] : [];
   });
+  const searchReport = Array.isArray(result.searchReport)
+    ? result.searchReport.map(asRecord).filter((entry): entry is JsonRecord => Boolean(entry))
+    : [];
+  const crawlerReport = searchReport[0];
+  const totalFound = typeof crawlerReport?.matchedJobs === "number"
+    ? crawlerReport.matchedJobs
+    : typeof result.returnedCount === "number"
+      ? result.returnedCount
+      : jobs.length;
+  const report = crawlerReport ? {
+    ...crawlerReport,
+    role: profile.jobTitle,
+    location: profile.location,
+    depth: "deep",
+    totalFound,
+    pageReports: Array.isArray(crawlerReport.pageReports) ? crawlerReport.pageReports : [],
+    note: stringValue(crawlerReport.note, 2000)
+  } : {
+    role: profile.jobTitle,
+    location: profile.location,
+    depth: "deep",
+    totalFound,
+    pageReports: [],
+    note: "The worker returned no crawler report. Check the worker deployment and crawler tool configuration."
+  };
 
   return NextResponse.json({
     ...result,
     jobs,
-    jobsFull: undefined,
+    report,
     returnedCount: jobs.length,
-    allJobsAvailable: Boolean(fullJobs)
+    allJobsAvailable: true
   }, { status: upstream.status });
 }
