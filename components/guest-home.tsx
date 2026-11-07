@@ -15,6 +15,9 @@ type SourceDiagnostic = {
   normalizedCount?: number;
   roleMatchedCount?: number;
   locationMatchedCount?: number;
+  detailsRequested?: number;
+  detailsFetched?: number;
+  detailTool?: string;
   connectionStatus: string;
   error?: string;
   skipReason?: string;
@@ -449,6 +452,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                     <div className="worker-crawl-source-counts">
                       <span>Fetched <strong>{(source.fetchedCount ?? 0).toLocaleString()}</strong></span>
                       <span>Matched <strong>{(source.locationMatchedCount ?? 0).toLocaleString()}</strong></span>
+                      <span>Details <strong>{(source.detailsFetched ?? 0).toLocaleString()} / {(source.detailsRequested ?? 0).toLocaleString()}</strong></span>
                     </div>
                     {(source.error || source.skipReason) && <p>{clean(source.error || source.skipReason)}</p>}
                   </article>
