@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, BriefcaseBusiness, Globe2, LoaderCircle, MapPin, ShieldCheck, UserRound } from "lucide-react";
+import { ArrowLeft, ArrowRight, Globe2, LoaderCircle, MapPin, ShieldCheck, UserRound } from "lucide-react";
 import { usersApi, type User } from "../lib/api/profile.api";
 
 function roleLabel(roleId: number) {
