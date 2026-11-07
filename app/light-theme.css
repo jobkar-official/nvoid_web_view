@@ -143,18 +143,32 @@ html body :is(input, textarea, [contenteditable="true"])::placeholder {
 html body :is(
   .public-content, .workspace-content, .nv-content, .auth-page,
   .nv-private-page, .nv-chat-page
-) :is(button, [role="button"], .nv-primary, .auth-submit, .auth-primary-button) {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  background-color: #6d28d9 !important;
-  border-color: #6d28d9 !important;
+) :is(button, [role="button"]) {
+  color: #344054 !important;
+  -webkit-text-fill-color: #344054 !important;
+  background-color: #ffffff !important;
+  border-color: #d0d5dd !important;
   box-shadow: none !important;
 }
 
 html body :is(
   .public-content, .workspace-content, .nv-content, .auth-page,
   .nv-private-page, .nv-chat-page
-) :is(button, [role="button"]):hover {
+) :is(.nv-primary, .auth-submit, .auth-primary-button, .worker-results-submit,
+  .worker-home-search-button, .nvoid-agent-refresh, .nvoid-search-source-button,
+  .public-job-apply-button, .info-cta-link, .nv-find-jobs-button) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-color: #6d28d9 !important;
+  border-color: #6d28d9 !important;
+}
+
+html body :is(
+  .public-content, .workspace-content, .nv-content, .auth-page,
+  .nv-private-page, .nv-chat-page
+) :is(.nv-primary, .auth-submit, .auth-primary-button, .worker-results-submit,
+  .worker-home-search-button, .nvoid-agent-refresh, .nvoid-search-source-button,
+  .public-job-apply-button, .info-cta-link, .nv-find-jobs-button):hover {
   background-color: #5b21b6 !important;
   border-color: #5b21b6 !important;
 }
@@ -207,4 +221,50 @@ html body :is(.public-content, .workspace-content, .nv-content, .auth-page) :is(
 ) {
   background: transparent !important;
   background-image: none !important;
+}
+
+
+html body :is(
+  .public-content, .workspace-content, .nv-content, .auth-page, .info-page,
+  .free-hiring-page, .release-hub, .model-docs-page, .model-detail-page,
+  .worker-homepage, .nvoid-agent-page
+) :is(
+  .topbar-browse-menu, .worker-home-visual, .model-latency-panel,
+  .model-latency-guide-grid > div, .free-hiring-hero,
+  .free-hiring-agent-section, .info-cta, .nvoid-apply-redirect-card,
+  .nvoid-search-source-empty, .nvoid-research-records pre,
+  .worker-search-guide > div, .worker-results-sort select,
+  .worker-results-page .public-job-card,
+  .nvoid-homepage-restored .worker-home-search-section .worker-home-search-card,
+  .model-card, .model-detail, .release-card, .release-panel,
+  .free-hiring-card, .info-toc, .info-toc-note, .auth-preview,
+  .info-document-layout, .model-index-current,
+  .model-index-capabilities-section, .worker-directory-card,
+  .worker-directory-empty, .worker-member-home, .worker-member-link,
+  .no-results, .search-notice
+) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border-color: #e4e7ec !important;
+  box-shadow: 0 6px 22px rgba(16,24,40,.045) !important;
+}
+
+html body :is(.free-hiring-hero, .free-hiring-agent-section) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border-color: #e4e7ec !important;
+}
+
+html body :is(.topbar-browse-menu, .nvoid-apply-redirect-card, .model-latency-panel, .model-latency-guide-grid > div) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  border-color: #e4e7ec !important;
+}
+
+html body :is(.nvoid-research-records pre, .nv-research-records pre) {
+  color: #344054 !important;
+  background: #f8f9fc !important;
+  border-color: #e4e7ec !important;
 }
