@@ -41,7 +41,7 @@ type CrawlPageReport = {
 type CrawlReport = {
   role?: string;
   location?: string;
-  depth?: "standard" | "deep";
+  depth?: "standard" | "deep" | "indexed";
   jobBoardSitesTargeted?: string[];
   searchEnginesUsed?: string[];
   totalFound?: number;
@@ -378,7 +378,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <div className="worker-results-heading">
           <span className="worker-results-eyebrow"><Asterisk size={13} /> NVOID SEARCH</span>
           <h1>{searchId ? "Saved search" : "Explore opportunities"}</h1>
-          <p>Nvoid discovers public job pages by role and location, then crawls each accessible listing for verified details.</p>
+          <p>Search Nvoid’s indexed company career pages by job title and location. The index is refreshed by the background company crawler.</p>
         </div>
 
         <form id="job-search" className="worker-results-search" onSubmit={runSearch}>
@@ -400,17 +400,17 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <div className="worker-results-trust"><ShieldCheck size={14} /> No account required. Your searches stay in this browser.</div>
       </section>
 
-      {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Discovering and crawling public job pages for {jobTitle} in {location}…</div>}
+      {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching Nvoid’s indexed company career pages for {jobTitle} in {location}…</div>}
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
 
       {searched && (searchReport || sources.length > 0 || searchTimings || sourceActivityIssue) && (
         <section className="worker-crawl-diagnostics" aria-label="Agent crawl diagnostics">
           <div className="worker-crawl-diagnostics-heading">
             <div>
-              <span>AGENT CRAWL REPORT</span>
+              <span>NVOID ENGINE SEARCH REPORT</span>
               <h2>Discovery details</h2>
             </div>
-            <span className="worker-crawl-depth">{searchReport?.depth === "deep" ? "Deep crawl" : "Standard crawl"}</span>
+            <span className="worker-crawl-depth">{searchReport?.depth === "indexed" ? "Indexed search" : searchReport?.depth === "deep" ? "Deep crawl" : "Standard crawl"}</span>
           </div>
           <div className="worker-crawl-stats">
             <div><strong>{(searchReport?.totalFound ?? jobs.length).toLocaleString()}</strong><span>Jobs collected</span></div>
@@ -501,7 +501,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {jobs.length > 0 && (
         <section className="public-results-section">
           <div className="section-heading">
-            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE CRAWL RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Listings are extracted from public job pages reached by this crawl. Open the original page to confirm application status."}</p></div>
+            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "NVOID INDEX RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Listings are returned from Nvoid’s indexed company career pages. Open the original page to confirm current availability."}</p></div>
             <span className="result-count">{(searchReport?.totalFound ?? jobs.length).toLocaleString()} found</span>
           </div>
           <div className="worker-results-toolbar">
@@ -556,7 +556,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <section className="no-results">
           <div className="no-results-icon"><Search size={21} /></div>
           <h2>No matching jobs returned</h2>
-          <p>Try another role or location. Nvoid only displays public opportunities it actually discovers and filters; it doesn't generate sample listings.</p>
+          <p>Try another role or location. Nvoid searches its own indexed company career pages and does not generate sample listings.</p>
         </section>
       )}
 
