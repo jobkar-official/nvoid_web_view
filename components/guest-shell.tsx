@@ -149,7 +149,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
       return {
         ...item,
         report: report && pageReports
-          ? { ...report, pageReports: pageReports.slice(0, 80), pageReportsTruncated: pageReports.length > 80 }
+          ? { ...report, pageReports: pageReports.slice(0, 80), pageReportsTotal: pageReports.length, pageReportsTruncated: pageReports.length > 80 }
           : report
       };
     });
