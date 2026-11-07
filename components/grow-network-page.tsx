@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { AlertCircle, ArrowRight, LoaderCircle, RefreshCw, Search, Users, UserRound } from "lucide-react";
+import { AlertCircle, ArrowRight, ExternalLink, LoaderCircle, RefreshCw, Search, Users, UserRound } from "lucide-react";
 import { usersApi, type RelatedPerson } from "../lib/api/profile.api";
 
 const PAGE_SIZE = 12;
@@ -129,7 +129,7 @@ export default function GrowNetworkPage({ userId }: { userId: string | null }) {
                 <h3>{person.name || "Nvoid member"}</h3>
                 {person.slug && <span className="grow-network-handle">@{person.slug}</span>}
                 <p>{person.bio?.trim() || "This member has not added a professional summary yet."}</p>
-                <div className="grow-network-card-footer"><UserRound size={14} /><span>Suggested member</span></div>
+                <div className="grow-network-card-footer"><UserRound size={14} /><span>Suggested member</span>{person.slug && <Link href={"/" + encodeURIComponent(person.slug)} className="grow-network-profile-link">View profile <ExternalLink size={13} /></Link>}</div>
               </article>
             ))}
           </div>
