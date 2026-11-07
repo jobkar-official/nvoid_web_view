@@ -31,7 +31,7 @@ cp .env.example .env
 Edit the agent `.env` and set a private key:
 
 ```env
-PORT=3000
+PORT=3100
 API_KEY=replace-with-a-long-random-secret
 DB_PATH=data/nvoid.db
 CRAWL_INTERVAL_HOURS=12
@@ -62,8 +62,8 @@ npm run dev
 Verify it:
 
 ```bash
-curl http://127.0.0.1:3000/health
-curl -H "x-api-key: YOUR_API_KEY" "http://127.0.0.1:3000/search?title=java%20developer&city=Noida&page=1&limit=100"
+curl http://127.0.0.1:3100/health
+curl -H "x-api-key: YOUR_API_KEY" "http://127.0.0.1:3100/search?title=java%20developer&city=Noida&page=1&limit=100"
 ```
 
 ### 2. Start the testing web branch
@@ -82,7 +82,7 @@ cp .env.example .env
 Set the following values in the web app's `.env`. The key must exactly match the agent's `API_KEY`:
 
 ```env
-NVOID_AGENT_URL=http://127.0.0.1:3000
+NVOID_AGENT_URL=http://127.0.0.1:3100
 NVOID_AGENT_API_KEY=the-same-value-as-agent-API_KEY
 ```
 
