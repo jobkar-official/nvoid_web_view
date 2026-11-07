@@ -268,3 +268,77 @@ html body :is(.nvoid-research-records pre, .nv-research-records pre) {
   background: #f8f9fc !important;
   border-color: #e4e7ec !important;
 }
+
+
+html body .public-sidebar :is(.sidebar-find-button, .sidebar-signin, .sidebar-register) {
+  color: #4b1b83 !important;
+  -webkit-text-fill-color: #4b1b83 !important;
+  background: #ffffff !important;
+  border-color: rgba(255,255,255,.7) !important;
+}
+
+html body .public-sidebar :is(.sidebar-find-button:hover, .sidebar-signin:hover, .sidebar-register:hover) {
+  color: #3b1768 !important;
+  background: #f3edff !important;
+}
+
+html body .public-sidebar :is(.brand-symbol, .guest-avatar) {
+  color: #ffffff !important;
+  background: #6d28d9 !important;
+  border-color: rgba(255,255,255,.24) !important;
+}
+
+html body :is(.public-topbar, .nv-topbar) :is(
+  .nvoid-header-signup, .nvoid-header-free-posting, .nvoid-header-logout
+) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6d28d9 !important;
+  border-color: #6d28d9 !important;
+}
+
+html body :is(.public-content, .workspace-content, .nv-content, .nvoid-agent-page) :is(
+  .nvoid-research-source, .nvoid-connection-card, .nvoid-search-source-row,
+  .nvoid-search-source-empty, .nvoid-research-records > article,
+  .nvoid-agent-panel, .nvoid-search-diagnostics, .nv-chat-search,
+  .nv-chat-new, .nv-chat-composer, .nv-chat-inbox, .nv-chat-conversation
+) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  background-image: none !important;
+  border-color: #e4e7ec !important;
+}
+
+html body :is(.public-content, .workspace-content, .nv-content) :is(
+  .public-job-details span, .source-chip, .result-count,
+  .worker-results-sort select, .nv-status-good, .nv-status-warning,
+  .nv-status-neutral, .nv-live-pill
+) {
+  color: #4b1b83 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+}
+
+html body :is(.nvoid-connection-indicator > span, .worker-home-agent-dot) {
+  background: #16a34a !important;
+  box-shadow: 0 0 0 4px rgba(22,163,74,.12) !important;
+}
+
+html body .nv-sidebar :is(.nv-nav-link:hover, .nv-nav-link.active) {
+  color: #ffffff !important;
+  background: rgba(255,255,255,.13) !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+
+html body .nv-sidebar :is(.nv-brand-name, .nv-workspace-label, .nv-nav-heading, .nv-user-info) {
+  color: #f8f5ff !important;
+}
+
+html body :is(.public-content, .workspace-content, .nv-content) :is(
+  .nvoid-homepage-restored .worker-home-search-section .worker-home-search-card,
+  .worker-home-search-card
+) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  border-color: #e4e7ec !important;
+}
