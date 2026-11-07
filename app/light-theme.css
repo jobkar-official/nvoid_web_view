@@ -1010,3 +1010,64 @@ html body .nv-workspace .nv-scrim,
 html body .nv-private-page .nv-scrim {
   background: rgba(43,20,80,.20) !important;
 }
+
+
+html body .public-shell .public-content :is(
+  .worker-directory-note, .model-docs-note, .model-docs-sidebar,
+  .model-docs-reading, .employer-benefit-grid article,
+  .workspace-welcome-card, .workspace-shortcut-card,
+  .workspace-content-card, .workspace-tip-card
+) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e4e7ec !important;
+}
+
+html body .public-shell .public-content .model-docs-nav a:is(:hover, .active, [aria-current="location"]) {
+  color: #4b1b83 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+}
+
+html body .public-shell .public-content .model-docs-sidebar :is(strong, p, span, a) {
+  color: #344054 !important;
+  -webkit-text-fill-color: #344054 !important;
+}
+
+html body .public-shell .public-content .model-docs-sidebar .model-docs-sidebar-heading strong,
+html body .public-shell .public-content .model-docs-sidebar .model-docs-sidebar-model strong {
+  color: #202938 !important;
+  -webkit-text-fill-color: #202938 !important;
+}
+
+html body .public-shell .public-content :is(
+  .model-docs-sidebar-model, .model-docs-sidebar-heading,
+  .model-docs-sidebar-model p
+) {
+  background: transparent !important;
+  border-color: #e4e7ec !important;
+}
+
+html body .public-shell .public-content :is(
+  .model-docs-action-link, .model-docs-section-actions a,
+  .model-docs-footer-actions a, .model-docs-cta
+) {
+  color: #4b1b83 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+}
+
+html body .public-shell .public-content .nvoid-home-mark {
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-content .employer-benefit-grid article > span {
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+}
