@@ -19,6 +19,22 @@ type SourceDiagnostic = {
   error?: string;
   skipReason?: string;
 };
+type CrawlPageReport = {
+  url: string;
+  status: string;
+  httpStatus?: number;
+  pageTitle?: string;
+  canonicalUrl?: string;
+  extractionMethod?: string;
+  fieldsExtracted?: string[];
+  missingFields?: string[];
+  availabilityStatus?: string;
+  reason?: string;
+  durationMs?: number;
+  discoveredFrom?: string;
+  searchQuery?: string;
+};
+
 type CrawlReport = {
   role?: string;
   location?: string;
@@ -30,6 +46,11 @@ type CrawlReport = {
   totalPages?: number;
   hasMore?: boolean;
   sourceSummary?: Array<{ source: string; count: number }>;
+  searchPagesFetched?: number;
+  crawlPagesAttempted?: number;
+  crawlPagesMatched?: number;
+  crawlStatusCounts?: Record<string, number>;
+  pageReports?: CrawlPageReport[];
   note?: string;
 };
 type SearchTimings = {
@@ -37,6 +58,8 @@ type SearchTimings = {
   sourceSearch?: number;
   detailEnrichment?: number;
   aiReranking?: number;
+  discovery?: number;
+  crawl?: number;
   total?: number;
 };
 
@@ -341,7 +364,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <div className="worker-results-heading">
           <span className="worker-results-eyebrow"><Asterisk size={13} /> NVOID SEARCH</span>
           <h1>{searchId ? "Saved search" : "Explore opportunities"}</h1>
-          <p>Search across connected job boards and company career pages. Review each opportunity and choose where to apply.</p>
+          <p>Nvoid discovers public job pages by role and location, then crawls each accessible listing for verified details.</p>
         </div>
 
         <form id="job-search" className="worker-results-search" onSubmit={runSearch}>
@@ -363,7 +386,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <div className="worker-results-trust"><ShieldCheck size={14} /> No account required. Your searches stay in this browser.</div>
       </section>
 
-      {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching connected job sources for {jobTitle} in {location}…</div>}
+      {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Discovering and crawling public job pages for {jobTitle} in {location}…</div>}
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
 
       {searched && (searchReport || sources.length > 0 || searchTimings || sourceActivityIssue) && (
@@ -377,8 +400,8 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
           </div>
           <div className="worker-crawl-stats">
             <div><strong>{(searchReport?.totalFound ?? jobs.length).toLocaleString()}</strong><span>Jobs collected</span></div>
-            <div><strong>{sources.length.toLocaleString()}</strong><span>Sources reported</span></div>
-            <div><strong>{sources.filter((source) => source.connectionStatus === "searched").length.toLocaleString()}</strong><span>Sources searched</span></div>
+            <div><strong>{(searchReport?.crawlPagesAttempted ?? 0).toLocaleString()}</strong><span>Job pages checked</span></div>
+            <div><strong>{(searchReport?.searchPagesFetched ?? 0).toLocaleString()}</strong><span>Search pages read</span></div>
             <div><strong>{formatDuration(searchTimings?.total) || "—"}</strong><span>Total time</span></div>
           </div>
           {searchReport?.note && <p className="worker-crawl-report-note">{searchReport.note}</p>}
@@ -390,21 +413,21 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
           )}
           {searchTimings && (
             <div className="worker-crawl-timings">
-              <span>Title planning <strong>{formatDuration(searchTimings.titlePlanning) || "—"}</strong></span>
-              <span>Source search <strong>{formatDuration(searchTimings.sourceSearch) || "—"}</strong></span>
-              <span>Detail enrichment <strong>{formatDuration(searchTimings.detailEnrichment) || "—"}</strong></span>
-              <span>AI reranking <strong>{formatDuration(searchTimings.aiReranking) || "—"}</strong></span>
+              <span>Discovery <strong>{formatDuration(searchTimings.discovery ?? searchTimings.sourceSearch) || "—"}</strong></span>
+              <span>Page crawling <strong>{formatDuration(searchTimings.crawl ?? searchTimings.detailEnrichment) || "—"}</strong></span>
+              <span>AI ranking <strong>{formatDuration(searchTimings.aiReranking) || "Not enabled"}</strong></span>
+              <span>Total <strong>{formatDuration(searchTimings.total) || "—"}</strong></span>
             </div>
           )}
           {sources.length > 0 && (
             <details className="worker-crawl-source-details">
-              <summary>Inspect source execution ({sources.length})</summary>
+              <summary>Inspect crawler execution ({sources.length})</summary>
               <div className="worker-crawl-source-list">
                 {sources.map((source) => (
                   <article className="worker-crawl-source-row" key={source.serverId + ":" + (source.tool || "")}>
                     <div>
                       <strong>{sourceName(source.serverId)}</strong>
-                      <span>{source.tool || "No search tool reported"}</span>
+                      <span>{source.tool || "Internal public-web crawler"}</span>
                     </div>
                     <span className={"worker-crawl-source-status " + source.connectionStatus}>{source.connectionStatus.replace(/-/g, " ")}</span>
                     <div className="worker-crawl-source-counts">
@@ -412,6 +435,30 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                       <span>Matched <strong>{(source.locationMatchedCount ?? 0).toLocaleString()}</strong></span>
                     </div>
                     {(source.error || source.skipReason) && <p>{clean(source.error || source.skipReason)}</p>}
+                  </article>
+                ))}
+              </div>
+            </details>
+          )}
+          {Boolean(searchReport?.pageReports?.length) && (
+            <details className="worker-crawl-source-details">
+              <summary>Inspect every crawled page ({searchReport?.pageReports?.length.toLocaleString()})</summary>
+              <div className="worker-crawl-source-list">
+                {searchReport?.pageReports?.map((page, index) => (
+                  <article className="worker-crawl-source-row" key={page.url + ":" + index}>
+                    <div>
+                      <strong>{page.pageTitle || page.url}</strong>
+                      <span>{page.discoveredFrom || "Public web discovery"} · {page.extractionMethod || "No page extraction"}</span>
+                      <a href={page.url} target="_blank" rel="noopener noreferrer">{page.url}</a>
+                    </div>
+                    <span className={"worker-crawl-source-status " + page.status}>{page.status.replace(/_/g, " ")}</span>
+                    <div className="worker-crawl-source-counts">
+                      <span>HTTP <strong>{page.httpStatus ?? "—"}</strong></span>
+                      <span>Duration <strong>{formatDuration(page.durationMs) || "—"}</strong></span>
+                    </div>
+                    {Boolean(page.fieldsExtracted?.length) && <p>Extracted: {page.fieldsExtracted?.join(", ")}</p>}
+                    {Boolean(page.missingFields?.length) && <p>Not published or unavailable: {page.missingFields?.join(", ")}</p>}
+                    {page.reason && <p>{clean(page.reason)}</p>}
                   </article>
                 ))}
               </div>
@@ -432,7 +479,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {jobs.length > 0 && (
         <section className="public-results-section">
           <div className="section-heading">
-            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE CRAWL RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Results are collected from the connected sources and public pages available to this crawl."}</p></div>
+            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "LIVE CRAWL RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Listings are extracted from public job pages reached by this crawl. Open the original page to confirm application status."}</p></div>
             <span className="result-count">{(searchReport?.totalFound ?? jobs.length).toLocaleString()} found</span>
           </div>
           <div className="worker-results-toolbar">
