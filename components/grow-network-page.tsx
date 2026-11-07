@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, ArrowRight, LoaderCircle, RefreshCw, Search, Users, UserRound } from "lucide-react";
 import { usersApi, type RelatedPerson } from "../lib/api/profile.api";
@@ -25,9 +25,11 @@ export default function GrowNetworkPage({ userId }: { userId: string | null }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
+  const requestInFlight = useRef(false);
 
   const loadPeople = useCallback(async (nextPage: number, append: boolean) => {
-    if (!userId || loading) return;
+    if (!userId || requestInFlight.current) return;
+    requestInFlight.current = true;
     setLoading(true);
     setError("");
     try {
@@ -38,9 +40,10 @@ export default function GrowNetworkPage({ userId }: { userId: string | null }) {
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "People suggestions could not be loaded.");
     } finally {
+      requestInFlight.current = false;
       setLoading(false);
     }
-  }, [loading, userId]);
+  }, [userId]);
 
   useEffect(() => {
     if (userId) void loadPeople(1, false);
