@@ -2116,3 +2116,22 @@ html body .public-shell .public-main .public-content .indexed-jobs-page .error {
     padding: 18px 14px 36px !important;
   }
 }
+
+
+/* Keep indexed catalogue eyebrow labels free of inherited legacy dark pills. */
+html body .public-shell .public-content .indexed-jobs-page > header > div > span:first-child,
+html body .public-shell .public-content .indexed-jobs-page > section > div > div > span:first-child {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
