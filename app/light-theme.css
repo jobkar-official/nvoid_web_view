@@ -691,3 +691,192 @@ html body .indexed-jobs-page :is(.eyebrow, .resultsEyebrow) {
   box-shadow: none !important;
   text-shadow: none !important;
 }
+
+
+/* Remaining model, directory, hiring and search surfaces found in the stylesheet audit. */
+html body .public-shell .public-content :is(
+  .default-model-card, .model-ai-card, .model-process-grid article,
+  .model-scope-card, .model-explainer-card, .model-explainer-block,
+  .model-pros, .model-cons, .model-latency-guide,
+  .model-accuracy-note, .model-guide-cta, .model-index-current-model,
+  .model-index-capabilities article, .model-docs-row,
+  .model-docs-comparison-labels, .model-docs-footer,
+  .release-hub-featured-release, .release-hub-capability,
+  .worker-home-capability, .worker-home-flow, .worker-home-flow-v2,
+  .worker-home-visual-v2, .worker-home-search-note,
+  .worker-home-search-v2 .worker-home-search-card,
+  .worker-home-capabilities-v2 .worker-home-capability,
+  .worker-member-home, .worker-member-link,
+  .worker-directory-card, .worker-directory-empty,
+  .worker-results-page .public-job-card,
+  .grow-network-card, .public-profile-card,
+  .free-hiring-preview, .free-hiring-candidate,
+  .free-hiring-step, .free-hiring-final-cta,
+  .free-hiring-faq-section, .info-aside, .info-toc-note
+) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e4e7ec !important;
+  box-shadow: 0 5px 18px rgba(16,24,40,.045) !important;
+}
+
+html body .public-shell .public-content :is(
+  .topbar-browse-trigger, .topbar-employer, .worker-home-secondary
+) {
+  color: #4b1b83 !important;
+  -webkit-text-fill-color: #4b1b83 !important;
+  background: #f3edff !important;
+  background-color: #f3edff !important;
+  border-color: #e5dafa !important;
+}
+
+html body .public-shell .public-content :is(
+  .topbar-browse-trigger:hover, .topbar-employer:hover,
+  .worker-home-secondary:hover
+) {
+  color: #4b1b83 !important;
+  background: #ece3fb !important;
+}
+
+html body .public-shell .public-content :is(
+  .default-model-icon, .default-model-lock, .model-ai-card .default-model-icon,
+  .model-explainer-icon, .model-accuracy-icon, .model-release-mark,
+  .release-hub-model-mark, .free-hiring-preview-brand > span,
+  .info-toc-note > span, .worker-results-page .company-monogram,
+  .worker-directory-icon, .worker-home-visual-icon, .worker-visual-core,
+  .worker-visual-node, .model-explainer-block ol li > span
+) {
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-content :is(
+  .model-status-pill, .model-guide-meta span, .model-engine-status-planned,
+  .model-score-parts span, .worker-home-model-status,
+  .worker-directory-tab, .worker-directory-type, .worker-directory-status,
+  .worker-home-search-note, .worker-home-capability, .worker-home-flow,
+  .worker-home-flow-v2, .worker-home-search-v2 .worker-home-search-card,
+  .free-hiring-preview-brand, .free-hiring-value-strip,
+  .release-hub-model-date, .release-hub-principles
+) {
+  color: #475467 !important;
+  background: #f8f9fc !important;
+  background-color: #f8f9fc !important;
+  border-color: #e4e7ec !important;
+}
+
+html body .public-shell .public-content :is(
+  .worker-directory-tab:hover, .worker-directory-tab.active,
+  .worker-home-capability:hover, .model-docs-nav a:hover
+) {
+  color: #4b1b83 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+}
+
+html body .public-shell .public-content :is(
+  .model-ai-runtime, .model-score-parts span
+) {
+  color: #475467 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+}
+
+html body .public-shell .public-content .free-hiring-final-cta > a {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6d28d9 !important;
+  border-color: #6d28d9 !important;
+}
+
+html body .public-shell .public-content .worker-home-field-divider,
+html body .public-shell .public-content .worker-results-divider {
+  background: #e4e7ec !important;
+}
+
+html body .public-shell .public-content .worker-home-visual :is(
+  h1,h2,h3,h4,p,span,strong,small
+) {
+  color: #202938 !important;
+  -webkit-text-fill-color: #202938 !important;
+}
+
+html body .nv-private-page :is(
+  .nv-profile-detail, .nv-file-drop, .nv-empty,
+  .nv-chat-connection, .nv-chat-unread-total,
+  .nv-chat-thread, .nv-chat-thread.is-active,
+  .nv-chat-conversation-header, .nv-chat-resume,
+  .nv-chat-start, .nv-chat-placeholder,
+  .nv-chat-start > span, .nv-chat-placeholder > span,
+  .nv-chat-resume-icon, .nv-chat-thread-list
+) {
+  color: #202938 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e4e7ec !important;
+  box-shadow: none !important;
+}
+
+html body .nv-private-page :is(
+  .nv-profile-tab.active, .nv-thread.active, .nv-chat-thread.is-active
+) {
+  color: #4b1b83 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+}
+
+html body .nv-private-page :is(
+  .nv-empty > span, .nv-chat-resume-icon,
+  .nv-chat-start > span, .nv-chat-placeholder > span
+) {
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+}
+
+html body .nv-private-page .nv-file-drop {
+  color: #475467 !important;
+  background: #f8f9fc !important;
+  border-color: #c8bfd8 !important;
+}
+
+html body .nv-private-page .nv-chat-connection,
+html body .nv-private-page .nv-connection-dot {
+  background: #16a34a !important;
+}
+
+html body .nv-private-page .nv-nav-link:is(:hover, .active) {
+  color: #ffffff !important;
+  background: rgba(255,255,255,.13) !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+
+html body .sidebar-scrim {
+  background: rgba(43,20,80,.20) !important;
+}
+
+html body ::selection {
+  color: #3b1768 !important;
+  background: #e9ddfb !important;
+}
+
+html body .public-shell .public-content .preview-banner,
+html body .public-shell .public-content .workspace-inline-notice,
+html body .public-shell .public-content .search-notice,
+html body .public-shell .public-content .search-notice.muted,
+html body .public-shell .public-content .preview-banner {
+  color: #475467 !important;
+  background: #f8f9fc !important;
+  border-color: #e4e7ec !important;
+}
+
+html body .public-shell .public-content .info-aside.green .info-aside-icon,
+html body .public-shell .public-content .workspace-tip-icon {
+  color: #6d28d9 !important;
+  background: #f3edff !important;
+}
