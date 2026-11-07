@@ -111,7 +111,9 @@ function sourceName(value?: string) {
     greenhouse: "Greenhouse", lever: "Lever", ashby: "Ashby", "serper-search": "Public web search",
     jobspy: "JobSpy", "mcp-jobspy-speedyapply": "JobSpy", "openings-mcp": "Openings MCP",
     jobdatalake: "JobDataLake", aidevboard: "AI Dev Jobs", weworkremotely: "We Work Remotely",
-    metaintro: "MetaIntro", jobsbylevel: "JobsByLevel", jobyap: "JobYap", youth4work: "Youth4work", "jobspipe-demo": "JobsPipe"
+    metaintro: "MetaIntro", jobsbylevel: "JobsByLevel", jobyap: "JobYap", youth4work: "Youth4work",
+    headcountlabs: "Headcount Labs", destava: "Destava", oceanofjobs: "Ocean of Jobs",
+    carejobs: "CareJobs.Now", metrohires: "MetroHires"
   };
   return names[value || ""] || value || "Public job site";
 }
