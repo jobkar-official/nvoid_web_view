@@ -154,7 +154,7 @@ export default function IndexedJobsPage() {
   const lastResult = Math.min(page * pageSize, total);
 
   return (
-    <main className={styles.page}>
+    <main className={`${styles.page} indexed-jobs-page`}>
       <header className={styles.header}>
         <div className={styles.heading}>
           <span className={styles.eyebrow}><BriefcaseBusiness size={14} /> NVOIDAI JOB INDEX</span>
