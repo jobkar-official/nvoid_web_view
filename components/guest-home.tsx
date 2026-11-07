@@ -528,7 +528,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                     {job.noticePeriod && <span>Notice: {job.noticePeriod}</span>}
                     {job.workMode && <span>{job.workMode}</span>}
                     {job.salary && <span>{job.salary}</span>}
-                    {job.isOpen === false ? <span>Closed / expired</span> : job.isOpen === true ? <span>Open</span> : job.availabilityStatus && <span>Availability unverified</span>}}
+                    {job.isOpen === false ? <span>Closed / expired</span> : job.isOpen === true ? <span>Open</span> : job.availabilityStatus && <span>Availability unverified</span>}
                     {job.postedAt && <span><Clock3 size={11} />{postedDate(job.postedAt)}</span>}
                   </div>
                   <div className="public-job-footer">
