@@ -1964,3 +1964,155 @@ html body .public-shell .public-main .public-content .public-profile-state a {
     flex-wrap: wrap;
   }
 }
+
+
+/* Indexed jobs catalogue: keep this public listing on a clear light surface. */
+html body .public-shell:has(.indexed-jobs-page) {
+  color-scheme: light !important;
+  color: #202938 !important;
+  background: #f6f7fb !important;
+  background-image: none !important;
+}
+
+html body .public-shell:has(.indexed-jobs-page) .public-main,
+html body .public-shell:has(.indexed-jobs-page) .public-content {
+  color: #202938 !important;
+  background: #f6f7fb !important;
+  background-color: #f6f7fb !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell:has(.indexed-jobs-page) .public-content {
+  width: 100% !important;
+  max-width: 1600px !important;
+  min-height: calc(100vh - 58px) !important;
+  padding: 26px clamp(18px, 3vw, 48px) 48px !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page {
+  color-scheme: light !important;
+  width: 100% !important;
+  max-width: 1380px !important;
+  min-height: calc(100vh - 110px) !important;
+  margin: 0 auto !important;
+  padding: 0 0 44px !important;
+  color: #202938 !important;
+  -webkit-text-fill-color: #202938;
+  background: #f6f7fb !important;
+  background-color: #f6f7fb !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page h1,
+html body .public-shell .public-main .public-content .indexed-jobs-page h2,
+html body .public-shell .public-main .public-content .indexed-jobs-page h3,
+html body .public-shell .public-main .public-content .indexed-jobs-page strong {
+  color: #182230 !important;
+  -webkit-text-fill-color: #182230 !important;
+  text-shadow: none !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page p,
+html body .public-shell .public-main .public-content .indexed-jobs-page label,
+html body .public-shell .public-main .public-content .indexed-jobs-page > section span {
+  color: #566173 !important;
+  -webkit-text-fill-color: #566173 !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page [class*="card"] {
+  color: #202938 !important;
+  -webkit-text-fill-color: #202938;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e1e5ed !important;
+  box-shadow: 0 4px 16px rgba(24, 34, 48, .045) !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page input,
+html body .public-shell .public-main .public-content .indexed-jobs-page select {
+  color: #202938 !important;
+  -webkit-text-fill-color: #202938 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-color: #d5dbe6 !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page input::placeholder {
+  color: #7b8493 !important;
+  -webkit-text-fill-color: #7b8493 !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page .applyFilters,
+html body .public-shell .public-main .public-content .indexed-jobs-page .applyFilters:hover {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6d28d9 !important;
+  background-color: #6d28d9 !important;
+  border-color: #6d28d9 !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page .filterHeading button,
+html body .public-shell .public-main .public-content .indexed-jobs-page .empty button,
+html body .public-shell .public-main .public-content .indexed-jobs-page .pagination button {
+  color: #4b1b83 !important;
+  -webkit-text-fill-color: #4b1b83 !important;
+  background: #ffffff !important;
+  border-color: #ded6eb !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page .pagination button:disabled {
+  color: #98a2b3 !important;
+  -webkit-text-fill-color: #98a2b3 !important;
+  background: #f8f9fc !important;
+  border-color: #e6e9f0 !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page a {
+  color: #5b21b6 !important;
+  -webkit-text-fill-color: #5b21b6 !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page .provider {
+  color: #4f3a70 !important;
+  -webkit-text-fill-color: #4f3a70 !important;
+  background: #f7f3ff !important;
+  border-color: #e7def7 !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page .remote {
+  color: #246044 !important;
+  -webkit-text-fill-color: #246044 !important;
+  background: #effaf3 !important;
+  border-color: #d6f0df !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page .companyMark {
+  color: #5b21b6 !important;
+  -webkit-text-fill-color: #5b21b6 !important;
+  background: #f3edff !important;
+  border-color: #e5dafa !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page .cardFooter > span {
+  color: #687386 !important;
+  -webkit-text-fill-color: #687386 !important;
+}
+
+html body .public-shell .public-main .public-content .indexed-jobs-page .error {
+  color: #991b1b !important;
+  -webkit-text-fill-color: #991b1b !important;
+  background: #fff7f7 !important;
+  border-color: #f1d5d5 !important;
+}
+
+@media (max-width: 640px) {
+  html body .public-shell:has(.indexed-jobs-page) .public-content {
+    padding: 18px 14px 36px !important;
+  }
+}
