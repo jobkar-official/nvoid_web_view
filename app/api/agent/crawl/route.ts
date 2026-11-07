@@ -54,6 +54,7 @@ function normalizeJob(value: unknown, index: number): JsonRecord | undefined {
     description: stringValue(job.description, 3000),
     salary: stringValue(job.salary, 180),
     jobUrl: safeUrl(job.jobUrl),
+    sourceUrl: safeUrl(job.sourceUrl) || safeUrl(job.jobUrl),
     applicationUrl: safeUrl(job.applicationUrl),
     employmentType: stringValue(job.employmentType, 100),
     workMode: stringValue(job.workMode, 100),
