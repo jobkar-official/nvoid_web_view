@@ -109,16 +109,18 @@ export async function POST(request: NextRequest) {
     ? result.searchReport.map(asRecord).filter((entry): entry is JsonRecord => Boolean(entry))
     : [];
   const crawlerReport = searchReport[0];
-  const totalFound = typeof crawlerReport?.matchedJobs === "number"
+  const crawlerMatchedJobs = typeof crawlerReport?.matchedJobs === "number"
     ? crawlerReport.matchedJobs
     : typeof result.returnedCount === "number"
       ? result.returnedCount
       : jobs.length;
+  const totalFound = jobs.length;
   const report = crawlerReport ? {
     ...crawlerReport,
     role: profile.jobTitle,
     location: profile.location,
     depth: "deep",
+    crawlerMatchedJobs,
     totalFound,
     pageReports: Array.isArray(crawlerReport.pageReports) ? crawlerReport.pageReports : [],
     note: stringValue(crawlerReport.note, 2000)
@@ -144,6 +146,7 @@ export async function POST(request: NextRequest) {
     report,
     timingsMs,
     returnedCount: jobs.length,
-    allJobsAvailable: true
+    allJobsAvailable: crawlerReport?.truncated !== true && crawlerMatchedJobs <= jobs.length,
+    moreResultsAvailable: crawlerReport?.truncated === true || crawlerMatchedJobs > jobs.length
   }, { status: upstream.status });
 }
