@@ -506,7 +506,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
             {displayedJobs.map((job, index) => {
               const company = job.company || "Company not listed";
               const locationText = job.location || job.country || "Location not provided";
-              const listing = job.jobUrl || job.sourceUrl || job.applicationUrl;
+              const listing = job.sourceUrl || job.jobUrl || job.applicationUrl;
               const apply = job.applicationUrl && job.applicationUrl !== job.jobUrl ? job.applicationUrl : listing;
               return (
                 <article className="public-job-card" key={job.id || (job.title + company + index)}>
