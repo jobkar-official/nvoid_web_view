@@ -106,7 +106,7 @@ function sourceName(value?: string) {
   const names: Record<string, string> = {
     "public-web-crawler": "Nvoid Web Crawler",
     jobicy: "Jobicy", remoteok: "Remote OK", arbeitnow: "Arbeitnow", workingnomads: "Working Nomads",
-    himalayas: "Himalayas", naukri: "Naukri", linkedin: "LinkedIn Jobs", indeed: "Indeed",
+    himalayas: "Himalayas", "himalayas-mcp": "Himalayas", naukri: "Naukri", linkedin: "LinkedIn Jobs", indeed: "Indeed",
     glassdoor: "Glassdoor", apna: "Apna", adzuna: "Adzuna", jooble: "Jooble",
     greenhouse: "Greenhouse", lever: "Lever", ashby: "Ashby", "serper-search": "Public web search",
     jobspy: "JobSpy", "mcp-jobspy-speedyapply": "JobSpy", "openings-mcp": "Openings MCP",
