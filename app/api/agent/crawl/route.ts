@@ -59,6 +59,9 @@ function normalizeJob(value: unknown, index: number): JsonRecord | undefined {
     workMode: stringValue(job.workMode, 100),
     postedAt,
     experience: stringValue(job.experience, 180),
+    noticePeriod: stringValue(job.noticePeriod, 180),
+    availabilityStatus: stringValue(job.availabilityStatus, 100),
+    isOpen: typeof job.isOpen === "boolean" ? job.isOpen : undefined,
     matchScore,
     matchReasons,
     canAutoApply: job.canAutoApply === true || Boolean(safeUrl(job.applicationUrl))
