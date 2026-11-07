@@ -342,3 +342,19 @@ html body :is(.public-content, .workspace-content, .nv-content) :is(
   background: #ffffff !important;
   border-color: #e4e7ec !important;
 }
+
+
+html body .public-shell .public-content .indexed-jobs-page > header > div > span:first-child,
+html body .public-shell .public-content .indexed-jobs-page > section > div > div > span:first-child {
+  display: inline-flex !important;
+  width: fit-content !important;
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
