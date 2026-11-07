@@ -39,7 +39,8 @@ type CrawlReport = {
   role?: string;
   location?: string;
   depth?: "standard" | "deep";
-  countryBoardsUsed?: string[];
+  jobBoardSitesTargeted?: string[];
+  searchEnginesUsed?: string[];
   totalFound?: number;
   page?: number;
   pageSize?: number;
@@ -408,10 +409,17 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
             <div><strong>{formatDuration(searchTimings?.total) || "—"}</strong><span>Total time</span></div>
           </div>
           {searchReport?.note && <p className="worker-crawl-report-note">{searchReport.note}</p>}
-          {searchReport?.countryBoardsUsed && searchReport.countryBoardsUsed.length > 0 && (
+          {searchReport?.jobBoardSitesTargeted && searchReport.jobBoardSitesTargeted.length > 0 && (
             <div className="worker-crawl-country-boards">
-              <span>Country boards:</span>
-              {searchReport.countryBoardsUsed.map((board) => <span key={board}>{board}</span>)}
+              <span>Public job sites targeted:</span>
+              {searchReport.jobBoardSitesTargeted.slice(0, 12).map((board) => <span key={board}>{board}</span>)}
+              {searchReport.jobBoardSitesTargeted.length > 12 && <span>+{searchReport.jobBoardSitesTargeted.length - 12} more</span>}
+            </div>
+          )}
+          {searchReport?.searchEnginesUsed && searchReport.searchEnginesUsed.length > 0 && (
+            <div className="worker-crawl-country-boards">
+              <span>Public search pages:</span>
+              {searchReport.searchEnginesUsed.map((engine) => <span key={engine}>{engine}</span>)}
             </div>
           )}
           {searchTimings && (
@@ -474,7 +482,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {!searched && !busy && !searchId && (
         <section className="worker-search-guide" aria-label="How Nvoid search works">
           <div><span>01</span><strong>Search by role and location</strong><p>Describe the opportunity you want to find.</p></div>
-          <div><span>02</span><strong>Compare available results</strong><p>Review the details returned by connected sources.</p></div>
+          <div><span>02</span><strong>Review original listings</strong><p>Compare details extracted from public job pages.</p></div>
           <div><span>03</span><strong>Choose your next step</strong><p>Open the original listing and apply on the destination provided.</p></div>
         </section>
       )}
@@ -535,7 +543,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <section className="no-results">
           <div className="no-results-icon"><Search size={21} /></div>
           <h2>No matching jobs returned</h2>
-          <p>Try another role or location. Nvoid only displays opportunities returned by its connected sources; it doesn't generate sample listings.</p>
+          <p>Try another role or location. Nvoid only displays public opportunities it actually discovers and filters; it doesn't generate sample listings.</p>
         </section>
       )}
 
