@@ -3,7 +3,7 @@ import WorkerHomepage from "../../components/worker-homepage";
 
 export const metadata: Metadata = {
   title: { absolute: "NVOIDAI — Global AI Career Agent" },
-  description: "Explore job opportunities across public job feeds, company career pages and configured research tools with NVOIDAI, a global AI-powered career agent.",
+  description: "Find jobs across public job boards and company career pages. NVOIDAI independently discovers and checks original listings by job title and location without external job-data API integrations.",
   alternates: {
     canonical: "/"
   }
