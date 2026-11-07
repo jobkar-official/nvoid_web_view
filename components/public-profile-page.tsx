@@ -52,12 +52,12 @@ export default function PublicProfilePage({ slug }: { slug: string }) {
     return <main className="public-profile-page"><section className="public-profile-state"><LoaderCircle className="spin" size={24} /><strong>Loading professional profile…</strong><p>Retrieving public profile information.</p></section></main>;
   }
 
-  if (notFound || !profile) {
-    return <main className="public-profile-page"><section className="public-profile-state"><span><UserRound size={23} /></span><strong>Profile not found</strong><p>This profile may be unavailable or the address may be incorrect.</p><Link href="/people">Back to Grow Network <ArrowRight size={15} /></Link></section></main>;
-  }
-
   if (error) {
     return <main className="public-profile-page"><section className="public-profile-state"><span><UserRound size={23} /></span><strong>Profile unavailable</strong><p>{error}</p><Link href="/people">Back to Grow Network <ArrowRight size={15} /></Link></section></main>;
+  }
+
+  if (notFound || !profile) {
+    return <main className="public-profile-page"><section className="public-profile-state"><span><UserRound size={23} /></span><strong>Profile not found</strong><p>This profile may be unavailable or the address may be incorrect.</p><Link href="/people">Back to Grow Network <ArrowRight size={15} /></Link></section></main>;
   }
 
   const location = [profile.city, profile.state, profile.country].filter(Boolean).join(", ");
