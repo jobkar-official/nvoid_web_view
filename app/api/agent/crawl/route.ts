@@ -131,8 +131,9 @@ export async function POST(request: NextRequest) {
   liveUrl.searchParams.set("city", location);
   liveUrl.searchParams.set("pool", "true");
   liveUrl.searchParams.set("token", token);
-  if (typeof profile.experienceYears === "number" && Number.isFinite(profile.experienceYears)) {
-    liveUrl.searchParams.set("experience", String(Math.max(0, Math.min(60, profile.experienceYears))));
+  const experienceYears = profile?.experienceYears;
+  if (typeof experienceYears === "number" && Number.isFinite(experienceYears)) {
+    liveUrl.searchParams.set("experience", String(Math.max(0, Math.min(60, experienceYears))));
   }
 
   let upstream: Response;
