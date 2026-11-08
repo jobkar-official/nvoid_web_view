@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Bell, BriefcaseBusiness, Check, ChevronRight, Clock3, FlaskConical, GroupIcon, History, LifeBuoy, Menu, MessageSquare, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
+import { Bell, BriefcaseBusiness, Check, ChevronRight, Clock3, FlaskConical, GroupIcon, History, LifeBuoy, MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
 
 export type GuestSearchJob = {
@@ -362,8 +362,8 @@ export function GuestShell({ children }: { children: ReactNode }) {
 
         <div className="public-main">
           <header className="public-topbar">
-            <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close navigation" : "Open navigation"} onClick={() => setSidebarOpen((open) => !open)}>
-              <Menu size={19} strokeWidth={1.9} />
+            <button className={"sidebar-toggle-button" + (sidebarOpen ? " is-expanded" : " is-collapsed")} type="button" aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"} onClick={() => setSidebarOpen((open) => !open)}>
+              {sidebarOpen ? <PanelLeftClose size={19} strokeWidth={1.9} /> : <PanelLeftOpen size={19} strokeWidth={1.9} />}
             </button>
             <div className="topbar-breadcrumb">
               <Link href="/" className="topbar-home" aria-label="NvoidAI home">NVOIDAI</Link>
@@ -381,7 +381,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
               ) : null}
               <span className="nvoid-header-employer-divider" aria-hidden="true" />
               <Link href="https://hiring.nvoidai.com/auth/login" className="nvoid-header-free-posting" onClick={closeSidebarOnMobile}>
-                <BriefcaseBusiness size={15} strokeWidth={1.9} />
+                <span className="nvoid-header-free-posting-icon" aria-hidden="true"><BriefcaseBusiness size={16} strokeWidth={2} /></span>
                 <span>Free Job Posting</span>
               </Link>
             </nav>
