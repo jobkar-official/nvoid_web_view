@@ -1071,3 +1071,323 @@ html body .public-shell .public-content .employer-benefit-grid article > span {
   background: #f3edff !important;
   border-color: #e5dafa !important;
 }
+
+
+/* Shared application navigation: precise hierarchy, consistent spacing and responsive behavior. */
+html body .public-shell .public-sidebar {
+  width: 280px !important;
+  padding: 20px 15px 16px !important;
+}
+
+html body .public-shell .public-sidebar-header {
+  min-height: 58px !important;
+  padding: 0 4px 15px !important;
+  margin-bottom: 7px !important;
+}
+
+html body .public-shell .public-brand strong {
+  font-size: 15px !important;
+  font-weight: 750 !important;
+  letter-spacing: .035em !important;
+}
+
+html body .public-shell .public-brand small {
+  font-size: 10px !important;
+  letter-spacing: .01em !important;
+}
+
+html body .public-shell .sidebar-find-button {
+  min-height: 44px !important;
+  margin: 15px 2px 18px !important;
+  padding: 0 12px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+}
+
+html body .public-shell .public-sidebar .public-nav {
+  gap: 4px !important;
+}
+
+html body .public-shell .public-sidebar .sidebar-section-label {
+  padding: 13px 10px 7px !important;
+  color: rgba(255,255,255,.68) !important;
+  font-size: 9px !important;
+  font-weight: 750 !important;
+  letter-spacing: .1em !important;
+  text-transform: uppercase !important;
+}
+
+html body .public-shell .public-sidebar .public-nav-link {
+  min-height: 42px !important;
+  gap: 12px !important;
+  padding: 0 11px !important;
+  border-radius: 10px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: .005em !important;
+}
+
+html body .public-shell .public-sidebar .public-nav-link svg {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 18px !important;
+  stroke-width: 1.85 !important;
+}
+
+html body .public-shell .public-sidebar .public-nav-link:is(:hover, .active) {
+  background: rgba(255,255,255,.13) !important;
+  border-color: rgba(255,255,255,.16) !important;
+}
+
+html body .public-shell .public-sidebar .public-nav-link.active {
+  box-shadow: inset 3px 0 #ffffff !important;
+}
+
+html body .public-shell .public-sidebar .history-heading {
+  padding: 0 7px 9px !important;
+}
+
+html body .public-shell .public-sidebar .history-copy strong {
+  font-size: 11px !important;
+  font-weight: 650 !important;
+  line-height: 1.4 !important;
+}
+
+html body .public-shell .public-sidebar .history-copy small {
+  font-size: 9px !important;
+  line-height: 1.45 !important;
+}
+
+html body .public-shell .public-sidebar .guest-identity strong {
+  font-size: 12px !important;
+  font-weight: 650 !important;
+}
+
+html body .public-shell .public-sidebar .guest-identity small {
+  font-size: 10px !important;
+}
+
+html body .public-shell .public-sidebar .guest-auth-actions :is(.sidebar-signin, .sidebar-register) {
+  min-height: 39px !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+
+html body .public-shell .public-sidebar :is(.history-edit, .history-delete) {
+  opacity: 0 !important;
+}
+
+html body .public-shell .public-sidebar .history-item:is(:hover, :focus-within) :is(.history-edit, .history-delete),
+html body .public-shell .public-sidebar :is(.history-edit, .history-delete):focus-visible {
+  opacity: 1 !important;
+}
+
+html body .public-shell .public-topbar {
+  height: 64px !important;
+  padding: 0 clamp(18px, 2.5vw, 34px) !important;
+  background: rgba(255,255,255,.94) !important;
+  backdrop-filter: blur(16px) saturate(150%) !important;
+}
+
+html body .public-shell .topbar-breadcrumb {
+  display: flex !important;
+  min-width: 0 !important;
+  align-items: center !important;
+  gap: 10px !important;
+  overflow: hidden !important;
+  color: #98a2b3 !important;
+  font-size: 12px !important;
+}
+
+html body .public-shell .topbar-breadcrumb .topbar-home {
+  flex: 0 0 auto !important;
+  color: #667085 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .09em !important;
+}
+
+html body .public-shell .topbar-breadcrumb > svg {
+  flex: 0 0 auto !important;
+  color: #98a2b3 !important;
+  stroke: #98a2b3 !important;
+}
+
+html body .public-shell .topbar-breadcrumb > span {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  color: #202938 !important;
+  font-size: 13px !important;
+  font-weight: 650 !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html body .public-shell .nvoid-header-actions {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-left: auto !important;
+  padding-left: 18px !important;
+  border-left: 1px solid #e4e7ec !important;
+}
+
+html body .public-shell .nvoid-header-actions .nvoid-header-free-posting {
+  display: inline-flex !important;
+  min-height: 40px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 15px !important;
+  border-radius: 10px !important;
+  font-size: 11px !important;
+  font-weight: 750 !important;
+  letter-spacing: .005em !important;
+  white-space: nowrap !important;
+}
+
+html body .public-shell .nvoid-header-actions .nvoid-header-free-posting svg {
+  width: 15px !important;
+  height: 15px !important;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html body .public-shell .sidebar-toggle-button {
+  display: none !important;
+}
+
+html body .public-shell .public-content {
+  padding: 30px clamp(20px, 3vw, 48px) 56px !important;
+}
+
+@media (min-width: 961px) {
+  html body .public-shell .public-sidebar,
+  html body .public-shell .public-sidebar.is-open,
+  html body .public-shell .public-sidebar:not(.is-open) {
+    width: 280px !important;
+    transform: translateX(0) !important;
+    visibility: visible !important;
+  }
+
+  html body .public-shell .public-main {
+    width: calc(100% - 280px) !important;
+    margin-left: 280px !important;
+  }
+
+  html body .public-shell .sidebar-scrim {
+    display: none !important;
+  }
+}
+
+@media (max-width: 960px) {
+  html body .public-shell .public-sidebar {
+    width: min(88vw, 320px) !important;
+    transform: translateX(-100%) !important;
+    visibility: hidden !important;
+    box-shadow: 18px 0 48px rgba(16,24,40,.2) !important;
+  }
+
+  html body .public-shell .public-sidebar.is-open {
+    transform: translateX(0) !important;
+    visibility: visible !important;
+  }
+
+  html body .public-shell .public-main,
+  html body .public-shell .public-sidebar.is-open + .public-main {
+    width: 100% !important;
+    margin-left: 0 !important;
+  }
+
+  html body .public-shell .sidebar-toggle-button {
+    display: grid !important;
+    width: 40px !important;
+    height: 40px !important;
+    flex: 0 0 40px !important;
+    place-items: center !important;
+    margin-right: 12px !important;
+    border: 1px solid #e4e7ec !important;
+    border-radius: 10px !important;
+    color: #344054 !important;
+    background: #ffffff !important;
+  }
+
+  html body .public-shell .sidebar-toggle-button svg {
+    color: #344054 !important;
+    stroke: #344054 !important;
+  }
+
+  html body .public-shell .sidebar-scrim {
+    position: fixed !important;
+    z-index: 55 !important;
+    inset: 0 !important;
+    display: block !important;
+    border: 0 !important;
+    background: rgba(16,24,40,.48) !important;
+    backdrop-filter: blur(3px) !important;
+  }
+
+  html body .public-shell .public-topbar {
+    height: 58px !important;
+    padding: 0 14px !important;
+  }
+
+  html body .public-shell .nvoid-header-actions {
+    gap: 0 !important;
+    padding-left: 10px !important;
+  }
+
+  html body .public-shell .nvoid-header-actions .nvoid-header-free-posting {
+    min-height: 36px !important;
+    padding: 0 10px !important;
+    font-size: 10px !important;
+  }
+
+  html body .public-shell .public-content {
+    padding: 22px 16px 42px !important;
+  }
+
+  @media (hover: none) {
+    html body .public-shell .public-sidebar :is(.history-edit, .history-delete) {
+      opacity: 1 !important;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  html body .public-shell .topbar-breadcrumb {
+    gap: 6px !important;
+  }
+
+  html body .public-shell .topbar-breadcrumb .topbar-home {
+    font-size: 9px !important;
+  }
+
+  html body .public-shell .topbar-breadcrumb > span {
+    font-size: 11px !important;
+  }
+
+  html body .public-shell .nvoid-header-actions .nvoid-header-free-posting {
+    gap: 6px !important;
+    padding: 0 8px !important;
+    font-size: 9px !important;
+  }
+}
+
+html body .public-shell :is(a, button, input, select, textarea):focus-visible {
+  outline: 3px solid rgba(109,40,217,.28) !important;
+  outline-offset: 2px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .public-shell *,
+  html body .nv-private-page *,
+  html body .nv-chat-page * {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
