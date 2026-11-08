@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Bell, BriefcaseBusiness, Check, Clock3, FlaskConical, GroupIcon, History, LifeBuoy, MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
+import { Bell, BriefcaseBusiness, Check, ChevronRight, Clock3, FlaskConical, GroupIcon, History, LifeBuoy, Menu, MessageSquare, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
 
 export type GuestSearchJob = {
@@ -215,14 +215,31 @@ export function GuestShell({ children }: { children: ReactNode }) {
   const closeSidebarOnMobile = () => {
     if (window.matchMedia("(max-width: 960px)").matches) setSidebarOpen(false);
   };
+  const routeTitles: Record<string, string> = {
+    "/": "New search",
+    "/job-search": "Find jobs",
+    "/jobs": "My jobs",
+    "/people": "Grow network",
+    "/application": "Applications",
+    "/highlights": "Open to work",
+    "/message": "Messages",
+    "/notification": "Notifications",
+    "/profile": "Profile",
+    "/support": "Support",
+    "/models": "Models",
+    "/models/alpha-k1": "Alpha K1",
+    "/about": "About NvoidAI",
+    "/privacy": "Privacy",
+    "/terms": "Terms",
+    "/cookies": "Cookies",
+    "/auth/signin": "Sign in",
+    "/auth/register": "Create account",
+    "/auth/forgot-password": "Reset password"
+  };
+  const fallbackTitle = pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid";
   const pageTitle = pathname.startsWith("/search/")
     ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search"
-    : pathname === "/" ? "New search"
-      : pathname === "/job-search" ? "Find opportunities"
-        : pathname === "/jobs" ? "My Jobs"
-          : pathname === "/connections" ? "Connections"
-            : pathname === "/research" ? "Research anything"
-              : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid";
+    : routeTitles[pathname] || fallbackTitle.replace(/\b\w/g, (character) => character.toUpperCase());
 
   return (
     <GuestHistoryContext.Provider value={context}>
@@ -251,12 +268,12 @@ export function GuestShell({ children }: { children: ReactNode }) {
           </nav>
 
           {signedIn && (
-            <nav className="public-nav nvoid-workspace-nav" aria-label="Workspace">
-              <span className="sidebar-section-label">Workspace</span>
+            <nav className="public-nav nvoid-workspace-nav" aria-label="Your career">
+              <span className="sidebar-section-label">Your career</span>
               {workspaceLinks.map((item) => {
                 const Icon = item.icon;
                 const active = pathname === item.href || (item.href === "/application" && pathname.startsWith("/application"));
-                return <Link key={item.href} href={item.href} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={16} /><span>{item.label}</span></Link>;
+                return <Link key={item.href} href={item.href} title={item.label} aria-label={item.label} aria-current={active ? "page" : undefined} onClick={closeSidebarOnMobile} className={"public-nav-link" + (active ? " active" : "")}><Icon size={17} strokeWidth={1.9} /><span>{item.label}</span></Link>;
               })}
             </nav>
           )}
@@ -322,22 +339,19 @@ export function GuestShell({ children }: { children: ReactNode }) {
 
         <div className="public-main">
           <header className="public-topbar">
-            <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Collapse sidebar" : "Open sidebar"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Collapse sidebar" : "Open sidebar"} onClick={() => setSidebarOpen((open) => !open)}>
-              {sidebarOpen ? <PanelLeftClose size={19} /> : <PanelLeftOpen size={19} />}
+            <button className="sidebar-toggle-button" type="button" aria-label={sidebarOpen ? "Close navigation" : "Open navigation"} aria-expanded={sidebarOpen} aria-controls="nvoid-public-sidebar" title={sidebarOpen ? "Close navigation" : "Open navigation"} onClick={() => setSidebarOpen((open) => !open)}>
+              <Menu size={19} strokeWidth={1.9} />
             </button>
-            <div className="topbar-breadcrumb"><strong>NvoidAI / {pageTitle}</strong></div>
-            <nav className="nvoid-header-actions" aria-label="Account and hiring links">
-              {signedIn ? (
-                <button type="button" className="nvoid-header-logout" onClick={() => void logout()}>Logout</button>
-              ) : (
-                <>
-                  <Link href="/auth/signin" className="nvoid-header-login" onClick={closeSidebarOnMobile}>Login</Link>
-                  <span className="nvoid-header-dash" aria-hidden="true">-</span>
-                  <Link href="/auth/register" className="nvoid-header-signup" onClick={closeSidebarOnMobile}>Sign Up</Link>
-                </>
-              )}
-              <span className="nvoid-header-divider" aria-hidden="true">|</span>
-              <Link href="https://hiring.nvoidai.com/auth/login" className="nvoid-header-free-posting" onClick={closeSidebarOnMobile}>Free Job Posting</Link>
+            <div className="topbar-breadcrumb">
+              <Link href="/" className="topbar-home" aria-label="NvoidAI home">NVOIDAI</Link>
+              <ChevronRight size={14} aria-hidden="true" />
+              <span>{pageTitle}</span>
+            </div>
+            <nav className="nvoid-header-actions" aria-label="Employer actions">
+              <Link href="https://hiring.nvoidai.com/auth/login" className="nvoid-header-free-posting" onClick={closeSidebarOnMobile}>
+                <BriefcaseBusiness size={15} strokeWidth={1.9} />
+                <span>Free Hiring</span>
+              </Link>
             </nav>
           </header>
           <main className="public-content">{children}</main>
