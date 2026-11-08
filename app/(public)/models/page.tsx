@@ -79,8 +79,7 @@ export default function ModelsPage() {
         <footer className="model-index-footer">
           <div><span>FOR CANDIDATES AND EMPLOYERS</span><p>Worker connects job discovery with a free employer posting and hiring workspace. Explore the product release overview or start with your next opportunity.</p></div>
           <div className="model-index-footer-actions">
-            <Link href="/release">Product updates <ArrowRight size={15} /></Link>
-            <Link href="/free-job-posting">Free job posting <ArrowRight size={15} /></Link>
+            <Link href="https://hiring.nvoidai.com/auth/login">Free job posting <ArrowRight size={15} /></Link>
           </div>
         </footer>
       </div>

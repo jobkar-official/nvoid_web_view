@@ -158,7 +158,7 @@ export default function IndexedJobsPage() {
       <header className={styles.header}>
         <div className={styles.heading}>
           <span className={styles.eyebrow}><BriefcaseBusiness size={14} /> NVOIDAI JOB INDEX</span>
-          <h1>Browse jobs</h1>
+          <h1>My Jobs</h1>
           <p>Explore open roles collected into Nvoid’s indexed company career-page database. Filter the catalogue and open the original employer listing.</p>
         </div>
         <div className={styles.totalCard}>

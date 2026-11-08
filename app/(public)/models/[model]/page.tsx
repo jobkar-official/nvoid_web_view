@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, BrainCircuit, CalendarDays, ChevronRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BrainCircuit, CalendarDays, ChevronRight, ShieldCheck } from "lucide-react";
 import { notFound } from "next/navigation";
 
 const modelCatalog = {
@@ -311,7 +311,7 @@ export default async function ModelDetailsPage({ params }: ModelPageProps) {
             </div>
             <div className="model-docs-header-actions">
               <Link href="/" className="model-docs-action-link">Explore jobs <ArrowUpRight size={15} /></Link>
-              <Link href="/free-job-posting" className="model-docs-action-link">For employers <ArrowUpRight size={15} /></Link>
+              <Link href="https://hiring.nvoidai.com/auth/login">Free job posting <ArrowRight size={15} /></Link>
             </div>
           </header>
 
@@ -344,7 +344,7 @@ export default async function ModelDetailsPage({ params }: ModelPageProps) {
             <DetailRows rows={hiringRows} showOutcome />
             <p className="model-docs-footnote">AI-assisted matching supports candidate review. Employers remain responsible for evaluating applicants and making every hiring decision.</p>
             <div className="model-docs-section-actions">
-              <Link href="/free-job-posting" className="model-docs-action-link">Explore free job posting <ArrowUpRight size={15} /></Link>
+              <Link href="https://hiring.nvoidai.com/auth/login">Free job posting <ArrowRight size={15} /></Link>
               <Link href="/auth/register?role=3" className="model-docs-action-link">Create employer account <ArrowUpRight size={15} /></Link>
             </div>
           </section>
@@ -411,7 +411,7 @@ export default async function ModelDetailsPage({ params }: ModelPageProps) {
             </div>
             <div className="model-docs-footer-actions">
               <Link href="/" className="model-docs-cta">Explore jobs <ArrowUpRight size={16} /></Link>
-              <Link href="/free-job-posting" className="model-docs-cta">Hire with Worker <ArrowUpRight size={16} /></Link>
+              <Link href="https://hiring.nvoidai.com/auth/login">Free job posting <ArrowRight size={15} /></Link>
             </div>
           </footer>
         </div>

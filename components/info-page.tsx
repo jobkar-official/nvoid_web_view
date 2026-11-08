@@ -57,7 +57,7 @@ export default function InfoPage({
             <p>{legal
               ? "We explain product behaviour and distinguish current capabilities from features that depend on rollout or configuration."
               : "Candidates discover opportunities. Employers publish roles and organise hiring. Nvoid brings both journeys into one place."}</p>
-            <Link href={legal ? "/about" : "/free-job-posting"}>{legal ? "About Nvoid" : "For employers"} <ArrowUpRight size={13} /></Link>
+            <Link href={legal ? "/about" : "https://hiring.nvoidai.com/auth/login"}>{legal ? "About Nvoid" : "For employers"} <ArrowUpRight size={13} /></Link>
           </div>
         </aside>
 
@@ -84,7 +84,7 @@ export default function InfoPage({
         </div>
         <div className="info-cta-actions">
           <Link href={legal ? "/" : "/job-search"} className="info-cta-link">{legal ? "Back to Nvoid" : "Find jobs"} <ArrowRight size={15} /></Link>
-          {!legal && <Link href="/free-job-posting" className="info-cta-secondary"><BriefcaseBusiness size={14} /> For employers</Link>}
+          {!legal && <Link href="https://hiring.nvoidai.com/auth/login" className="info-cta-secondary"><BriefcaseBusiness size={14} /> For employers</Link>}
         </div>
       </footer>
     </main>

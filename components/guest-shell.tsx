@@ -117,7 +117,7 @@ function formatTime(value: string) {
 }
 
 const agentLinks = [
-  { href: "/jobs", label: "Browse Jobs", icon: BriefcaseBusiness },
+  { href: "/jobs", label: "My Jobs", icon: BriefcaseBusiness },
   { href: "/people", label: "Grow Network", icon: GroupIcon },
 ];
 
@@ -219,10 +219,10 @@ export function GuestShell({ children }: { children: ReactNode }) {
     ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search"
     : pathname === "/" ? "New search"
       : pathname === "/job-search" ? "Find opportunities"
-        : pathname === "/jobs" ? "Browse Jobs"
-        : pathname === "/connections" ? "Connections"
-          : pathname === "/research" ? "Research anything"
-            : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid";
+        : pathname === "/jobs" ? "My Jobs"
+          : pathname === "/connections" ? "Connections"
+            : pathname === "/research" ? "Research anything"
+              : pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid";
 
   return (
     <GuestHistoryContext.Provider value={context}>
@@ -337,7 +337,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
                 </>
               )}
               <span className="nvoid-header-divider" aria-hidden="true">|</span>
-              <Link href="/free-job-posting" className="nvoid-header-free-posting" onClick={closeSidebarOnMobile}>Free Job Posting</Link>
+              <Link href="https://hiring.nvoidai.com/auth/login" className="nvoid-header-free-posting" onClick={closeSidebarOnMobile}>Free Job Posting</Link>
             </nav>
           </header>
           <main className="public-content">{children}</main>
