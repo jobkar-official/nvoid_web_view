@@ -1228,10 +1228,19 @@ html body .public-shell .nvoid-header-actions {
   display: flex !important;
   flex: 0 0 auto !important;
   align-items: center !important;
-  gap: 12px !important;
+  gap: 10px !important;
   margin-left: auto !important;
-  padding-left: 18px !important;
-  border-left: 1px solid #e4e7ec !important;
+  padding-left: 0 !important;
+  border-left: 0 !important;
+}
+
+html body .public-shell .nvoid-header-employer-divider {
+  display: block !important;
+  width: 1px !important;
+  height: 26px !important;
+  flex: 0 0 1px !important;
+  margin: 0 3px !important;
+  background: #e4e7ec !important;
 }
 
 html body .public-shell .nvoid-header-actions .nvoid-header-free-posting {
@@ -1256,7 +1265,24 @@ html body .public-shell .nvoid-header-actions .nvoid-header-free-posting svg {
 }
 
 html body .public-shell .sidebar-toggle-button {
-  display: none !important;
+  display: grid !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex: 0 0 40px !important;
+  place-items: center !important;
+  margin-right: 12px !important;
+  border: 1px solid #e4e7ec !important;
+  border-radius: 10px !important;
+  color: #344054 !important;
+  background: #ffffff !important;
+  cursor: pointer !important;
+}
+
+html body .public-shell .sidebar-toggle-button svg {
+  width: 19px !important;
+  height: 19px !important;
+  color: #344054 !important;
+  stroke: #344054 !important;
 }
 
 html body .public-shell .public-content {
@@ -1264,15 +1290,26 @@ html body .public-shell .public-content {
 }
 
 @media (min-width: 961px) {
-  html body .public-shell .public-sidebar,
-  html body .public-shell .public-sidebar.is-open,
-  html body .public-shell .public-sidebar:not(.is-open) {
+  html body .public-shell .public-sidebar {
     width: 280px !important;
     transform: translateX(0) !important;
     visibility: visible !important;
+    transition: transform .22s ease, visibility .22s ease !important;
+  }
+
+  html body .public-shell .public-sidebar:not(.is-open) {
+    transform: translateX(-100%) !important;
+    visibility: hidden !important;
   }
 
   html body .public-shell .public-main {
+    width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    transition: margin-left .22s ease, width .22s ease !important;
+  }
+
+  html body .public-shell .public-sidebar.is-open + .public-main {
     width: calc(100% - 280px) !important;
     margin-left: 280px !important;
   }
@@ -1738,8 +1775,16 @@ html body .public-shell .worker-results-page .worker-results-submit:hover:not(:d
     font-size: 9px !important;
   }
 
+  html body .public-shell .nvoid-header-employer-divider {
+    height: 21px !important;
+    margin: 0 1px !important;
+  }
+
   html body .public-shell .nvoid-header-actions .nvoid-header-free-posting svg {
-    display: none !important;
+    display: inline-block !important;
+    width: 14px !important;
+    height: 14px !important;
+    flex: 0 0 14px !important;
   }
 }
 
@@ -2135,5 +2180,73 @@ html body .public-shell .nvoid-homepage-restored .worker-home-search-meta svg {
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+}
+
+
+/* Correct public shell sizing, desktop sidebar collapse, and the existing homepage bounds. */
+html body .public-shell .public-main {
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+html body .public-shell .public-content:has(.nvoid-homepage-restored) {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: visible !important;
+}
+
+html body .public-shell .nvoid-homepage-restored {
+  width: min(100%, 1120px) !important;
+  max-width: 1120px !important;
+  min-width: 0 !important;
+  margin-right: auto !important;
+  margin-left: auto !important;
+  box-sizing: border-box !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-brand-intro,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-section,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 720px) {
+  html body .public-shell .nvoid-header-actions {
+    gap: 5px !important;
+    padding-left: 0 !important;
+    border-left: 0 !important;
+  }
+
+  html body .public-shell .nvoid-header-actions .nvoid-header-free-posting {
+    gap: 5px !important;
+    padding-right: 9px !important;
+    padding-left: 9px !important;
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  html body .public-shell .nvoid-header-employer-divider {
+    height: 20px !important;
+    margin: 0 1px !important;
+  }
+
+  html body .public-shell .nvoid-header-actions .nvoid-header-free-posting {
+    gap: 5px !important;
+    padding-right: 7px !important;
+    padding-left: 7px !important;
+    font-size: 9px !important;
+  }
+
+  html body .public-shell .nvoid-header-actions .nvoid-header-free-posting svg {
+    display: inline-block !important;
+    width: 14px !important;
+    height: 14px !important;
+    flex: 0 0 14px !important;
   }
 }
