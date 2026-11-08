@@ -141,8 +141,31 @@ export function GuestShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     setHistory(readHistory());
     setReady(true);
-    if (window.matchMedia("(max-width: 960px)").matches) setSidebarOpen(false);
+
+    const breakpoint = window.matchMedia("(max-width: 960px)");
+    const syncSidebar = () => setSidebarOpen(!breakpoint.matches);
+    syncSidebar();
+    breakpoint.addEventListener("change", syncSidebar);
+
+    return () => breakpoint.removeEventListener("change", syncSidebar);
   }, []);
+
+  useEffect(() => {
+    if (!sidebarOpen || !window.matchMedia("(max-width: 960px)").matches) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSidebarOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [sidebarOpen]);
 
   const persist = useCallback((next: GuestSearchRecord[]) => {
     const limited = next.slice(0, MAX_HISTORY_RECORDS);
