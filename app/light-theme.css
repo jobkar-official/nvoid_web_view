@@ -2250,3 +2250,20 @@ html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
     flex: 0 0 14px !important;
   }
 }
+
+
+@media (max-width: 960px) {
+  html body .public-shell .public-sidebar {
+    z-index: 60 !important;
+  }
+
+  html body .public-shell .sidebar-scrim {
+    z-index: 55 !important;
+  }
+}
+
+html body .public-shell .public-topbar .sidebar-toggle-button {
+  color: #51495f !important;
+  background: #ffffff !important;
+  border-color: #e4e7ec !important;
+}
