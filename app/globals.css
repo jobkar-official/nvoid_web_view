@@ -28,7 +28,7 @@ body {
   margin: 0;
   background: var(--canvas);
   color: var(--ink);
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-roboto), Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -4255,7 +4255,7 @@ body,
 
 body {
   color: #ececec !important;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-family: var(--font-roboto), Arial, sans-serif !important;
 }
 
 .public-sidebar,
