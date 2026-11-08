@@ -370,7 +370,15 @@ export function GuestShell({ children }: { children: ReactNode }) {
               <ChevronRight size={14} aria-hidden="true" />
               <span>{pageTitle}</span>
             </div>
-            <nav className="nvoid-header-actions" aria-label="Employer actions">
+            <nav className="nvoid-header-actions" aria-label="Account and employer actions">
+              {!signedIn && !isLoading ? (
+                <>
+                  <Link href="/auth/signin" className="nvoid-header-login" onClick={closeSidebarOnMobile}>Log in</Link>
+                  <Link href="/auth/register" className="nvoid-header-signup" onClick={closeSidebarOnMobile}>Sign up</Link>
+                </>
+              ) : signedIn ? (
+                <Link href="/profile" className="nvoid-header-login" onClick={closeSidebarOnMobile}>Profile</Link>
+              ) : null}
               <Link href="https://hiring.nvoidai.com/auth/login" className="nvoid-header-free-posting" onClick={closeSidebarOnMobile}>
                 <BriefcaseBusiness size={15} strokeWidth={1.9} />
                 <span>Free Hiring</span>
