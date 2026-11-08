@@ -1742,3 +1742,563 @@ html body .public-shell .worker-results-page .worker-results-submit:hover:not(:d
     display: none !important;
   }
 }
+
+
+/* Homepage refresh: clear hierarchy, focused search and responsive layout. */
+html body .public-content:has(.nvoid-homepage-restored) {
+  display: flex !important;
+  min-height: calc(100svh - 64px) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: clamp(38px, 6vh, 72px) clamp(18px, 4vw, 56px) 58px !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+}
+
+html body .public-shell .nvoid-homepage-restored {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 0 !important;
+  display: flex !important;
+  width: min(100%, 1080px) !important;
+  max-width: 1080px !important;
+  min-height: 0 !important;
+  height: auto !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  color: #191919 !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-brand-intro {
+  position: relative !important;
+  display: flex !important;
+  width: 100% !important;
+  justify-content: center !important;
+  margin: 0 auto 42px !important;
+  text-align: center !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-brand-intro::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: -1 !important;
+  top: -90px !important;
+  left: 50% !important;
+  width: min(760px, 88vw) !important;
+  height: 330px !important;
+  transform: translateX(-50%) !important;
+  border-radius: 50% !important;
+  background: radial-gradient(ellipse, rgba(109,40,217,.10) 0%, rgba(109,40,217,.035) 38%, transparent 72%) !important;
+  pointer-events: none !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy {
+  display: grid !important;
+  width: min(100%, 820px) !important;
+  justify-items: center !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-agent-label {
+  display: inline-flex !important;
+  min-height: 30px !important;
+  align-items: center !important;
+  gap: 9px !important;
+  padding: 0 12px !important;
+  border: 1px solid #e9e2f5 !important;
+  border-radius: 999px !important;
+  color: #5d3a91 !important;
+  -webkit-text-fill-color: #5d3a91 !important;
+  background: #faf8fd !important;
+  font-size: 10px !important;
+  font-weight: 750 !important;
+  letter-spacing: .13em !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-agent-dot {
+  width: 7px !important;
+  height: 7px !important;
+  flex: 0 0 7px !important;
+  border-radius: 50% !important;
+  background: #6d28d9 !important;
+  box-shadow: 0 0 0 4px rgba(109,40,217,.10) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy h1 {
+  display: grid !important;
+  justify-items: center !important;
+  gap: 2px !important;
+  margin: 22px 0 13px !important;
+  color: #171717 !important;
+  -webkit-text-fill-color: #171717 !important;
+  font-size: clamp(42px, 5.3vw, 66px) !important;
+  font-weight: 780 !important;
+  line-height: 1.02 !important;
+  letter-spacing: -.065em !important;
+  text-align: center !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy h1 .worker-home-heading-copy {
+  color: #171717 !important;
+  -webkit-text-fill-color: #171717 !important;
+  background: none !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy h1 .worker-home-wordmark-text {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 11px !important;
+  color: #6d28d9 !important;
+  -webkit-text-fill-color: #6d28d9 !important;
+  background: none !important;
+  font-size: inherit !important;
+  font-weight: 800 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -.06em !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-heading-logo {
+  display: block !important;
+  width: 38px !important;
+  height: 38px !important;
+  flex: 0 0 38px !important;
+  padding: 6px !important;
+  border: 1px solid #eee8f8 !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+  box-shadow: 0 3px 12px rgba(37,20,63,.08) !important;
+  object-fit: contain !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy > p {
+  max-width: 640px !important;
+  margin: 0 !important;
+  color: #68636f !important;
+  -webkit-text-fill-color: #68636f !important;
+  font-size: clamp(14px, 1.35vw, 16px) !important;
+  font-weight: 400 !important;
+  line-height: 1.75 !important;
+  text-align: center !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-proof-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  margin-top: 22px !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-proof-row > span {
+  display: inline-flex !important;
+  min-height: 34px !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 0 11px !important;
+  border: 1px solid #eeebf2 !important;
+  border-radius: 999px !important;
+  color: #55515d !important;
+  background: rgba(255,255,255,.82) !important;
+  font-size: 11px !important;
+  font-weight: 550 !important;
+  white-space: nowrap !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-proof-row svg {
+  flex: 0 0 auto !important;
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-section {
+  width: min(100%, 960px) !important;
+  max-width: 960px !important;
+  margin: 0 auto !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-heading {
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  margin: 0 3px 13px !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-heading > div:first-child {
+  display: grid !important;
+  gap: 5px !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-heading > div:first-child > span {
+  color: #8d849a !important;
+  -webkit-text-fill-color: #8d849a !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: .14em !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-heading h2 {
+  margin: 0 !important;
+  color: #211d27 !important;
+  -webkit-text-fill-color: #211d27 !important;
+  font-size: clamp(16px, 1.8vw, 19px) !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: -.025em !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-model-badge {
+  display: inline-flex !important;
+  min-height: 30px !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 0 10px !important;
+  border: 1px solid #e8e1f1 !important;
+  border-radius: 8px !important;
+  color: #5d3a91 !important;
+  -webkit-text-fill-color: #5d3a91 !important;
+  background: #faf8fd !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-model-badge svg {
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, .86fr) auto !important;
+  align-items: end !important;
+  gap: 17px !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 19px !important;
+  border: 1px solid #333039 !important;
+  border-radius: 18px !important;
+  color: #f4f4f4 !important;
+  background: linear-gradient(115deg, #222126 0%, #19191d 100%) !important;
+  box-shadow: 0 22px 54px rgba(23,18,31,.17), inset 0 1px rgba(255,255,255,.055) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field {
+  display: grid !important;
+  min-width: 0 !important;
+  gap: 9px !important;
+  margin: 0 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field > span:first-child {
+  color: #b9b4c0 !important;
+  -webkit-text-fill-color: #b9b4c0 !important;
+  font-size: 9px !important;
+  font-weight: 750 !important;
+  letter-spacing: .13em !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-control {
+  display: flex !important;
+  min-width: 0 !important;
+  min-height: 56px !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 0 13px !important;
+  border: 1px solid #414047 !important;
+  border-radius: 11px !important;
+  color: #aaa4b1 !important;
+  background: #101014 !important;
+  transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-control > svg {
+  flex: 0 0 auto !important;
+  color: #aaa4b1 !important;
+  stroke: #aaa4b1 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-control:focus-within {
+  border-color: #8664b3 !important;
+  background: #151419 !important;
+  box-shadow: 0 0 0 3px rgba(109,40,217,.15) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-control > input {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 54px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  color: #f5f3f8 !important;
+  -webkit-text-fill-color: #f5f3f8 !important;
+  background: transparent !important;
+  font-size: 14px !important;
+  font-weight: 450 !important;
+  box-shadow: none !important;
+  caret-color: #ffffff !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-control > input::placeholder {
+  color: #837e89 !important;
+  -webkit-text-fill-color: #837e89 !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill:hover,
+html body .public-shell .nvoid-homepage-restored .worker-home-search-card input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #101014 inset !important;
+  -webkit-text-fill-color: #f5f3f8 !important;
+  caret-color: #ffffff !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-field-divider {
+  width: 1px !important;
+  height: 48px !important;
+  align-self: center !important;
+  background: #45414c !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-button {
+  display: inline-flex !important;
+  min-height: 56px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  padding: 0 19px !important;
+  border: 1px solid #ffffff !important;
+  border-radius: 11px !important;
+  color: #19171d !important;
+  -webkit-text-fill-color: #19171d !important;
+  background: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  white-space: nowrap !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.10) !important;
+  transition: transform .18s ease, background-color .18s ease, box-shadow .18s ease !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-button svg {
+  color: #19171d !important;
+  stroke: #19171d !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-button:hover {
+  transform: translateY(-1px) !important;
+  color: #000000 !important;
+  -webkit-text-fill-color: #000000 !important;
+  background: #e9e6ed !important;
+  border-color: #e9e6ed !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,.13) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-meta {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin: 13px 3px 0 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-meta .worker-home-search-footnote {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  color: #817b88 !important;
+  -webkit-text-fill-color: #817b88 !important;
+  font-size: 10px !important;
+  line-height: 1.55 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-search-meta svg {
+  flex: 0 0 auto !important;
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-steps {
+  display: grid !important;
+  width: min(100%, 960px) !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 37px auto 0 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-step {
+  display: grid !important;
+  grid-template-columns: 34px 38px minmax(0, 1fr) !important;
+  min-width: 0 !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 14px 13px !important;
+  border: 1px solid #eeebf2 !important;
+  border-radius: 13px !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(31,25,41,.035) !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-step-number {
+  color: #a39aaE !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .04em !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-step-icon {
+  display: grid !important;
+  width: 36px !important;
+  height: 36px !important;
+  place-items: center !important;
+  border: 1px solid #eee8f8 !important;
+  border-radius: 10px !important;
+  color: #6d28d9 !important;
+  background: #f8f4fd !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-step-icon svg {
+  color: #6d28d9 !important;
+  stroke: #6d28d9 !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-step > div {
+  display: grid !important;
+  min-width: 0 !important;
+  gap: 4px !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-step strong {
+  overflow: hidden !important;
+  color: #28232f !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+html body .public-shell .nvoid-homepage-restored .worker-home-step small {
+  overflow: hidden !important;
+  color: #827b8c !important;
+  font-size: 9px !important;
+  line-height: 1.45 !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 960px) {
+  html body .public-content:has(.nvoid-homepage-restored) {
+    min-height: calc(100svh - 58px) !important;
+    align-items: flex-start !important;
+    padding-top: 54px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-search-card {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 13px !important;
+    padding: 17px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-field-divider {
+    display: none !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-search-button {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 680px) {
+  html body .public-content:has(.nvoid-homepage-restored) {
+    padding: 42px 16px 46px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-brand-intro {
+    margin-bottom: 32px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy h1 {
+    font-size: clamp(36px, 9vw, 50px) !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-heading-logo {
+    width: 32px !important;
+    height: 32px !important;
+    flex-basis: 32px !important;
+    padding: 5px !important;
+    border-radius: 10px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy > p {
+    max-width: 470px !important;
+    font-size: 13px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-proof-row {
+    gap: 7px !important;
+    margin-top: 17px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-proof-row > span {
+    min-height: 31px !important;
+    padding: 0 9px !important;
+    font-size: 10px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-search-heading {
+    align-items: flex-start !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-steps {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    margin-top: 24px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-step {
+    padding: 11px 12px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  html body .public-shell .nvoid-homepage-restored .worker-home-intro-copy h1 {
+    font-size: 34px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-wordmark-text {
+    gap: 8px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-search-heading {
+    flex-direction: column !important;
+    gap: 9px !important;
+  }
+
+  html body .public-shell .nvoid-homepage-restored .worker-home-search-meta {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .public-shell .nvoid-homepage-restored *,
+  html body .public-shell .nvoid-homepage-restored *::before,
+  html body .public-shell .nvoid-homepage-restored *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
