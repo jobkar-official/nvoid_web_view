@@ -379,9 +379,10 @@ export function GuestShell({ children }: { children: ReactNode }) {
               ) : signedIn ? (
                 <Link href="/profile" className="nvoid-header-login" onClick={closeSidebarOnMobile}>Profile</Link>
               ) : null}
+              <span className="nvoid-header-employer-divider" aria-hidden="true" />
               <Link href="https://hiring.nvoidai.com/auth/login" className="nvoid-header-free-posting" onClick={closeSidebarOnMobile}>
                 <BriefcaseBusiness size={15} strokeWidth={1.9} />
-                <span>Free Hiring</span>
+                <span>Free Job Posting</span>
               </Link>
             </nav>
           </header>
