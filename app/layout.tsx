@@ -1,10 +1,18 @@
 import type { Metadata, Viewport } from "next";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import "./nvoid-theme.css";
 import "./ui-polish.css";
 import "./(public)/agent-crawl.css";
 import "./light-theme.css";
 import { AuthProvider } from "../lib/context/AuthContext";
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700", "900"],
+  display: "swap",
+  variable: "--font-roboto"
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://nvoidai.com/"),
@@ -43,5 +51,5 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><AuthProvider>{children}</AuthProvider></body></html>;
+  return <html lang="en" className={roboto.variable}><body><AuthProvider>{children}</AuthProvider></body></html>;
 }
