@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requestAgent } from "@/lib/agent-proxy";
-import { resolveEngineLocation, type EngineJobsPayload, toWebJob } from "@/lib/agent-job-contract";
+import { engineErrorMessage, requestEngineJobs, resolveEngineLocation, type EngineJobsPayload, toWebJob } from "@/lib/agent-job-contract";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 30;
 
 function boundedInteger(value: string | null, fallback: number, minimum: number, maximum: number) {
   const parsed = Number(value);
@@ -41,10 +42,9 @@ export async function GET(request: NextRequest) {
       return "/v1/jobs?" + params.toString();
     };
 
-    const firstResponse = await requestAgent(buildPath(1), { method: "GET", timeoutMs: 20000 });
-    const firstPayload = await firstResponse.json().catch(() => ({})) as EngineJobsPayload & { error?: unknown };
+    const { response: firstResponse, payload: firstPayload } = await requestEngineJobs(buildPath(1));
     if (!firstResponse.ok) {
-      const message = typeof firstPayload.error === "string" ? firstPayload.error : "Nvoid Engine could not search jobs.";
+      const message = engineErrorMessage(firstPayload, "Nvoid Engine could not search jobs.");
       return NextResponse.json({ error: message, meta: firstPayload.meta }, { status: firstResponse.status });
     }
 
