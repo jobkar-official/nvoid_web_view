@@ -8141,6 +8141,50 @@ body::-webkit-scrollbar {
   box-shadow: 0 8px 21px rgba(138, 138, 138, .22);
 }
 
+.worker-home-search-v2 .worker-home-field-control {
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, .2);
+  border-radius: 9px;
+  color: #f0f0f0;
+  background: #202020;
+  transition: border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+.worker-home-search-v2 .worker-home-field-control:focus-within {
+  border-color: rgba(255, 255, 255, .58);
+  background: #1b1b1b;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, .09);
+}
+
+.worker-home-search-v2 .worker-home-field-control input,
+.worker-home-search-v2 .worker-home-field-control input:focus {
+  min-width: 0;
+  height: 44px;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: transparent !important;
+  caret-color: #ffffff;
+  opacity: 1;
+  font-size: 14px;
+  font-weight: 550;
+  line-height: 1.4;
+}
+
+.worker-home-search-v2 .worker-home-field-control input::placeholder {
+  color: #a3a3a3 !important;
+  -webkit-text-fill-color: #a3a3a3 !important;
+  opacity: 1;
+}
+
+.worker-home-search-v2 .worker-home-field-control input:-webkit-autofill,
+.worker-home-search-v2 .worker-home-field-control input:-webkit-autofill:hover,
+.worker-home-search-v2 .worker-home-field-control input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0 1000px #202020 inset !important;
+  caret-color: #ffffff;
+}
+
 .worker-home-search-meta {
   margin-top: 15px;
 }
