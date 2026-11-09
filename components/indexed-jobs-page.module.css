@@ -123,7 +123,7 @@
 }
 .filterGrid {
   display: grid;
-  grid-template-columns: minmax(180px,1.35fr) repeat(4,minmax(130px,1fr)) auto;
+  grid-template-columns: minmax(220px,1.25fr) minmax(220px,1.25fr) minmax(135px,.8fr) minmax(140px,.85fr) minmax(135px,.8fr) auto;
   align-items: end;
   gap: 12px;
 }
@@ -131,11 +131,12 @@
 .field > span, .sortField > span { color: #475467; font-size: 11px; font-weight: 650; }
 .inputWrap {
   min-width: 0;
-  min-height: 44px;
+  width: 100%;
+  min-height: 48px;
   display: flex;
   align-items: center;
-  gap: 9px;
-  padding: 0 11px;
+  gap: 10px;
+  padding: 0 13px;
   border: 1px solid #d0d5dd;
   border-radius: 9px;
   background: #ffffff;
@@ -146,14 +147,17 @@
 .inputWrap input {
   width: 100%;
   min-width: 0;
-  height: 42px;
+  height: 46px;
   padding: 0;
   border: 0;
   outline: 0;
   background: transparent;
   color: var(--jobs-ink);
   font: inherit;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 550;
+  line-height: 1.35;
+  caret-color: var(--jobs-accent);
 }
 .inputWrap input::placeholder { color: #98a2b3; opacity: 1; }
 .field select, .sortField select {
