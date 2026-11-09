@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { BriefcaseBusiness, Building2, ChevronLeft, ChevronRight, ExternalLink, MapPin, Search, SlidersHorizontal } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
+import { useGuestHistory } from "./guest-shell";
 import { openToWorkApi } from "../lib/api/highlights.api";
 import { usersApi } from "../lib/api/profile.api";
 import styles from "./indexed-jobs-page.module.css";
@@ -114,13 +115,17 @@ export default function IndexedJobsPage() {
   const [error, setError] = useState("");
   const [engineState, setEngineState] = useState<JobsResponse["engine"]>();
   const { user, isLoading: authLoading } = useAuth();
+  const { history } = useGuestHistory();
   const [profileReady, setProfileReady] = useState(false);
 
   useEffect(() => {
     if (authLoading) return;
+    const lastSearch = history[0];
     if (!user?.id) {
-      setDraft((current) => ({ ...current, query: current.query || "Software Developer", location: current.location || "India" }));
-      setFilters((current) => ({ ...current, query: current.query || "Software Developer", location: current.location || "India" }));
+      const initialRole = lastSearch?.jobTitle?.trim() || "Software Developer";
+      const initialLocation = lastSearch?.location?.trim() || "India";
+      setDraft((current) => ({ ...current, query: initialRole || current.query, location: initialLocation || current.location }));
+      setFilters((current) => ({ ...current, query: initialRole || current.query, location: initialLocation || current.location }));
       setProfileReady(true);
       return;
     }
@@ -140,12 +145,13 @@ export default function IndexedJobsPage() {
         state?: string | null;
         country?: string | null;
       } | null;
-      const preferredRole = availability?.jobTitle?.trim() || details?.title?.trim() || "";
-      const preferredLocation = [
+      const preferredRole = lastSearch?.jobTitle?.trim() || availability?.jobTitle?.trim() || details?.title?.trim() || "";
+      const profileLocation = [
         details?.city,
         details?.state,
         details?.country
       ].map((value) => value?.trim()).filter(Boolean).join(", ") || details?.location?.trim() || "";
+      const preferredLocation = lastSearch?.location?.trim() || profileLocation;
       const initialRole = preferredRole || "Software Developer";
       const initialLocation = preferredLocation || "India";
 
@@ -172,7 +178,7 @@ export default function IndexedJobsPage() {
     return () => {
       active = false;
     };
-  }, [authLoading, user?.id, user?.slug]);
+  }, [authLoading, user?.id, user?.slug, history[0]?.id, history[0]?.jobTitle, history[0]?.location]);
 
   const requestQuery = useMemo(() => {
     const params = new URLSearchParams({ page: String(page), limit: String(pageSize), sort });
@@ -255,7 +261,7 @@ export default function IndexedJobsPage() {
         <div className={styles.heading}>
           <span className={styles.eyebrow}><BriefcaseBusiness size={14} /> NVOIDAI JOB INDEX</span>
           <h1>My Jobs</h1>
-          <p>Your Open to work role and profile location are prefilled when available. Adjust either field to find matching opportunities from Nvoid Engine.</p>
+          <p>Your latest search is restored first, followed by your Open to work preferences when available. Adjust either field to find matching opportunities from Nvoid Engine.</p>
         </div>
         <div className={styles.totalCard}>
           <strong>{total.toLocaleString("en-IN")}</strong>
