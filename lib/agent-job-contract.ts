@@ -55,7 +55,7 @@ export async function resolveEngineLocation(value: string): Promise<{ country?: 
     countryCache = { expiresAt: Date.now() + 10 * 60_000, countries };
   }
 
-  const normalize = (text: string) => text.toLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g, "").replace(/[^\\p{L}\\p{N}]+/gu, " ").trim();
+  const normalize = (text: string) => text.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
   const parts = raw.split(/[,|]/).map((part) => part.trim()).filter(Boolean);
   const matchesCountry = (part: string) => countries.find((country) =>
     [country.code, country.name, country.slug, ...(country.aliases ?? [])].some((alias) => normalize(alias) === normalize(part))
