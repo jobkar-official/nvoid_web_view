@@ -66,10 +66,10 @@ export async function resolveEngineLocation(value: string): Promise<{ country?: 
 
   const trailingCountry = parts.length > 1 ? matchesCountry(parts[parts.length - 1]) : undefined;
   if (trailingCountry) {
-    return { country: trailingCountry.code, city: parts.slice(0, -1).join(", ") };
+    return { country: trailingCountry.code, city: parts[0] };
   }
 
-  return { city: raw };
+  return { city: parts[0] || raw };
 }
 
 export function toWebJob(job: EngineJob) {
