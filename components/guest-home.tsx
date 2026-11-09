@@ -392,12 +392,12 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <form id="job-search" className="worker-results-search" onSubmit={runSearch}>
           <label className="worker-results-field" htmlFor="public-role">
             <span>ROLE, SKILL OR KEYWORD</span>
-            <span><Search size={17} /><input id="public-role" value={jobTitle} onChange={(event) => { setJobTitle(event.target.value); setActiveSearch(""); }} placeholder="e.g. Product Designer, Java Developer" autoComplete="off" required /></span>
+            <span><Search size={17} /><input id="public-role" aria-label="Job title, skill or keyword" title={jobTitle} value={jobTitle} onChange={(event) => { setJobTitle(event.target.value); setActiveSearch(""); }} placeholder="e.g. Product Designer, Java Developer" autoComplete="off" spellCheck={false} required /></span>
           </label>
           <span className="worker-results-divider" aria-hidden="true" />
           <label className="worker-results-field" htmlFor="public-location">
             <span>LOCATION</span>
-            <span><MapPin size={17} /><input id="public-location" value={location} onChange={(event) => { setLocation(event.target.value); setActiveSearch(""); }} placeholder="City, country or Remote" autoComplete="off" required /></span>
+            <span><MapPin size={17} /><input id="public-location" aria-label="Job search location" title={location} value={location} onChange={(event) => { setLocation(event.target.value); setActiveSearch(""); }} placeholder="City, country or Remote" autoComplete="off" spellCheck={false} required /></span>
           </label>
           <button className="worker-results-submit" type="submit" disabled={busy}>
             {busy ? <LoaderCircle className="spin" size={17} /> : <Search size={17} />}
