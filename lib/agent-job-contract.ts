@@ -40,6 +40,35 @@ export type EngineJobsPayload = {
   };
 };
 
+export type EngineJobsResponse = EngineJobsPayload & { error?: unknown; message?: unknown };
+
+export function engineErrorMessage(payload: EngineJobsResponse, fallback: string): string {
+  if (typeof payload.error === "string" && payload.error.trim()) return payload.error;
+  if (payload.error && typeof payload.error === "object") {
+    const nested = payload.error as { message?: unknown; detail?: unknown };
+    if (typeof nested.message === "string" && nested.message.trim()) return nested.message;
+    if (typeof nested.detail === "string" && nested.detail.trim()) return nested.detail;
+  }
+  if (typeof payload.message === "string" && payload.message.trim()) return payload.message;
+  return fallback;
+}
+
+export async function requestEngineJobs(path: string, refreshAttempts = 6) {
+  let response = await requestAgent(path, { method: "GET", timeoutMs: 20000 });
+  let payload = await response.json().catch(() => ({})) as EngineJobsResponse;
+
+  for (let attempt = 0; response.ok && attempt < refreshAttempts; attempt++) {
+    const hasJobs = Array.isArray(payload.jobs) && payload.jobs.length > 0;
+    if (hasJobs || payload.meta?.complete !== false) break;
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    response = await requestAgent(path, { method: "GET", timeoutMs: 20000 });
+    payload = await response.json().catch(() => ({})) as EngineJobsResponse;
+  }
+
+  return { response, payload };
+}
+
 let countryCache: { expiresAt: number; countries: EngineCountry[] } | undefined;
 
 export async function resolveEngineLocation(value: string): Promise<{ country?: string; city?: string }> {
