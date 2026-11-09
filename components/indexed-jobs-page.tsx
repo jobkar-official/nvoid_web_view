@@ -2,6 +2,9 @@
 
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { BriefcaseBusiness, Building2, ChevronLeft, ChevronRight, ExternalLink, MapPin, Search, SlidersHorizontal } from "lucide-react";
+import { useAuth } from "../lib/context/AuthContext";
+import { openToWorkApi } from "../lib/api/highlights.api";
+import { usersApi } from "../lib/api/profile.api";
 import styles from "./indexed-jobs-page.module.css";
 
 type Job = {
@@ -88,6 +91,61 @@ export default function IndexedJobsPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { user, isLoading: authLoading } = useAuth();
+  const [profileReady, setProfileReady] = useState(false);
+
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user?.id) {
+      setProfileReady(true);
+      return;
+    }
+
+    let active = true;
+    const loadProfileDefaults = async () => {
+      const [availability, profile] = await Promise.all([
+        openToWorkApi.getByUserId(user.id).catch(() => null),
+        user.slug ? usersApi.getUserDetailBySlug(user.slug).catch(() => null) : Promise.resolve(null)
+      ]);
+      if (!active) return;
+
+      const details = profile as {
+        title?: string | null;
+        location?: string | null;
+        city?: string | null;
+        state?: string | null;
+        country?: string | null;
+      } | null;
+      const preferredRole = availability?.jobTitle?.trim() || details?.title?.trim() || "";
+      const preferredLocation = [
+        details?.city,
+        details?.state,
+        details?.country
+      ].map((value) => value?.trim()).filter(Boolean).join(", ") || details?.location?.trim() || "";
+
+      if (preferredRole || preferredLocation) {
+        setDraft((current) => ({
+          ...current,
+          query: preferredRole || current.query,
+          location: preferredLocation || current.location
+        }));
+        setFilters((current) => ({
+          ...current,
+          query: preferredRole || current.query,
+          location: preferredLocation || current.location
+        }));
+      }
+      setProfileReady(true);
+    };
+
+    void loadProfileDefaults().catch(() => {
+      if (active) setProfileReady(true);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [authLoading, user?.id, user?.slug]);
 
   const requestQuery = useMemo(() => {
     const params = new URLSearchParams({ page: String(page), limit: String(pageSize), sort });
@@ -100,6 +158,14 @@ export default function IndexedJobsPage() {
   }, [filters, page, sort]);
 
   useEffect(() => {
+    if (!profileReady) return;
+    if (!filters.query.trim() || !filters.location.trim()) {
+      setJobs([]);
+      setTotal(0);
+      setLoading(false);
+      return;
+    }
+
     const controller = new AbortController();
     setLoading(true);
     setError("");
@@ -114,7 +180,7 @@ export default function IndexedJobsPage() {
         const payload: unknown = await response.json().catch(() => ({}));
         if (!response.ok) {
           const record = payload && typeof payload === "object" ? payload as Record<string, unknown> : {};
-          throw new Error(typeof record.error === "string" ? record.error : "The indexed job catalogue could not be loaded.");
+          throw new Error(typeof record.error === "string" ? record.error : "Nvoid Engine could not load matching jobs.");
         }
         const result = payload as JobsResponse;
         setJobs(Array.isArray(result.jobs) ? result.jobs : []);
@@ -131,7 +197,7 @@ export default function IndexedJobsPage() {
 
     void loadJobs();
     return () => controller.abort();
-  }, [requestQuery]);
+  }, [requestQuery, profileReady, filters.query, filters.location]);
 
   function updateDraft(key: keyof Filters, value: string) {
     setDraft((current) => ({ ...current, [key]: value }));
@@ -159,7 +225,7 @@ export default function IndexedJobsPage() {
         <div className={styles.heading}>
           <span className={styles.eyebrow}><BriefcaseBusiness size={14} /> NVOIDAI JOB INDEX</span>
           <h1>My Jobs</h1>
-          <p>Explore open roles collected into Nvoid’s indexed company career-page database. Filter the catalogue and open the original employer listing.</p>
+          <p>Your Open to work role and profile location are prefilled when available. Adjust either field to find matching opportunities from Nvoid Engine.</p>
         </div>
         <div className={styles.totalCard}>
           <strong>{total.toLocaleString("en-IN")}</strong>
@@ -174,12 +240,12 @@ export default function IndexedJobsPage() {
         </div>
         <div className={styles.filterGrid}>
           <label className={styles.field}>
-            <span>Keyword</span>
-            <div className={styles.inputWrap}><Search size={16} /><input value={draft.query} onChange={(event) => updateDraft("query", event.target.value)} placeholder="Job title, skill or keyword" /></div>
+            <span>Role or skill</span>
+            <div className={styles.inputWrap}><Search size={16} /><input required value={draft.query} onChange={(event) => updateDraft("query", event.target.value)} placeholder="e.g. Java Developer" /></div>
           </label>
           <label className={styles.field}>
             <span>Location</span>
-            <div className={styles.inputWrap}><MapPin size={16} /><input value={draft.location} onChange={(event) => updateDraft("location", event.target.value)} placeholder="City or country" /></div>
+            <div className={styles.inputWrap}><MapPin size={16} /><input required value={draft.location} onChange={(event) => updateDraft("location", event.target.value)} placeholder="City, state or country" /></div>
           </label>
           <label className={styles.field}>
             <span>Company</span>
@@ -213,7 +279,7 @@ export default function IndexedJobsPage() {
           <div>
             <span className={styles.resultsEyebrow}>INDEXED OPPORTUNITIES</span>
             <h2>{total.toLocaleString("en-IN")} open listings</h2>
-            <p>{loading ? "Updating the job index…" : total > 0 ? "Showing " + firstResult.toLocaleString("en-IN") + "–" + lastResult.toLocaleString("en-IN") + " of " + total.toLocaleString("en-IN") + " matching jobs." : "No listings match the current filters."}</p>
+            <p>{!profileReady ? "Loading your job preferences…" : loading ? "Searching Nvoid Engine…" : total > 0 ? "Showing " + firstResult.toLocaleString("en-IN") + "–" + lastResult.toLocaleString("en-IN") + " of " + total.toLocaleString("en-IN") + " matching jobs." : "No listings match the current filters."}</p>
           </div>
           <label className={styles.sortField}>
             <span>Sort by</span>
