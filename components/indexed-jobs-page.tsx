@@ -21,6 +21,8 @@ type Job = {
   firstSeen?: string;
   provider?: string;
   source?: string;
+  matchScore?: number;
+  matchReasons?: string[];
 };
 
 type Filters = {
@@ -316,6 +318,7 @@ export default function IndexedJobsPage() {
                     {job.remote && <span className={styles.remote}>Remote</span>}
                   </div>
                   {job.salary && <p className={styles.salary}>{cleanText(job.salary)}</p>}
+                  {typeof job.matchScore === "number" && <p className={styles.salary}>{Math.round(job.matchScore)}% Nvoid relevance{job.matchReasons?.length ? " · " + job.matchReasons.join(" · ") : ""}</p>}
                   {description && <p className={styles.description}>{description.slice(0, 220)}{description.length > 220 ? "…" : ""}</p>}
                   <div className={styles.cardFooter}>
                     <span>Updated {formatPostedDate(job.postedAt || job.firstSeen)}</span>
