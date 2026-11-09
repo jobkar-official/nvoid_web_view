@@ -84,6 +84,7 @@ export function toWebJob(job: EngineJob) {
     title: job.title,
     company: job.company || undefined,
     location: job.location?.raw || (job.remote ? "Remote" : undefined),
+    remote: job.remote,
     country: job.location?.countryCode || undefined,
     description: job.summary || undefined,
     url: job.url,
