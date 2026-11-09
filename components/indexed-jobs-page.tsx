@@ -39,6 +39,12 @@ type JobsResponse = {
   limit?: number;
   jobs?: Job[];
   error?: string;
+  engine?: {
+    complete?: boolean;
+    cached?: boolean;
+    stale?: boolean;
+    notes?: string[];
+  };
 };
 
 const emptyFilters: Filters = {
@@ -106,6 +112,7 @@ export default function IndexedJobsPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [engineState, setEngineState] = useState<JobsResponse["engine"]>();
   const { user, isLoading: authLoading } = useAuth();
   const [profileReady, setProfileReady] = useState(false);
 
@@ -177,6 +184,7 @@ export default function IndexedJobsPage() {
     if (!filters.query.trim() || !filters.location.trim()) {
       setJobs([]);
       setTotal(0);
+      setEngineState(undefined);
       setLoading(false);
       return;
     }
@@ -200,10 +208,12 @@ export default function IndexedJobsPage() {
         const result = payload as JobsResponse;
         setJobs(Array.isArray(result.jobs) ? result.jobs : []);
         setTotal(typeof result.total === "number" ? result.total : 0);
+        setEngineState(result.engine);
       } catch (caught) {
         if (controller.signal.aborted) return;
         setJobs([]);
         setTotal(0);
+        setEngineState(undefined);
         setError(caught instanceof Error ? caught.message : "The indexed job catalogue could not be loaded.");
       } finally {
         if (!controller.signal.aborted) setLoading(false);
