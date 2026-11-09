@@ -79,7 +79,20 @@ function providerLabel(value?: string) {
     lever: "Lever",
     ashby: "Ashby",
     smartrecruiters: "SmartRecruiters",
-    nvoidai: "Nvoid"
+    boards: "Company career pages",
+    web: "Public web search",
+    remotive: "Remotive",
+    remoteok: "Remote OK",
+    weworkremotely: "We Work Remotely",
+    workingnomads: "Working Nomads",
+    himalayas: "Himalayas",
+    jobicy: "Jobicy",
+    themuse: "The Muse",
+    arbeitnow: "Arbeitnow",
+    arbeitsagentur: "Bundesagentur für Arbeit",
+    mycareersfuture: "MyCareersFuture",
+    hh: "HeadHunter",
+    dou: "DOU Jobs"
   };
   return labels[value.toLowerCase()] || value;
 }
@@ -257,11 +270,20 @@ export default function IndexedJobsPage() {
             <span>Job source</span>
             <select value={draft.provider} onChange={(event) => updateDraft("provider", event.target.value)}>
               <option value="">All providers</option>
-              <option value="greenhouse">Greenhouse</option>
-              <option value="lever">Lever</option>
-              <option value="ashby">Ashby</option>
-              <option value="smartrecruiters">SmartRecruiters</option>
-              <option value="nvoidai">Nvoid</option>
+              <option value="boards">Company career pages</option>
+              <option value="web">Public web search</option>
+              <option value="remotive">Remotive</option>
+              <option value="remoteok">Remote OK</option>
+              <option value="weworkremotely">We Work Remotely</option>
+              <option value="workingnomads">Working Nomads</option>
+              <option value="himalayas">Himalayas</option>
+              <option value="jobicy">Jobicy</option>
+              <option value="themuse">The Muse</option>
+              <option value="arbeitnow">Arbeitnow</option>
+              <option value="arbeitsagentur">Bundesagentur für Arbeit</option>
+              <option value="mycareersfuture">MyCareersFuture</option>
+              <option value="hh">HeadHunter</option>
+              <option value="dou">DOU Jobs</option>
             </select>
           </label>
           <label className={styles.field}>
