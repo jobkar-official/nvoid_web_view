@@ -42,7 +42,7 @@ export type EngineJobsPayload = {
 
 let countryCache: { expiresAt: number; countries: EngineCountry[] } | undefined;
 
-export async function resolveEngineLocation(value: string) {
+export async function resolveEngineLocation(value: string): Promise<{ country?: string; city?: string }> {
   const raw = value.trim();
   if (!raw || /^(worldwide|anywhere|remote|work from anywhere)$/i.test(raw)) return {};
 
@@ -86,6 +86,8 @@ export function toWebJob(job: EngineJob) {
     location: job.location?.raw || (job.remote ? "Remote" : undefined),
     country: job.location?.countryCode || undefined,
     description: job.summary || undefined,
+    url: job.url,
+    applyUrl: job.url,
     jobUrl: job.url,
     sourceUrl: job.url,
     applicationUrl: job.url,
@@ -95,6 +97,7 @@ export function toWebJob(job: EngineJob) {
     salary: salary || undefined,
     matchScore: job.score,
     matchReasons: [titleMatch, locationMatch],
-    source: job.source?.id || job.source?.name || "public"
+    source: job.source?.id || job.source?.name || "public",
+    provider: job.source?.id || "public"
   };
 }
