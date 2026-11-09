@@ -53,7 +53,7 @@ export function engineErrorMessage(payload: EngineJobsResponse, fallback: string
   return fallback;
 }
 
-export async function requestEngineJobs(path: string, refreshAttempts = 6) {
+export async function requestEngineJobs(path: string, refreshAttempts = 10) {
   let response = await requestAgent(path, { method: "GET", timeoutMs: 20000 });
   let payload = await response.json().catch(() => ({})) as EngineJobsResponse;
 
