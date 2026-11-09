@@ -251,7 +251,7 @@ export default function IndexedJobsPage() {
       <form className={styles.filters} onSubmit={submitFilters}>
         <div className={styles.filterHeading}>
           <span><SlidersHorizontal size={15} /> Filter listings</span>
-          {filters.query.trim() && filters.location.trim() && <button type="button" onClick={clearFilters}>Clear filters</button>}
+          <button type="button" onClick={clearFilters}>Clear filters</button>
         </div>
         <div className={styles.filterGrid}>
           <label className={styles.field}>
@@ -355,7 +355,7 @@ export default function IndexedJobsPage() {
             <span><Search size={20} /></span>
             <strong>{filters.query.trim() && filters.location.trim() ? "No matching jobs found" : "Set your role and location"}</strong>
             <p>{filters.query.trim() && filters.location.trim() ? "Try a broader title or nearby location, or adjust the filters above." : "Enter the role you want and your preferred city or country, then apply the filters to search Nvoid Engine."}</p>
-            <button type="button" onClick={clearFilters}>Clear filters</button>
+            {filters.query.trim() && filters.location.trim() && <button type="button" onClick={clearFilters}>Clear filters</button>}
           </div>
         ) : null}
 
