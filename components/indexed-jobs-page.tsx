@@ -119,6 +119,8 @@ export default function IndexedJobsPage() {
   useEffect(() => {
     if (authLoading) return;
     if (!user?.id) {
+      setDraft((current) => ({ ...current, query: current.query || "Software Developer", location: current.location || "India" }));
+      setFilters((current) => ({ ...current, query: current.query || "Software Developer", location: current.location || "India" }));
       setProfileReady(true);
       return;
     }
@@ -144,24 +146,27 @@ export default function IndexedJobsPage() {
         details?.state,
         details?.country
       ].map((value) => value?.trim()).filter(Boolean).join(", ") || details?.location?.trim() || "";
+      const initialRole = preferredRole || "Software Developer";
+      const initialLocation = preferredLocation || "India";
 
-      if (preferredRole || preferredLocation) {
-        setDraft((current) => ({
-          ...current,
-          query: preferredRole || current.query,
-          location: preferredLocation || current.location
-        }));
-        setFilters((current) => ({
-          ...current,
-          query: preferredRole || current.query,
-          location: preferredLocation || current.location
-        }));
-      }
+      setDraft((current) => ({
+        ...current,
+        query: preferredRole || current.query || initialRole,
+        location: preferredLocation || current.location || initialLocation
+      }));
+      setFilters((current) => ({
+        ...current,
+        query: preferredRole || current.query || initialRole,
+        location: preferredLocation || current.location || initialLocation
+      }));
       setProfileReady(true);
     };
 
     void loadProfileDefaults().catch(() => {
-      if (active) setProfileReady(true);
+      if (!active) return;
+      setDraft((current) => ({ ...current, query: current.query || "Software Developer", location: current.location || "India" }));
+      setFilters((current) => ({ ...current, query: current.query || "Software Developer", location: current.location || "India" }));
+      setProfileReady(true);
     });
 
     return () => {
@@ -266,11 +271,11 @@ export default function IndexedJobsPage() {
         <div className={styles.filterGrid}>
           <label className={styles.field}>
             <span>Role or skill</span>
-            <div className={styles.inputWrap}><Search size={16} /><input required value={draft.query} onChange={(event) => updateDraft("query", event.target.value)} placeholder="e.g. Java Developer" /></div>
+            <div className={styles.inputWrap}><Search size={16} /><input required aria-label="Job title or skill" title={draft.query} autoComplete="off" spellCheck={false} value={draft.query} onChange={(event) => updateDraft("query", event.target.value)} placeholder="e.g. Java Developer" /></div>
           </label>
           <label className={styles.field}>
             <span>Location</span>
-            <div className={styles.inputWrap}><MapPin size={16} /><input required value={draft.location} onChange={(event) => updateDraft("location", event.target.value)} placeholder="City, state or country" /></div>
+            <div className={styles.inputWrap}><MapPin size={16} /><input required aria-label="Job location" title={draft.location} autoComplete="off" spellCheck={false} value={draft.location} onChange={(event) => updateDraft("location", event.target.value)} placeholder="City, state or country" /></div>
           </label>
           <label className={styles.field}>
             <span>Company</span>
@@ -313,7 +318,7 @@ export default function IndexedJobsPage() {
           <div>
             <span className={styles.resultsEyebrow}>INDEXED OPPORTUNITIES</span>
             <h2>{total.toLocaleString("en-IN")} open listings</h2>
-            <p>{!profileReady ? "Loading your job preferences…" : loading ? "Searching Nvoid Engine…" : total > 0 ? "Showing " + firstResult.toLocaleString("en-IN") + "–" + lastResult.toLocaleString("en-IN") + " of " + total.toLocaleString("en-IN") + " matching jobs." : "No listings match the current filters."}</p>
+            <p>{!profileReady ? "Loading your job preferences…" : loading ? "Searching Nvoid Engine…" : total > 0 ? "Showing " + firstResult.toLocaleString("en-IN") + "–" + lastResult.toLocaleString("en-IN") + " of " + total.toLocaleString("en-IN") + " matching jobs." + (engineState?.stale ? " Showing the last available cached results." : engineState?.complete === false ? " More source results may still be loading." : "") : engineState?.notes?.length ? engineState.notes.join(" ") : "No listings match the current filters."}</p>
           </div>
           <label className={styles.sortField}>
             <span>Sort by</span>
