@@ -104,6 +104,14 @@ function postedDate(value?: string | number) {
 
 function sourceName(value?: string) {
   const names: Record<string, string> = {
+    boards: "Company career pages",
+    web: "Public web search",
+    remotive: "Remotive",
+    themuse: "The Muse",
+    arbeitsagentur: "Bundesagentur für Arbeit",
+    mycareersfuture: "MyCareersFuture",
+    hh: "HeadHunter",
+    dou: "DOU Jobs",
     "public-web-crawler": "Nvoid Web Crawler",
     jobicy: "Jobicy", remoteok: "Remote OK", arbeitnow: "Arbeitnow", workingnomads: "Working Nomads",
     himalayas: "Himalayas", "himalayas-mcp": "Himalayas", naukri: "Naukri", linkedin: "LinkedIn Jobs", indeed: "Indeed",
