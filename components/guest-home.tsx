@@ -378,7 +378,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <div className="worker-results-heading">
           <span className="worker-results-eyebrow"><Asterisk size={13} /> NVOID SEARCH</span>
           <h1>{searchId ? "Saved search" : "Explore opportunities"}</h1>
-          <p>Search Nvoid’s indexed company career pages by job title and location. The index is refreshed by the background company crawler.</p>
+          <p>Search jobs from Nvoid’s connected public sources and indexed company career pages by job title and location.</p>
         </div>
 
         <form id="job-search" className="worker-results-search" onSubmit={runSearch}>
@@ -400,7 +400,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <div className="worker-results-trust"><ShieldCheck size={14} /> No account required. Your searches stay in this browser.</div>
       </section>
 
-      {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching Nvoid’s indexed company career pages for {jobTitle} in {location}…</div>}
+      {busy && <div className="worker-search-progress" role="status" aria-live="polite"><LoaderCircle className="spin" size={16} /> Searching Nvoid’s public job sources and company career pages for {jobTitle} in {location}…</div>}
       {notice && <div className={"search-notice" + (searched && !jobs.length ? " muted" : "")} role="status" aria-live="polite"><span>{notice}</span><button onClick={() => setNotice("")} aria-label="Dismiss notice"><X size={15} /></button></div>}
 
       {searched && (searchReport || sources.length > 0 || searchTimings || sourceActivityIssue) && (
@@ -501,7 +501,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {jobs.length > 0 && (
         <section className="public-results-section">
           <div className="section-heading">
-            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "NVOID INDEX RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Listings are returned from Nvoid’s indexed company career pages. Open the original page to confirm current availability."}</p></div>
+            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "NVOID INDEX RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Listings come from public job sources and company career pages. Open the original page to confirm current availability."}</p></div>
             <span className="result-count">{(searchReport?.totalFound ?? jobs.length).toLocaleString()} found</span>
           </div>
           <div className="worker-results-toolbar">
@@ -534,7 +534,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                     {job.postedAt && <span><Clock3 size={11} />{postedDate(job.postedAt)}</span>}
                   </div>
                   <div className="public-job-footer">
-                    {typeof job.matchScore === "number" ? <span className="match-label"><Target size={12} /> {Math.round(job.matchScore)}% profile fit</span> : <span className="external-label">External opportunity</span>}
+                    {typeof job.matchScore === "number" ? <span className="match-label"><Target size={12} /> {Math.round(job.matchScore)}% Nvoid relevance</span> : <span className="external-label">External opportunity</span>}
                     {apply ? <button type="button" className="public-job-apply-button" onClick={() => openApplication(apply, job.source)}>Apply Now <ExternalLink size={14} /></button> : listing ? <span className="external-label">Original listing available</span> : <span className="external-label">Source link unavailable</span>}
                   </div>
                 </article>
@@ -556,7 +556,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <section className="no-results">
           <div className="no-results-icon"><Search size={21} /></div>
           <h2>No matching jobs returned</h2>
-          <p>Try another role or location. Nvoid searches its own indexed company career pages and does not generate sample listings.</p>
+          <p>Try another role or location. Nvoid searches public job sources and company career pages and does not generate sample listings.</p>
         </section>
       )}
 
