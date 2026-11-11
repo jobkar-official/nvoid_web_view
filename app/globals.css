@@ -13033,62 +13033,41 @@ button.topbar-create {
   padding: 32px 24px;
 }
 
-/* Homepage layout and responsive polish */
-.public-content:has(.worker-homepage-v2) {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  max-width: none;
-  min-height: calc(100vh - 58px);
-  padding: clamp(28px, 4vh, 48px) clamp(18px, 3vw, 42px) 54px;
-}
-
+/* Last added by me */
 .nvoid-homepage-restored {
-  position: relative;
-  inset: auto;
-  display: flex;
-  width: min(100%, 980px);
-  min-height: calc(100vh - 180px);
+  position: fixed;
+  inset: var(--header-height, 0px) 0 0;
+  width: 100%;
   height: auto;
+  min-height: 0;
+  margin: 0;
+  padding: 24px;
+  box-sizing: border-box;
+
+  display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: clamp(26px, 4vh, 38px);
-  margin: 0 auto;
-  padding: clamp(24px, 4vh, 42px) 0;
-  overflow: visible;
+  align-items: center;
+  gap: 28px;
+  overflow-y: auto;
 }
 
 .nvoid-homepage-restored .worker-home-brand-intro,
 .nvoid-homepage-restored .worker-home-search-section {
   width: 100%;
-  max-width: 960px;
+  max-width: 900px;
   margin: 0;
   flex-shrink: 0;
 }
 
 .nvoid-homepage-restored .worker-home-intro-copy {
-  width: min(100%, 820px);
-  margin: 0 auto;
   text-align: center;
 }
 
 .nvoid-homepage-restored .worker-home-intro-copy h1 {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 13px;
-  max-width: 850px;
-  margin-inline: auto;
-  line-height: 1.16;
-  text-wrap: balance;
-}
-
-.nvoid-homepage-restored .worker-home-intro-copy p {
-  max-width: 700px;
-  margin: 16px auto 0;
-  line-height: 1.85;
-  text-wrap: pretty;
+  align-items: center;
 }
 
 .nvoid-homepage-restored .worker-home-search-card {
@@ -13096,6 +13075,7 @@ button.topbar-create {
   box-sizing: border-box;
 }
 
+/* Force readable homepage search input colors */
 .worker-home-search-v2 input#home-role,
 .worker-home-search-v2 input#home-location {
   display: block;
@@ -13109,7 +13089,8 @@ button.topbar-create {
   outline: 0;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
-  background: #202020 !important;
+  background-color: #202020 !important;
+  background-image: none !important;
   box-shadow: none !important;
   opacity: 1 !important;
   appearance: none;
@@ -13131,64 +13112,6 @@ button.topbar-create {
   border-color: rgba(255, 255, 255, .62) !important;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
-  background: #171717 !important;
+  background-color: #171717 !important;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .1) !important;
-}
-
-@media (max-width: 960px) {
-  .public-content:has(.worker-homepage-v2) {
-    min-height: calc(100vh - 58px);
-    padding-top: 34px;
-  }
-
-  .nvoid-homepage-restored {
-    min-height: calc(100vh - 150px);
-    justify-content: center;
-  }
-}
-
-@media (max-width: 760px) {
-  .public-content:has(.worker-homepage-v2) {
-    min-height: calc(100vh - 56px);
-    padding: 26px 18px 38px;
-  }
-
-  .nvoid-homepage-restored {
-    min-height: 0;
-    gap: 25px;
-    padding: 24px 0;
-  }
-
-  .nvoid-homepage-restored .worker-home-intro-copy h1 {
-    gap: 10px;
-    font-size: clamp(29px, 7vw, 39px);
-  }
-
-  .nvoid-homepage-restored .worker-home-intro-copy p {
-    max-width: 590px;
-    margin-top: 13px;
-    font-size: 13px;
-    line-height: 1.75;
-  }
-}
-
-@media (max-width: 520px) {
-  .public-content:has(.worker-homepage-v2) {
-    padding: 22px 14px 30px;
-  }
-
-  .nvoid-homepage-restored {
-    gap: 21px;
-    padding: 18px 0;
-  }
-
-  .nvoid-homepage-restored .worker-home-intro-copy h1 {
-    flex-direction: column;
-    gap: 9px;
-    font-size: clamp(27px, 8vw, 34px);
-  }
-
-  .nvoid-homepage-restored .worker-home-intro-copy p {
-    font-size: 12px;
-  }
 }
