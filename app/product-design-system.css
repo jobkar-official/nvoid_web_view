@@ -1,116 +1,116 @@
 :root {
-  --product-font: var(--font-roboto), Inter, Arial, sans-serif;
-  --product-canvas: #f7f7fa;
-  --product-surface: #ffffff;
-  --product-ink: #242233;
-  --product-muted: #697184;
-  --product-line: #e7e8ef;
-  --product-accent: #63369f;
-  --product-accent-soft: #f5f1fa;
-  --product-radius: 14px;
-  --product-shadow: 0 6px 22px rgba(28, 26, 43, .045);
+  --product-font: var(--font-roboto), Inter, Arial, sans-serif !important;
+  --product-canvas: #f7f7fa !important;
+  --product-surface: #ffffff !important;
+  --product-ink: #242233 !important;
+  --product-muted: #697184 !important;
+  --product-line: #e7e8ef !important;
+  --product-accent: #63369f !important;
+  --product-accent-soft: #f5f1fa !important;
+  --product-radius: 14px !important;
+  --product-shadow: 0 6px 22px rgba(28, 26, 43, .045) !important;
 }
 
 html, body {
-  font-family: var(--product-font);
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+  font-family: var(--product-font) !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
 }
 
 html body .public-shell { min-width: 0; color: var(--product-ink); background: var(--product-canvas); }
 html body .public-shell .public-main { min-width: 0; }
 html body .public-shell .public-topbar { box-sizing: border-box; border-bottom: 1px solid #e9e8ee; box-shadow: 0 2px 12px rgba(31, 27, 45, .025); }
-html body .public-shell .public-content { box-sizing: border-box; }
+html body .public-shell .public-main .public-content { box-sizing: border-box; }
 
-html body .public-shell .public-content :is(.grow-network-hero, .worker-directory-hero, .public-profile-card, .info-hero, .catalog-hero, .info-toc, .auth-form-panel, .auth-brand-panel) {
-  border-radius: var(--product-radius);
+html body .public-shell .public-main .public-content :is(.grow-network-hero, .worker-directory-hero, .public-profile-card, .info-hero, .catalog-hero, .info-toc, .auth-form-panel, .auth-brand-panel) {
+  border-radius: var(--product-radius) !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-card, .worker-directory-card, .public-job-card, .public-profile-card, .model-card, .model-detail, .release-card, .release-panel, .free-hiring-card, .info-toc, .info-toc-note, .auth-form-panel, .auth-preview) {
-  border-color: var(--product-line);
-  box-shadow: var(--product-shadow);
+html body .public-shell .public-main .public-content :is(.grow-network-card, .worker-directory-card, .public-job-card, .public-profile-card, .model-card, .model-detail, .release-card, .release-panel, .free-hiring-card, .info-toc, .info-toc-note, .auth-form-panel, .auth-preview) {
+  border-color: var(--product-line) !important;
+  box-shadow: var(--product-shadow) !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-hero h1, .worker-directory-hero h1, .public-profile-heading h1, .worker-results-heading h1, .info-hero h1, .catalog-hero h1) {
-  color: #242233;
-  font-weight: 800;
-  letter-spacing: -.045em;
-  line-height: 1.12;
-  text-wrap: balance;
+html body .public-shell .public-main .public-content :is(.grow-network-hero h1, .worker-directory-hero h1, .public-profile-heading h1, .worker-results-heading h1, .info-hero h1, .catalog-hero h1) {
+  color: #242233 !important;
+  font-weight: 800 !important;
+  letter-spacing: -.045em !important;
+  line-height: 1.12 !important;
+  text-wrap: balance !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-hero p, .worker-directory-hero p, .public-profile-heading p, .worker-results-heading p, .info-hero > p, .catalog-hero > p) {
-  color: #697184;
-  line-height: 1.75;
+html body .public-shell .public-main .public-content :is(.grow-network-hero p, .worker-directory-hero p, .public-profile-heading p, .worker-results-heading p, .info-hero > p, .catalog-hero > p) {
+  color: #697184 !important;
+  line-height: 1.75 !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-search, .worker-directory-search, .worker-results-search, .auth-input, .auth-form-panel input, .auth-form-panel select, .auth-form-panel textarea) {
-  border-color: #dfe2e9;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, .025);
+html body .public-shell .public-main .public-content :is(.grow-network-search, .worker-directory-search, .worker-results-search, .auth-input, .auth-form-panel input, .auth-form-panel select, .auth-form-panel textarea) {
+  border-color: #dfe2e9 !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, .025) !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-search input, .worker-directory-search input, .worker-results-search input, .auth-input input, .auth-form-panel input, .auth-form-panel select, .auth-form-panel textarea) {
-  color: #292638;
-  font-family: var(--product-font);
-  font-size: 13px;
+html body .public-shell .public-main .public-content :is(.grow-network-search input, .worker-directory-search input, .worker-results-search input, .auth-input input, .auth-form-panel input, .auth-form-panel select, .auth-form-panel textarea) {
+  color: #292638 !important;
+  font-family: var(--product-font) !important;
+  font-size: 13px !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-search input, .worker-directory-search input, .worker-results-search input, .auth-input input, .auth-form-panel input)::placeholder {
-  color: #9298a6;
-  opacity: 1;
+html body .public-shell .public-main .public-content :is(.grow-network-search input, .worker-directory-search input, .worker-results-search input, .auth-input input, .auth-form-panel input)::placeholder {
+  color: #9298a6 !important;
+  opacity: 1 !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-search, .worker-directory-search, .worker-results-search, .auth-input):focus-within,
-html body .public-shell .public-content :is(.auth-form-panel input, .auth-form-panel select, .auth-form-panel textarea):focus {
-  border-color: #a78bc7;
-  box-shadow: 0 0 0 3px rgba(99, 54, 159, .10);
-  outline: 0;
+html body .public-shell .public-main .public-content :is(.grow-network-search, .worker-directory-search, .worker-results-search, .auth-input):focus-within,
+html body .public-shell .public-main .public-content :is(.auth-form-panel input, .auth-form-panel select, .auth-form-panel textarea):focus {
+  border-color: #a78bc7 !important;
+  box-shadow: 0 0 0 3px rgba(99, 54, 159, .10) !important;
+  outline: 0 !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-primary, .worker-directory-search button, .worker-results-submit, .auth-submit, .info-cta-link) {
-  min-height: 42px;
-  border-radius: 10px;
-  font-family: var(--product-font);
-  font-size: 12px;
-  font-weight: 750;
-  letter-spacing: -.005em;
-  transition: background .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+html body .public-shell .public-main .public-content :is(.grow-network-primary, .worker-directory-search button, .worker-results-submit, .auth-submit, .info-cta-link) {
+  min-height: 42px !important;
+  border-radius: 10px !important;
+  font-family: var(--product-font) !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  letter-spacing: -.005em !important;
+  transition: background .16s ease, border-color .16s ease, box-shadow .16s ease, transform .16s ease !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-card, .worker-directory-card, .public-job-card) {
-  border-radius: 13px;
-  background: #ffffff;
-  transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+html body .public-shell .public-main .public-content :is(.grow-network-card, .worker-directory-card, .public-job-card) {
+  border-radius: 13px !important;
+  background: #ffffff !important;
+  transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-card, .worker-directory-card, .public-job-card):hover {
-  border-color: #d7cbe5;
-  box-shadow: 0 10px 26px rgba(37, 29, 51, .075);
-  transform: translateY(-2px);
+html body .public-shell .public-main .public-content :is(.grow-network-card, .worker-directory-card, .public-job-card):hover {
+  border-color: #d7cbe5 !important;
+  box-shadow: 0 10px 26px rgba(37, 29, 51, .075) !important;
+  transform: translateY(-2px) !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-card h2, .grow-network-card h3, .worker-directory-card h2, .worker-directory-card h3, .public-job-card h3, .public-profile-about h2) {
-  color: #282638;
-  font-weight: 750;
-  letter-spacing: -.02em;
+html body .public-shell .public-main .public-content :is(.grow-network-card h2, .grow-network-card h3, .worker-directory-card h2, .worker-directory-card h3, .public-job-card h3, .public-profile-about h2) {
+  color: #282638 !important;
+  font-weight: 750 !important;
+  letter-spacing: -.02em !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-card p, .worker-directory-card p, .public-job-description, .public-profile-about p) {
-  color: #697184;
-  line-height: 1.7;
+html body .public-shell .public-main .public-content :is(.grow-network-card p, .worker-directory-card p, .public-job-description, .public-profile-about p) {
+  color: #697184 !important;
+  line-height: 1.7 !important;
 }
 
-html body .public-shell .public-content :is(.grow-network-secondary, .worker-directory-tabs button, .public-profile-back a, .info-cta-secondary) {
-  border-radius: 9px;
-  font-family: var(--product-font);
-  font-weight: 650;
+html body .public-shell .public-main .public-content :is(.grow-network-secondary, .worker-directory-tabs button, .public-profile-back a, .info-cta-secondary) {
+  border-radius: 9px !important;
+  font-family: var(--product-font) !important;
+  font-weight: 650 !important;
 }
 
-html body .public-shell .public-content :is(input, select, textarea, button, a):focus-visible {
-  outline: 3px solid rgba(99, 54, 159, .22);
-  outline-offset: 2px;
+html body .public-shell .public-main .public-content :is(input, select, textarea, button, a):focus-visible {
+  outline: 3px solid rgba(99, 54, 159, .22) !important;
+  outline-offset: 2px !important;
 }
 
 html body .public-shell .public-footer { color: #858b99; border-top-color: #e7e8ef; }
@@ -119,75 +119,75 @@ html body .nv-workspace,
 html body .nv-main,
 html body .nv-private-page,
 html body .nv-chat-page {
-  font-family: var(--product-font);
-  -webkit-font-smoothing: antialiased;
+  font-family: var(--product-font) !important;
+  -webkit-font-smoothing: antialiased !important;
 }
 
 html body .nv-private-page { width: 100%; min-width: 0; }
 
 html body .nv-private-page .nv-content {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 1540px;
-  margin: 0 auto;
-  padding: clamp(22px, 3vw, 42px) clamp(18px, 2.5vw, 38px) 48px;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 1540px !important;
+  margin: 0 auto !important;
+  padding: clamp(22px, 3vw, 42px) clamp(18px, 2.5vw, 38px) 48px !important;
 }
 
 html body .nv-private-page .nv-page-heading { display: grid; gap: 8px; margin-bottom: 22px; }
 
 html body .nv-private-page .nv-page-heading h1 {
-  color: #f5f5f5;
-  font-size: clamp(24px, 2.4vw, 31px);
-  font-weight: 780;
-  letter-spacing: -.04em;
-  line-height: 1.15;
+  color: #f5f5f5 !important;
+  font-size: clamp(24px, 2.4vw, 31px) !important;
+  font-weight: 780 !important;
+  letter-spacing: -.04em !important;
+  line-height: 1.15 !important;
 }
 
 html body .nv-private-page .nv-page-heading p {
-  max-width: 760px;
-  color: #aaa;
-  font-size: 12px;
-  line-height: 1.7;
+  max-width: 760px !important;
+  color: #aaa !important;
+  font-size: 12px !important;
+  line-height: 1.7 !important;
 }
 
 html body .nv-private-page :is(.nv-panel, .nv-stat-card, .nv-welcome, .nv-job-card, .nv-status-card, .nv-record, .nv-notification, .nv-profile-tab, .nv-info-strip, .nv-footer-note) {
-  border: 1px solid #303033;
-  border-radius: 13px;
-  background: #181819;
-  box-shadow: 0 7px 22px rgba(0, 0, 0, .12);
+  border: 1px solid #303033 !important;
+  border-radius: 13px !important;
+  background: #181819 !important;
+  box-shadow: 0 7px 22px rgba(0, 0, 0, .12) !important;
 }
 
 html body .nv-private-page .nv-panel-spaced { padding: clamp(16px, 2vw, 22px); }
 
 html body .nv-private-page :is(.nv-panel-heading h2, .nv-record strong, .nv-job-card h3, .nv-notification strong, .nv-status-card strong) {
-  color: #f5f5f5;
-  font-weight: 730;
-  letter-spacing: -.015em;
+  color: #f5f5f5 !important;
+  font-weight: 730 !important;
+  letter-spacing: -.015em !important;
 }
 
 html body .nv-private-page :is(.nv-panel-heading p, .nv-record small, .nv-job-card > p, .nv-job-meta span, .nv-notification p, .nv-notification small, .nv-status-card p, .nv-status-card small, .nv-form-footer > span) {
-  color: #a5a5aa;
-  line-height: 1.65;
+  color: #a5a5aa !important;
+  line-height: 1.65 !important;
 }
 
 html body .nv-private-page :is(.nv-form-grid label, .nv-search-form label) {
-  color: #d2d2d7;
-  font-size: 11px;
-  font-weight: 650;
-  line-height: 1.45;
+  color: #d2d2d7 !important;
+  font-size: 11px !important;
+  font-weight: 650 !important;
+  line-height: 1.45 !important;
 }
 
 html body .nv-private-page .nv-content :is(input, textarea, select),
 html body .nv-private-page .nv-chat-composer input,
 html body .nv-private-page .nv-search-form input {
-  min-height: 43px;
-  border: 1px solid #39393e;
-  border-radius: 9px;
-  color: #f2f2f4;
-  background: #101011;
-  font-family: var(--product-font);
-  font-size: 13px;
-  box-shadow: none;
+  min-height: 43px !important;
+  border: 1px solid #39393e !important;
+  border-radius: 9px !important;
+  color: #f2f2f4 !important;
+  background: #101011 !important;
+  font-family: var(--product-font) !important;
+  font-size: 13px !important;
+  box-shadow: none !important;
 }
 
 html body .nv-private-page .nv-content textarea { min-height: 104px; padding: 12px; line-height: 1.6; }
@@ -198,105 +198,105 @@ html body .nv-private-page .nv-chat-composer input::placeholder { color: #85858d
 html body .nv-private-page .nv-content :is(input, textarea, select):focus,
 html body .nv-private-page .nv-chat-composer input:focus,
 html body .nv-private-page .nv-search-form input:focus {
-  border-color: #8c78a8;
-  outline: 2px solid rgba(160, 130, 195, .13);
-  outline-offset: 1px;
+  border-color: #8c78a8 !important;
+  outline: 2px solid rgba(160, 130, 195, .13) !important;
+  outline-offset: 1px !important;
 }
 
 html body .nv-private-page :is(.nv-primary, .nv-chat-composer button) {
-  min-height: 40px;
-  border: 1px solid #f0f0f0;
-  border-radius: 9px;
-  color: #151515;
-  background: #f0f0f0;
-  font-family: var(--product-font);
-  font-size: 11px;
-  font-weight: 750;
-  transition: background .16s ease, border-color .16s ease, transform .16s ease;
+  min-height: 40px !important;
+  border: 1px solid #f0f0f0 !important;
+  border-radius: 9px !important;
+  color: #151515 !important;
+  background: #f0f0f0 !important;
+  font-family: var(--product-font) !important;
+  font-size: 11px !important;
+  font-weight: 750 !important;
+  transition: background .16s ease, border-color .16s ease, transform .16s ease !important;
 }
 
 html body .nv-private-page :is(.nv-primary, .nv-chat-composer button):hover:not(:disabled) {
-  border-color: #ffffff;
-  color: #080808;
-  background: #ffffff;
-  transform: translateY(-1px);
+  border-color: #ffffff !important;
+  color: #080808 !important;
+  background: #ffffff !important;
+  transform: translateY(-1px) !important;
 }
 
 html body .nv-private-page :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back) {
-  min-height: 38px;
-  border: 1px solid #3b3b40;
-  border-radius: 9px;
-  color: #dedee3;
-  background: #222225;
-  font-family: var(--product-font);
-  font-size: 11px;
-  font-weight: 650;
+  min-height: 38px !important;
+  border: 1px solid #3b3b40 !important;
+  border-radius: 9px !important;
+  color: #dedee3 !important;
+  background: #222225 !important;
+  font-family: var(--product-font) !important;
+  font-size: 11px !important;
+  font-weight: 650 !important;
 }
 
 html body .nv-private-page :is(.nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back):hover {
-  border-color: #55555c;
-  color: #ffffff;
-  background: #2c2c30;
+  border-color: #55555c !important;
+  color: #ffffff !important;
+  background: #2c2c30 !important;
 }
 
 html body .nv-private-page .nv-profile-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #303033;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 7px !important;
+  padding-bottom: 10px !important;
+  border-bottom: 1px solid #303033 !important;
 }
 
 html body .nv-private-page .nv-profile-tab {
-  min-height: 38px;
-  padding: 0 13px;
-  border-radius: 9px;
-  color: #bdbdc4;
-  background: #171719;
-  font-size: 11px;
-  font-weight: 650;
+  min-height: 38px !important;
+  padding: 0 13px !important;
+  border-radius: 9px !important;
+  color: #bdbdc4 !important;
+  background: #171719 !important;
+  font-size: 11px !important;
+  font-weight: 650 !important;
 }
 
 html body .nv-private-page .nv-profile-tab.active {
-  border-color: #55505c;
-  color: #ffffff;
-  background: #302b36;
+  border-color: #55505c !important;
+  color: #ffffff !important;
+  background: #302b36 !important;
 }
 
 html body .nv-private-page :is(button, a, input, textarea, select):focus-visible {
-  outline: 3px solid rgba(210, 190, 235, .3);
-  outline-offset: 2px;
+  outline: 3px solid rgba(210, 190, 235, .3) !important;
+  outline-offset: 2px !important;
 }
 
 html body .nv-chat-page {
-  box-sizing: border-box;
-  width: min(100%, 1540px);
-  margin: 0 auto;
-  padding: clamp(18px, 2.5vw, 32px) clamp(14px, 2vw, 30px);
+  box-sizing: border-box !important;
+  width: min(100%, 1540px) !important;
+  margin: 0 auto !important;
+  padding: clamp(18px, 2.5vw, 32px) clamp(14px, 2vw, 30px) !important;
 }
 
 html body .nv-chat-page .nv-chat-layout {
-  border: 1px solid #303033;
-  border-radius: 14px;
-  background: #181819;
-  box-shadow: 0 8px 26px rgba(0, 0, 0, .14);
+  border: 1px solid #303033 !important;
+  border-radius: 14px !important;
+  background: #181819 !important;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, .14) !important;
 }
 
 html body .nv-chat-page :is(.nv-thread-list, .nv-chat-preview, .nv-chat-inbox, .nv-chat-conversation, .nv-chat-placeholder, .nv-chat-composer) {
-  border-color: #303033;
-  background: #181819;
+  border-color: #303033 !important;
+  background: #181819 !important;
 }
 
 html body .nv-chat-page .nv-chat-search {
-  border: 1px solid #39393e;
-  border-radius: 9px;
-  background: #101011;
+  border: 1px solid #39393e !important;
+  border-radius: 9px !important;
+  background: #101011 !important;
 }
 
 html body .nv-chat-page .nv-chat-search input {
-  color: #f2f2f4;
-  font-family: var(--product-font);
-  font-size: 12px;
+  color: #f2f2f4 !important;
+  font-family: var(--product-font) !important;
+  font-size: 12px !important;
 }
 
 html body .nv-chat-page .nv-chat-search input::placeholder { color: #85858d; }
@@ -316,9 +316,9 @@ html body .nv-chat-page .nv-chat-search input::placeholder { color: #85858d; }
   html body .public-shell *,
   html body .nv-private-page *,
   html body .nv-chat-page * {
-    scroll-behavior: auto;
-    animation-duration: .01ms;
-    animation-iteration-count: 1;
-    transition-duration: .01ms;
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
   }
 }
