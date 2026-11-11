@@ -18,6 +18,7 @@ import {
   Sparkles,
   X
 } from "lucide-react";
+import styles from "./indexed-jobs-page.module.css";
 
 type Job = {
   id: string;
