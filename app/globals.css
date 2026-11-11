@@ -13075,47 +13075,6 @@ button.topbar-create {
   box-sizing: border-box;
 }
 
-/* Force readable homepage search input colors */
-.worker-home-search-v2 input#home-role,
-.worker-home-search-v2 input#home-location {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  height: 46px;
-  margin: 0;
-  padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, .16) !important;
-  border-radius: 7px;
-  outline: 0;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  background-color: #202020 !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  opacity: 1 !important;
-  appearance: none;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.4;
-  caret-color: #ffffff;
-}
-
-.worker-home-search-v2 input#home-role::placeholder,
-.worker-home-search-v2 input#home-location::placeholder {
-  color: #a3a3a3 !important;
-  -webkit-text-fill-color: #a3a3a3 !important;
-  opacity: 1 !important;
-}
-
-.worker-home-search-v2 input#home-role:focus,
-.worker-home-search-v2 input#home-location:focus {
-  border-color: rgba(255, 255, 255, .62) !important;
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-  background-color: #171717 !important;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, .1) !important;
-}
-
 
 /* Public shell header and navigation alignment */
 .public-sidebar {
