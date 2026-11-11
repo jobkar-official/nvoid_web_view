@@ -14323,3 +14323,30 @@ button.topbar-create {
     flex-direction: column;
   }
 }
+
+
+/* Keep the homepage within the visible area below the top navigation. */
+.public-content:has(> .nvoid-homepage-restored) {
+  height: calc(100vh - 67px);
+  min-height: 0;
+  padding: 0;
+}
+
+.public-content:has(> .nvoid-homepage-restored) > .nvoid-homepage-restored {
+  display: flex;
+  min-height: 0;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(24px, 5vh, 48px);
+}
+
+@media (max-width: 680px) {
+  .public-content:has(> .nvoid-homepage-restored) {
+    height: calc(100vh - 59px);
+  }
+
+  .public-content:has(> .nvoid-homepage-restored) > .nvoid-homepage-restored {
+    gap: 28px;
+  }
+}
