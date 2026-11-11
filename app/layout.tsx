@@ -1,12 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
-import "./nvoid-theme.css";
-import "./ui-polish.css";
-import "./(public)/agent-crawl.css";
-import "./light-theme.css";
-import "./product-design-system.css";
-import "./brand-light-override.css";
 import { AuthProvider } from "../lib/context/AuthContext";
 
 const roboto = Roboto({
