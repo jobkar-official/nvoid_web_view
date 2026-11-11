@@ -5,6 +5,7 @@ import "./nvoid-theme.css";
 import "./ui-polish.css";
 import "./(public)/agent-crawl.css";
 import "./light-theme.css";
+import "./product-design-system.css";
 import { AuthProvider } from "../lib/context/AuthContext";
 
 const roboto = Roboto({
