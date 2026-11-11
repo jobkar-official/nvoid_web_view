@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getNvoidSession } from "../../lib/auth-session";
 import "./private.css";
 import "../product-design-system.css";
+import "../brand-light-override.css";
 import { GuestShell } from "../../components/guest-shell";
 
 export const metadata: Metadata = {
