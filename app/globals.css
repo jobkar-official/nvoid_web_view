@@ -7252,39 +7252,6 @@ body::-webkit-scrollbar {
   }
 }
 
-/* Keep the complete Worker homepage block centered with 100px top spacing */
-.public-content:has(.worker-homepage-v2) {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 100px;
-}
-
-.worker-homepage-v2 {
-  width: min(100%, 1040px);
-  margin-inline: auto;
-}
-
-.worker-home-brand-intro,
-.worker-home-search-v2,
-.worker-home-search-card,
-.worker-home-search-footnote-centered {
-  margin-right: auto;
-  margin-left: auto;
-}
-
-.worker-home-brand-intro,
-.worker-home-search-footnote-centered {
-  text-align: center;
-  justify-content: center;
-}
-
-@media (max-width: 680px) {
-  .public-content:has(.worker-homepage-v2) {
-    padding-top: 100px;
-  }
-}
-
 /* Keep the privacy note and fixed model together beneath the homepage search */
 .worker-home-search-meta {
   display: flex;
@@ -14325,28 +14292,161 @@ button.topbar-create {
 }
 
 
-/* Keep the homepage within the visible area below the top navigation. */
-.public-content:has(> .nvoid-homepage-restored) {
-  height: calc(100vh - 67px);
+/* Homepage viewport lock and sidebar account hierarchy */
+.public-main:has(.nvoid-homepage-restored) {
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
   min-height: 0;
-  padding: 0;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.public-main:has(.nvoid-homepage-restored) > .public-topbar {
+  flex: 0 0 67px;
+}
+
+.public-content:has(> .nvoid-homepage-restored) {
+  display: flex;
+  width: 100%;
+  max-width: none;
+  height: calc(100vh - 67px);
+  height: calc(100dvh - 67px);
+  min-height: 0;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 24px clamp(18px, 4vw, 64px);
 }
 
 .public-content:has(> .nvoid-homepage-restored) > .nvoid-homepage-restored {
   display: flex;
+  width: min(100%, 1040px);
+  height: auto;
+  max-height: 100%;
   min-height: 0;
-  height: 100%;
+  flex: 0 1 auto;
   flex-direction: column;
   justify-content: center;
-  gap: clamp(24px, 5vh, 48px);
+  gap: clamp(22px, 4vh, 38px);
+  margin: 0 auto;
+  padding: 0;
+  overflow: visible;
+}
+
+.public-content:has(> .nvoid-homepage-restored) .worker-home-brand-intro,
+.public-content:has(> .nvoid-homepage-restored) .worker-home-search-section {
+  flex: 0 0 auto;
+}
+
+.public-sidebar-bottom {
+  margin-top: auto;
+  padding: 16px 2px 2px;
+  border-top: 1px solid rgba(255, 255, 255, .10);
+}
+
+.public-sidebar-bottom .guest-identity {
+  gap: 11px;
+  padding: 2px 5px 13px;
+}
+
+.public-sidebar-bottom .guest-avatar {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  color: #f1f1f1;
+  background: #303030;
+  font-size: 11px;
+}
+
+.public-sidebar-bottom .guest-identity strong {
+  color: #f0f0f0;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.public-sidebar-bottom .guest-identity small {
+  color: #929292;
+  font-size: 10px;
+}
+
+.public-sidebar-bottom .guest-auth-actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 5px;
+}
+
+.public-sidebar-bottom .sidebar-register {
+  display: flex;
+  width: 100%;
+  min-height: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  order: -1;
+  border: 1px solid #eeeeee;
+  border-radius: 8px;
+  color: #171717 !important;
+  background: #eeeeee !important;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  transition: background .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+.public-sidebar-bottom .sidebar-register:hover {
+  border-color: #ffffff;
+  color: #111111 !important;
+  background: #ffffff !important;
+  transform: translateY(-1px);
+}
+
+.public-sidebar-bottom .sidebar-signin {
+  display: flex;
+  width: 100%;
+  min-height: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: #bcbcbc !important;
+  background: transparent !important;
+  font-size: 11px;
+  font-weight: 550;
+  transition: color .16s ease, background .16s ease;
+}
+
+.public-sidebar-bottom .sidebar-signin:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, .06) !important;
 }
 
 @media (max-width: 680px) {
+  .public-main:has(.nvoid-homepage-restored) > .public-topbar {
+    flex-basis: 56px;
+  }
+
   .public-content:has(> .nvoid-homepage-restored) {
-    height: calc(100vh - 59px);
+    height: calc(100vh - 56px);
+    height: calc(100dvh - 56px);
+    padding: 20px 16px;
   }
 
   .public-content:has(> .nvoid-homepage-restored) > .nvoid-homepage-restored {
-    gap: 28px;
+    gap: 26px;
+  }
+}
+
+@media (max-height: 700px) and (min-width: 681px) {
+  .public-content:has(> .nvoid-homepage-restored) {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .public-content:has(> .nvoid-homepage-restored) > .nvoid-homepage-restored {
+    gap: 18px;
   }
 }
