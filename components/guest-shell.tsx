@@ -386,7 +386,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
               </Link>
             </nav>
           </header>
-          <main className="public-content">{children}</main>
+          <main className={"public-content" + (pathname === "/jobs" ? " public-content-jobs" : "")}>{children}</main>
         </div>
       </div>
     </GuestHistoryContext.Provider>
