@@ -1127,3 +1127,12 @@
     transition: none;
   }
 }
+
+
+.sectionKicker {
+  color: #c9c9c9;
+}
+
+.mobileFilterBar > span {
+  color: #a8a8a8;
+}
