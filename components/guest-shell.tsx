@@ -386,7 +386,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
               </Link>
             </nav>
           </header>
-          <main className={"public-content" + (pathname === "/jobs" ? " public-content-jobs" : "")}>{children}</main>
+          <main className={"public-content" + (pathname === "/jobs" ? " public-content-jobs" : "")} style={pathname === "/jobs" ? { width: "100%", maxWidth: "none", margin: 0, padding: "22px clamp(16px, 1.5vw, 24px) 44px" } : undefined}>{children}</main>
         </div>
       </div>
     </GuestHistoryContext.Provider>
