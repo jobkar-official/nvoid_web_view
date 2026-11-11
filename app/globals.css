@@ -13370,3 +13370,18 @@ button.topbar-create {
     display: none;
   }
 }
+
+
+@media (min-width: 851px) {
+  .public-sidebar {
+    transition: transform .22s ease;
+  }
+
+  .public-sidebar:not(.is-open) {
+    transform: translateX(-102%);
+  }
+
+  .public-sidebar.is-open {
+    transform: translateX(0);
+  }
+}
