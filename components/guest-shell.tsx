@@ -342,8 +342,8 @@ export function GuestShell({ children }: { children: ReactNode }) {
                   <span><strong>{user.name}</strong><small>Signed in</small></span>
                 </div>
                 <div className="guest-auth-actions">
-                  <Link href="/profile" className="sidebar-signin" onClick={closeSidebarOnMobile}>Profile</Link>
-                  <button type="button" className="sidebar-register" onClick={() => void logout()}>Sign out</button>
+                  <Link href="/profile" className="sidebar-profile-link" onClick={closeSidebarOnMobile}>Profile</Link>
+                  <button type="button" className="sidebar-signout" onClick={() => void logout()}>Sign out</button>
                 </div>
               </>
             ) : isLoading ? (
