@@ -142,7 +142,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
     setHistory(readHistory());
     setReady(true);
 
-    const breakpoint = window.matchMedia("(max-width: 960px)");
+    const breakpoint = window.matchMedia("(max-width: 850px)");
     const syncSidebar = () => setSidebarOpen(!breakpoint.matches);
     syncSidebar();
     breakpoint.addEventListener("change", syncSidebar);
@@ -151,7 +151,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!sidebarOpen || !window.matchMedia("(max-width: 960px)").matches) return;
+    if (!sidebarOpen || !window.matchMedia("(max-width: 850px)").matches) return;
 
     const previousOverflow = document.body.style.overflow;
     const closeOnEscape = (event: KeyboardEvent) => {
@@ -236,7 +236,7 @@ export function GuestShell({ children }: { children: ReactNode }) {
 
   const context = useMemo(() => ({ history, saveSearch, updateSearch, getSearch, removeSearch, clearHistory }), [history, saveSearch, updateSearch, getSearch, removeSearch, clearHistory]);
   const closeSidebarOnMobile = () => {
-    if (window.matchMedia("(max-width: 960px)").matches) setSidebarOpen(false);
+    if (window.matchMedia("(max-width: 850px)").matches) setSidebarOpen(false);
   };
   const routeTitles: Record<string, string> = {
     "/": "New search",
