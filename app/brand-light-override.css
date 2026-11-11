@@ -1,0 +1,137 @@
+:root {
+  color-scheme: light !important;
+  --nvoid-bg: #ffffff !important;
+  --nvoid-sidebar: #6d28d9 !important;
+  --nvoid-text: #241b35 !important;
+  --nvoid-border: #e9e3f1 !important;
+  --nv-bg: #ffffff !important;
+  --nv-page-bg: #ffffff !important;
+  --nv-panel: #ffffff !important;
+  --nv-ink: #241b35 !important;
+  --nv-line: #e9e3f1 !important;
+  --nv-accent: #6d28d9 !important;
+  --product-canvas: #ffffff !important;
+  --product-ink: #241b35 !important;
+}
+
+html, body {
+  color-scheme: light !important;
+  color: #241b35 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+html body :is(.public-shell, .public-main, .public-content, .home-page, .catalog-page, .info-page, .release-hub, .free-hiring-page, .nvoid-agent-page, .worker-results-page, .auth-page, .nv-workspace, .nv-main, .nv-content, .nv-private-page, .nv-chat-page) {
+  color: #241b35 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+}
+
+html body :is(.public-topbar, .nv-topbar) {
+  color: #241b35 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border-color: #e9e3f1 !important;
+  box-shadow: 0 1px 0 rgba(36, 27, 53, .04) !important;
+}
+
+html body :is(.public-sidebar, .nv-sidebar, .nv-expanded .nv-sidebar) {
+  color: #ffffff !important;
+  background: #6d28d9 !important;
+  background-color: #6d28d9 !important;
+  background-image: none !important;
+  border-color: #5b21b6 !important;
+}
+
+html body :is(.public-sidebar, .nv-sidebar) :is(a, button, span, strong, small, p, svg, i, label) {
+  color: inherit;
+}
+
+html body :is(.public-sidebar, .nv-sidebar) :is(.public-nav-link, .nv-nav-link, .sidebar-find-button, .nv-find-jobs-button) {
+  color: #ffffff !important;
+  background: transparent !important;
+  border-color: rgba(255,255,255,.2) !important;
+}
+
+html body :is(.public-sidebar, .nv-sidebar) :is(.public-nav-link:hover, .public-nav-link.active, .nv-nav-link:hover, .nv-nav-link.active) {
+  color: #ffffff !important;
+  background: rgba(255,255,255,.17) !important;
+  border-color: rgba(255,255,255,.3) !important;
+}
+
+html body :is(.public-main, .nv-content, .auth-page, .info-page, .catalog-page, .release-hub, .free-hiring-page) :is(
+  [class*="card"], [class*="panel"], [class*="surface"], [class*="section"], 
+  .nv-welcome, .nv-panel, .nv-stat-card, .nv-job-card, .nv-status-card,
+  .nv-messages-layout, .nv-thread-list, .nv-chat-preview, .nv-chat-composer,
+  .nv-profile-tab, .nv-record, .nv-chat-inbox, .nv-chat-conversation,
+  .nv-chat-placeholder, .nv-alert, .nv-info-strip, .nv-footer-note
+) {
+  color: #241b35 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #e9e3f1 !important;
+  box-shadow: 0 8px 28px rgba(49, 30, 78, .055) !important;
+}
+
+html body :is(.nv-content, .nv-private-page, .auth-page, .worker-results-page, .public-main) :is(input, textarea, select, [role="combobox"]) {
+  color: #241b35 !important;
+  -webkit-text-fill-color: #241b35 !important;
+  background: #ffffff !important;
+  background-color: #ffffff !important;
+  border: 1px solid #dcd4e8 !important;
+  box-shadow: none !important;
+}
+
+html body :is(.nv-content, .nv-private-page, .auth-page, .worker-results-page, .public-main) :is(input, textarea, select)::placeholder {
+  color: #8b8298 !important;
+  -webkit-text-fill-color: #8b8298 !important;
+}
+
+html body :is(.nv-content, .nv-private-page, .auth-page, .worker-results-page, .public-main) :is(input, textarea, select):focus {
+  border-color: #8b5bd6 !important;
+  outline: 3px solid rgba(109, 40, 217, .12) !important;
+}
+
+html body :is(button, .nv-primary, .nv-chat-composer button, .nv-find-jobs-button, .worker-home-search-button, .auth-submit, .nvoid-header-signup, .nvoid-header-free-posting) {
+  accent-color: #6d28d9;
+}
+
+html body :is(.nv-primary, .nv-chat-composer button, .worker-home-search-button, .auth-submit, .nvoid-header-signup, .nvoid-header-free-posting) {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #6d28d9 !important;
+  background-color: #6d28d9 !important;
+  border-color: #6d28d9 !important;
+  box-shadow: 0 5px 14px rgba(109, 40, 217, .16) !important;
+}
+
+html body :is(.nv-primary, .nv-chat-composer button, .worker-home-search-button, .auth-submit, .nvoid-header-signup, .nvoid-header-free-posting):hover {
+  background: #5b21b6 !important;
+  background-color: #5b21b6 !important;
+  border-color: #5b21b6 !important;
+}
+
+html body :is(.nv-primary, .nv-chat-composer button, .worker-home-search-button, .auth-submit, .nvoid-header-signup, .nvoid-header-free-posting) svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html body :is(h1, h2, h3, h4, h5, h6, label, strong, .nv-title, .nv-page-title) {
+  color: #241b35;
+}
+
+html body :is(p, small, .muted, .nv-muted, .nv-subtitle) {
+  color: #71677f;
+}
+
+html body ::selection {
+  color: #ffffff !important;
+  background: #6d28d9 !important;
+}
+
+@media (max-width: 760px) {
+  html body .nv-content { background: #ffffff !important; }
+}
