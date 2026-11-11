@@ -42,7 +42,7 @@ const emptyFilters: Filters = { query: "", location: "", company: "", provider: 
 const pageSize = 24;
 
 function cleanText(value?: string | null) {
-  return (value || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&").replace(/\\s+/g, " ").trim();
+  return (value || "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&").replace(/\s+/g, " ").trim();
 }
 
 function safeJobUrl(value?: string) {
