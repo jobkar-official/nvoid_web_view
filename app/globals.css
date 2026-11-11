@@ -13385,3 +13385,13 @@ button.topbar-create {
     transform: translateX(0);
   }
 }
+
+
+/* Keep the desktop content canvas fixed while the sidebar toggles */
+@media (min-width: 851px) {
+  .public-main,
+  .public-sidebar.is-open + .public-main {
+    width: calc(100% - 264px);
+    margin-left: 264px;
+  }
+}
