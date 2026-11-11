@@ -322,3 +322,454 @@ html body .nv-chat-page .nv-chat-search input::placeholder { color: #85858d; }
     transition-duration: .01ms !important;
   }
 }
+
+
+html body .public-shell .public-main .public-content:has(.nvoid-homepage-restored) {
+  background: #ffffff !important;
+}
+
+html body .public-shell .public-main .public-content:has(.nvoid-homepage-restored) .nvoid-homepage-restored {
+  width: 100% !important;
+  max-width: 1100px !important;
+  min-height: calc(100svh - 122px) !important;
+  margin: 0 auto !important;
+  padding: clamp(28px, 5vh, 58px) clamp(12px, 2vw, 26px) 42px !important;
+  gap: 26px !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-brand-intro,
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-section {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-intro-copy {
+  display: grid !important;
+  justify-items: center !important;
+  gap: 13px !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-agent-label {
+  color: #6a4a91 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .14em !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-intro-copy h1 {
+  max-width: 900px !important;
+  margin: 0 !important;
+  gap: 12px !important;
+  color: #242233 !important;
+  font-size: clamp(34px, 4.2vw, 54px) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.055em !important;
+  line-height: 1.08 !important;
+  text-align: center !important;
+  text-wrap: balance !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-heading-copy {
+  color: #242233 !important;
+  -webkit-text-fill-color: #242233 !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-wordmark-text {
+  color: #63369f !important;
+  -webkit-text-fill-color: #63369f !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-intro-copy > p {
+  max-width: 680px !important;
+  margin: 0 !important;
+  color: #697184 !important;
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+  text-align: center !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-card {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 1px minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 18px !important;
+  padding: 18px !important;
+  border: 1px solid #e7e4ed !important;
+  border-radius: 17px !important;
+  background: #ffffff !important;
+  box-shadow: 0 14px 36px rgba(37, 29, 51, .07) !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-field {
+  min-width: 0 !important;
+  display: grid !important;
+  gap: 9px !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-field > span:first-child {
+  color: #565e70 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-field-control {
+  min-width: 0 !important;
+  min-height: 50px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 0 13px !important;
+  border: 1px solid #e0e2e9 !important;
+  border-radius: 11px !important;
+  color: #76658b !important;
+  background: #faf9fc !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-field-control > svg {
+  flex: 0 0 auto !important;
+  width: 17px !important;
+  height: 17px !important;
+  color: #78609c !important;
+  stroke: #78609c !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-field-control > input {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 48px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  color: #282638 !important;
+  -webkit-text-fill-color: #282638 !important;
+  background: transparent !important;
+  font-family: var(--product-font) !important;
+  font-size: 13px !important;
+  font-weight: 560 !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-field-control > input::placeholder {
+  color: #9298a7 !important;
+  -webkit-text-fill-color: #9298a7 !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-field-control:focus-within {
+  border-color: #a68bc7 !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(99, 54, 159, .10) !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-field-divider {
+  width: 1px !important;
+  height: 42px !important;
+  background: #eceaf0 !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-button {
+  min-height: 50px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 9px !important;
+  padding: 0 19px !important;
+  border: 1px solid #63369f !important;
+  border-radius: 11px !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #63369f !important;
+  box-shadow: 0 5px 14px rgba(99, 54, 159, .18) !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  white-space: nowrap !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-button svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-button:hover {
+  transform: translateY(-1px) !important;
+  border-color: #522889 !important;
+  background: #522889 !important;
+  box-shadow: 0 8px 18px rgba(99, 54, 159, .22) !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-meta {
+  justify-content: center !important;
+  gap: 10px 24px !important;
+  margin-top: 3px !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-footnote {
+  color: #808797 !important;
+  font-size: 11px !important;
+}
+
+html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-footnote svg {
+  color: #8066a1 !important;
+  stroke: #8066a1 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page {
+  display: grid !important;
+  gap: 22px !important;
+  width: 100% !important;
+  max-width: none !important;
+  color: #242233 !important;
+  background: transparent !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-header {
+  padding: 0 0 3px !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-heading h1 {
+  color: #242233 !important;
+  font-size: clamp(27px, 3vw, 36px) !important;
+  font-weight: 800 !important;
+  letter-spacing: -.045em !important;
+  line-height: 1.12 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-heading p {
+  max-width: 720px !important;
+  color: #697184 !important;
+  font-size: 12px !important;
+  line-height: 1.75 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-search {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.1fr) 1px minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 16px !important;
+  padding: 16px !important;
+  border: 1px solid #e6e3ec !important;
+  border-radius: 15px !important;
+  color: #292638 !important;
+  background: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(31, 26, 43, .045) !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-field {
+  min-width: 0 !important;
+  display: grid !important;
+  gap: 8px !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-field > span:first-child {
+  color: #555d70 !important;
+  -webkit-text-fill-color: #555d70 !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: .075em !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-field > span:last-child {
+  min-width: 0 !important;
+  min-height: 49px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 0 12px !important;
+  border: 1px solid #dfe2e9 !important;
+  border-radius: 10px !important;
+  color: #76658b !important;
+  background: #faf9fc !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-field > span:last-child svg {
+  flex: 0 0 auto !important;
+  color: #78609c !important;
+  stroke: #78609c !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-field input {
+  width: 100% !important;
+  min-width: 0 !important;
+  color: #282638 !important;
+  -webkit-text-fill-color: #282638 !important;
+  background: transparent !important;
+  font-family: var(--product-font) !important;
+  font-size: 13px !important;
+  font-weight: 550 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-field input::placeholder {
+  color: #9298a7 !important;
+  -webkit-text-fill-color: #9298a7 !important;
+  opacity: 1 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-divider {
+  width: 1px !important;
+  height: 42px !important;
+  background: #eceaf0 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-submit {
+  min-height: 49px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 16px !important;
+  border: 1px solid #63369f !important;
+  border-radius: 10px !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #63369f !important;
+  font-family: var(--product-font) !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  box-shadow: 0 4px 11px rgba(99, 54, 159, .16) !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-submit svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-submit:hover:not(:disabled) {
+  border-color: #522889 !important;
+  background: #522889 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-results-trust {
+  color: #858b99 !important;
+  font-size: 10px !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-search-guide > div,
+html body .public-shell .public-main .public-content .worker-results-page .worker-crawl-diagnostics {
+  border: 1px solid #e7e6ed !important;
+  border-radius: 13px !important;
+  color: #383548 !important;
+  background: #ffffff !important;
+  box-shadow: 0 5px 17px rgba(30, 27, 43, .035) !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-search-guide strong,
+html body .public-shell .public-main .public-content .worker-results-page .worker-crawl-diagnostics h2 {
+  color: #282638 !important;
+  font-size: 13px !important;
+  font-weight: 750 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-search-guide p,
+html body .public-shell .public-main .public-content .worker-results-page .worker-crawl-diagnostics p {
+  color: #70788b !important;
+  font-size: 11px !important;
+  line-height: 1.65 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-crawl-stats > div {
+  border: 1px solid #eeedf2 !important;
+  border-radius: 10px !important;
+  background: #faf9fc !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-crawl-stats strong {
+  color: #292638 !important;
+  font-size: 20px !important;
+  font-weight: 780 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .worker-crawl-stats span {
+  color: #7b8292 !important;
+  font-size: 10px !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .public-job-card {
+  border: 1px solid #e7e6ed !important;
+  border-radius: 13px !important;
+  color: #292638 !important;
+  background: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(30, 27, 43, .035) !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .public-job-card:hover {
+  border-color: #d5c7e6 !important;
+  background: #ffffff !important;
+  box-shadow: 0 10px 25px rgba(30, 27, 43, .07) !important;
+  transform: translateY(-2px) !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .public-job-card h3 {
+  color: #282638 !important;
+  -webkit-text-fill-color: #282638 !important;
+  font-size: 15px !important;
+  font-weight: 750 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .public-job-card :is(.public-job-company, .public-job-meta, .public-job-description) {
+  color: #697184 !important;
+  -webkit-text-fill-color: #697184 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .public-job-card .public-job-details span,
+html body .public-shell .public-main .public-content .worker-results-page .public-job-card .source-chip,
+html body .public-shell .public-main .public-content .worker-results-page .worker-match-reasons span {
+  border: 1px solid #ebe8f1 !important;
+  border-radius: 7px !important;
+  color: #665b78 !important;
+  -webkit-text-fill-color: #665b78 !important;
+  background: #faf8fc !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .public-job-card .public-job-footer {
+  border-top-color: #eeedf2 !important;
+}
+
+html body .public-shell .public-main .public-content .worker-results-page .public-job-card .public-job-footer a {
+  color: #63369f !important;
+  -webkit-text-fill-color: #63369f !important;
+  font-weight: 750 !important;
+}
+
+@media (max-width: 900px) {
+  html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-card {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-field-divider {
+    width: 100% !important;
+    height: 1px !important;
+  }
+
+  html body .public-shell .public-main .public-content .worker-results-page .worker-results-search {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  html body .public-shell .public-main .public-content .worker-results-page .worker-results-divider {
+    width: 100% !important;
+    height: 1px !important;
+  }
+
+  html body .public-shell .public-main .public-content .worker-results-page .worker-results-submit {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 600px) {
+  html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-intro-copy h1 {
+    align-items: center !important;
+    flex-direction: column !important;
+    font-size: 32px !important;
+  }
+
+  html body .public-shell .public-main .public-content .nvoid-homepage-restored .worker-home-search-meta {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+}
