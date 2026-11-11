@@ -13399,10 +13399,15 @@ button.topbar-create {
 
 /* Stable public canvas: the desktop sidebar overlays instead of reserving an empty rail */
 @media (min-width: 851px) {
-  .public-main,
-  .public-sidebar.is-open + .public-main {
+  .public-main {
     width: 100%;
     margin-left: 0;
+    transition: margin-left .22s ease, width .22s ease;
+  }
+
+  .public-sidebar.is-open + .public-main {
+    width: calc(100% - 264px);
+    margin-left: 264px;
   }
 
   .public-sidebar {
