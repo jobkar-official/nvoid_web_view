@@ -1,4 +1,4 @@
-:global(.public-content-jobs) {
+:global(.public-content.public-content-jobs) {
   width: 100%;
   max-width: none;
   margin: 0;
