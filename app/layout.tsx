@@ -6,6 +6,7 @@ import "./ui-polish.css";
 import "./(public)/agent-crawl.css";
 import "./light-theme.css";
 import "./product-design-system.css";
+import "./brand-light-override.css";
 import { AuthProvider } from "../lib/context/AuthContext";
 
 const roboto = Roboto({
