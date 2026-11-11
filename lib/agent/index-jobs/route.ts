@@ -7,7 +7,7 @@ export const maxDuration = 20;
 export async function GET(request: NextRequest) {
   const incoming = new URL(request.url).searchParams;
   const params = new URLSearchParams();
-  for (const key of ["page", "limit", "q", "location", "company", "provider", "remote", "sort"]) {
+  for (const key of ["page", "limit", "q", "skills", "location", "company", "provider", "remote", "sort"]) {
     const value = incoming.get(key);
     if (value !== null && value.trim()) params.set(key, value.trim());
   }
