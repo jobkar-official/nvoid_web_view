@@ -14450,3 +14450,44 @@ button.topbar-create {
     gap: 18px;
   }
 }
+
+
+/* Distinguish profile access from sign-out in the signed-in sidebar */
+.public-sidebar-bottom .sidebar-profile-link,
+.public-sidebar-bottom .sidebar-signout {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 650;
+  text-decoration: none;
+  transition: color .16s ease, background .16s ease, border-color .16s ease;
+}
+
+.public-sidebar-bottom .sidebar-profile-link {
+  min-height: 40px;
+  border: 1px solid #eeeeee;
+  color: #171717;
+  background: #eeeeee;
+}
+
+.public-sidebar-bottom .sidebar-profile-link:hover {
+  border-color: #ffffff;
+  color: #111111;
+  background: #ffffff;
+}
+
+.public-sidebar-bottom .sidebar-signout {
+  min-height: 34px;
+  border: 1px solid transparent;
+  color: #bcbcbc;
+  background: transparent;
+  cursor: pointer;
+}
+
+.public-sidebar-bottom .sidebar-signout:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, .06);
+}
