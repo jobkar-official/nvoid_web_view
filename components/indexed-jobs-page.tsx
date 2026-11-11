@@ -38,6 +38,7 @@ type Job = {
 
 type Filters = {
   query: string;
+  skills: string;
   location: string;
   company: string;
   provider: string;
@@ -54,7 +55,7 @@ type JobsResponse = {
   facets?: { providers?: Array<{ id: string; count: number }> };
 };
 
-const emptyFilters: Filters = { query: "", location: "", company: "", provider: "", remote: "" };
+const emptyFilters: Filters = { query: "", skills: "", location: "", company: "", provider: "", remote: "" };
 const pageSize = 24;
 
 function cleanText(value?: string | null) {
@@ -109,6 +110,7 @@ export default function IndexedJobsPage() {
   const requestQuery = useMemo(() => {
     const params = new URLSearchParams({ page: String(page), limit: String(pageSize), sort });
     if (filters.query) params.set("q", filters.query);
+    if (filters.skills) params.set("skills", filters.skills);
     if (filters.location) params.set("location", filters.location);
     if (filters.company) params.set("company", filters.company);
     if (filters.provider) params.set("provider", filters.provider);
@@ -223,6 +225,14 @@ export default function IndexedJobsPage() {
                 <div className={styles.inputWrap}>
                   <Search size={16} aria-hidden="true" />
                   <input value={draft.query} onChange={(event) => updateDraft("query", event.target.value)} placeholder="e.g. Product designer" autoComplete="off" />
+                </div>
+              </label>
+
+              <label className={styles.field}>
+                <span className={styles.fieldLabel}>SKILLS</span>
+                <div className={styles.inputWrap}>
+                  <Sparkles size={16} aria-hidden="true" />
+                  <input value={draft.skills} onChange={(event) => updateDraft("skills", event.target.value)} placeholder="e.g. Java, React, SQL" autoComplete="off" />
                 </div>
               </label>
 
