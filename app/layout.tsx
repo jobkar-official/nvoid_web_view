@@ -5,7 +5,7 @@ import { AuthProvider } from "../lib/context/AuthContext";
 
 const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700", "900"],
+  weight: ["300", "400", "500", "600", "700", "900"],
   display: "swap",
   variable: "--font-roboto"
 });
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#1a1a1a"
+  themeColor: "#17213a"
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
