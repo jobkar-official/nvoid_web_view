@@ -14491,3 +14491,136 @@ button.topbar-create {
   color: #ffffff;
   background: rgba(255, 255, 255, .06);
 }
+
+
+/* Focused refinement of the existing NVOID dark product interface */
+.public-shell .public-sidebar {
+  background: linear-gradient(180deg, #191919 0%, #202020 100%);
+  border-right-color: rgba(255, 255, 255, .08);
+  box-shadow: 10px 0 28px rgba(0, 0, 0, .12);
+}
+
+.public-shell .public-nav-link {
+  font-weight: 500;
+  letter-spacing: .005em;
+  transition: color .16s ease, background .16s ease, border-color .16s ease;
+}
+
+.public-shell .public-nav-link:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, .055);
+  border-color: rgba(255, 255, 255, .06);
+}
+
+.public-shell .public-nav-link.active {
+  background: #303030 !important;
+  border-color: rgba(255, 255, 255, .14) !important;
+  box-shadow: inset 2px 0 #e8e8e8 !important;
+}
+
+.public-shell .public-topbar {
+  border-bottom-color: rgba(255, 255, 255, .09);
+  background: rgba(31, 31, 31, .92);
+  backdrop-filter: blur(16px);
+}
+
+.nvoid-homepage-restored .worker-home-intro-copy h1 {
+  font-weight: 550;
+  letter-spacing: -.045em;
+}
+
+.nvoid-homepage-restored .worker-home-intro-copy p {
+  max-width: 640px;
+  color: #bcbcbc;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.nvoid-homepage-restored .worker-home-search-card {
+  border-color: rgba(255, 255, 255, .14);
+  border-radius: 15px;
+  background: linear-gradient(135deg, #2c2c2c 0%, #272727 100%);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, .2), inset 0 1px rgba(255, 255, 255, .025);
+}
+
+.nvoid-homepage-restored .worker-home-field > span:first-child {
+  color: #a9a9a9;
+  font-size: 10px;
+  font-weight: 550;
+  letter-spacing: .075em;
+}
+
+.nvoid-homepage-restored .worker-home-field-control {
+  min-height: 42px;
+  gap: 10px;
+  color: #a7a7a7;
+}
+
+.nvoid-homepage-restored .worker-home-field-control input {
+  min-height: 42px;
+  padding: 8px 0;
+  border: 0 !important;
+  outline: 0 !important;
+  border-radius: 0 !important;
+  color: #f1f1f1;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.nvoid-homepage-restored .worker-home-field-control input:focus,
+.nvoid-homepage-restored .worker-home-field-control input:focus-visible {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+.nvoid-homepage-restored .worker-home-field-control input::placeholder {
+  color: #858585;
+}
+
+.nvoid-homepage-restored .worker-home-search-button {
+  min-height: 44px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  transition: color .16s ease, background .16s ease, transform .16s ease;
+}
+
+.nvoid-homepage-restored .worker-home-search-button:hover {
+  transform: translateY(-1px);
+}
+
+.nvoid-homepage-restored .worker-home-search-meta {
+  color: #a6a6a6;
+}
+
+.public-shell :is(.public-job-card, .category-card, .home-feature-card, .model-card, .release-card, .workspace-content-card, .workspace-shortcut-card, .workspace-tip-card) {
+  border-radius: 12px;
+  transition: border-color .18s ease, background .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.public-shell :is(.public-job-card, .category-card, .home-feature-card, .model-card, .release-card, .workspace-content-card, .workspace-shortcut-card, .workspace-tip-card):hover {
+  border-color: rgba(255, 255, 255, .2);
+}
+
+.public-shell :is(h1, h2, h3, h4) {
+  text-wrap: balance;
+}
+
+.public-shell :is(a, button):focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .48);
+  outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+  .nvoid-homepage-restored .worker-home-search-card {
+    border-radius: 13px;
+  }
+
+  .nvoid-homepage-restored .worker-home-field-control input {
+    font-size: 16px;
+  }
+}
