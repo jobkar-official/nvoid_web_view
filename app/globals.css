@@ -15233,3 +15233,18 @@ html body ::selection {
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Preserve readable contrast for compact secondary text inside the dark navigation */
+.public-sidebar :is(.guest-identity small, .history-copy small, .history-placeholder, .history-empty, .sidebar-trust) {
+  color: #aab5cc !important;
+}
+
+.public-sidebar .history-copy strong {
+  color: #e9edfa !important;
+}
+
+.public-sidebar .history-empty svg,
+.public-sidebar .history-search-icon {
+  color: #9eabc7 !important;
+}
