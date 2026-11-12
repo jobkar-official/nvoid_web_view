@@ -2565,3 +2565,88 @@ html body .nv-private-page .nv-status-neutral {
     min-width: 0;
   }
 }
+
+
+/* Refinement pass on the existing dark workspace — hierarchy and control polish */
+html body .nv-private-page .nv-page-heading h1 {
+  color: #f2f2f2 !important;
+  font-size: clamp(24px, 2.2vw, 30px);
+  font-weight: 550 !important;
+  letter-spacing: -.035em;
+  line-height: 1.2;
+}
+
+html body .nv-private-page .nv-page-heading p,
+html body .nv-private-page .nv-panel-heading p,
+html body .nv-private-page .nv-stat-card small,
+html body .nv-private-page .nv-muted-copy,
+html body .nv-private-page .nv-record small,
+html body .nv-private-page .nv-notification small,
+html body .nv-private-page .nv-connection-row small {
+  color: #a5a5a5 !important;
+}
+
+html body .nv-private-page .nv-panel-heading h2,
+html body .nv-private-page .nv-stat-card strong,
+html body .nv-private-page .nv-job-card h3 {
+  color: #eeeeee !important;
+  font-weight: 550 !important;
+  letter-spacing: -.015em;
+}
+
+html body .nv-private-page .nv-nav-link {
+  font-weight: 500 !important;
+  transition: color .16s ease, background .16s ease, border-color .16s ease;
+}
+
+html body .nv-private-page .nv-nav-link.active {
+  box-shadow: inset 2px 0 #e8e8e8 !important;
+}
+
+html body .nv-private-page :is(.nv-panel, .nv-stat-card, .nv-job-card, .nv-status-card, .nv-messages-layout, .nv-chat-inbox, .nv-chat-conversation) {
+  border-radius: 12px !important;
+  border-color: #343434 !important;
+  box-shadow: 0 7px 22px rgba(0, 0, 0, .13) !important;
+}
+
+html body .nv-private-page .nv-stat-card {
+  transition: border-color .16s ease, background .16s ease, transform .16s ease;
+}
+
+html body .nv-private-page .nv-stat-card:hover {
+  transform: translateY(-1px);
+  border-color: #4a4a4a !important;
+  background: #1c1c1c !important;
+}
+
+html body .nv-private-page .nv-form-grid label,
+html body .nv-private-page .nv-search-form label {
+  color: #c2c2c2 !important;
+  font-weight: 500 !important;
+}
+
+html body .nv-private-page .nv-content :is(input, textarea, select),
+html body .nv-private-page .nv-chat-composer input,
+html body .nv-private-page .nv-search-form input {
+  border-radius: 9px !important;
+}
+
+html body .nv-private-page :is(.nv-primary, .nv-secondary, .nv-icon-action, .nv-icon-button, .nv-chat-back) {
+  font-weight: 500 !important;
+  transition: color .16s ease, background .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+html body .nv-private-page .nv-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+html body .nv-private-page .nv-record,
+html body .nv-private-page .nv-notification,
+html body .nv-private-page .nv-connection-row {
+  border-color: rgba(255, 255, 255, .075) !important;
+}
+
+html body .nv-private-page :is(a, button, input, textarea, select):focus-visible {
+  outline: 2px solid rgba(255, 255, 255, .42) !important;
+  outline-offset: 2px;
+}
