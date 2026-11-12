@@ -14491,3 +14491,144 @@ button.topbar-create {
   color: #ffffff;
   background: rgba(255, 255, 255, .06);
 }
+
+
+/* Compact, restrained interface refinement */
+:root {
+  --ui-space-1: 4px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-radius: 8px;
+  --ui-line: #e8e9ec;
+  --ui-muted: #777d87;
+}
+
+body {
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6,
+strong, b, th, label {
+  font-weight: 500;
+}
+
+h1 { letter-spacing: -.035em; }
+h2, h3 { letter-spacing: -.025em; }
+
+button, input, textarea, select {
+  font-weight: 400;
+}
+
+button, input, textarea, select,
+[role="button"] {
+  border-radius: var(--ui-radius);
+}
+
+.public-sidebar {
+  width: 256px;
+  padding: 18px 14px 14px;
+}
+
+.public-main { margin-left: 256px; }
+
+.public-brand, .workspace-brand {
+  min-height: 36px;
+  gap: 9px;
+}
+
+.brand-symbol, .workspace-brand-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.public-brand strong, .workspace-brand strong {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .09em;
+}
+
+.sidebar-find-button {
+  height: 38px;
+  margin: 20px 0 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.public-nav { gap: 2px; }
+
+.public-nav-link {
+  min-height: 34px;
+  gap: 10px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.sidebar-section-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .1em;
+}
+
+.sidebar-history { margin-top: 20px; }
+
+.history-select { padding: 7px 6px; gap: 8px; }
+
+.history-copy { gap: 2px; }
+
+.history-copy strong { font-weight: 500; }
+
+.guest-avatar, .account-avatar, .workspace-top-avatar {
+  width: 30px;
+  height: 30px;
+  font-weight: 500;
+}
+
+.public-topbar {
+  min-height: 54px;
+}
+
+@media (max-width: 850px) {
+  .public-sidebar { width: min(270px, 86vw); }
+  .public-main { margin-left: 0; }
+}
+
+/* Shared compact data presentation */
+table { border-collapse: collapse; }
+
+th {
+  font-size: 11px;
+  letter-spacing: .01em;
+  color: #626873;
+}
+
+td {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+tr > th, tr > td {
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+input, select, textarea {
+  font-size: 12px;
+}
+
+input::placeholder, textarea::placeholder {
+  font-weight: 400;
+}
+
+.badge, [class*="badge"], [class*="chip"], [class*="tag"] {
+  letter-spacing: 0;
+}
+
+[class*="list"] > * {
+  min-width: 0;
+}
