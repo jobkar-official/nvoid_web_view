@@ -1136,3 +1136,104 @@
 .mobileFilterBar > span {
   color: #a8a8a8;
 }
+
+
+/* Refined hierarchy for the existing monochrome job discovery experience */
+.hero h1,
+.resultsSummary h2,
+.filterHeading strong,
+.jobCard h3,
+.emptyState h3 {
+  font-weight: 550;
+  letter-spacing: -.02em;
+}
+
+.heroCopy > p,
+.description {
+  line-height: 1.65;
+}
+
+.eyebrow,
+.metricLabel,
+.fieldLabel,
+.sortField > span {
+  font-weight: 500;
+  letter-spacing: .045em;
+}
+
+.hero {
+  border-color: rgba(255, 255, 255, .15);
+  background: linear-gradient(115deg, #2b2b2b 0%, #242424 62%, #2a2a2a 100%);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .16);
+}
+
+.filterPanel {
+  border-color: rgba(255, 255, 255, .14);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .13);
+}
+
+.inputWrap,
+.field select,
+.sortControl {
+  border-radius: 9px;
+}
+
+.jobCard {
+  min-height: 222px;
+  border-color: rgba(255, 255, 255, .12);
+  border-radius: 12px;
+  background: #252525;
+  transition: border-color .16s ease, background .16s ease, box-shadow .16s ease, transform .16s ease;
+}
+
+.jobCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, .26);
+  background: #2a2a2a;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .19);
+}
+
+.companyDetails strong {
+  font-weight: 500;
+}
+
+.companyDetails small,
+.jobMeta > span,
+.description,
+.postedDate {
+  color: #bcbcbc;
+}
+
+.openStatus {
+  font-weight: 500;
+}
+
+.jobCardFooter a,
+.clearButton {
+  font-weight: 500;
+}
+
+.applyFilters {
+  border-radius: 9px;
+  font-weight: 600;
+  transition: color .16s ease, background .16s ease, border-color .16s ease, transform .16s ease;
+}
+
+.applyFilters:hover {
+  transform: translateY(-1px);
+}
+
+.pagination button {
+  border-radius: 8px;
+  transition: color .16s ease, background .16s ease, border-color .16s ease;
+}
+
+.emptyState {
+  border-radius: 13px;
+}
+
+@media (max-width: 640px) {
+  .jobCard {
+    min-height: 0;
+  }
+}
