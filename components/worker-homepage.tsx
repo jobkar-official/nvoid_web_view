@@ -10,8 +10,19 @@ export default function WorkerHomepage() {
         <div className="worker-home-intro-copy">
           <span className="worker-home-agent-label"><span className="worker-home-agent-dot" />YOUR AI JOB AGENT</span>
           <h1>
-            <Image src="/favicon.svg" alt="" width={42} height={42} priority className="worker-home-heading-logo" />
-            <span className="worker-home-heading-copy">Find your next role with <span className="worker-home-wordmark-text">NvoidAI.com</span></span>
+            <div className="worker-home-heading">
+              <Image
+                src="/logo.png"
+                alt="logo"
+                width={64}
+                height={64}
+                priority
+                style={{ filter: "brightness(0) invert(1)" }}
+              />
+              <span className="worker-home-heading-copy">
+                NvoidAI : Your Future Career Agent
+              </span>
+            </div>
           </h1>
           <p>NvoidAI is your AI job agent. Enter a role and location to search public job boards and company career pages for relevant openings in one place.</p>
         </div>
