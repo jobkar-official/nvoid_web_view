@@ -1,4 +1,4 @@
-import request, { isNotFoundError } from '../context/client';
+import request from '../context/client';
 
 
 export interface GoogleOAuthPayload {
