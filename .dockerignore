@@ -1,8 +1,5 @@
 node_modules
-.next
-.git
-.env
-.env.*
-!.env.example
+    .next
+    .git
 coverage
-npm-debug.log*
+npm - debug.log
