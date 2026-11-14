@@ -20,6 +20,8 @@ export type GuestSearchJob = {
   employmentType?: string;
   workMode?: string;
   postedAt?: string | number;
+  firstSeen?: string;
+  skills?: string[];
   experience?: string;
   noticePeriod?: string;
   availabilityStatus?: string;

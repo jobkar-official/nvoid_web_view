@@ -5,6 +5,7 @@ import { ArrowRight, Asterisk, BriefcaseBusiness, Clock3, ExternalLink, LoaderCi
 import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
 import { useAuth } from "../lib/context/AuthContext";
 import { buildTrackedApplicationUrl } from "../lib/application-url";
+import { toGuestSearchJobs } from "../lib/agent-job-view";
 
 type Job = GuestSearchJob;
 type SourceDiagnostic = {
@@ -116,7 +117,7 @@ function sourceName(value?: string) {
     jobicy: "Jobicy", remoteok: "Remote OK", arbeitnow: "Arbeitnow", workingnomads: "Working Nomads",
     himalayas: "Himalayas", "himalayas-mcp": "Himalayas", naukri: "Naukri", linkedin: "LinkedIn Jobs", indeed: "Indeed",
     glassdoor: "Glassdoor", apna: "Apna", adzuna: "Adzuna", jooble: "Jooble",
-    greenhouse: "Greenhouse", lever: "Lever", ashby: "Ashby", "serper-search": "Public web search",
+    greenhouse: "Greenhouse", lever: "Lever", ashby: "Ashby", workday: "Workday", smartrecruiters: "SmartRecruiters", "serper-search": "Public web search",
     jobspy: "JobSpy", "mcp-jobspy-speedyapply": "JobSpy", "openings-mcp": "Openings MCP",
     jobdatalake: "JobDataLake", aidevboard: "AI Dev Jobs", weworkremotely: "We Work Remotely",
     metaintro: "MetaIntro", jobsbylevel: "JobsByLevel", jobyap: "JobYap", youth4work: "Youth4work",
@@ -152,6 +153,8 @@ function cachedJobs(jobs: Job[]): Job[] {
     employmentType: clean(job.employmentType).slice(0, 80) || undefined,
     workMode: clean(job.workMode).slice(0, 80) || undefined,
     postedAt: clean(job.postedAt).slice(0, 80) || undefined,
+    firstSeen: clean(job.firstSeen).slice(0, 80) || undefined,
+    skills: Array.isArray(job.skills) ? job.skills.slice(0, 12).map((skill) => clean(skill).slice(0, 60)).filter(Boolean) : undefined,
     experience: clean(job.experience).slice(0, 100) || undefined,
     noticePeriod: clean(job.noticePeriod).slice(0, 100) || undefined,
     availabilityStatus: clean(job.availabilityStatus).slice(0, 100) || undefined,
@@ -163,13 +166,14 @@ function cachedJobs(jobs: Job[]): Job[] {
   })).filter((job) => job.title !== "Untitled opportunity" || Boolean(job.jobUrl || job.applicationUrl));
 }
 
-export default function GuestHome({ searchId, initialJobTitle = "", initialLocation = "Worldwide", autoSearch = false }: { searchId?: string; initialJobTitle?: string; initialLocation?: string; autoSearch?: boolean }) {
+export default function GuestHome({ searchId, initialJobTitle = "", initialLocation = "Worldwide", autoSearch = false, initialJobs, initialTotal, initialError }: { searchId?: string; initialJobTitle?: string; initialLocation?: string; autoSearch?: boolean; initialJobs?: Job[]; initialTotal?: number; initialError?: string }) {
   const { saveSearch, updateSearch, getSearch } = useGuestHistory();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const autoSearchKey = useRef("");
   const [jobTitle, setJobTitle] = useState(initialJobTitle);
   const [location, setLocation] = useState(initialLocation || "Worldwide");
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const [jobs, setJobs] = useState<Job[]>(initialJobs ?? []);
+  const [resultTotal, setResultTotal] = useState<number | null>(initialTotal ?? null);
   const [sources, setSources] = useState<SourceDiagnostic[]>([]);
   const [searchReport, setSearchReport] = useState<CrawlReport | null>(null);
   const [searchTimings, setSearchTimings] = useState<SearchTimings | null>(null);
@@ -192,17 +196,24 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
 
   useEffect(() => {
     if (!searchId) {
+      const hasInitialResults = autoSearch && Boolean(initialJobTitle.trim()) && Array.isArray(initialJobs);
+      const initialResultJobs = hasInitialResults ? cachedJobs(initialJobs) : [];
       setJobTitle(initialJobTitle);
       setLocation(initialLocation || "Worldwide");
-      setJobs([]);
+      setJobs(initialResultJobs);
+      setResultTotal(hasInitialResults ? (initialTotal ?? initialResultJobs.length) : null);
       setSources([]);
       setSearchReport(null);
       setSearchTimings(null);
-      setSourceActivityIssue("");
+      setSourceActivityIssue(initialError || "");
       setVisibleJobCount(100);
-      setSearched(false);
+      setSearched(hasInitialResults || Boolean(initialError));
       setActiveSearch("");
-      setNotice("");
+      setNotice(initialError || (hasInitialResults
+        ? initialResultJobs.length
+          ? (initialTotal ?? initialResultJobs.length).toLocaleString() + " matching opportunities found for " + initialJobTitle + " in " + (initialLocation || "Worldwide") + "."
+          : "The search completed, but no matching jobs were returned."
+        : ""));
       return;
     }
 
@@ -211,6 +222,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       setJobTitle("");
       setLocation("Worldwide");
       setJobs([]);
+      setResultTotal(null);
       setSources([]);
       setSearchReport(null);
       setSearchTimings(null);
@@ -223,6 +235,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     }
 
     const savedJobs = Array.isArray(saved.jobs) ? saved.jobs : [];
+    setResultTotal(saved.resultCount ?? savedJobs.length);
     setJobTitle(saved.jobTitle);
     setLocation(saved.location);
     setJobs(savedJobs);
@@ -240,7 +253,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         ? `${saved.resultCount ?? savedJobs.length} saved opportunities restored for ${saved.jobTitle} in ${saved.location}.`
         : "This search is saved, but no matching job records were returned."
       : "Search details restored. Run it again to retrieve current job records."));
-  }, [searchId, getSearch, initialJobTitle, initialLocation]);
+  }, [searchId, getSearch, initialJobTitle, initialLocation, autoSearch, initialJobs, initialTotal, initialError]);
 
   const openApplication = useCallback((value: string, source?: string) => {
     if (authLoading) {
@@ -304,54 +317,36 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     updateSearch(recordId, { jobTitle: role, location: place, resultCount: 0, jobs: [], error: undefined });
 
     try {
-      const profile = {
-        userId: "guest-public-search",
-        fullName: "Guest",
-        firstName: "Guest",
-        lastName: "",
-        email: "",
-        phone: "",
-        jobTitle: role,
-        location: place,
-        countries: place.toLowerCase() === "worldwide" ? [] : [place],
-        skills: [],
-        keywords: [role],
-        experienceYears: 0,
-        salaryMin: 0,
-        salaryCurrency: "INR",
-        employmentTypes: /intern|internship/i.test(role) ? ["internship"] : /part[ -]?time/i.test(role) ? ["part-time"] : ["full-time"],
-        remote: false,
-        summary: "",
-        linkedinUrl: "",
-        portfolioUrl: "",
-        resumePath: ""
-      };
-      const result = await responseData(await fetch("/api/agent/crawl", {
+      const requestStartedAt = Date.now();
+      const result = await responseData(await fetch("/api/agent/results", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ profile, limit: 1000, page: 1, pageSize: 100, depth: "deep", syncToBackend: false })
-      }));
-      const found = Array.isArray(result.jobs) ? result.jobs as Job[] : [];
+        body: JSON.stringify({ jobtitle: role, location: place }),
+        cache: "no-store"
+      })) as { jobs?: unknown[]; total?: number };
+
+      const found = Array.isArray(result.jobs)
+        ? toGuestSearchJobs(result.jobs as Parameters<typeof toGuestSearchJobs>[0])
+        : [];
       const savedJobs = cachedJobs(found);
-      const sourceRows = Array.isArray(result.sources) ? result.sources as SourceDiagnostic[] : [];
-      const searchSummary = result.report && typeof result.report === "object" ? result.report as CrawlReport : null;
+      const totalFound = typeof result.total === "number" ? result.total : savedJobs.length;
+      const elapsed = Date.now() - requestStartedAt;
+
       setJobs(savedJobs);
-      setSources(sourceRows);
-      setSearchReport(searchSummary);
-      const timings = result.timingsMs && typeof result.timingsMs === "object" ? result.timingsMs as SearchTimings : null;
-      setSearchTimings(timings);
-      setSourceActivityIssue(sourceRows.length === 0 && !searchSummary
-        ? "The agent returned no crawl report or source activity. Check that the deployed Nvoid worker is running the current crawl API."
-        : sourceRows.length === 0
-          ? "The crawl completed without reporting configured job-search sources for this query."
-          : "");
+      setResultTotal(totalFound);
+      setSources([]);
+      setSearchReport(null);
+      setSearchTimings({ sourceSearch: elapsed, total: elapsed });
+      setSourceActivityIssue("");
       setSearched(true);
-      const totalFound = searchSummary?.totalFound ?? savedJobs.length;
-      updateSearch(recordId, { resultCount: totalFound, jobs: savedJobs, sources: sourceRows, report: searchSummary || undefined, orchestration: undefined, timingsMs: timings || undefined, error: undefined });
-      setNotice(savedJobs.length ? totalFound.toLocaleString() + " opportunities found across the crawl. " + savedJobs.length.toLocaleString() + " listings are ready to review." : "No matching opportunities returned. Try a broader job title or location.");
+      updateSearch(recordId, { resultCount: totalFound, jobs: savedJobs, sources: [], report: undefined, orchestration: undefined, timingsMs: { sourceSearch: elapsed, total: elapsed }, error: undefined });
+      setNotice(savedJobs.length
+        ? totalFound.toLocaleString() + " opportunities found. " + savedJobs.length.toLocaleString() + " listings are ready to review."
+        : "No matching opportunities returned. Try a broader job title or location.");
     } catch (error) {
       const message = error instanceof Error ? error.message : "Nvoid could not complete this search. Please try again.";
       setSearched(true);
+      setResultTotal(0);
       setSourceActivityIssue(message);
       setSearchTimings(null);
       setSearchReport(null);
@@ -366,7 +361,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
   useEffect(() => {
     const role = initialJobTitle.trim();
     const place = initialLocation.trim() || "Worldwide";
-    if (!autoSearch || !role) {
+    if (initialJobs !== undefined || initialError || !autoSearch || !role) {
       autoSearchKey.current = "";
       return;
     }
@@ -378,7 +373,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
     setLocation(place);
     setActiveSearch("");
     void runSearch(undefined, { jobTitle: role, location: place, forceNewRecord: true });
-  }, [autoSearch, initialJobTitle, initialLocation, runSearch]);
+  }, [autoSearch, initialJobTitle, initialLocation, initialJobs, initialError, runSearch]);
 
   return (
     <div className="worker-results-page">
@@ -510,10 +505,10 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
         <section className="public-results-section">
           <div className="section-heading">
             <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "NVOID INDEX RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Listings come from public job sources and company career pages. Open the original page to confirm current availability."}</p></div>
-            <span className="result-count">{(searchReport?.totalFound ?? jobs.length).toLocaleString()} found</span>
+            <span className="result-count">{(resultTotal ?? searchReport?.totalFound ?? jobs.length).toLocaleString()} found</span>
           </div>
           <div className="worker-results-toolbar">
-            <div className="worker-results-result-context"><strong>{(searchReport?.totalFound ?? jobs.length).toLocaleString()} opportunities</strong><span>Showing {displayedJobs.length.toLocaleString()} of {jobs.length.toLocaleString()} returned listings.</span></div>
+            <div className="worker-results-result-context"><strong>{(resultTotal ?? searchReport?.totalFound ?? jobs.length).toLocaleString()} opportunities</strong><span>Showing {displayedJobs.length.toLocaleString()} of {jobs.length.toLocaleString()} returned listings.</span></div>
             <label className="worker-results-sort"><span>Sort results</span><select value={sortMode} onChange={(event) => setSortMode(event.target.value as "relevance" | "newest" | "title")}><option value="relevance">Nvoid relevance</option><option value="newest">Newest first</option><option value="title">Job title</option></select></label>
           </div>
           <div className="public-job-grid">
@@ -531,7 +526,8 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                   <h3>{job.title}</h3>
                   <p className="public-job-company">{company}</p>
                   <div className="public-job-meta"><span><MapPin size={13} />{locationText}</span>{job.employmentType && <span><BriefcaseBusiness size={13} />{job.employmentType}</span>}</div>
-                  <p className="public-job-description">{clean(job.description) || "Open the original listing for the full job description and requirements."}</p>
+                  <p className="public-job-description">{job.description && /^[A-Z]{1,8}[-_]?[0-9]{4,}$/i.test(clean(job.description)) ? <>Job reference: <strong>{clean(job.description)}</strong></> : clean(job.description) || "Open the original listing for the full job description and requirements."}</p>
+              {job.skills && job.skills.length > 0 && <div className="public-job-details" aria-label="Required skills">{job.skills.slice(0, 8).map((skill) => <span key={skill}>{skill}</span>)}</div>}
                   {job.matchReasons && job.matchReasons.length > 0 && <div className="worker-match-reasons">{job.matchReasons.slice(0, 3).map((reason) => <span key={reason}>{reason}</span>)}</div>}
                   <div className="public-job-details">
                     {job.experience && <span>{job.experience}</span>}
@@ -539,10 +535,11 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
                     {job.workMode && <span>{job.workMode}</span>}
                     {job.salary && <span>{job.salary}</span>}
                     {job.isOpen === false ? <span>Closed / expired</span> : job.isOpen === true ? <span>Open</span> : job.availabilityStatus && <span>Availability unverified</span>}
-                    {job.postedAt && <span><Clock3 size={11} />{postedDate(job.postedAt)}</span>}
+                    {job.postedAt && <span><Clock3 size={11} />Posted {postedDate(job.postedAt)}</span>}
+                    {!job.postedAt && job.firstSeen && <span><Clock3 size={11} />First seen {postedDate(job.firstSeen)}</span>}
                   </div>
                   <div className="public-job-footer">
-                    {typeof job.matchScore === "number" ? <span className="match-label"><Target size={12} /> {Math.round(job.matchScore)}% Nvoid relevance</span> : <span className="external-label">External opportunity</span>}
+                    {typeof job.matchScore === "number" ? <span className="match-label"><Target size={12} /> {Math.round(job.matchScore)}% Nvoid relevance</span> : job.matchReasons?.length ? <span className="match-label"><Target size={12} />{job.matchReasons[0]}</span> : <span className="external-label">External opportunity</span>}
                     {apply ? <button type="button" className="public-job-apply-button" onClick={() => openApplication(apply, job.source)}>Apply Now <ExternalLink size={14} /></button> : listing ? <span className="external-label">Original listing available</span> : <span className="external-label">Source link unavailable</span>}
                   </div>
                 </article>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import GuestHome from "../../../components/guest-home";
-import { agentApi, type JobPosting } from "../../../lib/api/agent.api";
+import { agentApi } from "../../../lib/api/agent.api";
+import { toGuestSearchJobs } from "../../../lib/agent-job-view";
 
 export const metadata: Metadata = {
   title: "Find Jobs Across Connected Sources",
@@ -26,12 +27,19 @@ export default async function JobSearchPage({
   const initialJobTitle = firstValue(params.role).trim();
   const initialLocation = firstValue(params.location).trim() || "Worldwide";
 
-  try {
-    const response = await agentApi.fetchResults(initialJobTitle, initialLocation);
-    const results: JobPosting[] = response?.jobs || [];
-    console.log("Fetched job results count:", results.length);
-  } catch (error) {
-    console.error("Error fetching job results:", error);
+  let initialJobs: Awaited<ReturnType<typeof toGuestSearchJobs>> | undefined;
+  let initialTotal: number | undefined;
+  let initialError: string | undefined;
+
+  if (initialJobTitle) {
+    try {
+      const response = await agentApi.fetchResults(initialJobTitle, initialLocation);
+      initialJobs = toGuestSearchJobs(response.jobs || []);
+      initialTotal = typeof response.total === "number" ? response.total : initialJobs.length;
+    } catch (error) {
+      initialJobs = [];
+      initialError = error instanceof Error ? error.message : "NVOIDAI could not load job results.";
+    }
   }
 
   return (
@@ -39,6 +47,9 @@ export default async function JobSearchPage({
       initialJobTitle={initialJobTitle}
       initialLocation={initialLocation}
       autoSearch={Boolean(initialJobTitle)}
+      initialJobs={initialJobs}
+      initialTotal={initialTotal}
+      initialError={initialError}
     />
   );
 }
