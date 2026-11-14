@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { agentApi, type JobPosting } from "../lib/api/agent.api";
 import { ArrowRight, BriefcaseBusiness, Globe2, Rainbow, Search } from "lucide-react";
 
 export default function WorkerHomepage() {

@@ -4,8 +4,42 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } fro
 import { ArrowRight, Asterisk, BriefcaseBusiness, Clock3, ExternalLink, LoaderCircle, MapPin, Search, ShieldCheck, Target, X } from "lucide-react";
 import { useGuestHistory, type GuestSearchJob } from "./guest-shell";
 import { useAuth } from "../lib/context/AuthContext";
-import { buildTrackedApplicationUrl } from "../lib/application-url";
-import { toGuestSearchJobs } from "../lib/agent-job-view";
+import { JobPosting } from "@/lib/api/agent.api";
+
+
+export function toGuestSearchJobs(jobs: JobPosting[]): GuestSearchJob[] {
+  if (!Array.isArray(jobs)) return [];
+  return jobs.map((job) => ({
+    id: job.id,
+    title: job.title,
+    company: job.company,
+    location: job.location?.raw || job.location?.city,
+    country: job.location?.countryCode,
+    description: job.summary || undefined,
+    jobUrl: job.url,
+    applicationUrl: job.applyUrl,
+    employmentType: job.employmentType || undefined,
+    postedAt: job.postedAt || undefined,
+    firstSeen: job.firstSeen,
+    skills: job.skills,
+    salary: job.salary !== null && job.salary !== undefined ? String(job.salary) : undefined,
+    source: job.source?.name,
+    matchScore: job.match?.title === "exact" ? 100 : 80
+  }));
+}
+export function buildTrackedApplicationUrl(url?: string, source?: string): string {
+  if (!url) return "";
+  try {
+    const parsed = new URL(url);
+    if (source) {
+      parsed.searchParams.set("ref", "nvoidai");
+      parsed.searchParams.set("source", source);
+    }
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
 
 type Job = GuestSearchJob;
 type SourceDiagnostic = {
@@ -184,6 +218,7 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
   const [notice, setNotice] = useState("");
   const [activeSearch, setActiveSearch] = useState("");
   const [sortMode, setSortMode] = useState<"relevance" | "newest" | "title">("relevance");
+
   const displayedJobs = useMemo(() => jobs.map((job, index) => ({ job, index })).sort((left, right) => {
     if (sortMode === "newest") {
       const leftDate = postedTimestamp(left.job.postedAt);
@@ -504,68 +539,63 @@ export default function GuestHome({ searchId, initialJobTitle = "", initialLocat
       {jobs.length > 0 && (
         <section className="public-results-section">
           <div className="section-heading">
-            <div><span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "NVOID INDEX RESULTS"}</span><h2>Opportunities for {jobTitle}</h2><p>{searchId ? `Restored from your saved search in ${location}.` : "Listings come from public job sources and company career pages. Open the original page to confirm current availability."}</p></div>
+            <div>
+              <span className="section-kicker">{searchId ? "SAVED SEARCH RESULTS" : "NVOID INDEX RESULTS"}</span>
+              <h2>Opportunities for {jobTitle}</h2>
+              <p>{searchId ? `Restored from your saved search in ${location}.` : "Listings come from public job sources and company career pages. Open the original page to confirm current availability."}</p>
+            </div>
             <span className="result-count">{(resultTotal ?? searchReport?.totalFound ?? jobs.length).toLocaleString()} found</span>
           </div>
           <div className="worker-results-toolbar">
-            <div className="worker-results-result-context"><strong>{(resultTotal ?? searchReport?.totalFound ?? jobs.length).toLocaleString()} opportunities</strong><span>Showing {displayedJobs.length.toLocaleString()} of {jobs.length.toLocaleString()} returned listings.</span></div>
-            <label className="worker-results-sort"><span>Sort results</span><select value={sortMode} onChange={(event) => setSortMode(event.target.value as "relevance" | "newest" | "title")}><option value="relevance">Nvoid relevance</option><option value="newest">Newest first</option><option value="title">Job title</option></select></label>
-          </div>
-          <div className="public-job-grid">
-            {displayedJobs.map((job, index) => {
-              const company = job.company || "Company not listed";
-              const locationText = job.location || job.country || "Location not provided";
-              const listing = job.sourceUrl || job.jobUrl || job.applicationUrl;
-              const apply = job.applicationUrl && job.applicationUrl !== job.jobUrl ? job.applicationUrl : listing;
-              return (
-                <article className="public-job-card" key={job.id || (job.title + company + index)}>
-                  <div className="public-job-card-top">
-                    <div className="company-monogram">{company.slice(0, 1).toUpperCase()}</div>
-                    <span className="source-chip">{sourceName(job.source)}</span>
-                  </div>
-                  <h3>{job.title}</h3>
-                  <p className="public-job-company">{company}</p>
-                  <div className="public-job-meta"><span><MapPin size={13} />{locationText}</span>{job.employmentType && <span><BriefcaseBusiness size={13} />{job.employmentType}</span>}</div>
-                  <p className="public-job-description">{job.description && /^[A-Z]{1,8}[-_]?[0-9]{4,}$/i.test(clean(job.description)) ? <>Job reference: <strong>{clean(job.description)}</strong></> : clean(job.description) || "Open the original listing for the full job description and requirements."}</p>
-              {job.skills && job.skills.length > 0 && <div className="public-job-details" aria-label="Required skills">{job.skills.slice(0, 8).map((skill) => <span key={skill}>{skill}</span>)}</div>}
-                  {job.matchReasons && job.matchReasons.length > 0 && <div className="worker-match-reasons">{job.matchReasons.slice(0, 3).map((reason) => <span key={reason}>{reason}</span>)}</div>}
-                  <div className="public-job-details">
-                    {job.experience && <span>{job.experience}</span>}
-                    {job.noticePeriod && <span>Notice: {job.noticePeriod}</span>}
-                    {job.workMode && <span>{job.workMode}</span>}
-                    {job.salary && <span>{job.salary}</span>}
-                    {job.isOpen === false ? <span>Closed / expired</span> : job.isOpen === true ? <span>Open</span> : job.availabilityStatus && <span>Availability unverified</span>}
-                    {job.postedAt && <span><Clock3 size={11} />Posted {postedDate(job.postedAt)}</span>}
-                    {!job.postedAt && job.firstSeen && <span><Clock3 size={11} />First seen {postedDate(job.firstSeen)}</span>}
-                  </div>
-                  <div className="public-job-footer">
-                    {typeof job.matchScore === "number" ? <span className="match-label"><Target size={12} /> {Math.round(job.matchScore)}% Nvoid relevance</span> : job.matchReasons?.length ? <span className="match-label"><Target size={12} />{job.matchReasons[0]}</span> : <span className="external-label">External opportunity</span>}
-                    {apply ? <button type="button" className="public-job-apply-button" onClick={() => openApplication(apply, job.source)}>Apply Now <ExternalLink size={14} /></button> : listing ? <span className="external-label">Original listing available</span> : <span className="external-label">Source link unavailable</span>}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-          {jobs.length > displayedJobs.length && (
-            <div className="worker-crawl-pagination">
-              <span>Showing {displayedJobs.length.toLocaleString()} of {jobs.length.toLocaleString()} returned opportunities</span>
-              <button type="button" onClick={() => setVisibleJobCount((current) => Math.min(current + 100, jobs.length))}>
-                Load more opportunities <ArrowRight size={15} />
-              </button>
+            <div className="worker-results-result-context">
+              <strong>{(resultTotal ?? searchReport?.totalFound ?? jobs.length).toLocaleString()} opportunities</strong>
+              <span>Showing {displayedJobs.length.toLocaleString()} of {jobs.length.toLocaleString()} returned listings.</span>
             </div>
-          )}
+            <label className="worker-results-sort">
+              <span>Sort results</span>
+              <select value={sortMode} onChange={(event) => setSortMode(event.target.value as "relevance" | "newest" | "title")}>
+                <option value="relevance">Most relevant</option>
+                <option value="newest">Newest first</option>
+                <option value="title">Job title</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="worker-jobs-grid">
+            {displayedJobs.map((job) => (
+              <article className="worker-job-card" key={job.id}>
+                <div className="worker-job-top">
+                  <div>
+                    <h3>{job.title}</h3>
+                    <span className="worker-job-company">{job.company || "Company confidential"}</span>
+                  </div>
+                  {job.source && <span className="worker-job-source-tag">{sourceName(job.source)}</span>}
+                </div>
+                <div className="worker-job-meta">
+                  {job.location && <span><MapPin size={14} /> {job.location}</span>}
+                  {job.employmentType && <span><BriefcaseBusiness size={14} /> {job.employmentType}</span>}
+                  {job.postedAt && <span><Clock3 size={14} /> {postedDate(job.postedAt)}</span>}
+                </div>
+                {job.description && <p className="worker-job-summary">{job.description}</p>}
+                {Array.isArray(job.skills) && job.skills.length > 0 && (
+                  <div className="worker-job-skills">
+                    {job.skills.map((skill) => <span key={skill}>{skill}</span>)}
+                  </div>
+                )}
+                <div className="worker-job-actions">
+                  <button
+                    type="button"
+                    className="worker-job-apply"
+                    onClick={() => openApplication(job.applicationUrl || job.jobUrl || "", job.source)}
+                  >
+                    Apply Now <ExternalLink size={14} />
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
         </section>
       )}
-
-      {searched && jobs.length === 0 && (
-        <section className="no-results">
-          <div className="no-results-icon"><Search size={21} /></div>
-          <h2>No matching jobs returned</h2>
-          <p>Try another role or location. Nvoid searches public job sources and company career pages and does not generate sample listings.</p>
-        </section>
-      )}
-
-
     </div>
   );
 }

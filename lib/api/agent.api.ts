@@ -61,7 +61,7 @@ async function requestAgent<T>(url: URL): Promise<T> {
     const body = payload && typeof payload === "object" ? payload as Record<string, unknown> : {};
     throw new Error(typeof body.error === "string" ? body.error
       : typeof body.message === "string" ? body.message
-      : "The NVOIDAI agent API request failed.");
+        : "The NVOIDAI agent API request failed.");
   }
   if (!payload || typeof payload !== "object" || !Array.isArray((payload as { jobs?: unknown }).jobs)) {
     throw new Error("The NVOIDAI agent API response did not contain a jobs array.");
