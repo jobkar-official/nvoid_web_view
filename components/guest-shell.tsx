@@ -4,118 +4,66 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Bell, BriefcaseBusiness, Check, ChevronRight, Clock3, FlaskConical, GroupIcon, History, LifeBuoy, MessageSquare, PanelLeftClose, PanelLeftOpen, Pencil, PlugZap, Plus, Target, Trash2, UserRound } from "lucide-react";
+import { Bell, BriefcaseBusiness, ChevronRight, Clock3, GroupIcon, History, LifeBuoy, MessageSquare, PanelLeftClose, PanelLeftOpen, Plus, Target, Trash2, UserRound } from "lucide-react";
 import { useAuth } from "../lib/context/AuthContext";
+import { countLabel, timeAgo } from "../lib/jobs/format";
 
-export type GuestSearchJob = {
-  id: string;
-  title: string;
-  company?: string;
-  location?: string;
-  country?: string;
-  description?: string;
-  jobUrl?: string;
-  sourceUrl?: string;
-  applicationUrl?: string;
-  employmentType?: string;
-  workMode?: string;
-  postedAt?: string | number;
-  firstSeen?: string;
-  skills?: string[];
-  experience?: string;
-  noticePeriod?: string;
-  availabilityStatus?: string;
-  isOpen?: boolean;
-  salary?: string;
-  matchScore?: number;
-  matchReasons?: string[];
-  source?: string;
-};
-
-export type GuestSearchRecord = {
+export type SearchRecord = {
   id: string;
   jobTitle: string;
   location: string;
+  resultCount: number;
   searchedAt: string;
-  resultCount?: number;
-  jobs?: GuestSearchJob[];
-  error?: string;
-  sources?: Array<Record<string, unknown>>;
-  report?: Record<string, unknown>;
-  orchestration?: Record<string, unknown>;
-  timingsMs?: {
-    titlePlanning?: number;
-    sourceSearch?: number;
-    detailEnrichment?: number;
-    aiReranking?: number;
-    discovery?: number;
-    crawl?: number;
-    total?: number;
-  };
 };
 
-type GuestHistoryContextValue = {
-  history: GuestSearchRecord[];
-  saveSearch: (record: Omit<GuestSearchRecord, "id" | "searchedAt">) => string;
-  updateSearch: (id: string, patch: Partial<GuestSearchRecord>) => void;
-  getSearch: (id: string) => GuestSearchRecord | undefined;
+type HistoryContextValue = {
+  history: SearchRecord[];
+  saveSearch: (record: Omit<SearchRecord, "id" | "searchedAt">) => void;
   removeSearch: (id: string) => void;
   clearHistory: () => void;
 };
 
-const GuestHistoryContext = createContext<GuestHistoryContextValue | null>(null);
-const STORAGE_KEY = "nvoid.guest-search-history.v1";
-const MAX_HISTORY_RECORDS = 30;
-const MAX_SAVED_JOBS = 1000;
+const HistoryContext = createContext<HistoryContextValue | null>(null);
+const STORAGE_KEY = "nvoid.search-history.v2";
+const MAX_RECORDS = 20;
 
 export function useGuestHistory() {
-  const value = useContext(GuestHistoryContext);
+  const value = useContext(HistoryContext);
   if (!value) throw new Error("useGuestHistory must be used inside GuestShell.");
   return value;
 }
 
-function makeId() {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) return crypto.randomUUID();
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
-    const random = Math.random() * 16 | 0;
-    return (char === "x" ? random : (random & 3 | 8)).toString(16);
-  });
+function isRecord(value: unknown): value is SearchRecord {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Record<string, unknown>;
+  return typeof item.id === "string" && typeof item.jobTitle === "string" && typeof item.location === "string" && typeof item.resultCount === "number" && typeof item.searchedAt === "string";
 }
 
-function readHistory(): GuestSearchRecord[] {
+function readHistory(): SearchRecord[] {
   try {
     const parsed: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    if (!Array.isArray(parsed)) return [];
-    return parsed.flatMap((value): GuestSearchRecord[] => {
-      if (!value || typeof value !== "object") return [];
-      const item = value as Record<string, unknown>;
-      if (typeof item.id !== "string" || typeof item.jobTitle !== "string" || typeof item.location !== "string" || typeof item.searchedAt !== "string") return [];
-      const jobs = Array.isArray(item.jobs)
-        ? item.jobs.filter((job): job is GuestSearchJob => Boolean(job && typeof job === "object" && typeof (job as Record<string, unknown>).title === "string")).slice(0, MAX_SAVED_JOBS)
-        : undefined;
-      return [{
-        id: item.id,
-        jobTitle: item.jobTitle,
-        location: item.location,
-        searchedAt: item.searchedAt,
-        resultCount: typeof item.resultCount === "number" ? item.resultCount : undefined,
-        jobs,
-        error: typeof item.error === "string" ? item.error : undefined,
-        sources: Array.isArray(item.sources) ? item.sources.filter((source): source is Record<string, unknown> => Boolean(source && typeof source === "object")) : undefined,
-        report: item.report && typeof item.report === "object" ? item.report as Record<string, unknown> : undefined,
-        orchestration: item.orchestration && typeof item.orchestration === "object" ? item.orchestration as Record<string, unknown> : undefined,
-        timingsMs: item.timingsMs && typeof item.timingsMs === "object" ? item.timingsMs as GuestSearchRecord["timingsMs"] : undefined
-      }];
-    }).slice(0, MAX_HISTORY_RECORDS);
+    return Array.isArray(parsed) ? parsed.filter(isRecord).slice(0, MAX_RECORDS) : [];
   } catch {
     return [];
   }
 }
 
-function formatTime(value: string) {
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return "Previously searched";
-  return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(date);
+function writeHistory(records: SearchRecord[]) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const searchKey = (record: Pick<SearchRecord, "jobTitle" | "location">) => `${record.jobTitle.trim().toLowerCase()}|${record.location.trim().toLowerCase()}`;
+
+function searchHref(record: Pick<SearchRecord, "jobTitle" | "location">) {
+  const params = new URLSearchParams();
+  if (record.jobTitle) params.set("role", record.jobTitle);
+  if (record.location) params.set("location", record.location);
+  return `/job-search?${params}`;
 }
 
 const agentLinks = [
@@ -136,10 +84,9 @@ export function GuestShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const { user, isAuthenticated, isLoading, logout } = useAuth();
   const signedIn = isAuthenticated && Boolean(user);
-  const [history, setHistory] = useState<GuestSearchRecord[]>([]);
+  const [history, setHistory] = useState<SearchRecord[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [ready, setReady] = useState(false);
-  const [editing, setEditing] = useState<{ id: string; jobTitle: string; location: string } | null>(null);
   useEffect(() => {
     setHistory(readHistory());
     setReady(true);
@@ -169,74 +116,21 @@ export function GuestShell({ children }: { children: ReactNode }) {
     };
   }, [sidebarOpen]);
 
-  const persist = useCallback((next: GuestSearchRecord[]) => {
-    const limited = next.slice(0, MAX_HISTORY_RECORDS);
+  const persist = useCallback((next: SearchRecord[]) => {
+    const limited = next.slice(0, MAX_RECORDS);
     setHistory(limited);
-    const serializable = limited.map((item) => {
-      const report = item.report && typeof item.report === "object" ? item.report : undefined;
-      const pageReports = report && Array.isArray(report.pageReports) ? report.pageReports : undefined;
-      return {
-        ...item,
-        report: report && pageReports
-          ? { ...report, pageReports: pageReports.slice(0, 80), pageReportsTotal: pageReports.length, pageReportsTruncated: pageReports.length > 80 }
-          : report
-      };
-    });
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(serializable));
-    } catch {
-      const compacted = serializable.map((item, index) => index === 0
-        ? { ...item, jobs: item.jobs?.slice(0, 1000).map((job) => ({ ...job, description: job.description?.slice(0, 180), matchReasons: job.matchReasons?.slice(0, 3) })) }
-        : index < 4
-          ? { ...item, jobs: item.jobs?.slice(0, 100).map((job) => ({ ...job, description: job.description?.slice(0, 120), matchReasons: job.matchReasons?.slice(0, 2) })) }
-          : { ...item, jobs: undefined }
-      );
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(compacted));
-      } catch {
-        const reduced = serializable.slice(0, 4).map((item, index) => index === 0
-          ? { ...item, jobs: item.jobs?.slice(0, 400).map((job) => ({ ...job, description: job.description?.slice(0, 100), matchReasons: job.matchReasons?.slice(0, 2) })) }
-          : { ...item, jobs: item.jobs?.slice(0, 25).map((job) => ({ ...job, description: job.description?.slice(0, 80), matchReasons: job.matchReasons?.slice(0, 1) })) }
-        );
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(reduced));
-        } catch {
-          const historyOnly = serializable.slice(0, 20).map(({ jobs, ...item }) => item);
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(historyOnly));
-          } catch { }
-        }
-      }
-    }
+    writeHistory(limited);
   }, []);
 
-  const saveSearch = useCallback((record: Omit<GuestSearchRecord, "id" | "searchedAt">) => {
-    const item: GuestSearchRecord = { ...record, id: makeId(), searchedAt: new Date().toISOString() };
-    persist([item, ...readHistory()].slice(0, MAX_HISTORY_RECORDS));
-    return item.id;
+  const saveSearch = useCallback((record: Omit<SearchRecord, "id" | "searchedAt">) => {
+    const entry: SearchRecord = { ...record, id: `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`, searchedAt: new Date().toISOString() };
+    persist([entry, ...readHistory().filter((item) => searchKey(item) !== searchKey(record))]);
   }, [persist]);
 
-  const updateSearch = useCallback((id: string, patch: Partial<GuestSearchRecord>) => {
-    persist(readHistory().map((item) => item.id === id ? { ...item, ...patch } : item));
-  }, [persist]);
+  const removeSearch = useCallback((id: string) => persist(readHistory().filter((item) => item.id !== id)), [persist]);
+  const clearHistory = useCallback(() => persist([]), [persist]);
 
-  const getSearch = useCallback((id: string) => readHistory().find((item) => item.id === id), []);
-  const removeSearch = useCallback((id: string) => {
-    if (editing?.id === id) setEditing(null);
-    persist(readHistory().filter((item) => item.id !== id));
-  }, [persist, editing]);
-  const clearHistory = useCallback(() => {
-    setEditing(null);
-    persist([]);
-  }, [persist]);
-
-  const saveEdit = () => {
-    if (!editing || !editing.jobTitle.trim() || !editing.location.trim()) return;
-    updateSearch(editing.id, { jobTitle: editing.jobTitle.trim(), location: editing.location.trim(), resultCount: 0, jobs: [], error: undefined });
-    setEditing(null);
-  };
-
-  const context = useMemo(() => ({ history, saveSearch, updateSearch, getSearch, removeSearch, clearHistory }), [history, saveSearch, updateSearch, getSearch, removeSearch, clearHistory]);
+  const context = useMemo(() => ({ history, saveSearch, removeSearch, clearHistory }), [history, saveSearch, removeSearch, clearHistory]);
   const closeSidebarOnMobile = () => {
     if (window.matchMedia("(max-width: 850px)").matches) setSidebarOpen(false);
   };
@@ -262,21 +156,18 @@ export function GuestShell({ children }: { children: ReactNode }) {
     "/auth/forgot-password": "Reset password"
   };
   const fallbackTitle = pathname.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Nvoid";
-  const pageTitle = pathname.startsWith("/search/")
-    ? history.find((item) => pathname === `/search/${item.id}`)?.jobTitle || "Saved search"
-    : routeTitles[pathname] || fallbackTitle.replace(/\b\w/g, (character) => character.toUpperCase());
+  const pageTitle = routeTitles[pathname] || fallbackTitle.replace(/\b\w/g, (character) => character.toUpperCase());
 
   return (
-    <GuestHistoryContext.Provider value={context}>
+    <HistoryContext.Provider value={context}>
       <div className="public-shell">
         {sidebarOpen && <button className="sidebar-scrim" aria-label="Close navigation" onClick={() => setSidebarOpen(false)} />}
         <aside id="nvoid-public-sidebar" aria-label="Nvoid navigation" className={"public-sidebar" + (sidebarOpen ? " is-open" : "")}>
           <div className="public-sidebar-header">
             <Link href="/" className="public-brand" onClick={closeSidebarOnMobile}>
-              
               <Image
                 src="/logo.png"
-                alt="logo"
+                alt=""
                 width={44}
                 height={44}
                 priority
@@ -322,23 +213,12 @@ export function GuestShell({ children }: { children: ReactNode }) {
             ) : (
               <div className="history-list">
                 {history.map((item) => (
-                  <div className={"history-item" + (pathname === `/search/${item.id}` ? " active" : "")} key={item.id}>
-                    {editing?.id === item.id ? (
-                      <div className="history-editor">
-                        <input aria-label="Edit job title" value={editing.jobTitle} onChange={(event) => setEditing({ ...editing, jobTitle: event.target.value })} />
-                        <input aria-label="Edit search location" value={editing.location} onChange={(event) => setEditing({ ...editing, location: event.target.value })} />
-                        <div><button onClick={saveEdit} disabled={!editing.jobTitle.trim() || !editing.location.trim()}><Check size={12} /> Save</button><button onClick={() => setEditing(null)}>Cancel</button></div>
-                      </div>
-                    ) : (
-                      <>
-                        <Link href={`/search/${item.id}`} className="history-select" aria-current={pathname === `/search/${item.id}` ? "page" : undefined} onClick={closeSidebarOnMobile} title={item.jobTitle + " in " + item.location}>
-                          <span className="history-search-icon"><Clock3 size={13} /></span>
-                          <span className="history-copy"><strong>{item.jobTitle}</strong><small>{item.location} · {item.resultCount === undefined ? "Saved search" : `${item.resultCount} results`} · {formatTime(item.searchedAt)}</small></span>
-                        </Link>
-                        <button className="history-edit" aria-label={"Edit search " + item.jobTitle} onClick={() => setEditing({ id: item.id, jobTitle: item.jobTitle, location: item.location })}><Pencil size={12} /></button>
-                        <button className="history-delete" aria-label={"Delete search " + item.jobTitle} onClick={() => removeSearch(item.id)}><Trash2 size={13} /></button>
-                      </>
-                    )}
+                  <div className="history-item" key={item.id}>
+                    <Link href={searchHref(item)} className="history-select" onClick={closeSidebarOnMobile} title={`${item.jobTitle || "All jobs"}${item.location ? ` in ${item.location}` : ""}`}>
+                      <span className="history-search-icon"><Clock3 size={13} /></span>
+                      <span className="history-copy"><strong>{item.jobTitle || "All jobs"}</strong><small>{item.location || "Anywhere"} · {countLabel(item.resultCount)} jobs · {timeAgo(item.searchedAt)}</small></span>
+                    </Link>
+                    <button className="history-delete" aria-label={`Delete search ${item.jobTitle}`} onClick={() => removeSearch(item.id)}><Trash2 size={13} /></button>
                   </div>
                 ))}
               </div>
@@ -397,9 +277,9 @@ export function GuestShell({ children }: { children: ReactNode }) {
               </Link>
             </nav>
           </header>
-          <main className={"public-content" + (pathname === "/jobs" ? " public-content-jobs" : "")} style={pathname === "/jobs" ? { width: "100%", maxWidth: "none", margin: 0, padding: "22px clamp(16px, 1.5vw, 24px) 44px" } : undefined}>{children}</main>
+          <main className="public-content">{children}</main>
         </div>
       </div>
-    </GuestHistoryContext.Provider>
+    </HistoryContext.Provider>
   );
 }

@@ -1,76 +1,113 @@
 import "server-only";
 
-export interface JobLocation { raw: string; city: string; countryCode: string; }
-export interface JobSource { id: string; name: string; type: "board" | "company" | "aggregator" | string; }
-export type MatchType = "exact" | "partial" | "nearby" | "none" | string;
-export interface JobMatch { title: MatchType; location: MatchType; }
+export interface JobSalary { min: number | null; max: number | null; currency: string | null; raw: string | null }
 export interface JobPosting {
-  id: string; title: string; company: string; location: JobLocation; remote: boolean;
-  skills: string[]; summary: string | null; postedAt: string | null; employmentType: string | null;
-  salary: string | number | null; source: JobSource; url: string; applyUrl: string;
-  firstSeen: string; match: JobMatch;
+  id: string;
+  title: string;
+  company: string | null;
+  location: { raw: string; city: string | null; countryCode: string | null };
+  remote: boolean;
+  skills: string[];
+  summary: string;
+  postedAt: string | null;
+  employmentType: string | null;
+  salary: JobSalary | null;
+  source: { id: string; name: string; type: string };
+  url: string;
+  applyUrl: string;
+  firstSeen: string;
+  match?: { title: "exact" | "related"; location: string };
 }
-export interface JobSearchQuery {
-  title: string; location: string; country: string; skills: string[];
-  company: string | null; remote: string;
-}
+
 export interface JobSearchResponse {
-  query: JobSearchQuery; page: number; limit: number; total: number; totalPages: number;
-  hasNext: boolean; hasPrev: boolean;
-  meta: {
-    tiers: { exact: number; nearby: number };
-    relaxed: boolean; indexed: number; notes: string[]; generatedAt: string;
-  };
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  meta: { tiers: Record<string, number>; relaxed: boolean; indexed: number; notes: string[]; crawlQueued?: boolean; unresolvedSkills?: string[] };
   jobs: JobPosting[];
 }
 
-function agentEndpoint(params?: { jobtitle?: string; location?: string; page?: number; size?: number }) {
-  const configuredBase = (process.env.NVOID_AGENT_API_URL || "https://agent.nvoidai.com").trim();
-  let base: URL;
-  try { base = new URL(configuredBase); }
-  catch { throw new Error("NVOID_AGENT_API_URL must be a valid absolute URL."); }
-
-  if (!["http:", "https:"].includes(base.protocol) || base.username || base.password) {
-    throw new Error("NVOID_AGENT_API_URL must use HTTP(S) without embedded credentials.");
-  }
-
-  const url = new URL("/agent/crawl", base.origin);
-  if (params?.jobtitle) url.searchParams.set("jobtitle", params.jobtitle);
-  if (params?.location) url.searchParams.set("location", params.location);
-  if (params?.page !== undefined) url.searchParams.set("page", String(params.page));
-  if (params?.size !== undefined) url.searchParams.set("size", String(params.size));
-  return url;
+export interface JobSearchParams {
+  title?: string;
+  location?: string;
+  skills?: string;
+  company?: string;
+  source?: string;
+  remote?: "include" | "only" | "exclude";
+  posted?: number;
+  page?: number;
+  limit?: number;
 }
 
-async function requestAgent<T>(url: URL): Promise<T> {
+export interface IndexSummary { total: number; sources: { id: string; count: number }[]; countries: number }
+
+export class AgentError extends Error {
+  constructor(message: string, readonly status: number) {
+    super(message);
+    this.name = "AgentError";
+  }
+}
+
+const REQUEST_TIMEOUT_MS = 20_000;
+
+async function request<T>(path: string, params: URLSearchParams, revalidate?: number): Promise<T> {
   const apiKey = process.env.NVOID_AGENT_API_KEY?.trim();
-  if (!apiKey) throw new Error("NVOID_AGENT_API_KEY is missing from the server environment.");
+  if (!apiKey) throw new AgentError("NVOID_AGENT_API_KEY is not configured.", 500);
+  const base = (process.env.NVOID_AGENT_API_URL || "https://agent.nvoidai.com").trim();
+  const url = new URL(path, base);
+  url.search = params.toString();
 
   const response = await fetch(url, {
-    method: "GET",
     headers: { accept: "application/json", "x-api-key": apiKey },
-    cache: "no-store",
-    signal: AbortSignal.timeout(30_000)
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    ...(revalidate === undefined ? { cache: "no-store" as const } : { next: { revalidate } })
   });
-  const raw = await response.text();
-  let payload: unknown;
-  try { payload = raw ? JSON.parse(raw) : {}; }
-  catch { throw new Error("The NVOIDAI agent API returned an invalid JSON response."); }
-
+  const payload = await response.json().catch(() => null);
   if (!response.ok) {
-    const body = payload && typeof payload === "object" ? payload as Record<string, unknown> : {};
-    throw new Error(typeof body.error === "string" ? body.error
-      : typeof body.message === "string" ? body.message
-        : "The NVOIDAI agent API request failed.");
-  }
-  if (!payload || typeof payload !== "object" || !Array.isArray((payload as { jobs?: unknown }).jobs)) {
-    throw new Error("The NVOIDAI agent API response did not contain a jobs array.");
+    const detail = payload?.error?.message ?? payload?.error;
+    throw new AgentError(typeof detail === "string" ? detail : "The job service request failed.", response.status);
   }
   return payload as T;
 }
 
+async function skillNames(): Promise<Map<string, string>> {
+  const { skills } = await request<{ skills: { skill: string; slug: string }[] }>("/agent/skills", new URLSearchParams({ counts: "false" }), 86_400);
+  return new Map(skills.map((item) => [item.slug, item.skill]));
+}
+
 export const agentApi = {
-  fetchResults: (jobtitle: string, location: string) =>
-    requestAgent<JobSearchResponse>(agentEndpoint({ jobtitle, location, page: 0, size: 1 })),
-  allJobCrawl: () => requestAgent<JobSearchResponse>(agentEndpoint())
+  async search(input: JobSearchParams): Promise<JobSearchResponse> {
+    const params = new URLSearchParams();
+    if (input.title) params.set("jobtitle", input.title);
+    if (input.location) params.set("location", input.location);
+    if (input.skills) params.set("skill", input.skills);
+    if (input.company) params.set("company", input.company);
+    if (input.source) params.set("source", input.source);
+    if (input.remote) params.set("remote", input.remote);
+    if (input.posted) params.set("posted", String(input.posted));
+    params.set("page", String(input.page ?? 1));
+    params.set("limit", String(input.limit ?? 20));
+
+    const [result, names] = await Promise.all([
+      request<JobSearchResponse>("/agent/crawl", params),
+      skillNames().catch(() => new Map<string, string>())
+    ]);
+    return { ...result, jobs: result.jobs.map((job) => ({ ...job, skills: job.skills.map((skill) => names.get(skill) ?? skill) })) };
+  },
+
+  async summary(): Promise<IndexSummary | null> {
+    try {
+      const stats = await request<{ total: number; bySource: Record<string, number>; byCountry: Record<string, number> }>("/agent/stats", new URLSearchParams(), 300);
+      return {
+        total: stats.total,
+        sources: Object.entries(stats.bySource).map(([id, count]) => ({ id, count })),
+        countries: Object.keys(stats.byCountry).length
+      };
+    } catch {
+      return null;
+    }
+  }
 };

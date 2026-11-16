@@ -1,0 +1,35 @@
+.suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.suggestionsLabel {
+  color: #8f8f8f;
+  font-size: 13px;
+}
+
+.chip {
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  color: #cfcfcf;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 13px;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.chip:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.chip:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

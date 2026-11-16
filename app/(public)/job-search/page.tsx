@@ -1,76 +1,44 @@
 import type { Metadata } from "next";
-import GuestHome from "../../../components/guest-home";
-import { agentApi, type JobPosting } from "../../../lib/api/agent.api";
-import type { GuestSearchJob } from "../../../components/guest-shell";
+import JobResults from "../../../components/jobs/job-results";
+import styles from "../../../components/jobs/jobs.module.css";
+import RecordSearch from "../../../components/jobs/record-search";
+import SearchBar from "../../../components/jobs/search-bar";
+import { agentApi, type JobSearchResponse } from "../../../lib/api/agent.api";
+import { readFilters, toParams, type SearchParamsInput } from "../../../lib/jobs/filters";
 
 export const metadata: Metadata = {
-  title: "Find Jobs Across Connected Sources",
-  description: "Search opportunities across the job sources configured for Nvoid.",
+  title: "Find Jobs",
+  description: "Search open jobs by title and location across company career pages and public job boards.",
   robots: { index: false, follow: true }
 };
 
-type SearchParams = {
-  role?: string | string[];
-  location?: string | string[];
-};
+export default async function JobSearchPage({ searchParams }: { searchParams: Promise<SearchParamsInput> }) {
+  const filters = readFilters(await searchParams, "role");
 
-function firstValue(value?: string | string[]) {
-  return Array.isArray(value) ? value[0] || "" : value || "";
-}
-
-function mapJobPostings(jobs: JobPosting[]): GuestSearchJob[] {
-  return jobs.map((job) => ({
-    id: job.id,
-    title: job.title,
-    company: job.company,
-    location: job.location?.raw || job.location?.city,
-    country: job.location?.countryCode,
-    description: job.summary || undefined,
-    jobUrl: job.url,
-    applicationUrl: job.applyUrl,
-    employmentType: job.employmentType || undefined,
-    postedAt: job.postedAt || undefined,
-    firstSeen: job.firstSeen,
-    skills: job.skills,
-    salary: job.salary !== null && job.salary !== undefined ? String(job.salary) : undefined,
-    source: job.source?.name,
-    matchScore: job.match?.title === "exact" ? 100 : 80
-  }));
-}
-
-export default async function JobSearchPage({
-  searchParams
-}: {
-  searchParams: Promise<SearchParams>;
-}) {
-  const params = await searchParams;
-  const initialJobTitle = firstValue(params.role).trim();
-  const initialLocation = firstValue(params.location).trim() || "Bengaluru, India";
-
-  let initialJobs: GuestSearchJob[] = [];
-  let initialTotal = 0;
-  let initialError = "";
-
-  if (initialJobTitle) {
-    try {
-      const response = await agentApi.fetchResults(initialJobTitle, initialLocation);
-      const rawJobs = Array.isArray(response?.jobs) ? response.jobs : [];
-      initialJobs = mapJobPostings(rawJobs);
-      initialTotal = typeof response?.total === "number" ? response.total : initialJobs.length;
-    } catch (error) {
-      initialJobs = [];
-      initialError = error instanceof Error ? error.message : "NVOIDAI could not load job results.";
-    }
+  let response: JobSearchResponse | null = null;
+  try {
+    response = await agentApi.search({ title: filters.q, location: filters.location, page: filters.page });
+  } catch (error) {
+    console.error("Job search failed:", error);
   }
 
+  const heading = filters.q ? `${filters.q} jobs${filters.location ? ` in ${filters.location}` : ""}` : filters.location ? `Jobs in ${filters.location}` : "Find jobs";
+
   return (
-    <GuestHome
-      initialJobTitle={initialJobTitle}
-      initialLocation={initialLocation}
-      autoSearch={Boolean(initialJobTitle)}
-      initialJobs={initialJobs}
-      initialTotal={initialTotal}
-      initialError={initialError}
-    />
+    <div className={styles.board}>
+      <header className={styles.header}>
+        <span className={styles.eyebrow}>Job search</span>
+        <h1 className={styles.title}>{heading}</h1>
+        <p className={styles.lead}>Open roles collected from company career pages and public job boards. Apply on the original listing.</p>
+      </header>
+
+      <SearchBar role={filters.q} location={filters.location} />
+
+      <JobResults response={response} path="/job-search" params={toParams(filters, "role")} resetHref="/job-search" />
+
+      {response && filters.page === 1 && (filters.q || filters.location) && (
+        <RecordSearch jobTitle={filters.q} location={filters.location} resultCount={response.total} />
+      )}
+    </div>
   );
 }

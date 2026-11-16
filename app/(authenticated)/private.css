@@ -288,8 +288,6 @@
     flex-wrap: wrap;
   }
 }
-
-/* Monochrome workspace theme */
 .nv-topbar {
   border-bottom-color: #303030;
   color: #ffffff;
@@ -704,8 +702,6 @@
     border-bottom-color: #dedede;
   }
 }
-
-/* ChatGPT dark monochrome workspace */
 :root {
   color-scheme: dark;
   --nv-ink: #ececec;
@@ -1041,8 +1037,6 @@
     border-bottom-color: rgba(255, 255, 255, .1) !important;
   }
 }
-
-/* Fixed ChatGPT-style workspace sidebar and persistent Find jobs action */
 .nv-workspace {
   min-height: 100vh;
 }
@@ -1167,12 +1161,8 @@
   }
 }
 
-
 .public-content:has(.nv-private-page){max-width:none;padding:0}
 .nv-private-page{min-height:calc(100vh - 68px)}
-
-
-/* Keep account and application pages visually consistent with the Nvoid workspace. */
 .nv-private-page,
 .nv-private-page .nv-content {
   min-height: calc(100vh - 58px);
@@ -1312,7 +1302,6 @@
   .nv-private-page .nv-content { padding: 22px 14px 38px; }
   .nv-private-page .nv-panel-spaced { padding: 16px; }
 }
-
 
 .nv-profile-details {
   display: grid;
@@ -1796,7 +1785,6 @@
   .nv-chat-resume > div { min-width: 70px; }
 }
 
-
 .nv-private-page {
   width: 100%;
   min-width: 0;
@@ -1959,9 +1947,6 @@
     max-width: 100%;
   }
 }
-
-
-/* Match every authenticated workspace page to the monochrome NVOIDAI theme. */
 .nv-workspace,
 .nv-main,
 .nv-private-page,
@@ -2178,7 +2163,6 @@
   background: #f2f2f2;
 }
 
-
 :root {
   --nv-ink: #ffffff;
   --nv-line: rgba(255, 255, 255, .16);
@@ -2304,8 +2288,6 @@ html body ::selection {
   background: #303030;
 }
 
-
-
 :root {
   --nv-bg: #050505;
   --nv-panel: #242424;
@@ -2321,7 +2303,6 @@ html body .nv-chat-page svg,
 html body .nv-private-page svg {
   color: #ffffff !important;
 }
-
 
 :root {
   --nv-bg: #050505;
@@ -2435,8 +2416,6 @@ html body ::selection {
   color: #050505;
   background: #ffffff;
 }
-
-
 
 :root {
   --nv-ink: #f0f0f0;
@@ -2565,9 +2544,6 @@ html body .nv-private-page .nv-status-neutral {
     min-width: 0;
   }
 }
-
-
-/* Refinement pass on the existing dark workspace — hierarchy and control polish */
 html body .nv-private-page .nv-page-heading h1 {
   color: #f2f2f2 !important;
   font-size: clamp(24px, 2.2vw, 30px);
